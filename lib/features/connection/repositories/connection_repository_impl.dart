@@ -1,0 +1,264 @@
+import 'dart:async';
+
+import 'package:hapoc/core/db/database.dart';
+import 'package:hapoc/core/db/database_extension.dart';
+import 'package:hapoc/core/hass/models/constants.dart';
+import 'package:hapoc/core/hass/models/events/state_model.dart';
+import 'package:hapoc/core/hass/models/messages/get_config_message_model.dart';
+import 'package:hapoc/core/hass/models/messages/get_services_message_model.dart';
+import 'package:hapoc/core/hass/models/messages/get_states_message_model.dart';
+import 'package:hapoc/core/hass/models/messages/send_message_model.dart';
+import 'package:hapoc/core/hass/models/messages/subscribe_message_model.dart';
+import 'package:hapoc/core/hass/models/messages/unsubscribe_message_model.dart';
+import 'package:hapoc/features/config/entities/config_entity.dart';
+import 'package:hapoc/features/connection/datasources/web_socket_service.dart';
+
+import 'package:hapoc/features/connection/entities/message.dart';
+import 'package:moor/moor.dart';
+
+import 'connection_repository.dart';
+
+class ConnectionRepositoryImpl extends ConnectionRepository {
+  final Database db;
+
+  ConnectionRepositoryImpl(this.db);
+
+  StreamController<Message> _controller;
+  String _accessToken;
+  String _configUuid;
+  WebSocketService localWebSocket;
+  WebSocketService distantWebSocket;
+
+  ConnectionType _connectionType = ConnectionType.IDLE;
+
+  WebSocketService get currentWebSocket {
+    if (_connectionType == ConnectionType.LOCAL) {
+      return localWebSocket;
+    }
+    if (_connectionType == ConnectionType.DISTANT) {
+      return distantWebSocket;
+    }
+    return null;
+  }
+
+  @override
+  Stream<Message> listen() {
+    dispose();
+    _controller = StreamController();
+    return _controller.stream;
+  }
+
+  @override
+  void dispose() {
+    _controller?.close();
+    _controller = null;
+  }
+
+  ///
+  /// --- CONNECTION --- ///
+  ///
+
+  @override
+  Future<bool> connect(ConfigEntity config) async {
+    _controller?.sink?.add(Message("Connecting"));
+    _accessToken = config.accessToken;
+    _configUuid = config.uuid;
+
+    localWebSocket = WebSocketService(
+      accessToken: _accessToken,
+      url: config.internalUrl,
+      connectionType: ConnectionType.LOCAL,
+      onAuthOk: _onAuthOk,
+      onState: _onState,
+      onInfo: _onInfo,
+      onError: _onError,
+      onDone: _onDone,
+    )..connect();
+
+    if (config?.externalUrl != null) {
+      distantWebSocket = WebSocketService(
+        accessToken: _accessToken,
+        url: config.externalUrl,
+        connectionType: ConnectionType.DISTANT,
+        onAuthOk: _onAuthOk,
+        onState: _onState,
+        onInfo: _onInfo,
+        onError: _onError,
+        onDone: _onDone,
+      )..connect();
+    }
+
+    return true;
+  }
+
+  @override
+  void disconnect() {
+    _controller?.sink?.add(Message("Disconnected"));
+
+    unsubscribe();
+
+    localWebSocket?.disconnect();
+    localWebSocket = null;
+    distantWebSocket?.disconnect();
+    distantWebSocket = null;
+
+    _connectionType = ConnectionType.IDLE;
+  }
+
+  ///
+  /// --- WEBSOCKET CALLBACKS --- ///
+  ///
+
+  void _onAuthOk(ConnectionType connectionType) {
+    print("$connectionType: _onAuthOk");
+    if (_connectionType == ConnectionType.IDLE) {
+      _connectionType = connectionType;
+
+      db.updateConfigDate(_configUuid);
+
+      subscribe();
+
+      getStates();
+    } else {
+      // Already connected
+      if (connectionType == ConnectionType.DISTANT) {
+        distantWebSocket?.disconnect();
+        distantWebSocket = null;
+      } else {
+        localWebSocket?.disconnect();
+        localWebSocket = null;
+      }
+    }
+  }
+
+  void _onInfo(ConnectionType connectionType, String message) {
+    if (connectionType == _connectionType) {
+      _controller?.sink?.add(Message(message));
+    }
+  }
+
+  void _onState(ConnectionType connectionType, StateModel state) async {
+    if (connectionType == _connectionType) {
+      final State stateDao = await db.getState(state.entityId);
+
+      if (stateDao == null) {
+        // Create state
+        final StatesCompanion newState = StatesCompanion(
+          entityId: state.entityId?.toValue() ?? Value.absent(),
+          state: state.state?.toValue() ?? Value.absent(),
+          lastChanged: state.lastChanged?.toValue() ?? Value.absent(),
+          lastUpdated: state.lastUpdated?.toValue() ?? Value.absent(),
+          friendlyName:
+              state.attributes?.friendlyName?.toValue() ?? Value.absent(),
+          supportedFeatures:
+              state.attributes?.supportedFeatures?.toValue() ?? Value.absent(),
+          currentPosition:
+              state.attributes?.currentPosition?.toValue() ?? Value.absent(),
+          lastTriggered:
+              state.attributes?.lastTriggered?.toValue() ?? Value.absent(),
+          mode: state.attributes?.mode?.toValue() ?? Value.absent(),
+          temperature:
+              state.attributes?.temperature?.toValue() ?? Value.absent(),
+          humidity: state.attributes?.humidity?.toValue() ?? Value.absent(),
+          pressure: state.attributes?.pressure?.toValue() ?? Value.absent(),
+          windBearing:
+              state.attributes?.windBearing?.toValue() ?? Value.absent(),
+          windSpeed: state.attributes?.windSpeed?.toValue() ?? Value.absent(),
+          attribution:
+              state.attributes?.attribution?.toValue() ?? Value.absent(),
+          isOn: state.attributes?.isOn?.toValue() ?? Value.absent(),
+          deviceClass:
+              state.attributes?.deviceClass?.toValue() ?? Value.absent(),
+          unitOfMeasurement:
+              state.attributes?.unitOfMeasurement?.toValue() ?? Value.absent(),
+          current: state.attributes?.current?.toValue() ?? Value.absent(),
+          voltage: state.attributes?.voltage?.toValue() ?? Value.absent(),
+        );
+
+        await db.insertState(newState);
+      } else if (stateDao.state != state.state) {
+        // Update state
+        final State updatedState = stateDao.copyWith(
+          state: state.state,
+          lastChanged: state.lastChanged,
+          lastUpdated: state.lastUpdated,
+          friendlyName: state.attributes?.friendlyName,
+          supportedFeatures: state.attributes?.supportedFeatures,
+          currentPosition: state.attributes?.currentPosition,
+          lastTriggered: state.attributes?.lastTriggered,
+          mode: state.attributes?.mode,
+          temperature: state.attributes?.temperature,
+          humidity: state.attributes?.humidity,
+          pressure: state.attributes?.pressure,
+          windBearing: state.attributes?.windBearing,
+          windSpeed: state.attributes?.windSpeed,
+          attribution: state.attributes?.attribution,
+          isOn: state.attributes?.isOn,
+          deviceClass: state.attributes?.deviceClass,
+          unitOfMeasurement: state.attributes?.unitOfMeasurement,
+          current: state.attributes?.current,
+          voltage: state.attributes?.voltage,
+        );
+
+        await db.updateState(updatedState);
+      }
+    }
+  }
+
+  void _onError(ConnectionType connectionType, Object error) {
+    print("$connectionType: _onError");
+    if (connectionType == _connectionType) {
+      _controller?.sink?.add(Message("on Error"));
+    }
+  }
+
+  void _onDone(ConnectionType connectionType) {
+    print("$connectionType: _onDone");
+    if (connectionType == _connectionType) {
+      _controller?.sink?.add(Message("on Done"));
+    }
+  }
+
+  ///
+  /// --- EVENTS --- ///
+  ///
+
+  @override
+  void subscribe() {
+    _send(SubscribeMessageModel(id: _getNextCommandId()));
+  }
+
+  @override
+  void unsubscribe() {
+    _send(UnsubscribeMessageModel(id: _getNextCommandId()));
+  }
+
+  @override
+  void getConfig() {
+    _send(GetConfigMessageModel(id: _getNextCommandId()));
+  }
+
+  @override
+  void getServices() {
+    _send(GetServicesMessageModel(id: _getNextCommandId()));
+  }
+
+  @override
+  void getStates() {
+    _send(GetStatesMessageModel(id: _getNextCommandId()));
+  }
+
+  ///
+  /// --- INTERNAL --- ///
+  ///
+
+  int _getNextCommandId() {
+    return currentWebSocket?.nextCommandId ?? -1;
+  }
+
+  void _send(SendMessageModel object) {
+    if ((object?.id ?? 0) <= 0) return;
+
+    currentWebSocket?.send(object);
+  }
+}
