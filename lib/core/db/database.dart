@@ -96,4 +96,6 @@ class Database extends _$Database {
   Future insertState(StatesCompanion state) =>
       into(states).insert(state, mode: InsertMode.insertOrReplace);
   Future updateState(State state) => update(states).replace(state);
+
+  Stream<List<State>> watchStates() => select(states).watch();
 }

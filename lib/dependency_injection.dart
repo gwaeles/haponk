@@ -7,6 +7,8 @@ import 'package:hapoc/features/config/repositories/config_repository.dart';
 import 'package:hapoc/features/config/repositories/config_repository_impl.dart';
 import 'package:hapoc/features/connection/repositories/connection_repository.dart';
 import 'package:hapoc/features/connection/repositories/connection_repository_impl.dart';
+import 'package:hapoc/features/devices/repositories/devices_repository.dart';
+import 'package:hapoc/features/devices/repositories/devices_repository_impl.dart';
 import 'package:hapoc/features/discovery/data/datasources/discovery_service.dart';
 import 'package:hapoc/features/discovery/data/repositories/discovery_repository_impl.dart';
 import 'package:hapoc/features/discovery/domain/repositories/discovery_repository.dart';
@@ -35,6 +37,8 @@ ServiceDeclaration declareServices = () {
       () => ConnectionRepositoryImpl(getIt()));
   getIt.registerLazySingleton<DiscoveryRepository>(
       () => DiscoveryRepositoryImpl(getIt()));
+  getIt.registerLazySingleton<DevicesRepository>(
+      () => DevicesRepositoryImpl(getIt()));
 
   // --- USECASES --- //
   getIt.registerLazySingleton(() => ListenDiscoverUseCase(getIt()));

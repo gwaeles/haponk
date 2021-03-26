@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:hapoc/features/connection/providers/connection_provider.dart';
+import 'package:hapoc/ui/devices/devices_screen.dart';
 import 'package:hapoc/ui/launcher/launcher_screen.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:provider/provider.dart';
@@ -41,6 +42,7 @@ class MyApp extends StatelessWidget {
         ),
         routes: {
           "/launcher": (context) => LauncherScreen(),
+          "/devices": (context) => DevicesScreen(),
         },
         initialRoute: "/launcher",
       ),

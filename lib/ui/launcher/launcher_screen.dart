@@ -104,8 +104,9 @@ class LauncherPage extends StatelessWidget {
                 }),
                 ElevatedButton(
                     onPressed: () async {
-                      String barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
-                          "#ff6666", "Cancel", true, ScanMode.BARCODE);
+                      String barcodeScanRes =
+                          await FlutterBarcodeScanner.scanBarcode(
+                              "#ff6666", "Cancel", true, ScanMode.BARCODE);
                       print(barcodeScanRes);
                     },
                     child: Text("FAB")),
@@ -122,6 +123,13 @@ class StateText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final message = context.watch<Message>();
+
+    // Todo: Manage with ConnectionState
+    if (message.text == "Authenticated") {
+      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+        Navigator.of(context).pushReplacementNamed("/devices");
+      });
+    }
 
     return Text(message.text);
   }
