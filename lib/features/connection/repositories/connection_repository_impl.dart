@@ -30,6 +30,7 @@ class ConnectionRepositoryImpl extends ConnectionRepository {
   WebSocketService distantWebSocket;
 
   ConnectionType _connectionType = ConnectionType.IDLE;
+  StreamController<ConnectionType> _controllerConnectionType;
 
   WebSocketService get currentWebSocket {
     if (_connectionType == ConnectionType.LOCAL) {
@@ -42,8 +43,12 @@ class ConnectionRepositoryImpl extends ConnectionRepository {
   }
 
   @override
+  ConnectionType get currentConnectionType => _connectionType;
+
+  @override
   Stream<Message> listen() {
-    dispose();
+    _controller?.close();
+    _controller = null;
     _controller = StreamController();
     return _controller.stream;
   }
@@ -52,14 +57,28 @@ class ConnectionRepositoryImpl extends ConnectionRepository {
   void dispose() {
     _controller?.close();
     _controller = null;
+    _controllerConnectionType?.close();
+    _controllerConnectionType = null;
   }
 
   ///
   /// --- CONNECTION --- ///
   ///
+  
+  @override
+  Stream<ConnectionType> listenConnectionType() {
+    _controllerConnectionType?.close();
+    _controllerConnectionType = null;
+    _controllerConnectionType = StreamController();
+    return _controllerConnectionType.stream;
+  }
 
   @override
   Future<bool> connect(ConfigEntity config) async {
+    if (_connectionType != ConnectionType.IDLE) {
+      return false;
+    }
+    
     _controller?.sink?.add(Message("Connecting"));
     _accessToken = config.accessToken;
     _configUuid = config.uuid;
@@ -103,6 +122,8 @@ class ConnectionRepositoryImpl extends ConnectionRepository {
     distantWebSocket = null;
 
     _connectionType = ConnectionType.IDLE;
+
+    _controllerConnectionType?.sink?.add(_connectionType);
   }
 
   ///
@@ -115,6 +136,8 @@ class ConnectionRepositoryImpl extends ConnectionRepository {
       _connectionType = connectionType;
 
       db.updateConfigDate(_configUuid);
+
+    _controllerConnectionType?.sink?.add(_connectionType);
 
       subscribe();
 

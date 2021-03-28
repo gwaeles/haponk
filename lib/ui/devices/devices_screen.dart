@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:hapoc/dependency_injection.dart';
+import 'package:hapoc/features/config/entities/config_entity.dart';
+import 'package:hapoc/features/connection/providers/connection_provider.dart';
 import 'package:hapoc/features/devices/entities/device.dart';
 import 'package:hapoc/features/devices/providers/devices_provider.dart';
 import 'package:hapoc/ui/devices/widgets/devices_page.dart';
@@ -10,6 +13,13 @@ class DevicesScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ConfigEntity _configArg =
+        ModalRoute.of(context).settings.arguments as ConfigEntity;
+    final ConnectionProvider connectionProvider =
+        context.read<ConnectionProvider>();
+
+    connectionProvider.connect(_configArg);
+
     return MultiProvider(
       providers: [
         ListenableProvider.value(value: deviceProvider),
@@ -17,9 +27,17 @@ class DevicesScreen extends StatelessWidget {
             initialData: null,
             create: (context) => deviceProvider.messageStream),
       ],
-      child: Scaffold(
-        appBar: AppBar(title: Text("Device list"),),
-        body: DevicesPage(),
+      child: AnnotatedRegion<SystemUiOverlayStyle>(
+        value: SystemUiOverlayStyle(
+          statusBarColor: Colors.transparent,
+        ),
+        child: Scaffold(
+          appBar: AppBar(
+            title: Text("Device list"),
+            brightness: Brightness.dark,
+          ),
+          body: DevicesPage(),
+        ),
       ),
     );
   }

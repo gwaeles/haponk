@@ -1,43 +1,29 @@
 import 'package:flutter/material.dart';
-import 'package:hapoc/core/states/connexion_state.dart' as cx;
 
-import 'package:hapoc/core/errors/failures.dart';
+import 'package:hapoc/core/hass/models/constants.dart';
 import 'package:hapoc/features/config/entities/config_entity.dart';
 import 'package:hapoc/features/connection/entities/message.dart';
 import 'package:hapoc/features/connection/repositories/connection_repository.dart';
 
 class ConnectionProvider
-    with ChangeNotifier
-    implements cx.ListenerConnectionState {
-  ConnectionRepository connectionEvent;
-  cx.ConnectionState _state = cx.ConnectionState.INITIAL;
-  bool _isConnected = false;
-  Failure _error;
+    with ChangeNotifier {
+  ConnectionRepository connectionRepository;
 
-  ConnectionProvider(this.connectionEvent);
+  ConnectionProvider(this.connectionRepository);
 
-  ///
-  /// --- State --- ///
-  ///
+  ConnectionType get currentConnectionType => connectionRepository.currentConnectionType;
 
-  @override
-  cx.ConnectionState get state => _state;
-
-  @override
-  void setState(cx.ConnectionState state) {
-    _state = state;
-    notifyListeners();
-  }
+  Stream<ConnectionType> get connectionStream => connectionRepository.listenConnectionType();
 
   ///
   /// --- Messaging --- ///
   ///
 
-  Stream<Message> get messageStream => connectionEvent.listen();
+  Stream<Message> get messageStream => connectionRepository.listen();
 
   @override
   void dispose() {
-    connectionEvent.dispose();
+    connectionRepository.dispose();
     super.dispose();
   }
 
@@ -45,34 +31,34 @@ class ConnectionProvider
   /// --- Request --- ///
   ///
 
-  bool get isConnected => _isConnected;
-  Failure get error => _error;
+  bool get isConnected => currentConnectionType != ConnectionType.IDLE;
+  bool get isNotConnected => currentConnectionType == ConnectionType.IDLE;
 
   void connect(ConfigEntity config) {
-    connectionEvent.connect(config);
+    connectionRepository.connect(config);
   }
 
   void disconnect() {
-    connectionEvent.disconnect();
+    connectionRepository.disconnect();
   }
 
   void subscribe() {
-    connectionEvent.subscribe();
+    connectionRepository.subscribe();
   }
 
   void unsubscribe() {
-    connectionEvent.unsubscribe();
+    connectionRepository.unsubscribe();
   }
 
   void getConfig() {
-    connectionEvent.getConfig();
+    connectionRepository.getConfig();
   }
 
   void getServices() {
-    connectionEvent.getServices();
+    connectionRepository.getServices();
   }
 
   void getStates() {
-    connectionEvent.getStates();
+    connectionRepository.getStates();
   }
 }

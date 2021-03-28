@@ -29,6 +29,7 @@ class ConfigProvider with ChangeNotifier implements ListenerRequestState {
   ///
 
   Stream<ConfigEntity> get messageStream => repository.listen();
+  ConfigEntity get currentConfig => repository.currentConfig;
 
   @override
   void dispose() {
@@ -51,6 +52,6 @@ class ConfigProvider with ChangeNotifier implements ListenerRequestState {
       await repository.setAccessToken(typedToken);
     }
     _connectionSucceed = await repository.tryConnect(typedUrl);
-    setState(RequestState.LOADED);
+    setState(_connectionSucceed ? RequestState.LOADED : RequestState.ERROR);
   }
 }

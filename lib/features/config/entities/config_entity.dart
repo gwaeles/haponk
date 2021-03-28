@@ -21,4 +21,28 @@ class ConfigEntity {
       this.version,
       this.lastConnection,
       this.accessToken});
+
+  ConfigEntity copyWith({
+      String uuid,
+      String baseUrl,
+      String externalUrl,
+      String internalUrl,
+      String locationName,
+      String installationType,
+      bool requiresApiPassword,
+      String version,
+      DateTime lastConnection,
+      String accessToken}) =>
+  ConfigEntity(
+    uuid: uuid ?? this.uuid,
+    baseUrl: baseUrl ?? this.baseUrl,
+    externalUrl: externalUrl ?? this.externalUrl,
+    internalUrl: internalUrl ?? this.internalUrl,
+    locationName: locationName ?? this.locationName,
+    installationType: installationType ?? this.installationType,
+    requiresApiPassword: requiresApiPassword ?? this.requiresApiPassword,
+    version: version ?? this.version,
+    lastConnection: lastConnection ?? this.lastConnection,
+    accessToken: accessToken ?? this.accessToken,
+  );
 }
