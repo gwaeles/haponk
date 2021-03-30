@@ -13,27 +13,20 @@ class ConfigScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    return ChangeNotifierProvider(
-      create: (_) => ConfigProvider(getIt()),
-      builder: _builder,
-      child: Scaffold(
-        body: ConfigPage(),
-      ),
-    );
-  }
-
-  Widget _builder(BuildContext context, Widget child) {
-    final configProvider = context.read<ConfigProvider>();
-    final connexionProvider = context.read<ConnectionProvider>();
-
     return MultiProvider(
       providers: [
+        ListenableProvider(
+          create: (_) => ConfigProvider(getIt()),
+        ),
         StreamProvider<ConfigEntity>(
             initialData: null,
-            create: (context) => configProvider.messageStream),
+            create: (context) => context.read<ConfigProvider>().messageStream
+        ),
         StreamProvider<ConnectionType>(
             initialData: ConnectionType.IDLE,
-            create: (context) => connexionProvider.connectionStream),
+            create: (context) => 
+                context.read<ConnectionProvider>().connectionStream
+        ),
       ],
       child: ConfigPage(),
     );
