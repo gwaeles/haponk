@@ -1,4 +1,6 @@
-class ConfigEntity {
+import 'package:equatable/equatable.dart';
+
+class ConfigEntity extends Equatable {
   final String uuid;
   final String baseUrl;
   final String externalUrl;
@@ -45,4 +47,7 @@ class ConfigEntity {
     lastConnection: lastConnection ?? this.lastConnection,
     accessToken: accessToken ?? this.accessToken,
   );
+
+  @override
+  List<Object> get props => [uuid];
 }

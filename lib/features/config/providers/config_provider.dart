@@ -28,14 +28,8 @@ class ConfigProvider with ChangeNotifier implements ListenerRequestState {
   /// --- Config --- ///
   ///
 
-  Stream<ConfigEntity> get messageStream => repository.listen();
+  Stream<ConfigEntity> get messageStream => repository.addListener();
   ConfigEntity get currentConfig => repository.currentConfig;
-
-  @override
-  void dispose() {
-    repository.dispose();
-    super.dispose();
-  }
 
   ///
   /// --- Request --- ///

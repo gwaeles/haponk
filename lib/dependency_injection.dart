@@ -15,6 +15,7 @@ import 'package:hapoc/features/discovery/domain/repositories/discovery_repositor
 import 'package:hapoc/features/discovery/domain/usecases/listen_discover_use_case.dart';
 import 'package:hapoc/features/discovery/domain/usecases/start_discover_use_case.dart';
 import 'package:hapoc/features/discovery/domain/usecases/stop_discover_use_case.dart';
+import 'package:moor_flutter/moor_flutter.dart';
 
 GetIt getIt = GetIt.instance;
 
@@ -23,7 +24,11 @@ typedef ServiceDeclaration = void Function();
 ServiceDeclaration declareServices = () {
   // --- SERVICES --- //
   getIt.registerSingleton(FlutterSecureStorage());
-  getIt.registerSingleton(Database());
+  getIt.registerSingleton(Database((FlutterQueryExecutor.inDatabaseFolder(
+          path: 'db.sqlite',
+          // Good for debugging - prints SQL in the console
+          logStatements: true,
+        ))));
   getIt.registerLazySingleton(() => client.configureDio());
   getIt.registerLazySingleton(() => DiscoveryService());
 

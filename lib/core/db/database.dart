@@ -68,13 +68,9 @@ class StateForecast extends Table {
   tables: [Configs, States],
 )
 class Database extends _$Database {
-  Database()
+  Database(QueryExecutor e)
       // Specify the location of the database file
-      : super((FlutterQueryExecutor.inDatabaseFolder(
-          path: 'db.sqlite',
-          // Good for debugging - prints SQL in the console
-          logStatements: true,
-        )));
+      : super(e);
 
   @override
   int get schemaVersion => 1;
