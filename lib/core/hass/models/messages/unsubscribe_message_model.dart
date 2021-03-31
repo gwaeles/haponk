@@ -9,11 +9,11 @@ part 'unsubscribe_message_model.g.dart';
 class UnsubscribeMessageModel extends SendMessageModel {
   final int subscription;
 
-  const UnsubscribeMessageModel({
-    int id, 
-    this.subscription, 
-    MessageType type = MessageType.UNSUBSCRIBE_EVENTS
-  }): super(type, id: id);
+  const UnsubscribeMessageModel(
+      {int id,
+      this.subscription,
+      MessageType type = MessageType.UNSUBSCRIBE_EVENTS})
+      : super(type, id: id);
 
   Map<String, dynamic> toJson() => _$UnsubscribeMessageModelToJson(this);
 }

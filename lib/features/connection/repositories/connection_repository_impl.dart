@@ -64,7 +64,7 @@ class ConnectionRepositoryImpl extends ConnectionRepository {
   ///
   /// --- CONNECTION --- ///
   ///
-  
+
   @override
   Stream<ConnectionType> listenConnectionType() {
     _controllerConnectionType?.close();
@@ -78,7 +78,7 @@ class ConnectionRepositoryImpl extends ConnectionRepository {
     if (_connectionType != ConnectionType.IDLE) {
       return false;
     }
-    
+
     _controller?.sink?.add(Message("Connecting"));
     _accessToken = config.accessToken;
     _configUuid = config.uuid;
@@ -137,7 +137,7 @@ class ConnectionRepositoryImpl extends ConnectionRepository {
 
       db.updateConfigDate(_configUuid);
 
-    _controllerConnectionType?.sink?.add(_connectionType);
+      _controllerConnectionType?.sink?.add(_connectionType);
 
       subscribe();
 

@@ -14,7 +14,7 @@ abstract class MessageModel {
   @JsonKey(includeIfNull: false)
   final int id;
   final MessageType type;
-   
+
   const MessageModel(this.type, {this.id});
 
   factory MessageModel.fromJson(Map<String, dynamic> json) {
@@ -31,7 +31,8 @@ abstract class MessageModel {
       final id = json['id'] as int;
       final success = json['success'] as bool;
       final result = json['result'];
-      return CommandResultMessageModel(id: id, success: success, result: result);
+      return CommandResultMessageModel(
+          id: id, success: success, result: result);
     } else if (type == MessageType.EVENT) {
       final id = json['id'] as int;
       final event = EventModel.fromJson(json['event']);

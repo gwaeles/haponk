@@ -9,10 +9,8 @@ import 'package:provider/provider.dart';
 import 'widgets/config_page.dart';
 
 class ConfigScreen extends StatelessWidget {
-  
   @override
   Widget build(BuildContext context) {
-
     return MultiProvider(
       providers: [
         ListenableProvider(
@@ -20,13 +18,11 @@ class ConfigScreen extends StatelessWidget {
         ),
         StreamProvider<ConfigEntity>(
             initialData: null,
-            create: (context) => context.read<ConfigProvider>().messageStream
-        ),
+            create: (context) => context.read<ConfigProvider>().messageStream),
         StreamProvider<ConnectionType>(
             initialData: ConnectionType.IDLE,
-            create: (context) => 
-                context.read<ConnectionProvider>().connectionStream
-        ),
+            create: (context) =>
+                context.read<ConnectionProvider>().connectionStream),
       ],
       child: ConfigPage(),
     );

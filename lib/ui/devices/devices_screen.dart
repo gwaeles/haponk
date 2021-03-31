@@ -6,10 +6,8 @@ import 'package:hapoc/ui/devices/widgets/devices_page.dart';
 import 'package:provider/provider.dart';
 
 class DevicesScreen extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
-
     return StreamProvider(
       create: (_) => DevicesProvider(getIt()).deviceStream,
       child: AnnotatedRegion<SystemUiOverlayStyle>(

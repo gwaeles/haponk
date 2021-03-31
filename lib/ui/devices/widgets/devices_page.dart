@@ -5,7 +5,6 @@ import 'package:provider/provider.dart';
 class DevicesPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-
     final devices = context.watch<List<Device>>();
 
     return ListView.separated(
@@ -27,8 +26,7 @@ class DevicesItem extends StatelessWidget {
       title: Text(device.friendlyName),
       subtitle: Text("${device.entityId}\n${device.state}"),
       isThreeLine: true,
-      onTap: () => Navigator.of(context)
-                    .pushReplacementNamed("/devices"),
+      onTap: () => Navigator.of(context).pushReplacementNamed("/devices"),
     );
   }
 }

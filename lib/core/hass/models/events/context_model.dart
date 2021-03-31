@@ -12,7 +12,8 @@ class ContextModel {
 
   const ContextModel({this.id, this.parentId, this.userId});
 
-  factory ContextModel.fromJson(Map<String, dynamic> json) => _$ContextModelFromJson(json);
+  factory ContextModel.fromJson(Map<String, dynamic> json) =>
+      _$ContextModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$ContextModelToJson(this);
 }

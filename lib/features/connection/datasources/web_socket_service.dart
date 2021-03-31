@@ -116,7 +116,8 @@ class WebSocketService {
 
       if (model.id == _statesId && model.result != null) {
         final result = model.result as List<dynamic>;
-        final stateList = result.map((item) => StateModel.fromJson(item as Map<String, dynamic>));
+        final stateList = result
+            .map((item) => StateModel.fromJson(item as Map<String, dynamic>));
         for (var state in stateList) {
           onState?.call(connectionType, state);
         }

@@ -83,12 +83,15 @@ class Database extends _$Database {
   Future insertConfig(Config config) =>
       into(configs).insert(config, mode: InsertMode.insertOrReplace);
   Future updateConfig(Config config) => update(configs).replace(config);
-  Future updateConfigDate(String uuid) => (update(configs)..where((item) => item.uuid.equals(uuid))).write(ConfigsCompanion(lastConnection: Value(DateTime.now())));
+  Future updateConfigDate(String uuid) =>
+      (update(configs)..where((item) => item.uuid.equals(uuid)))
+          .write(ConfigsCompanion(lastConnection: Value(DateTime.now())));
   Future deleteConfig(Config config) => delete(configs).delete(config);
 
   // STATES
   Future<State> getState(String entityId) =>
-      (select(states)..where((item) => item.entityId.equals(entityId))).getSingle();
+      (select(states)..where((item) => item.entityId.equals(entityId)))
+          .getSingle();
   Future insertState(StatesCompanion state) =>
       into(states).insert(state, mode: InsertMode.insertOrReplace);
   Future updateState(State state) => update(states).replace(state);

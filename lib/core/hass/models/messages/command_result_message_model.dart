@@ -10,5 +10,6 @@ class CommandResultMessageModel extends MessageModel {
   final bool success;
   final dynamic result;
 
-  const CommandResultMessageModel({int id, this.success, this.result}) : super(MessageType.RESULT, id: id);
+  const CommandResultMessageModel({int id, this.success, this.result})
+      : super(MessageType.RESULT, id: id);
 }

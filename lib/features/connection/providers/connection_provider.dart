@@ -5,15 +5,16 @@ import 'package:hapoc/features/config/entities/config_entity.dart';
 import 'package:hapoc/features/connection/entities/message.dart';
 import 'package:hapoc/features/connection/repositories/connection_repository.dart';
 
-class ConnectionProvider
-    with ChangeNotifier {
+class ConnectionProvider with ChangeNotifier {
   ConnectionRepository connectionRepository;
 
   ConnectionProvider(this.connectionRepository);
 
-  ConnectionType get currentConnectionType => connectionRepository.currentConnectionType;
+  ConnectionType get currentConnectionType =>
+      connectionRepository.currentConnectionType;
 
-  Stream<ConnectionType> get connectionStream => connectionRepository.listenConnectionType();
+  Stream<ConnectionType> get connectionStream =>
+      connectionRepository.listenConnectionType();
 
   ///
   /// --- Messaging --- ///

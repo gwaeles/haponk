@@ -10,9 +10,7 @@ part 'event_message_model.g.dart';
 class EventMessageModel extends MessageModel {
   final EventModel event;
 
-  const EventMessageModel({
-    int id,
-    this.event,
-    MessageType type = MessageType.EVENT
-  }): super(type, id: id);
+  const EventMessageModel(
+      {int id, this.event, MessageType type = MessageType.EVENT})
+      : super(type, id: id);
 }

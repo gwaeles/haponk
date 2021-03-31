@@ -12,15 +12,15 @@ class DiscoveryProvider extends ChangeNotifier {
   final StopDiscoverUseCase stopDiscoverUseCase;
   // StreamSubscription<List<ServiceEntity>> _subscription;
 
-  DiscoveryProvider(this.listenDiscoverUseCase, this.startDiscoverUseCase, this.stopDiscoverUseCase);
+  DiscoveryProvider(this.listenDiscoverUseCase, this.startDiscoverUseCase,
+      this.stopDiscoverUseCase);
 
   // List<ServiceEntity> _resolvedServices;
 
   // List<ServiceEntity> get discoveredServices =>
   //     List.of(_resolvedServices);
 
-  Stream<List<ServiceEntity>> get stream =>
-      listenDiscoverUseCase();
+  Stream<List<ServiceEntity>> get stream => listenDiscoverUseCase();
 
   void start() {
     // _subscription?.cancel();

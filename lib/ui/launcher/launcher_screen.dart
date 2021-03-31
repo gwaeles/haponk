@@ -22,13 +22,11 @@ class LauncherScreenState extends State<LauncherScreen> {
     Future.delayed(Duration(milliseconds: 250))
         .then((value) => configProvider.messageStream.first.then((value) {
               if (value?.lastConnection != null) {
-                final connectionProvider =
-                    context.read<ConnectionProvider>();
+                final connectionProvider = context.read<ConnectionProvider>();
 
                 connectionProvider.connect(value);
 
-                Navigator.of(context)
-                    .pushReplacementNamed("/devices");
+                Navigator.of(context).pushReplacementNamed("/devices");
               } else {
                 Navigator.of(context).pushReplacementNamed("/config");
               }
@@ -47,7 +45,6 @@ class LauncherScreenState extends State<LauncherScreen> {
 
   @override
   Widget build(BuildContext context) {
-    
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle(
         statusBarColor: Colors.transparent,

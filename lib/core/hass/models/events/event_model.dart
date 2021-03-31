@@ -16,9 +16,11 @@ class EventModel {
   final DateTime timeFired;
   final ContextModel context;
 
-  const EventModel({this.eventType, this.data, this.origin, this.timeFired, this.context});
+  const EventModel(
+      {this.eventType, this.data, this.origin, this.timeFired, this.context});
 
-  factory EventModel.fromJson(Map<String, dynamic> json) => _$EventModelFromJson(json);
+  factory EventModel.fromJson(Map<String, dynamic> json) =>
+      _$EventModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$EventModelToJson(this);
 }

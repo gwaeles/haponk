@@ -17,9 +17,16 @@ class StateModel {
   final DateTime lastUpdated;
   final ContextModel context;
 
-  const StateModel({this.entityId, this.state, this.attributes, this.lastChanged, this.lastUpdated, this.context});
+  const StateModel(
+      {this.entityId,
+      this.state,
+      this.attributes,
+      this.lastChanged,
+      this.lastUpdated,
+      this.context});
 
-  factory StateModel.fromJson(Map<String, dynamic> json) => _$StateModelFromJson(json);
+  factory StateModel.fromJson(Map<String, dynamic> json) =>
+      _$StateModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$StateModelToJson(this);
 }

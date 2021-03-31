@@ -25,10 +25,10 @@ ServiceDeclaration declareServices = () {
   // --- SERVICES --- //
   getIt.registerSingleton(FlutterSecureStorage());
   getIt.registerSingleton(Database((FlutterQueryExecutor.inDatabaseFolder(
-          path: 'db.sqlite',
-          // Good for debugging - prints SQL in the console
-          logStatements: true,
-        ))));
+    path: 'db.sqlite',
+    // Good for debugging - prints SQL in the console
+    logStatements: true,
+  ))));
   getIt.registerLazySingleton(() => client.configureDio());
   getIt.registerLazySingleton(() => DiscoveryService());
 

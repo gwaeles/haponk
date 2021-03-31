@@ -1,6 +1,10 @@
 import 'dart:async';
 
 import 'package:flutter_test/flutter_test.dart';
+import 'package:hapoc/core/hass/datasources/hass_api.dart';
+import 'package:hapoc/core/hass/models/events/discovery_info_model.dart';
+import 'package:hapoc/core/network/api_status.dart';
+import 'package:hapoc/dependency_injection.dart';
 import 'package:hapoc/features/config/repositories/config_repository_impl.dart';
 import 'package:hapoc/features/config/entities/config_entity.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -8,10 +12,18 @@ import 'package:hapoc/core/db/database.dart';
 import 'package:hapoc/core/db/database_extension.dart';
 import 'package:mockito/mockito.dart';
 import 'package:moor/ffi.dart';
+import 'package:retrofit/retrofit.dart';
+import 'package:dio/dio.dart';
 
 class DatabaseMock extends Mock implements Database {}
 
 class FlutterSecureStorageMock extends Mock implements FlutterSecureStorage {}
+
+class HassApiMock extends Mock implements HassApi {}
+
+class HttpResponseMock extends Mock implements HttpResponse {}
+
+class ResponseMock extends Mock implements Response {}
 
 void main() {
   // Target of Tests
@@ -20,6 +32,17 @@ void main() {
   // Mocks
   Database db;
   FlutterSecureStorageMock storage;
+  HassApiMock hassApi;
+  HttpResponseMock httpResponseMock;
+  ResponseMock responseMock;
+
+  final ServiceDeclaration declareServices = () {
+    getIt.registerFactoryParam<HassApi, String, String>((param1, _) => hassApi);
+  };
+
+  final ServiceDeclaration undeclareServices = () {
+    getIt.unregister<HassApi>();
+  };
 
   setUpAll(() {
     // Mocks
@@ -32,6 +55,18 @@ void main() {
 
   tearDownAll(() async {
     await db.close();
+  });
+
+  setUp(() async {
+    hassApi = HassApiMock();
+    declareServices();
+    httpResponseMock = HttpResponseMock();
+    responseMock = ResponseMock();
+    db.delete(db.configs).go();
+  });
+
+  tearDown(() {
+    undeclareServices();
   });
 
   Config aConfig() => Config(
@@ -95,24 +130,65 @@ void main() {
 
     test("Try a connection with a right url", () async {
       //GIVEN
+      final model = DiscoveryInfoModel(
+          uuid: "uid",
+          baseUrl: "baseUrl",
+          externalUrl: "extUrl",
+          internalUrl: "internUrl",
+          locationName: "location",
+          installationType: "good",
+          requiresApiPassword: true,
+          version: "1");
       final url = "http://localhost:8123";
 
+      when(hassApi.discoveryInfo())
+          .thenAnswer((_) => Future.value(httpResponseMock));
+      when(httpResponseMock.response).thenReturn(responseMock);
+      when(responseMock.statusCode).thenReturn(ApiStatus.OK);
+      when(httpResponseMock.data).thenReturn(model.toJson());
+
       //WHEN
-      configRepositoryImpl.tryConnect(url);
+      expect(db.select(db.configs).get(), completion(isEmpty));
+      final result = await configRepositoryImpl.tryConnect(url);
 
       //THEN
-      expect(true, 1 == 2);
+      expect(true, result);
+      final config = await db.select(db.configs).get();
+      expect(config, isNotEmpty);
+      expect(config.first.id, 1);
+      expect(config.first.uuid, model.uuid);
+      expect(config.first.internalUrl, model.internalUrl);
     });
 
     test("Try a connection with a wrong url", () async {
       //GIVEN
-      final url = "http://unknown.com:8123";
+      final model = DiscoveryInfoModel(
+          uuid: "uid",
+          baseUrl: "baseUrl",
+          externalUrl: "extUrl",
+          internalUrl: "internUrl",
+          locationName: "location",
+          installationType: "good",
+          requiresApiPassword: true,
+          version: "1");
+      final url = "http://localhost:8123";
+
+      when(hassApi.discoveryInfo())
+          .thenAnswer((_) => Future.value(httpResponseMock));
+      when(httpResponseMock.response).thenReturn(responseMock);
+      when(responseMock.statusCode).thenReturn(ApiStatus.RESOURCE_NOT_FOUND);
+      when(httpResponseMock.data).thenReturn(model.toJson());
 
       //WHEN
-      configRepositoryImpl.tryConnect(url);
+      expect(db.select(db.configs).get(), completion(isEmpty));
+      final result = await configRepositoryImpl.tryConnect(url);
 
       //THEN
-      expect(true, 1 == 2);
+      expect(false, result);
+      final config = await db.select(db.configs).get();
+      expect(config, isNotEmpty);
+      expect(config.first.id, 1);
+      expect(config.first.internalUrl, url);
     });
   });
 }

@@ -67,14 +67,11 @@ class ConfigRepositoryImpl extends ConfigRepository {
     final accessToken =
         await secureStorage.read(key: PREF_LONG_LIVED_ACCESS_TOKEN);
 
-    ConfigEntity entity = event?.toEntity()?.copyWith(
-      accessToken: accessToken
-    );
+    ConfigEntity entity = event?.toEntity()?.copyWith(accessToken: accessToken);
 
     if (entity != null) {
       _currentConfig = entity;
-    }
-    else if (_currentConfig != null) {
+    } else if (_currentConfig != null) {
       _currentConfig = _currentConfig.copyWith(
         accessToken: accessToken,
       );

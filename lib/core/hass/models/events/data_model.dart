@@ -15,7 +15,8 @@ class DataModel {
 
   const DataModel({this.entityId, this.oldState, this.newState});
 
-  factory DataModel.fromJson(Map<String, dynamic> json) => _$DataModelFromJson(json);
+  factory DataModel.fromJson(Map<String, dynamic> json) =>
+      _$DataModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$DataModelToJson(this);
 }
