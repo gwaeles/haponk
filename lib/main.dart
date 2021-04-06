@@ -1,10 +1,10 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:hapoc/features/connection/providers/connection_provider.dart';
-import 'package:hapoc/ui/config/config_screen.dart';
-import 'package:hapoc/ui/devices/devices_screen.dart';
-import 'package:hapoc/ui/launcher/launcher_screen.dart';
+import 'package:haponk/features/connection/providers/connection_provider.dart';
+import 'package:haponk/ui/config/config_screen.dart';
+import 'package:haponk/ui/devices/devices_screen.dart';
+import 'package:haponk/ui/launcher/launcher_screen.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:provider/provider.dart';
 

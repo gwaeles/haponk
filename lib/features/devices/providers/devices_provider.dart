@@ -1,5 +1,5 @@
-import 'package:hapoc/features/devices/entities/device.dart';
-import 'package:hapoc/features/devices/repositories/devices_repository.dart';
+import 'package:haponk/features/devices/entities/device.dart';
+import 'package:haponk/features/devices/repositories/devices_repository.dart';
 
 class DevicesProvider {
   final DevicesRepository repository;

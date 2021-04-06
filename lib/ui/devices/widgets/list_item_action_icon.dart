@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hapoc/features/connection/providers/connection_provider.dart';
+import 'package:haponk/features/connection/providers/connection_provider.dart';
 import 'package:provider/provider.dart';
 
 typedef GestureTapCallback = void Function(ConnectionProvider provider);

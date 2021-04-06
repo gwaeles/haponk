@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:hapoc/features/devices/entities/device.dart';
+import 'package:haponk/features/devices/entities/device.dart';
 
 import 'device_list_item.dart';
 import 'list_item_action_icon.dart';

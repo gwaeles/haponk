@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:hapoc/features/connection/providers/connection_provider.dart';
-import 'package:hapoc/features/devices/entities/device.dart';
+import 'package:haponk/features/connection/providers/connection_provider.dart';
+import 'package:haponk/features/devices/entities/device.dart';
 import 'package:provider/provider.dart';
 
 import 'device_list_item.dart';

@@ -1,21 +1,21 @@
 import 'dart:async';
 
-import 'package:hapoc/core/db/database.dart';
-import 'package:hapoc/core/db/database_extension.dart';
-import 'package:hapoc/core/hass/models/constants.dart';
-import 'package:hapoc/core/hass/models/events/data_model.dart';
-import 'package:hapoc/core/hass/models/events/state_model.dart';
-import 'package:hapoc/core/hass/models/messages/call_service_message_model.dart';
-import 'package:hapoc/core/hass/models/messages/get_config_message_model.dart';
-import 'package:hapoc/core/hass/models/messages/get_services_message_model.dart';
-import 'package:hapoc/core/hass/models/messages/get_states_message_model.dart';
-import 'package:hapoc/core/hass/models/messages/send_message_model.dart';
-import 'package:hapoc/core/hass/models/messages/subscribe_message_model.dart';
-import 'package:hapoc/core/hass/models/messages/unsubscribe_message_model.dart';
-import 'package:hapoc/features/config/entities/config_entity.dart';
-import 'package:hapoc/features/connection/datasources/web_socket_service.dart';
+import 'package:haponk/core/db/database.dart';
+import 'package:haponk/core/db/database_extension.dart';
+import 'package:haponk/core/hass/models/constants.dart';
+import 'package:haponk/core/hass/models/events/data_model.dart';
+import 'package:haponk/core/hass/models/events/state_model.dart';
+import 'package:haponk/core/hass/models/messages/call_service_message_model.dart';
+import 'package:haponk/core/hass/models/messages/get_config_message_model.dart';
+import 'package:haponk/core/hass/models/messages/get_services_message_model.dart';
+import 'package:haponk/core/hass/models/messages/get_states_message_model.dart';
+import 'package:haponk/core/hass/models/messages/send_message_model.dart';
+import 'package:haponk/core/hass/models/messages/subscribe_message_model.dart';
+import 'package:haponk/core/hass/models/messages/unsubscribe_message_model.dart';
+import 'package:haponk/features/config/entities/config_entity.dart';
+import 'package:haponk/features/connection/datasources/web_socket_service.dart';
 
-import 'package:hapoc/features/connection/entities/message.dart';
+import 'package:haponk/features/connection/entities/message.dart';
 import 'package:moor/moor.dart';
 
 import 'connection_repository.dart';

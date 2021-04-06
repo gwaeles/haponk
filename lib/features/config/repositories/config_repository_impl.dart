@@ -1,15 +1,15 @@
 import 'dart:async';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:hapoc/core/db/database.dart';
+import 'package:haponk/core/db/database.dart';
 
-import 'package:hapoc/core/hass/datasources/hass_api.dart';
-import 'package:hapoc/core/hass/models/events/discovery_info_model.dart';
-import 'package:hapoc/core/network/api_status.dart';
-import 'package:hapoc/dependency_injection.dart';
-import 'package:hapoc/features/config/entities/config_entity.dart';
-import 'package:hapoc/features/config/repositories/config_repository.dart';
-import 'package:hapoc/core/db/database_extension.dart';
+import 'package:haponk/core/hass/datasources/hass_api.dart';
+import 'package:haponk/core/hass/models/events/discovery_info_model.dart';
+import 'package:haponk/core/network/api_status.dart';
+import 'package:haponk/dependency_injection.dart';
+import 'package:haponk/features/config/entities/config_entity.dart';
+import 'package:haponk/features/config/repositories/config_repository.dart';
+import 'package:haponk/core/db/database_extension.dart';
 
 const String PREF_LONG_LIVED_ACCESS_TOKEN = "PREF_LONG_LIVED_ACCESS_TOKEN";
 

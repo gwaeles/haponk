@@ -1,10 +1,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.hapoc">
+    package="com.example.haponk">
 
    <uses-permission android:name="android.permission.INTERNET" />
 
    <application
-        android:label="hapoc"
+        android:label="Haponk"
         android:icon="@mipmap/ic_launcher"
         android:usesCleartextTraffic="true">
         <activity

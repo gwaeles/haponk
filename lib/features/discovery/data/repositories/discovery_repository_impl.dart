@@ -1,9 +1,9 @@
 import 'dart:async';
 
 import 'package:bonsoir/bonsoir.dart';
-import 'package:hapoc/features/discovery/data/datasources/discovery_service.dart';
-import 'package:hapoc/features/discovery/domain/entities/service_entity.dart';
-import 'package:hapoc/features/discovery/domain/repositories/discovery_repository.dart';
+import 'package:haponk/features/discovery/data/datasources/discovery_service.dart';
+import 'package:haponk/features/discovery/domain/entities/service_entity.dart';
+import 'package:haponk/features/discovery/domain/repositories/discovery_repository.dart';
 
 class DiscoveryRepositoryImpl extends DiscoveryRepository {
   final DiscoveryService _bonsoirService;

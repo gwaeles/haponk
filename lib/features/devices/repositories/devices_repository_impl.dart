@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:hapoc/core/db/database.dart';
-import 'package:hapoc/features/devices/entities/device.dart';
-import 'package:hapoc/core/db/database_extension.dart';
+import 'package:haponk/core/db/database.dart';
+import 'package:haponk/features/devices/entities/device.dart';
+import 'package:haponk/core/db/database_extension.dart';
 
 import 'devices_repository.dart';
 

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:hapoc/core/states/request_state.dart';
-import 'package:hapoc/features/config/entities/config_entity.dart';
-import 'package:hapoc/features/config/repositories/config_repository.dart';
+import 'package:haponk/core/states/request_state.dart';
+import 'package:haponk/features/config/entities/config_entity.dart';
+import 'package:haponk/features/config/repositories/config_repository.dart';
 
 class ConfigProvider with ChangeNotifier implements ListenerRequestState {
   final ConfigRepository repository;

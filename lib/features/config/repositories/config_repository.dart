@@ -1,4 +1,4 @@
-import 'package:hapoc/features/config/entities/config_entity.dart';
+import 'package:haponk/features/config/entities/config_entity.dart';
 
 abstract class ConfigRepository {
   Stream<ConfigEntity> addListener();

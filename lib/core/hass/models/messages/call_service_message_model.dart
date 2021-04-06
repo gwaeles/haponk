@@ -1,5 +1,5 @@
-import 'package:hapoc/core/hass/models/constants.dart';
-import 'package:hapoc/core/hass/models/events/data_model.dart';
+import 'package:haponk/core/hass/models/constants.dart';
+import 'package:haponk/core/hass/models/events/data_model.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 import 'send_message_model.dart';

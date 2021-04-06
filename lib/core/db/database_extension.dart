@@ -1,6 +1,6 @@
-import 'package:hapoc/core/hass/models/constants.dart';
-import 'package:hapoc/core/hass/models/device_type_converter.dart';
-import 'package:hapoc/features/config/entities/config_entity.dart';
+import 'package:haponk/core/hass/models/constants.dart';
+import 'package:haponk/core/hass/models/device_type_converter.dart';
+import 'package:haponk/features/config/entities/config_entity.dart';
 import 'package:moor_flutter/moor_flutter.dart';
 
 import 'database.dart';

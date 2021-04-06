@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:hapoc/features/devices/entities/device.dart';
-import 'package:hapoc/ui/devices/widgets/device_list_item.dart';
+import 'package:haponk/features/devices/entities/device.dart';
+import 'package:haponk/ui/devices/widgets/device_list_item.dart';
 import 'package:provider/provider.dart';
 
 class DevicesPage extends StatelessWidget {

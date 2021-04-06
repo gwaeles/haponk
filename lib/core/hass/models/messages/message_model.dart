@@ -1,5 +1,5 @@
-import 'package:hapoc/core/hass/models/constants.dart';
-import 'package:hapoc/core/hass/models/events/event_model.dart';
+import 'package:haponk/core/hass/models/constants.dart';
+import 'package:haponk/core/hass/models/events/event_model.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'auth_invalid_message_model.dart';
 import 'auth_ok_message_model.dart';

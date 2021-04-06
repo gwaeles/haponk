@@ -1,10 +1,10 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:hapoc/features/discovery/domain/entities/service_entity.dart';
-import 'package:hapoc/features/discovery/domain/usecases/listen_discover_use_case.dart';
-import 'package:hapoc/features/discovery/domain/usecases/start_discover_use_case.dart';
-import 'package:hapoc/features/discovery/domain/usecases/stop_discover_use_case.dart';
+import 'package:haponk/features/discovery/domain/entities/service_entity.dart';
+import 'package:haponk/features/discovery/domain/usecases/listen_discover_use_case.dart';
+import 'package:haponk/features/discovery/domain/usecases/start_discover_use_case.dart';
+import 'package:haponk/features/discovery/domain/usecases/stop_discover_use_case.dart';
 
 class DiscoveryProvider extends ChangeNotifier {
   final ListenDiscoverUseCase listenDiscoverUseCase;

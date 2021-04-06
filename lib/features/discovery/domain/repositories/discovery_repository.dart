@@ -1,4 +1,4 @@
-import 'package:hapoc/features/discovery/domain/entities/service_entity.dart';
+import 'package:haponk/features/discovery/domain/entities/service_entity.dart';
 
 abstract class DiscoveryRepository {
   Future<bool> startDiscover();

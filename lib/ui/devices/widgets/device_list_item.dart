@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:hapoc/core/hass/models/constants.dart';
-import 'package:hapoc/features/devices/entities/device.dart';
+import 'package:haponk/core/hass/models/constants.dart';
+import 'package:haponk/features/devices/entities/device.dart';
 
 import 'device_list_item_cover.dart';
 import 'device_list_item_light.dart';

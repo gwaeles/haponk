@@ -1,5 +1,5 @@
-import 'package:hapoc/features/discovery/domain/entities/service_entity.dart';
-import 'package:hapoc/features/discovery/domain/repositories/discovery_repository.dart';
+import 'package:haponk/features/discovery/domain/entities/service_entity.dart';
+import 'package:haponk/features/discovery/domain/repositories/discovery_repository.dart';
 
 class ListenDiscoverUseCase {
   final DiscoveryRepository _discoverRepository;

@@ -1,18 +1,18 @@
 import 'dart:convert';
 
-import 'package:hapoc/core/hass/models/constants.dart';
-import 'package:hapoc/core/hass/models/events/state_model.dart';
-import 'package:hapoc/core/hass/models/messages/auth_invalid_message_model.dart';
-import 'package:hapoc/core/hass/models/messages/auth_message_model.dart';
-import 'package:hapoc/core/hass/models/messages/auth_ok_message_model.dart';
-import 'package:hapoc/core/hass/models/messages/auth_required_message_model.dart';
-import 'package:hapoc/core/hass/models/messages/command_result_message_model.dart';
-import 'package:hapoc/core/hass/models/messages/event_message_model.dart';
-import 'package:hapoc/core/hass/models/messages/get_states_message_model.dart';
-import 'package:hapoc/core/hass/models/messages/message_model.dart';
-import 'package:hapoc/core/hass/models/messages/send_message_model.dart';
-import 'package:hapoc/core/hass/models/messages/subscribe_message_model.dart';
-import 'package:hapoc/core/hass/models/messages/unsubscribe_message_model.dart';
+import 'package:haponk/core/hass/models/constants.dart';
+import 'package:haponk/core/hass/models/events/state_model.dart';
+import 'package:haponk/core/hass/models/messages/auth_invalid_message_model.dart';
+import 'package:haponk/core/hass/models/messages/auth_message_model.dart';
+import 'package:haponk/core/hass/models/messages/auth_ok_message_model.dart';
+import 'package:haponk/core/hass/models/messages/auth_required_message_model.dart';
+import 'package:haponk/core/hass/models/messages/command_result_message_model.dart';
+import 'package:haponk/core/hass/models/messages/event_message_model.dart';
+import 'package:haponk/core/hass/models/messages/get_states_message_model.dart';
+import 'package:haponk/core/hass/models/messages/message_model.dart';
+import 'package:haponk/core/hass/models/messages/send_message_model.dart';
+import 'package:haponk/core/hass/models/messages/subscribe_message_model.dart';
+import 'package:haponk/core/hass/models/messages/unsubscribe_message_model.dart';
 import 'package:web_socket_channel/io.dart';
 import 'package:web_socket_channel/status.dart' as status;
 

@@ -1,4 +1,4 @@
-import 'package:hapoc/core/hass/models/constants.dart';
+import 'package:haponk/core/hass/models/constants.dart';
 
 class Device {
   final int id;

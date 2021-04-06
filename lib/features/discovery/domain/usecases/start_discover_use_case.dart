@@ -1,4 +1,4 @@
-import 'package:hapoc/features/discovery/domain/repositories/discovery_repository.dart';
+import 'package:haponk/features/discovery/domain/repositories/discovery_repository.dart';
 
 class StartDiscoverUseCase {
   final DiscoveryRepository _discoverRepository;

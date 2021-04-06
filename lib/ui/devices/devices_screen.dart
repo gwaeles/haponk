@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:hapoc/dependency_injection.dart';
-import 'package:hapoc/features/devices/providers/devices_provider.dart';
-import 'package:hapoc/ui/devices/widgets/devices_page.dart';
+import 'package:haponk/dependency_injection.dart';
+import 'package:haponk/features/devices/providers/devices_provider.dart';
+import 'package:haponk/ui/devices/widgets/devices_page.dart';
 import 'package:provider/provider.dart';
 
 class DevicesScreen extends StatelessWidget {
