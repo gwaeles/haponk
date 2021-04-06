@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:hapoc/core/db/database.dart';
 import 'package:hapoc/features/devices/entities/device.dart';
+import 'package:hapoc/core/db/database_extension.dart';
 
 import 'devices_repository.dart';
 
@@ -56,8 +57,10 @@ class DevicesRepositoryImpl implements DevicesRepository {
 
   Future<void> _onData(List<State> data) async {
     final result = data
+        .where((element) => element.deviceType() != null)
         .map((state) => Device(
               entityId: state.entityId,
+              deviceType: state.deviceType(),
               state: state.state,
               lastChanged: state.lastChanged,
               lastUpdated: state.lastUpdated,

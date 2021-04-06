@@ -1,6 +1,9 @@
+import 'package:hapoc/core/hass/models/constants.dart';
+
 class Device {
   final int id;
   final String entityId;
+  final DeviceType deviceType;
   final String state;
   final DateTime lastChanged;
   final DateTime lastUpdated;
@@ -24,6 +27,7 @@ class Device {
   Device(
       {this.id,
       this.entityId,
+      this.deviceType,
       this.state,
       this.lastChanged,
       this.lastUpdated,

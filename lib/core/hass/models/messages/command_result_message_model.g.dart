@@ -32,7 +32,7 @@ const _$MessageTypeEnumMap = {
   MessageType.SUBSCRIBE_EVENTS: 'subscribe_events',
   MessageType.UNSUBSCRIBE_EVENTS: 'unsubscribe_events',
   MessageType.EVENT: 'event',
-  MessageType.CALL_SERVICES: 'call_service',
+  MessageType.CALL_SERVICE: 'call_service',
   MessageType.GET_STATES: 'get_states',
   MessageType.GET_CONFIG: 'get_config',
   MessageType.GET_SERVICES: 'get_services',

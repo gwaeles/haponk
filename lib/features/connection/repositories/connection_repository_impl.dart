@@ -3,7 +3,9 @@ import 'dart:async';
 import 'package:hapoc/core/db/database.dart';
 import 'package:hapoc/core/db/database_extension.dart';
 import 'package:hapoc/core/hass/models/constants.dart';
+import 'package:hapoc/core/hass/models/events/data_model.dart';
 import 'package:hapoc/core/hass/models/events/state_model.dart';
+import 'package:hapoc/core/hass/models/messages/call_service_message_model.dart';
 import 'package:hapoc/core/hass/models/messages/get_config_message_model.dart';
 import 'package:hapoc/core/hass/models/messages/get_services_message_model.dart';
 import 'package:hapoc/core/hass/models/messages/get_states_message_model.dart';
@@ -142,6 +144,8 @@ class ConnectionRepositoryImpl extends ConnectionRepository {
       subscribe();
 
       getStates();
+
+      getServices();
     } else {
       // Already connected
       if (connectionType == ConnectionType.DISTANT) {
@@ -269,6 +273,15 @@ class ConnectionRepositoryImpl extends ConnectionRepository {
   @override
   void getStates() {
     _send(GetStatesMessageModel(id: _getNextCommandId()));
+  }
+
+  @override
+  void callService(String domain, String service, String entityId) {
+    _send(CallServiceMessageModel(
+        id: _getNextCommandId(),
+        domain: domain,
+        service: service,
+        serviceData: DataModel(entityId: entityId)));
   }
 
   ///

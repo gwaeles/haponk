@@ -18,8 +18,18 @@ DataModel _$DataModelFromJson(Map<String, dynamic> json) {
   );
 }
 
-Map<String, dynamic> _$DataModelToJson(DataModel instance) => <String, dynamic>{
-      'entity_id': instance.entityId,
-      'old_state': instance.oldState,
-      'new_state': instance.newState,
-    };
+Map<String, dynamic> _$DataModelToJson(DataModel instance) {
+  final val = <String, dynamic>{
+    'entity_id': instance.entityId,
+  };
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('old_state', instance.oldState);
+  writeNotNull('new_state', instance.newState);
+  return val;
+}

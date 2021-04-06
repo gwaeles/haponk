@@ -13,4 +13,6 @@ class EventMessageModel extends MessageModel {
   const EventMessageModel(
       {int id, this.event, MessageType type = MessageType.EVENT})
       : super(type, id: id);
+
+  Map<String, dynamic> toJson() => _$EventMessageModelToJson(this);
 }

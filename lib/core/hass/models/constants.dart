@@ -20,7 +20,7 @@ enum MessageType {
   @JsonValue("event")
   EVENT,
   @JsonValue("call_service")
-  CALL_SERVICES,
+  CALL_SERVICE,
   @JsonValue("get_states")
   GET_STATES,
   @JsonValue("get_config")
@@ -43,45 +43,26 @@ enum EventType {
 }
 
 enum DeviceType {
-  @JsonValue("automation")
   AUTOMATION,
-  @JsonValue("light")
   LIGHT,
-  @JsonValue("cover")
   COVER,
-  @JsonValue("weather")
   WEATHER,
-  @JsonValue("binary_sensor")
   BINARY_SENSOR,
-  @JsonValue("sensor")
   SENSOR,
-  @JsonValue("switch")
   SWITCH,
-  @JsonValue("media_player")
   MEDIA_PLAYER,
 }
 
 enum SensorDeviceType {
-  @JsonValue("opening")
   OPENING,
-  @JsonValue("plug")
   PLUG,
-  @JsonValue("motion")
   MOTION,
-  @JsonValue("smoke")
   SMOKE,
-  @JsonValue("battery")
   BETTERY,
-  @JsonValue("illuminance")
   ILLUMINANCE,
-  @JsonValue("temperature")
   TEMPERATURE,
-  @JsonValue("humidity")
   HUMIDITY,
-  @JsonValue("pressure")
   PRESSURE,
-  @JsonValue("power")
   POWER,
-  @JsonValue("timestamp")
   TIMESTAMP,
 }

@@ -41,6 +41,8 @@ abstract class MessageModel {
 
     throw TypeError;
   }
+
+  Map<String, dynamic> toJson() => _$MessageModelToJson(this);
 }
 
 MessageType messageTypeFromString(String source) {

@@ -1,13 +1,13 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'get_states_message_model.dart';
+part of 'call_service_message_model.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-Map<String, dynamic> _$GetStatesMessageModelToJson(
-    GetStatesMessageModel instance) {
+Map<String, dynamic> _$CallServiceMessageModelToJson(
+    CallServiceMessageModel instance) {
   final val = <String, dynamic>{};
 
   void writeNotNull(String key, dynamic value) {
@@ -18,6 +18,9 @@ Map<String, dynamic> _$GetStatesMessageModelToJson(
 
   writeNotNull('id', instance.id);
   val['type'] = _$MessageTypeEnumMap[instance.type];
+  val['domain'] = instance.domain;
+  val['service'] = instance.service;
+  val['service_data'] = instance.serviceData;
   return val;
 }
 

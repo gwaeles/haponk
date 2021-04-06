@@ -12,4 +12,6 @@ class CommandResultMessageModel extends MessageModel {
 
   const CommandResultMessageModel({int id, this.success, this.result})
       : super(MessageType.RESULT, id: id);
+
+  Map<String, dynamic> toJson() => _$CommandResultMessageModelToJson(this);
 }

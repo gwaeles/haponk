@@ -8,9 +8,9 @@ part 'data_model.g.dart';
 class DataModel {
   @JsonKey(name: "entity_id")
   final String entityId;
-  @JsonKey(name: "old_state")
+  @JsonKey(name: "old_state", includeIfNull: false)
   final StateModel oldState;
-  @JsonKey(name: "new_state")
+  @JsonKey(name: "new_state", includeIfNull: false)
   final StateModel newState;
 
   const DataModel({this.entityId, this.oldState, this.newState});

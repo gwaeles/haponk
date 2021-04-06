@@ -12,4 +12,6 @@ class AuthInvalidMessageModel extends MessageModel {
   const AuthInvalidMessageModel(
       {this.message, MessageType type = MessageType.AUTH_INVALID})
       : super(type);
+
+  Map<String, dynamic> toJson() => _$AuthInvalidMessageModelToJson(this);
 }

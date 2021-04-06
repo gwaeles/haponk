@@ -37,7 +37,12 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: 'app_name'.tr(),
         theme: ThemeData(
-          primarySwatch: Colors.blue,
+          primarySwatch: Colors.indigo,
+          textTheme: TextTheme(
+            headline1: TextStyle(fontSize: 72.0, fontWeight: FontWeight.bold),
+            headline6: TextStyle(fontSize: 36.0, fontStyle: FontStyle.italic),
+            bodyText2: TextStyle(fontSize: 14.0),
+          ),
         ),
         routes: {
           "/launcher": (context) => LauncherScreen(),

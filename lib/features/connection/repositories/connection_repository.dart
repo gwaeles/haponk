@@ -14,4 +14,5 @@ abstract class ConnectionRepository {
   void getConfig();
   void getServices();
   void getStates();
+  void callService(String domain, String service, String entityId);
 }

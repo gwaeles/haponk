@@ -1,3 +1,5 @@
+import 'package:hapoc/core/hass/models/constants.dart';
+import 'package:hapoc/core/hass/models/device_type_converter.dart';
 import 'package:hapoc/features/config/entities/config_entity.dart';
 import 'package:moor_flutter/moor_flutter.dart';
 
@@ -45,5 +47,15 @@ extension ConfigEntityExtension on Config {
         requiresApiPassword: this.requiresApiPassword,
         version: this.version,
         lastConnection: this.lastConnection);
+  }
+}
+
+extension StateTypeExtension on State {
+  DeviceType deviceType() {
+    final converter = CustomDeviceTypeConverter();
+
+    String type = entityId?.substring(0, entityId.indexOf('.'));
+
+    return converter.fromJson(type);
   }
 }
