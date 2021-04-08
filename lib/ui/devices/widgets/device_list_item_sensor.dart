@@ -21,11 +21,31 @@ class DeviceListItemSensor extends DeviceListItem {
       if (device.deviceClass == "temperature") {
         return 'assets/images/thermometer.svg';
       }
-      if (device.deviceClass == "humidity") {
+      else if (device.deviceClass == "humidity") {
         return 'assets/images/humidity.svg';
       }
+      else if (device.deviceClass == "battery") {
+        return 'assets/images/battery.svg';
+      }
+      else {
+        return 'assets/images/sensor.svg';
+      }
+    }
+    else if (device.deviceType == DeviceType.BINARY_SENSOR) {
+      if (device.deviceClass == "plug") {
+        return 'assets/images/battery.svg';
+      }
+      else if (device.deviceClass == "opening") {
+        return 'assets/images/sensor.svg';
+      }
+      else {
+        return 'assets/images/processor.svg';
+      }
+    }
+    else if (device.deviceType == DeviceType.AUTOMATION) {
+      return 'assets/images/scenario.svg';
     }
 
-    return 'assets/images/sensor.svg';
+    return 'assets/images/processor.svg';
   }
 }
