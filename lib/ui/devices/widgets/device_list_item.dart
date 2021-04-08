@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:haponk/core/hass/models/constants.dart';
 import 'package:haponk/features/devices/entities/device.dart';
 
+import 'device_list_item_automation.dart';
 import 'device_list_item_cover.dart';
 import 'device_list_item_light.dart';
 import 'device_list_item_sensor.dart';
@@ -14,26 +15,21 @@ abstract class DeviceListItem extends StatelessWidget {
   factory DeviceListItem.fromDevice(Device device) {
     switch (device.deviceType) {
       case DeviceType.AUTOMATION:
-        // TODO: Handle this case.
-        break;
+        return DeviceListItemAutomation(device: device);
       case DeviceType.LIGHT:
         return DeviceListItemLight(device: device);
       case DeviceType.COVER:
         return DeviceListItemCover(device: device);
       case DeviceType.WEATHER:
-        // TODO: Handle this case.
-        break;
+        return DeviceListItemSensor(device: device);
       case DeviceType.BINARY_SENSOR:
-        // TODO: Handle this case.
-        break;
+        return DeviceListItemSensor(device: device);
       case DeviceType.SENSOR:
         return DeviceListItemSensor(device: device);
       case DeviceType.SWITCH:
-        // TODO: Handle this case.
-        break;
+        return DeviceListItemSensor(device: device);
       case DeviceType.MEDIA_PLAYER:
-        // TODO: Handle this case.
-        break;
+        return DeviceListItemSensor(device: device);
     }
 
     return DeviceListItemSensor(device: device);
