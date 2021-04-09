@@ -8,13 +8,23 @@ class DevicesPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final devices = context.watch<List<Device>>();
 
-    return ListView.separated(
-        padding: EdgeInsets.only(top: 8, bottom: 16),
-        itemBuilder: (_, index) => DeviceListItem.fromDevice(devices[index]),
-        separatorBuilder: (_, index) => Divider(
-              height: 1,
-              color: Colors.grey,
-            ),
-        itemCount: devices?.length ?? 0);
+    return SliverList(
+      delegate: SliverChildBuilderDelegate(
+        (BuildContext context, int index) {
+          return Column(
+            children: <Widget>[
+              if (index == 0) SizedBox(height: 8),
+              if (index != 0) Divider(
+                height: 1,
+                color: Colors.grey,
+              ),
+              DeviceListItem.fromDevice(devices[index]),
+              if (index == (devices.length - 1)) SizedBox(height: 16),
+            ],
+          );
+        },
+        childCount: devices?.length ?? 0,
+      ),
+    );
   }
 }
