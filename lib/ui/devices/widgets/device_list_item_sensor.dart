@@ -23,7 +23,16 @@ class DeviceListItemSensor extends DeviceListItem {
       } else if (device.deviceClass == "humidity") {
         return 'assets/images/humidity.svg';
       } else if (device.deviceClass == "battery") {
-        return 'assets/images/battery.svg';
+        int level = int.tryParse(device.state);
+        if (level == null) {
+          return 'assets/images/battery.svg';
+        } else if (level >= 50) {
+          return 'assets/images/battery_full.svg';
+        } else if (level >= 20) {
+          return 'assets/images/battery_half.svg';
+        } else {
+          return 'assets/images/battery_low.svg';
+        }
       } else {
         return 'assets/images/sensor.svg';
       }

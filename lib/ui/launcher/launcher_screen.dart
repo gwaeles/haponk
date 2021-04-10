@@ -47,18 +47,17 @@ class LauncherScreenState extends State<LauncherScreen> {
   Widget build(BuildContext context) {
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle(
+        // Fixing the status bar icon color
+        statusBarIconBrightness:
+            Theme.of(context).brightness == Brightness.light
+                ? Brightness.dark
+                : Brightness.light,
         statusBarColor: Colors.transparent,
-        statusBarIconBrightness: Brightness.dark,
       ),
       child: Scaffold(
         body: Center(
-            child: Container(
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(8)),
-              color: Colors.blue.shade100),
-          width: 120,
-          height: 120,
-        )),
+            child:
+                Image.asset("assets/images/ha_splash_logo.png", height: 152)),
       ),
     );
   }

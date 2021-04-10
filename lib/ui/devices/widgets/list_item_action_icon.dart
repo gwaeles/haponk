@@ -10,7 +10,7 @@ class ListItemActionIcon extends StatelessWidget {
   final GestureTapCallback onTap;
 
   const ListItemActionIcon(
-      {Key key, this.icon, this.color = Colors.black54, this.onTap})
+      {Key key, this.icon, this.color = const Color(0xFF3F5AA6), this.onTap})
       : super(key: key);
 
   @override
@@ -25,7 +25,7 @@ class ListItemActionIcon extends StatelessWidget {
         height: 48,
         child: Icon(
           icon,
-          color: onTap == null ? Colors.black26 : color,
+          color: onTap == null ? const Color(0xFFBACAFF) : color,
         ),
       ),
     );

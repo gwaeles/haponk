@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:haponk/core/hass/models/constants.dart';
+import 'package:haponk/core/theme/app_theme.dart';
+import 'package:haponk/core/theme/colors.dart';
 import 'package:haponk/features/devices/entities/device.dart';
 
 import 'device_list_item_automation.dart';
@@ -47,14 +49,13 @@ abstract class DeviceListItem extends StatelessWidget {
     return InkWell(
       //onTap: () => Navigator.of(context).pushReplacementNamed("/devices"),
       child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             // Icon
             if (_leading != null) leading,
-
-            SizedBox(width: _leading != null ? 12 : 4),
+            if (_leading != null) SizedBox(width: 16),
 
             // Labels
             Expanded(
@@ -64,11 +65,12 @@ abstract class DeviceListItem extends StatelessWidget {
                 children: [
                   Text(
                     device.friendlyName,
-                    style: _deviceNameTextStyle(),
+                    style: AppTheme.of(context).listItemTitleTextStyle,
                   ),
+                  SizedBox(height: 2),
                   Text(
                     "${device.state} ${device.unitOfMeasurement ?? ''}",
-                    style: _deviceStateTextStyle(),
+                    style: AppTheme.of(context).listItemSubtitleTextStyle,
                   ),
                 ],
               ),
@@ -93,22 +95,4 @@ abstract class DeviceListItem extends StatelessWidget {
   Widget buildLeading(BuildContext context) => null;
   Widget buildTrailing(BuildContext context) => null;
 
-  ///
-  /// --- TextStyle --- ///
-  ///
-
-  TextStyle _deviceNameTextStyle() {
-    return TextStyle(
-      fontSize: 12,
-      color: Colors.black54,
-    );
-  }
-
-  TextStyle _deviceStateTextStyle() {
-    return TextStyle(
-      fontSize: 24,
-      fontWeight: FontWeight.w300,
-      color: Colors.black87,
-    );
-  }
 }

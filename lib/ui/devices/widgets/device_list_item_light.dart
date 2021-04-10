@@ -15,6 +15,7 @@ class DeviceListItemLight extends DeviceListItem {
   Widget get leading => Consumer<ConnectionProvider>(
         builder: (context, provider, child) {
           return InkWell(
+            borderRadius: BorderRadius.all(Radius.circular(24)),
             child: child,
             onTap: () => provider.callService(
                 domain: "light", service: "toggle", entityId: device.entityId),
@@ -22,8 +23,8 @@ class DeviceListItemLight extends DeviceListItem {
         },
         child: SvgPicture.asset(
           device.state == "on"
-              ? 'assets/images/light_on.svg'
-              : 'assets/images/light_off.svg',
+                ? 'assets/images/light_on.svg'
+                : 'assets/images/light_off.svg',
           width: 48,
           height: 48,
         ),

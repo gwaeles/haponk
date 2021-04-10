@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:haponk/features/devices/entities/device.dart';
 
 import 'device_list_item.dart';
@@ -17,12 +16,12 @@ class DeviceListItemCover extends DeviceListItem {
     final isClosed = device.currentPosition == null
         ? device.state == "closed"
         : device.currentPosition == 0;
-    return SvgPicture.asset(
+    return Image.asset(
       isOpened
-          ? 'assets/images/cover_open.svg'
+          ? 'assets/images/cover_open.png'
           : isClosed
-              ? 'assets/images/cover_closed.svg'
-              : 'assets/images/cover_half.svg',
+              ? 'assets/images/cover_closed.png'
+              : 'assets/images/cover_half.png',
       width: 48,
       height: 48,
     );

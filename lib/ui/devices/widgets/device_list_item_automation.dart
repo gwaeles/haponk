@@ -11,10 +11,10 @@ class DeviceListItemAutomation extends DeviceListItem {
 
   @override
   Widget get leading => SvgPicture.asset(
-        'assets/images/scenario.svg',
-        width: 48,
-        height: 48,
-      );
+    'assets/images/scenario.svg',
+    width: 48,
+    height: 48,
+  );
 
   @override
   Widget get trailing => Row(
