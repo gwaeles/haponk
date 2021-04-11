@@ -76,6 +76,7 @@ flutter:
   assets:
     - assets/translations/
     - assets/images/
+    - assets/images/dark/
   fonts:
     - family: Avenir
       fonts:

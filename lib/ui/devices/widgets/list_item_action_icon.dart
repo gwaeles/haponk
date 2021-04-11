@@ -6,11 +6,10 @@ typedef GestureTapCallback = void Function(ConnectionProvider provider);
 
 class ListItemActionIcon extends StatelessWidget {
   final IconData icon;
-  final Color color;
   final GestureTapCallback onTap;
 
   const ListItemActionIcon(
-      {Key key, this.icon, this.color = const Color(0xFF3F5AA6), this.onTap})
+      {Key key, this.icon, this.onTap})
       : super(key: key);
 
   @override
@@ -25,7 +24,9 @@ class ListItemActionIcon extends StatelessWidget {
         height: 48,
         child: Icon(
           icon,
-          color: onTap == null ? const Color(0xFFBACAFF) : color,
+          color: onTap == null
+            ? Theme.of(context).disabledColor
+            : Theme.of(context).focusColor,
         ),
       ),
     );

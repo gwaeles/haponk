@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:haponk/core/themes/app_theme.dart';
 import 'package:haponk/features/devices/providers/devices_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -9,27 +10,29 @@ class DevicesAppBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final backgroundColor = AppTheme.of(context).inputBackgroungColor;
+    final hintColor = AppTheme.of(context).inputHintColor;
+    final textColor = AppTheme.of(context).inputTextColor;
+
     return SliverAppBar(
       backwardsCompatibility: false,
-      systemOverlayStyle: SystemUiOverlayStyle(statusBarColor: Colors.transparent),
+      systemOverlayStyle:
+          SystemUiOverlayStyle(statusBarColor: Colors.transparent),
       title: TextField(
         decoration: InputDecoration(
           hintText: "Find",
           filled: true,
-          fillColor: Color(0xFF192A59),
+          fillColor: backgroundColor,
           border: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(32)),
-            borderSide: BorderSide(width: 0, color: Color(0xFF192A59))
-          ),
+              borderRadius: BorderRadius.all(Radius.circular(32)),
+              borderSide: BorderSide(width: 0, color: backgroundColor)),
           focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(32)),
-            borderSide: BorderSide(width: 0, color: Color(0xFF192A59))
-          ),
+              borderRadius: BorderRadius.all(Radius.circular(32)),
+              borderSide: BorderSide(width: 0, color: backgroundColor)),
           enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(32)),
-            borderSide: BorderSide(width: 0, color: Color(0xFF192A59))
-          ),
-          hintStyle: TextStyle(color: Color(0xFFBACAFF)),
+              borderRadius: BorderRadius.all(Radius.circular(32)),
+              borderSide: BorderSide(width: 0, color: backgroundColor)),
+          hintStyle: TextStyle(color: hintColor),
           isDense: true,
           contentPadding:
               EdgeInsets.only(left: 20, top: 11, right: 8, bottom: 11),
@@ -38,14 +41,14 @@ class DevicesAppBar extends StatelessWidget {
             padding: const EdgeInsets.only(right: 16.0),
             child: SvgPicture.asset(
               'assets/images/search.svg',
-              color: Color(0xFFBACAFF),
+              color: hintColor,
             ),
           ),
         ),
         style: TextStyle(
-          color: Colors.white,
+          color: textColor,
         ),
-        cursorColor: Color(0xFFBACAFF),
+        cursorColor: hintColor,
         onChanged: (value) => context.read<DevicesProvider>().search(value),
       ),
       floating: true,

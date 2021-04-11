@@ -1,8 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:haponk/core/theme/colors.dart';
+import 'package:haponk/core/themes/app_theme.dart';
 import 'package:haponk/features/connection/providers/connection_provider.dart';
 import 'package:haponk/ui/config/config_screen.dart';
 import 'package:haponk/ui/devices/devices_screen.dart';
@@ -38,27 +37,8 @@ class MyApp extends StatelessWidget {
       create: (context) => ConnectionProvider(getIt()),
       child: MaterialApp(
           title: 'app_name'.tr(),
-          theme: ThemeData(
-            primaryColor: AppColors.blue,
-            scaffoldBackgroundColor: AppColors.white,
-            fontFamily: 'Avenir',
-            textTheme: TextTheme(
-              headline1: TextStyle(fontSize: 72.0, fontWeight: FontWeight.bold),
-              headline6: TextStyle(fontSize: 36.0, fontStyle: FontStyle.italic),
-              bodyText2: TextStyle(fontSize: 14.0),
-            ),
-          ),
-          darkTheme: ThemeData(
-            primaryColor: AppColors.blue,
-            brightness: Brightness.dark,
-            scaffoldBackgroundColor: Colors.grey.shade900,
-            fontFamily: 'Avenir',
-            textTheme: TextTheme(
-              headline1: TextStyle(fontSize: 72.0, fontWeight: FontWeight.bold),
-              headline6: TextStyle(fontSize: 36.0, fontStyle: FontStyle.italic),
-              bodyText2: TextStyle(fontSize: 14.0),
-            ),
-          ),
+          theme: lightTheme,
+          darkTheme: darkTheme,
           routes: {
             "/launcher": (context) => LauncherScreen(),
             "/config": (context) => ConfigScreen(),

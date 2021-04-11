@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:haponk/core/themes/app_theme.dart';
 import 'package:haponk/features/devices/entities/device.dart';
 
 import 'device_list_item.dart';
@@ -10,11 +11,15 @@ class DeviceListItemAutomation extends DeviceListItem {
       : super(key: key, device: device);
 
   @override
-  Widget get leading => SvgPicture.asset(
-    'assets/images/scenario.svg',
-    width: 48,
-    height: 48,
-  );
+  Widget buildLeading(BuildContext context) {
+    final path = AppTheme.of(context).isDark ? "dark/" : "";
+
+    return SvgPicture.asset(
+      'assets/images/${path}scenario.svg',
+      width: 48,
+      height: 48,
+    );
+  }
 
   @override
   Widget get trailing => Row(

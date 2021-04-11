@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:haponk/core/hass/models/constants.dart';
-import 'package:haponk/core/theme/app_theme.dart';
-import 'package:haponk/core/theme/colors.dart';
+import 'package:haponk/core/themes/app_theme.dart';
 import 'package:haponk/features/devices/entities/device.dart';
 
 import 'device_list_item_automation.dart';
@@ -54,7 +53,7 @@ abstract class DeviceListItem extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             // Icon
-            if (_leading != null) leading,
+            if (_leading != null) _leading,
             if (_leading != null) SizedBox(width: 16),
 
             // Labels
