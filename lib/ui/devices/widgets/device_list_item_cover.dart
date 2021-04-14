@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:haponk/core/themes/app_theme.dart';
 import 'package:haponk/features/devices/entities/device.dart';
 
@@ -11,7 +12,7 @@ class DeviceListItemCover extends DeviceListItem {
 
   @override
   Widget buildLeading(BuildContext context) {
-    final suffix = AppTheme.of(context).isDark ? "_dark" : "";
+    final path = AppTheme.of(context).isDark ? "dark/" : "";
     final isOpened = device.currentPosition == null
         ? device.state == "open"
         : device.currentPosition == 100;
@@ -19,12 +20,12 @@ class DeviceListItemCover extends DeviceListItem {
         ? device.state == "closed"
         : device.currentPosition == 0;
 
-    return Image.asset(
+    return SvgPicture.asset(
       isOpened
-          ? 'assets/images/cover_open$suffix.png'
+          ? 'assets/images/${path}cover_open.svg'
           : isClosed
-              ? 'assets/images/cover_closed$suffix.png'
-              : 'assets/images/cover_half$suffix.png',
+              ? 'assets/images/${path}cover_closed.svg'
+              : 'assets/images/${path}cover_half.svg',
       width: 48,
       height: 48,
     );

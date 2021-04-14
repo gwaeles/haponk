@@ -22,9 +22,7 @@ class LauncherScreenState extends State<LauncherScreen> {
     Future.delayed(Duration(milliseconds: 250))
         .then((value) => configProvider.messageStream.first.then((value) {
               if (value?.lastConnection != null) {
-                final connectionProvider = context.read<ConnectionProvider>();
-
-                connectionProvider.connect(value);
+                context.read<ConnectionProvider>().connect(value);
 
                 Navigator.of(context).pushReplacementNamed("/devices");
               } else {
