@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import 'widgets/pages_page.dart';
+import 'widgets/tabs_page.dart';
 
 class PagesScreen extends StatelessWidget {
   @override

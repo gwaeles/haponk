@@ -1,5 +1,8 @@
 import 'dart:async';
+import 'dart:convert';
 
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:haponk/core/db/database.dart';
 
@@ -64,10 +67,28 @@ class ConfigRepositoryImpl extends ConfigRepository {
   }
 
   Future<void> _onConfigData(Config event) async {
-    final accessToken =
+    String accessToken =
         await secureStorage.read(key: PREF_LONG_LIVED_ACCESS_TOKEN);
 
-    ConfigEntity entity = event?.toEntity()?.copyWith(accessToken: accessToken);
+    if (accessToken == null) {
+      // Initiale config
+      try {
+        final String json =
+            await rootBundle.loadString("assets/config/config.json");
+        final defaultConfig = jsonDecode(json) as Map<String, dynamic>;
+        accessToken = defaultConfig.containsKey("longLivedToken")
+            ? defaultConfig["longLivedToken"]
+            : null;
+        if (accessToken != null && accessToken.isNotEmpty) {
+          await secureStorage.write(
+              key: PREF_LONG_LIVED_ACCESS_TOKEN, value: accessToken);
+        }
+      } catch (e) {
+        debugPrint("[CONFIG] No config file");
+      }
+    }
+
+    final entity = event?.toEntity()?.copyWith(accessToken: accessToken);
 
     if (entity != null) {
       _currentConfig = entity;
