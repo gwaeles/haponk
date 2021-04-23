@@ -1,80 +1,69 @@
+import 'dart:convert';
+
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:moor_flutter/moor_flutter.dart';
+
+import 'tables/cards.dart';
+import 'tables/configs.dart';
+import 'tables/states.dart';
+import 'tables/tabs.dart';
 
 part 'database.g.dart';
 
-class Configs extends Table {
-  IntColumn get id => integer()();
-  TextColumn get uuid => text().nullable()();
-  TextColumn get baseUrl => text().nullable()();
-  TextColumn get externalUrl => text().nullable()();
-  TextColumn get internalUrl => text().nullable()();
-  TextColumn get locationName => text().nullable()();
-  TextColumn get installationType => text().nullable()();
-  BoolColumn get requiresApiPassword =>
-      boolean().withDefault(const Constant(false))();
-  TextColumn get version => text().nullable()();
-  DateTimeColumn get lastConnection => dateTime().nullable()();
-
-  @override
-  Set<Column> get primaryKey => {id};
-}
-
-class States extends Table {
-  IntColumn get id => integer().autoIncrement()();
-  TextColumn get entityId => text().nullable()();
-  TextColumn get state => text().nullable()();
-  DateTimeColumn get lastChanged => dateTime().nullable()();
-  DateTimeColumn get lastUpdated => dateTime().nullable()();
-  // Attributes
-  TextColumn get friendlyName => text().nullable()();
-  IntColumn get supportedFeatures => integer().nullable()();
-
-  // COVER
-  IntColumn get currentPosition => integer().nullable()();
-
-  // AUTOMATION
-  DateTimeColumn get lastTriggered => dateTime().nullable()();
-  TextColumn get mode => text().nullable()();
-
-  // WEATHER / SENSOR
-  RealColumn get temperature => real().nullable()();
-  IntColumn get humidity => integer().nullable()();
-  RealColumn get pressure => real().nullable()();
-  RealColumn get windBearing => real().nullable()();
-  RealColumn get windSpeed => real().nullable()();
-  TextColumn get attribution => text().nullable()();
-
-  // SENSOR / BINARY SENSOR
-  BoolColumn get isOn => boolean().nullable()();
-  TextColumn get deviceClass => text().nullable()();
-  TextColumn get unitOfMeasurement => text().nullable()();
-  IntColumn get current => integer().nullable()();
-  IntColumn get voltage => integer().nullable()();
-}
-
-class StateForecast extends Table {
-  IntColumn get id => integer().autoIncrement()();
-  IntColumn get stateId => integer()();
-  TextColumn get condition => text().nullable()();
-  RealColumn get precipitation => real().nullable()();
-  RealColumn get temperature => real().nullable()();
-  RealColumn get templow => real().nullable()();
-  RealColumn get windBearing => real().nullable()();
-  RealColumn get windSpeed => real().nullable()();
-  DateTimeColumn get datetime => dateTime().nullable()();
-}
-
 @UseMoor(
-  tables: [Configs, States],
+  tables: [Configs, States, Tabs, Cards],
 )
 class Database extends _$Database {
-  Database(QueryExecutor e)
-      // Specify the location of the database file
-      : super(e);
+  Database(QueryExecutor e) : super(e);
 
   @override
-  int get schemaVersion => 1;
+  int get schemaVersion => 2;
 
+  @override
+  MigrationStrategy get migration {
+    return MigrationStrategy(
+      onCreate: (Migrator m) {
+        debugPrint("[MOOR] onCreate");
+        return m.createAll();
+      },
+      onUpgrade: (Migrator m, int from, int to) async {
+        debugPrint("[MOOR] onUpgrade from: $from, to: $to");
+        if (from == 1) {
+          await m.addColumn(states, states.displayLabel);
+          await m.addColumn(states, states.displayType);
+          await m.createTable(tabs);
+          await m.createTable(cards);
+        }
+      },
+      beforeOpen: (details) async {
+        if (details.wasCreated) {
+          // Initiale config
+          String internalUrl;
+          try {
+            final String json =
+                await rootBundle.loadString("assets/config/config.json");
+            final defaultConfig = jsonDecode(json) as Map<String, dynamic>;
+            internalUrl = defaultConfig.containsKey("internalUrl")
+                ? defaultConfig["internalUrl"]
+                : null;
+          } catch (e) {
+            debugPrint("[MOOR] No config file");
+          }
+          if (internalUrl != null) {
+            final Config newConfig = Config(
+              id: 1,
+              internalUrl: internalUrl,
+              requiresApiPassword: null,
+            );
+            await insertConfig(newConfig);
+          }
+        }
+      },
+    );
+  }
+
+  // CONFIG
   Future<Config> getConfig() =>
       (select(configs)..where((item) => item.id.equals(1))).getSingle();
   Stream<Config> watchConfig() =>

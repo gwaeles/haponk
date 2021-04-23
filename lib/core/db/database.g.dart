@@ -605,6 +605,8 @@ class State extends DataClass implements Insertable<State> {
   final String state;
   final DateTime lastChanged;
   final DateTime lastUpdated;
+  final String displayLabel;
+  final String displayType;
   final String friendlyName;
   final int supportedFeatures;
   final int currentPosition;
@@ -627,6 +629,8 @@ class State extends DataClass implements Insertable<State> {
       this.state,
       this.lastChanged,
       this.lastUpdated,
+      this.displayLabel,
+      this.displayType,
       this.friendlyName,
       this.supportedFeatures,
       this.currentPosition,
@@ -661,6 +665,10 @@ class State extends DataClass implements Insertable<State> {
           .mapFromDatabaseResponse(data['${effectivePrefix}last_changed']),
       lastUpdated: dateTimeType
           .mapFromDatabaseResponse(data['${effectivePrefix}last_updated']),
+      displayLabel: stringType
+          .mapFromDatabaseResponse(data['${effectivePrefix}display_label']),
+      displayType: stringType
+          .mapFromDatabaseResponse(data['${effectivePrefix}display_type']),
       friendlyName: stringType
           .mapFromDatabaseResponse(data['${effectivePrefix}friendly_name']),
       supportedFeatures: intType.mapFromDatabaseResponse(
@@ -710,6 +718,12 @@ class State extends DataClass implements Insertable<State> {
     }
     if (!nullToAbsent || lastUpdated != null) {
       map['last_updated'] = Variable<DateTime>(lastUpdated);
+    }
+    if (!nullToAbsent || displayLabel != null) {
+      map['display_label'] = Variable<String>(displayLabel);
+    }
+    if (!nullToAbsent || displayType != null) {
+      map['display_type'] = Variable<String>(displayType);
     }
     if (!nullToAbsent || friendlyName != null) {
       map['friendly_name'] = Variable<String>(friendlyName);
@@ -776,6 +790,12 @@ class State extends DataClass implements Insertable<State> {
       lastUpdated: lastUpdated == null && nullToAbsent
           ? const Value.absent()
           : Value(lastUpdated),
+      displayLabel: displayLabel == null && nullToAbsent
+          ? const Value.absent()
+          : Value(displayLabel),
+      displayType: displayType == null && nullToAbsent
+          ? const Value.absent()
+          : Value(displayType),
       friendlyName: friendlyName == null && nullToAbsent
           ? const Value.absent()
           : Value(friendlyName),
@@ -832,6 +852,8 @@ class State extends DataClass implements Insertable<State> {
       state: serializer.fromJson<String>(json['state']),
       lastChanged: serializer.fromJson<DateTime>(json['lastChanged']),
       lastUpdated: serializer.fromJson<DateTime>(json['lastUpdated']),
+      displayLabel: serializer.fromJson<String>(json['displayLabel']),
+      displayType: serializer.fromJson<String>(json['displayType']),
       friendlyName: serializer.fromJson<String>(json['friendlyName']),
       supportedFeatures: serializer.fromJson<int>(json['supportedFeatures']),
       currentPosition: serializer.fromJson<int>(json['currentPosition']),
@@ -859,6 +881,8 @@ class State extends DataClass implements Insertable<State> {
       'state': serializer.toJson<String>(state),
       'lastChanged': serializer.toJson<DateTime>(lastChanged),
       'lastUpdated': serializer.toJson<DateTime>(lastUpdated),
+      'displayLabel': serializer.toJson<String>(displayLabel),
+      'displayType': serializer.toJson<String>(displayType),
       'friendlyName': serializer.toJson<String>(friendlyName),
       'supportedFeatures': serializer.toJson<int>(supportedFeatures),
       'currentPosition': serializer.toJson<int>(currentPosition),
@@ -884,6 +908,8 @@ class State extends DataClass implements Insertable<State> {
           String state,
           DateTime lastChanged,
           DateTime lastUpdated,
+          String displayLabel,
+          String displayType,
           String friendlyName,
           int supportedFeatures,
           int currentPosition,
@@ -906,6 +932,8 @@ class State extends DataClass implements Insertable<State> {
         state: state ?? this.state,
         lastChanged: lastChanged ?? this.lastChanged,
         lastUpdated: lastUpdated ?? this.lastUpdated,
+        displayLabel: displayLabel ?? this.displayLabel,
+        displayType: displayType ?? this.displayType,
         friendlyName: friendlyName ?? this.friendlyName,
         supportedFeatures: supportedFeatures ?? this.supportedFeatures,
         currentPosition: currentPosition ?? this.currentPosition,
@@ -931,6 +959,8 @@ class State extends DataClass implements Insertable<State> {
           ..write('state: $state, ')
           ..write('lastChanged: $lastChanged, ')
           ..write('lastUpdated: $lastUpdated, ')
+          ..write('displayLabel: $displayLabel, ')
+          ..write('displayType: $displayType, ')
           ..write('friendlyName: $friendlyName, ')
           ..write('supportedFeatures: $supportedFeatures, ')
           ..write('currentPosition: $currentPosition, ')
@@ -963,38 +993,37 @@ class State extends DataClass implements Insertable<State> {
                   $mrjc(
                       lastUpdated.hashCode,
                       $mrjc(
-                          friendlyName.hashCode,
+                          displayLabel.hashCode,
                           $mrjc(
-                              supportedFeatures.hashCode,
+                              displayType.hashCode,
                               $mrjc(
-                                  currentPosition.hashCode,
+                                  friendlyName.hashCode,
                                   $mrjc(
-                                      lastTriggered.hashCode,
+                                      supportedFeatures.hashCode,
                                       $mrjc(
-                                          mode.hashCode,
+                                          currentPosition.hashCode,
                                           $mrjc(
-                                              temperature.hashCode,
+                                              lastTriggered.hashCode,
                                               $mrjc(
-                                                  humidity.hashCode,
+                                                  mode.hashCode,
                                                   $mrjc(
-                                                      pressure.hashCode,
+                                                      temperature.hashCode,
                                                       $mrjc(
-                                                          windBearing.hashCode,
+                                                          humidity.hashCode,
                                                           $mrjc(
-                                                              windSpeed
-                                                                  .hashCode,
+                                                              pressure.hashCode,
                                                               $mrjc(
-                                                                  attribution
+                                                                  windBearing
                                                                       .hashCode,
                                                                   $mrjc(
-                                                                      isOn
+                                                                      windSpeed
                                                                           .hashCode,
                                                                       $mrjc(
-                                                                          deviceClass
+                                                                          attribution
                                                                               .hashCode,
                                                                           $mrjc(
-                                                                              unitOfMeasurement.hashCode,
-                                                                              $mrjc(current.hashCode, voltage.hashCode)))))))))))))))))))));
+                                                                              isOn.hashCode,
+                                                                              $mrjc(deviceClass.hashCode, $mrjc(unitOfMeasurement.hashCode, $mrjc(current.hashCode, voltage.hashCode)))))))))))))))))))))));
   @override
   bool operator ==(dynamic other) =>
       identical(this, other) ||
@@ -1004,6 +1033,8 @@ class State extends DataClass implements Insertable<State> {
           other.state == this.state &&
           other.lastChanged == this.lastChanged &&
           other.lastUpdated == this.lastUpdated &&
+          other.displayLabel == this.displayLabel &&
+          other.displayType == this.displayType &&
           other.friendlyName == this.friendlyName &&
           other.supportedFeatures == this.supportedFeatures &&
           other.currentPosition == this.currentPosition &&
@@ -1028,6 +1059,8 @@ class StatesCompanion extends UpdateCompanion<State> {
   final Value<String> state;
   final Value<DateTime> lastChanged;
   final Value<DateTime> lastUpdated;
+  final Value<String> displayLabel;
+  final Value<String> displayType;
   final Value<String> friendlyName;
   final Value<int> supportedFeatures;
   final Value<int> currentPosition;
@@ -1050,6 +1083,8 @@ class StatesCompanion extends UpdateCompanion<State> {
     this.state = const Value.absent(),
     this.lastChanged = const Value.absent(),
     this.lastUpdated = const Value.absent(),
+    this.displayLabel = const Value.absent(),
+    this.displayType = const Value.absent(),
     this.friendlyName = const Value.absent(),
     this.supportedFeatures = const Value.absent(),
     this.currentPosition = const Value.absent(),
@@ -1073,6 +1108,8 @@ class StatesCompanion extends UpdateCompanion<State> {
     this.state = const Value.absent(),
     this.lastChanged = const Value.absent(),
     this.lastUpdated = const Value.absent(),
+    this.displayLabel = const Value.absent(),
+    this.displayType = const Value.absent(),
     this.friendlyName = const Value.absent(),
     this.supportedFeatures = const Value.absent(),
     this.currentPosition = const Value.absent(),
@@ -1096,6 +1133,8 @@ class StatesCompanion extends UpdateCompanion<State> {
     Expression<String> state,
     Expression<DateTime> lastChanged,
     Expression<DateTime> lastUpdated,
+    Expression<String> displayLabel,
+    Expression<String> displayType,
     Expression<String> friendlyName,
     Expression<int> supportedFeatures,
     Expression<int> currentPosition,
@@ -1119,6 +1158,8 @@ class StatesCompanion extends UpdateCompanion<State> {
       if (state != null) 'state': state,
       if (lastChanged != null) 'last_changed': lastChanged,
       if (lastUpdated != null) 'last_updated': lastUpdated,
+      if (displayLabel != null) 'display_label': displayLabel,
+      if (displayType != null) 'display_type': displayType,
       if (friendlyName != null) 'friendly_name': friendlyName,
       if (supportedFeatures != null) 'supported_features': supportedFeatures,
       if (currentPosition != null) 'current_position': currentPosition,
@@ -1144,6 +1185,8 @@ class StatesCompanion extends UpdateCompanion<State> {
       Value<String> state,
       Value<DateTime> lastChanged,
       Value<DateTime> lastUpdated,
+      Value<String> displayLabel,
+      Value<String> displayType,
       Value<String> friendlyName,
       Value<int> supportedFeatures,
       Value<int> currentPosition,
@@ -1166,6 +1209,8 @@ class StatesCompanion extends UpdateCompanion<State> {
       state: state ?? this.state,
       lastChanged: lastChanged ?? this.lastChanged,
       lastUpdated: lastUpdated ?? this.lastUpdated,
+      displayLabel: displayLabel ?? this.displayLabel,
+      displayType: displayType ?? this.displayType,
       friendlyName: friendlyName ?? this.friendlyName,
       supportedFeatures: supportedFeatures ?? this.supportedFeatures,
       currentPosition: currentPosition ?? this.currentPosition,
@@ -1202,6 +1247,12 @@ class StatesCompanion extends UpdateCompanion<State> {
     }
     if (lastUpdated.present) {
       map['last_updated'] = Variable<DateTime>(lastUpdated.value);
+    }
+    if (displayLabel.present) {
+      map['display_label'] = Variable<String>(displayLabel.value);
+    }
+    if (displayType.present) {
+      map['display_type'] = Variable<String>(displayType.value);
     }
     if (friendlyName.present) {
       map['friendly_name'] = Variable<String>(friendlyName.value);
@@ -1262,6 +1313,8 @@ class StatesCompanion extends UpdateCompanion<State> {
           ..write('state: $state, ')
           ..write('lastChanged: $lastChanged, ')
           ..write('lastUpdated: $lastUpdated, ')
+          ..write('displayLabel: $displayLabel, ')
+          ..write('displayType: $displayType, ')
           ..write('friendlyName: $friendlyName, ')
           ..write('supportedFeatures: $supportedFeatures, ')
           ..write('currentPosition: $currentPosition, ')
@@ -1343,6 +1396,34 @@ class $StatesTable extends States with TableInfo<$StatesTable, State> {
   GeneratedDateTimeColumn _constructLastUpdated() {
     return GeneratedDateTimeColumn(
       'last_updated',
+      $tableName,
+      true,
+    );
+  }
+
+  final VerificationMeta _displayLabelMeta =
+      const VerificationMeta('displayLabel');
+  GeneratedTextColumn _displayLabel;
+  @override
+  GeneratedTextColumn get displayLabel =>
+      _displayLabel ??= _constructDisplayLabel();
+  GeneratedTextColumn _constructDisplayLabel() {
+    return GeneratedTextColumn(
+      'display_label',
+      $tableName,
+      true,
+    );
+  }
+
+  final VerificationMeta _displayTypeMeta =
+      const VerificationMeta('displayType');
+  GeneratedTextColumn _displayType;
+  @override
+  GeneratedTextColumn get displayType =>
+      _displayType ??= _constructDisplayType();
+  GeneratedTextColumn _constructDisplayType() {
+    return GeneratedTextColumn(
+      'display_type',
       $tableName,
       true,
     );
@@ -1565,6 +1646,8 @@ class $StatesTable extends States with TableInfo<$StatesTable, State> {
         state,
         lastChanged,
         lastUpdated,
+        displayLabel,
+        displayType,
         friendlyName,
         supportedFeatures,
         currentPosition,
@@ -1615,6 +1698,18 @@ class $StatesTable extends States with TableInfo<$StatesTable, State> {
           _lastUpdatedMeta,
           lastUpdated.isAcceptableOrUnknown(
               data['last_updated'], _lastUpdatedMeta));
+    }
+    if (data.containsKey('display_label')) {
+      context.handle(
+          _displayLabelMeta,
+          displayLabel.isAcceptableOrUnknown(
+              data['display_label'], _displayLabelMeta));
+    }
+    if (data.containsKey('display_type')) {
+      context.handle(
+          _displayTypeMeta,
+          displayType.isAcceptableOrUnknown(
+              data['display_type'], _displayTypeMeta));
     }
     if (data.containsKey('friendly_name')) {
       context.handle(
@@ -1715,14 +1810,847 @@ class $StatesTable extends States with TableInfo<$StatesTable, State> {
   }
 }
 
+class Tab extends DataClass implements Insertable<Tab> {
+  final int id;
+  final String label;
+  final int order;
+  Tab({@required this.id, @required this.label, @required this.order});
+  factory Tab.fromData(Map<String, dynamic> data, GeneratedDatabase db,
+      {String prefix}) {
+    final effectivePrefix = prefix ?? '';
+    final intType = db.typeSystem.forDartType<int>();
+    final stringType = db.typeSystem.forDartType<String>();
+    return Tab(
+      id: intType.mapFromDatabaseResponse(data['${effectivePrefix}id']),
+      label:
+          stringType.mapFromDatabaseResponse(data['${effectivePrefix}label']),
+      order: intType.mapFromDatabaseResponse(data['${effectivePrefix}order']),
+    );
+  }
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (!nullToAbsent || id != null) {
+      map['id'] = Variable<int>(id);
+    }
+    if (!nullToAbsent || label != null) {
+      map['label'] = Variable<String>(label);
+    }
+    if (!nullToAbsent || order != null) {
+      map['order'] = Variable<int>(order);
+    }
+    return map;
+  }
+
+  TabsCompanion toCompanion(bool nullToAbsent) {
+    return TabsCompanion(
+      id: id == null && nullToAbsent ? const Value.absent() : Value(id),
+      label:
+          label == null && nullToAbsent ? const Value.absent() : Value(label),
+      order:
+          order == null && nullToAbsent ? const Value.absent() : Value(order),
+    );
+  }
+
+  factory Tab.fromJson(Map<String, dynamic> json,
+      {ValueSerializer serializer}) {
+    serializer ??= moorRuntimeOptions.defaultSerializer;
+    return Tab(
+      id: serializer.fromJson<int>(json['id']),
+      label: serializer.fromJson<String>(json['label']),
+      order: serializer.fromJson<int>(json['order']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer serializer}) {
+    serializer ??= moorRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'label': serializer.toJson<String>(label),
+      'order': serializer.toJson<int>(order),
+    };
+  }
+
+  Tab copyWith({int id, String label, int order}) => Tab(
+        id: id ?? this.id,
+        label: label ?? this.label,
+        order: order ?? this.order,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('Tab(')
+          ..write('id: $id, ')
+          ..write('label: $label, ')
+          ..write('order: $order')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode =>
+      $mrjf($mrjc(id.hashCode, $mrjc(label.hashCode, order.hashCode)));
+  @override
+  bool operator ==(dynamic other) =>
+      identical(this, other) ||
+      (other is Tab &&
+          other.id == this.id &&
+          other.label == this.label &&
+          other.order == this.order);
+}
+
+class TabsCompanion extends UpdateCompanion<Tab> {
+  final Value<int> id;
+  final Value<String> label;
+  final Value<int> order;
+  const TabsCompanion({
+    this.id = const Value.absent(),
+    this.label = const Value.absent(),
+    this.order = const Value.absent(),
+  });
+  TabsCompanion.insert({
+    this.id = const Value.absent(),
+    @required String label,
+    @required int order,
+  })  : label = Value(label),
+        order = Value(order);
+  static Insertable<Tab> custom({
+    Expression<int> id,
+    Expression<String> label,
+    Expression<int> order,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (label != null) 'label': label,
+      if (order != null) 'order': order,
+    });
+  }
+
+  TabsCompanion copyWith(
+      {Value<int> id, Value<String> label, Value<int> order}) {
+    return TabsCompanion(
+      id: id ?? this.id,
+      label: label ?? this.label,
+      order: order ?? this.order,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (label.present) {
+      map['label'] = Variable<String>(label.value);
+    }
+    if (order.present) {
+      map['order'] = Variable<int>(order.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('TabsCompanion(')
+          ..write('id: $id, ')
+          ..write('label: $label, ')
+          ..write('order: $order')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $TabsTable extends Tabs with TableInfo<$TabsTable, Tab> {
+  final GeneratedDatabase _db;
+  final String _alias;
+  $TabsTable(this._db, [this._alias]);
+  final VerificationMeta _idMeta = const VerificationMeta('id');
+  GeneratedIntColumn _id;
+  @override
+  GeneratedIntColumn get id => _id ??= _constructId();
+  GeneratedIntColumn _constructId() {
+    return GeneratedIntColumn('id', $tableName, false,
+        hasAutoIncrement: true, declaredAsPrimaryKey: true);
+  }
+
+  final VerificationMeta _labelMeta = const VerificationMeta('label');
+  GeneratedTextColumn _label;
+  @override
+  GeneratedTextColumn get label => _label ??= _constructLabel();
+  GeneratedTextColumn _constructLabel() {
+    return GeneratedTextColumn(
+      'label',
+      $tableName,
+      false,
+    );
+  }
+
+  final VerificationMeta _orderMeta = const VerificationMeta('order');
+  GeneratedIntColumn _order;
+  @override
+  GeneratedIntColumn get order => _order ??= _constructOrder();
+  GeneratedIntColumn _constructOrder() {
+    return GeneratedIntColumn(
+      'order',
+      $tableName,
+      false,
+    );
+  }
+
+  @override
+  List<GeneratedColumn> get $columns => [id, label, order];
+  @override
+  $TabsTable get asDslTable => this;
+  @override
+  String get $tableName => _alias ?? 'tabs';
+  @override
+  final String actualTableName = 'tabs';
+  @override
+  VerificationContext validateIntegrity(Insertable<Tab> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id'], _idMeta));
+    }
+    if (data.containsKey('label')) {
+      context.handle(
+          _labelMeta, label.isAcceptableOrUnknown(data['label'], _labelMeta));
+    } else if (isInserting) {
+      context.missing(_labelMeta);
+    }
+    if (data.containsKey('order')) {
+      context.handle(
+          _orderMeta, order.isAcceptableOrUnknown(data['order'], _orderMeta));
+    } else if (isInserting) {
+      context.missing(_orderMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  Tab map(Map<String, dynamic> data, {String tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : null;
+    return Tab.fromData(data, _db, prefix: effectivePrefix);
+  }
+
+  @override
+  $TabsTable createAlias(String alias) {
+    return $TabsTable(_db, alias);
+  }
+}
+
+class Card extends DataClass implements Insertable<Card> {
+  final int id;
+  final String type;
+  final int stateId;
+  final int parentId;
+  final int horizontalPosition;
+  final int verticalPosition;
+  final int horizontalFlex;
+  final int verticalFlex;
+  final int width;
+  final int height;
+  Card(
+      {@required this.id,
+      @required this.type,
+      this.stateId,
+      this.parentId,
+      @required this.horizontalPosition,
+      @required this.verticalPosition,
+      @required this.horizontalFlex,
+      @required this.verticalFlex,
+      @required this.width,
+      @required this.height});
+  factory Card.fromData(Map<String, dynamic> data, GeneratedDatabase db,
+      {String prefix}) {
+    final effectivePrefix = prefix ?? '';
+    final intType = db.typeSystem.forDartType<int>();
+    final stringType = db.typeSystem.forDartType<String>();
+    return Card(
+      id: intType.mapFromDatabaseResponse(data['${effectivePrefix}id']),
+      type: stringType.mapFromDatabaseResponse(data['${effectivePrefix}type']),
+      stateId:
+          intType.mapFromDatabaseResponse(data['${effectivePrefix}state_id']),
+      parentId:
+          intType.mapFromDatabaseResponse(data['${effectivePrefix}parent_id']),
+      horizontalPosition: intType.mapFromDatabaseResponse(
+          data['${effectivePrefix}horizontal_position']),
+      verticalPosition: intType
+          .mapFromDatabaseResponse(data['${effectivePrefix}vertical_position']),
+      horizontalFlex: intType
+          .mapFromDatabaseResponse(data['${effectivePrefix}horizontal_flex']),
+      verticalFlex: intType
+          .mapFromDatabaseResponse(data['${effectivePrefix}vertical_flex']),
+      width: intType.mapFromDatabaseResponse(data['${effectivePrefix}width']),
+      height: intType.mapFromDatabaseResponse(data['${effectivePrefix}height']),
+    );
+  }
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (!nullToAbsent || id != null) {
+      map['id'] = Variable<int>(id);
+    }
+    if (!nullToAbsent || type != null) {
+      map['type'] = Variable<String>(type);
+    }
+    if (!nullToAbsent || stateId != null) {
+      map['state_id'] = Variable<int>(stateId);
+    }
+    if (!nullToAbsent || parentId != null) {
+      map['parent_id'] = Variable<int>(parentId);
+    }
+    if (!nullToAbsent || horizontalPosition != null) {
+      map['horizontal_position'] = Variable<int>(horizontalPosition);
+    }
+    if (!nullToAbsent || verticalPosition != null) {
+      map['vertical_position'] = Variable<int>(verticalPosition);
+    }
+    if (!nullToAbsent || horizontalFlex != null) {
+      map['horizontal_flex'] = Variable<int>(horizontalFlex);
+    }
+    if (!nullToAbsent || verticalFlex != null) {
+      map['vertical_flex'] = Variable<int>(verticalFlex);
+    }
+    if (!nullToAbsent || width != null) {
+      map['width'] = Variable<int>(width);
+    }
+    if (!nullToAbsent || height != null) {
+      map['height'] = Variable<int>(height);
+    }
+    return map;
+  }
+
+  CardsCompanion toCompanion(bool nullToAbsent) {
+    return CardsCompanion(
+      id: id == null && nullToAbsent ? const Value.absent() : Value(id),
+      type: type == null && nullToAbsent ? const Value.absent() : Value(type),
+      stateId: stateId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(stateId),
+      parentId: parentId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(parentId),
+      horizontalPosition: horizontalPosition == null && nullToAbsent
+          ? const Value.absent()
+          : Value(horizontalPosition),
+      verticalPosition: verticalPosition == null && nullToAbsent
+          ? const Value.absent()
+          : Value(verticalPosition),
+      horizontalFlex: horizontalFlex == null && nullToAbsent
+          ? const Value.absent()
+          : Value(horizontalFlex),
+      verticalFlex: verticalFlex == null && nullToAbsent
+          ? const Value.absent()
+          : Value(verticalFlex),
+      width:
+          width == null && nullToAbsent ? const Value.absent() : Value(width),
+      height:
+          height == null && nullToAbsent ? const Value.absent() : Value(height),
+    );
+  }
+
+  factory Card.fromJson(Map<String, dynamic> json,
+      {ValueSerializer serializer}) {
+    serializer ??= moorRuntimeOptions.defaultSerializer;
+    return Card(
+      id: serializer.fromJson<int>(json['id']),
+      type: serializer.fromJson<String>(json['type']),
+      stateId: serializer.fromJson<int>(json['stateId']),
+      parentId: serializer.fromJson<int>(json['parentId']),
+      horizontalPosition: serializer.fromJson<int>(json['horizontalPosition']),
+      verticalPosition: serializer.fromJson<int>(json['verticalPosition']),
+      horizontalFlex: serializer.fromJson<int>(json['horizontalFlex']),
+      verticalFlex: serializer.fromJson<int>(json['verticalFlex']),
+      width: serializer.fromJson<int>(json['width']),
+      height: serializer.fromJson<int>(json['height']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer serializer}) {
+    serializer ??= moorRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'type': serializer.toJson<String>(type),
+      'stateId': serializer.toJson<int>(stateId),
+      'parentId': serializer.toJson<int>(parentId),
+      'horizontalPosition': serializer.toJson<int>(horizontalPosition),
+      'verticalPosition': serializer.toJson<int>(verticalPosition),
+      'horizontalFlex': serializer.toJson<int>(horizontalFlex),
+      'verticalFlex': serializer.toJson<int>(verticalFlex),
+      'width': serializer.toJson<int>(width),
+      'height': serializer.toJson<int>(height),
+    };
+  }
+
+  Card copyWith(
+          {int id,
+          String type,
+          int stateId,
+          int parentId,
+          int horizontalPosition,
+          int verticalPosition,
+          int horizontalFlex,
+          int verticalFlex,
+          int width,
+          int height}) =>
+      Card(
+        id: id ?? this.id,
+        type: type ?? this.type,
+        stateId: stateId ?? this.stateId,
+        parentId: parentId ?? this.parentId,
+        horizontalPosition: horizontalPosition ?? this.horizontalPosition,
+        verticalPosition: verticalPosition ?? this.verticalPosition,
+        horizontalFlex: horizontalFlex ?? this.horizontalFlex,
+        verticalFlex: verticalFlex ?? this.verticalFlex,
+        width: width ?? this.width,
+        height: height ?? this.height,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('Card(')
+          ..write('id: $id, ')
+          ..write('type: $type, ')
+          ..write('stateId: $stateId, ')
+          ..write('parentId: $parentId, ')
+          ..write('horizontalPosition: $horizontalPosition, ')
+          ..write('verticalPosition: $verticalPosition, ')
+          ..write('horizontalFlex: $horizontalFlex, ')
+          ..write('verticalFlex: $verticalFlex, ')
+          ..write('width: $width, ')
+          ..write('height: $height')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => $mrjf($mrjc(
+      id.hashCode,
+      $mrjc(
+          type.hashCode,
+          $mrjc(
+              stateId.hashCode,
+              $mrjc(
+                  parentId.hashCode,
+                  $mrjc(
+                      horizontalPosition.hashCode,
+                      $mrjc(
+                          verticalPosition.hashCode,
+                          $mrjc(
+                              horizontalFlex.hashCode,
+                              $mrjc(
+                                  verticalFlex.hashCode,
+                                  $mrjc(
+                                      width.hashCode, height.hashCode))))))))));
+  @override
+  bool operator ==(dynamic other) =>
+      identical(this, other) ||
+      (other is Card &&
+          other.id == this.id &&
+          other.type == this.type &&
+          other.stateId == this.stateId &&
+          other.parentId == this.parentId &&
+          other.horizontalPosition == this.horizontalPosition &&
+          other.verticalPosition == this.verticalPosition &&
+          other.horizontalFlex == this.horizontalFlex &&
+          other.verticalFlex == this.verticalFlex &&
+          other.width == this.width &&
+          other.height == this.height);
+}
+
+class CardsCompanion extends UpdateCompanion<Card> {
+  final Value<int> id;
+  final Value<String> type;
+  final Value<int> stateId;
+  final Value<int> parentId;
+  final Value<int> horizontalPosition;
+  final Value<int> verticalPosition;
+  final Value<int> horizontalFlex;
+  final Value<int> verticalFlex;
+  final Value<int> width;
+  final Value<int> height;
+  const CardsCompanion({
+    this.id = const Value.absent(),
+    this.type = const Value.absent(),
+    this.stateId = const Value.absent(),
+    this.parentId = const Value.absent(),
+    this.horizontalPosition = const Value.absent(),
+    this.verticalPosition = const Value.absent(),
+    this.horizontalFlex = const Value.absent(),
+    this.verticalFlex = const Value.absent(),
+    this.width = const Value.absent(),
+    this.height = const Value.absent(),
+  });
+  CardsCompanion.insert({
+    this.id = const Value.absent(),
+    @required String type,
+    this.stateId = const Value.absent(),
+    this.parentId = const Value.absent(),
+    @required int horizontalPosition,
+    @required int verticalPosition,
+    @required int horizontalFlex,
+    @required int verticalFlex,
+    @required int width,
+    @required int height,
+  })  : type = Value(type),
+        horizontalPosition = Value(horizontalPosition),
+        verticalPosition = Value(verticalPosition),
+        horizontalFlex = Value(horizontalFlex),
+        verticalFlex = Value(verticalFlex),
+        width = Value(width),
+        height = Value(height);
+  static Insertable<Card> custom({
+    Expression<int> id,
+    Expression<String> type,
+    Expression<int> stateId,
+    Expression<int> parentId,
+    Expression<int> horizontalPosition,
+    Expression<int> verticalPosition,
+    Expression<int> horizontalFlex,
+    Expression<int> verticalFlex,
+    Expression<int> width,
+    Expression<int> height,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (type != null) 'type': type,
+      if (stateId != null) 'state_id': stateId,
+      if (parentId != null) 'parent_id': parentId,
+      if (horizontalPosition != null) 'horizontal_position': horizontalPosition,
+      if (verticalPosition != null) 'vertical_position': verticalPosition,
+      if (horizontalFlex != null) 'horizontal_flex': horizontalFlex,
+      if (verticalFlex != null) 'vertical_flex': verticalFlex,
+      if (width != null) 'width': width,
+      if (height != null) 'height': height,
+    });
+  }
+
+  CardsCompanion copyWith(
+      {Value<int> id,
+      Value<String> type,
+      Value<int> stateId,
+      Value<int> parentId,
+      Value<int> horizontalPosition,
+      Value<int> verticalPosition,
+      Value<int> horizontalFlex,
+      Value<int> verticalFlex,
+      Value<int> width,
+      Value<int> height}) {
+    return CardsCompanion(
+      id: id ?? this.id,
+      type: type ?? this.type,
+      stateId: stateId ?? this.stateId,
+      parentId: parentId ?? this.parentId,
+      horizontalPosition: horizontalPosition ?? this.horizontalPosition,
+      verticalPosition: verticalPosition ?? this.verticalPosition,
+      horizontalFlex: horizontalFlex ?? this.horizontalFlex,
+      verticalFlex: verticalFlex ?? this.verticalFlex,
+      width: width ?? this.width,
+      height: height ?? this.height,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (type.present) {
+      map['type'] = Variable<String>(type.value);
+    }
+    if (stateId.present) {
+      map['state_id'] = Variable<int>(stateId.value);
+    }
+    if (parentId.present) {
+      map['parent_id'] = Variable<int>(parentId.value);
+    }
+    if (horizontalPosition.present) {
+      map['horizontal_position'] = Variable<int>(horizontalPosition.value);
+    }
+    if (verticalPosition.present) {
+      map['vertical_position'] = Variable<int>(verticalPosition.value);
+    }
+    if (horizontalFlex.present) {
+      map['horizontal_flex'] = Variable<int>(horizontalFlex.value);
+    }
+    if (verticalFlex.present) {
+      map['vertical_flex'] = Variable<int>(verticalFlex.value);
+    }
+    if (width.present) {
+      map['width'] = Variable<int>(width.value);
+    }
+    if (height.present) {
+      map['height'] = Variable<int>(height.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('CardsCompanion(')
+          ..write('id: $id, ')
+          ..write('type: $type, ')
+          ..write('stateId: $stateId, ')
+          ..write('parentId: $parentId, ')
+          ..write('horizontalPosition: $horizontalPosition, ')
+          ..write('verticalPosition: $verticalPosition, ')
+          ..write('horizontalFlex: $horizontalFlex, ')
+          ..write('verticalFlex: $verticalFlex, ')
+          ..write('width: $width, ')
+          ..write('height: $height')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $CardsTable extends Cards with TableInfo<$CardsTable, Card> {
+  final GeneratedDatabase _db;
+  final String _alias;
+  $CardsTable(this._db, [this._alias]);
+  final VerificationMeta _idMeta = const VerificationMeta('id');
+  GeneratedIntColumn _id;
+  @override
+  GeneratedIntColumn get id => _id ??= _constructId();
+  GeneratedIntColumn _constructId() {
+    return GeneratedIntColumn('id', $tableName, false,
+        hasAutoIncrement: true, declaredAsPrimaryKey: true);
+  }
+
+  final VerificationMeta _typeMeta = const VerificationMeta('type');
+  GeneratedTextColumn _type;
+  @override
+  GeneratedTextColumn get type => _type ??= _constructType();
+  GeneratedTextColumn _constructType() {
+    return GeneratedTextColumn(
+      'type',
+      $tableName,
+      false,
+    );
+  }
+
+  final VerificationMeta _stateIdMeta = const VerificationMeta('stateId');
+  GeneratedIntColumn _stateId;
+  @override
+  GeneratedIntColumn get stateId => _stateId ??= _constructStateId();
+  GeneratedIntColumn _constructStateId() {
+    return GeneratedIntColumn(
+      'state_id',
+      $tableName,
+      true,
+    );
+  }
+
+  final VerificationMeta _parentIdMeta = const VerificationMeta('parentId');
+  GeneratedIntColumn _parentId;
+  @override
+  GeneratedIntColumn get parentId => _parentId ??= _constructParentId();
+  GeneratedIntColumn _constructParentId() {
+    return GeneratedIntColumn(
+      'parent_id',
+      $tableName,
+      true,
+    );
+  }
+
+  final VerificationMeta _horizontalPositionMeta =
+      const VerificationMeta('horizontalPosition');
+  GeneratedIntColumn _horizontalPosition;
+  @override
+  GeneratedIntColumn get horizontalPosition =>
+      _horizontalPosition ??= _constructHorizontalPosition();
+  GeneratedIntColumn _constructHorizontalPosition() {
+    return GeneratedIntColumn(
+      'horizontal_position',
+      $tableName,
+      false,
+    );
+  }
+
+  final VerificationMeta _verticalPositionMeta =
+      const VerificationMeta('verticalPosition');
+  GeneratedIntColumn _verticalPosition;
+  @override
+  GeneratedIntColumn get verticalPosition =>
+      _verticalPosition ??= _constructVerticalPosition();
+  GeneratedIntColumn _constructVerticalPosition() {
+    return GeneratedIntColumn(
+      'vertical_position',
+      $tableName,
+      false,
+    );
+  }
+
+  final VerificationMeta _horizontalFlexMeta =
+      const VerificationMeta('horizontalFlex');
+  GeneratedIntColumn _horizontalFlex;
+  @override
+  GeneratedIntColumn get horizontalFlex =>
+      _horizontalFlex ??= _constructHorizontalFlex();
+  GeneratedIntColumn _constructHorizontalFlex() {
+    return GeneratedIntColumn(
+      'horizontal_flex',
+      $tableName,
+      false,
+    );
+  }
+
+  final VerificationMeta _verticalFlexMeta =
+      const VerificationMeta('verticalFlex');
+  GeneratedIntColumn _verticalFlex;
+  @override
+  GeneratedIntColumn get verticalFlex =>
+      _verticalFlex ??= _constructVerticalFlex();
+  GeneratedIntColumn _constructVerticalFlex() {
+    return GeneratedIntColumn(
+      'vertical_flex',
+      $tableName,
+      false,
+    );
+  }
+
+  final VerificationMeta _widthMeta = const VerificationMeta('width');
+  GeneratedIntColumn _width;
+  @override
+  GeneratedIntColumn get width => _width ??= _constructWidth();
+  GeneratedIntColumn _constructWidth() {
+    return GeneratedIntColumn(
+      'width',
+      $tableName,
+      false,
+    );
+  }
+
+  final VerificationMeta _heightMeta = const VerificationMeta('height');
+  GeneratedIntColumn _height;
+  @override
+  GeneratedIntColumn get height => _height ??= _constructHeight();
+  GeneratedIntColumn _constructHeight() {
+    return GeneratedIntColumn(
+      'height',
+      $tableName,
+      false,
+    );
+  }
+
+  @override
+  List<GeneratedColumn> get $columns => [
+        id,
+        type,
+        stateId,
+        parentId,
+        horizontalPosition,
+        verticalPosition,
+        horizontalFlex,
+        verticalFlex,
+        width,
+        height
+      ];
+  @override
+  $CardsTable get asDslTable => this;
+  @override
+  String get $tableName => _alias ?? 'cards';
+  @override
+  final String actualTableName = 'cards';
+  @override
+  VerificationContext validateIntegrity(Insertable<Card> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id'], _idMeta));
+    }
+    if (data.containsKey('type')) {
+      context.handle(
+          _typeMeta, type.isAcceptableOrUnknown(data['type'], _typeMeta));
+    } else if (isInserting) {
+      context.missing(_typeMeta);
+    }
+    if (data.containsKey('state_id')) {
+      context.handle(_stateIdMeta,
+          stateId.isAcceptableOrUnknown(data['state_id'], _stateIdMeta));
+    }
+    if (data.containsKey('parent_id')) {
+      context.handle(_parentIdMeta,
+          parentId.isAcceptableOrUnknown(data['parent_id'], _parentIdMeta));
+    }
+    if (data.containsKey('horizontal_position')) {
+      context.handle(
+          _horizontalPositionMeta,
+          horizontalPosition.isAcceptableOrUnknown(
+              data['horizontal_position'], _horizontalPositionMeta));
+    } else if (isInserting) {
+      context.missing(_horizontalPositionMeta);
+    }
+    if (data.containsKey('vertical_position')) {
+      context.handle(
+          _verticalPositionMeta,
+          verticalPosition.isAcceptableOrUnknown(
+              data['vertical_position'], _verticalPositionMeta));
+    } else if (isInserting) {
+      context.missing(_verticalPositionMeta);
+    }
+    if (data.containsKey('horizontal_flex')) {
+      context.handle(
+          _horizontalFlexMeta,
+          horizontalFlex.isAcceptableOrUnknown(
+              data['horizontal_flex'], _horizontalFlexMeta));
+    } else if (isInserting) {
+      context.missing(_horizontalFlexMeta);
+    }
+    if (data.containsKey('vertical_flex')) {
+      context.handle(
+          _verticalFlexMeta,
+          verticalFlex.isAcceptableOrUnknown(
+              data['vertical_flex'], _verticalFlexMeta));
+    } else if (isInserting) {
+      context.missing(_verticalFlexMeta);
+    }
+    if (data.containsKey('width')) {
+      context.handle(
+          _widthMeta, width.isAcceptableOrUnknown(data['width'], _widthMeta));
+    } else if (isInserting) {
+      context.missing(_widthMeta);
+    }
+    if (data.containsKey('height')) {
+      context.handle(_heightMeta,
+          height.isAcceptableOrUnknown(data['height'], _heightMeta));
+    } else if (isInserting) {
+      context.missing(_heightMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  Card map(Map<String, dynamic> data, {String tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : null;
+    return Card.fromData(data, _db, prefix: effectivePrefix);
+  }
+
+  @override
+  $CardsTable createAlias(String alias) {
+    return $CardsTable(_db, alias);
+  }
+}
+
 abstract class _$Database extends GeneratedDatabase {
   _$Database(QueryExecutor e) : super(SqlTypeSystem.defaultInstance, e);
   $ConfigsTable _configs;
   $ConfigsTable get configs => _configs ??= $ConfigsTable(this);
   $StatesTable _states;
   $StatesTable get states => _states ??= $StatesTable(this);
+  $TabsTable _tabs;
+  $TabsTable get tabs => _tabs ??= $TabsTable(this);
+  $CardsTable _cards;
+  $CardsTable get cards => _cards ??= $CardsTable(this);
   @override
   Iterable<TableInfo> get allTables => allSchemaEntities.whereType<TableInfo>();
   @override
-  List<DatabaseSchemaEntity> get allSchemaEntities => [configs, states];
+  List<DatabaseSchemaEntity> get allSchemaEntities =>
+      [configs, states, tabs, cards];
 }
