@@ -46,7 +46,7 @@ abstract class DeviceListItem extends StatelessWidget {
     final _trailing = trailing ?? buildTrailing(context);
 
     return InkWell(
-      //onTap: () => Navigator.of(context).pushReplacementNamed("/devices"),
+      //onTap: () => Navigator.of(context).pushReplacementNamed("/supervisor"),
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         child: Row(

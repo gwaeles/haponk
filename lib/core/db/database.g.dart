@@ -1810,17 +1810,17 @@ class $StatesTable extends States with TableInfo<$StatesTable, State> {
   }
 }
 
-class Tab extends DataClass implements Insertable<Tab> {
+class FlexTab extends DataClass implements Insertable<FlexTab> {
   final int id;
   final String label;
   final int order;
-  Tab({@required this.id, @required this.label, @required this.order});
-  factory Tab.fromData(Map<String, dynamic> data, GeneratedDatabase db,
+  FlexTab({@required this.id, @required this.label, @required this.order});
+  factory FlexTab.fromData(Map<String, dynamic> data, GeneratedDatabase db,
       {String prefix}) {
     final effectivePrefix = prefix ?? '';
     final intType = db.typeSystem.forDartType<int>();
     final stringType = db.typeSystem.forDartType<String>();
-    return Tab(
+    return FlexTab(
       id: intType.mapFromDatabaseResponse(data['${effectivePrefix}id']),
       label:
           stringType.mapFromDatabaseResponse(data['${effectivePrefix}label']),
@@ -1842,8 +1842,8 @@ class Tab extends DataClass implements Insertable<Tab> {
     return map;
   }
 
-  TabsCompanion toCompanion(bool nullToAbsent) {
-    return TabsCompanion(
+  FlexTabsCompanion toCompanion(bool nullToAbsent) {
+    return FlexTabsCompanion(
       id: id == null && nullToAbsent ? const Value.absent() : Value(id),
       label:
           label == null && nullToAbsent ? const Value.absent() : Value(label),
@@ -1852,10 +1852,10 @@ class Tab extends DataClass implements Insertable<Tab> {
     );
   }
 
-  factory Tab.fromJson(Map<String, dynamic> json,
+  factory FlexTab.fromJson(Map<String, dynamic> json,
       {ValueSerializer serializer}) {
     serializer ??= moorRuntimeOptions.defaultSerializer;
-    return Tab(
+    return FlexTab(
       id: serializer.fromJson<int>(json['id']),
       label: serializer.fromJson<String>(json['label']),
       order: serializer.fromJson<int>(json['order']),
@@ -1871,14 +1871,14 @@ class Tab extends DataClass implements Insertable<Tab> {
     };
   }
 
-  Tab copyWith({int id, String label, int order}) => Tab(
+  FlexTab copyWith({int id, String label, int order}) => FlexTab(
         id: id ?? this.id,
         label: label ?? this.label,
         order: order ?? this.order,
       );
   @override
   String toString() {
-    return (StringBuffer('Tab(')
+    return (StringBuffer('FlexTab(')
           ..write('id: $id, ')
           ..write('label: $label, ')
           ..write('order: $order')
@@ -1892,28 +1892,28 @@ class Tab extends DataClass implements Insertable<Tab> {
   @override
   bool operator ==(dynamic other) =>
       identical(this, other) ||
-      (other is Tab &&
+      (other is FlexTab &&
           other.id == this.id &&
           other.label == this.label &&
           other.order == this.order);
 }
 
-class TabsCompanion extends UpdateCompanion<Tab> {
+class FlexTabsCompanion extends UpdateCompanion<FlexTab> {
   final Value<int> id;
   final Value<String> label;
   final Value<int> order;
-  const TabsCompanion({
+  const FlexTabsCompanion({
     this.id = const Value.absent(),
     this.label = const Value.absent(),
     this.order = const Value.absent(),
   });
-  TabsCompanion.insert({
+  FlexTabsCompanion.insert({
     this.id = const Value.absent(),
     @required String label,
     @required int order,
   })  : label = Value(label),
         order = Value(order);
-  static Insertable<Tab> custom({
+  static Insertable<FlexTab> custom({
     Expression<int> id,
     Expression<String> label,
     Expression<int> order,
@@ -1925,9 +1925,9 @@ class TabsCompanion extends UpdateCompanion<Tab> {
     });
   }
 
-  TabsCompanion copyWith(
+  FlexTabsCompanion copyWith(
       {Value<int> id, Value<String> label, Value<int> order}) {
-    return TabsCompanion(
+    return FlexTabsCompanion(
       id: id ?? this.id,
       label: label ?? this.label,
       order: order ?? this.order,
@@ -1951,7 +1951,7 @@ class TabsCompanion extends UpdateCompanion<Tab> {
 
   @override
   String toString() {
-    return (StringBuffer('TabsCompanion(')
+    return (StringBuffer('FlexTabsCompanion(')
           ..write('id: $id, ')
           ..write('label: $label, ')
           ..write('order: $order')
@@ -1960,10 +1960,10 @@ class TabsCompanion extends UpdateCompanion<Tab> {
   }
 }
 
-class $TabsTable extends Tabs with TableInfo<$TabsTable, Tab> {
+class $FlexTabsTable extends FlexTabs with TableInfo<$FlexTabsTable, FlexTab> {
   final GeneratedDatabase _db;
   final String _alias;
-  $TabsTable(this._db, [this._alias]);
+  $FlexTabsTable(this._db, [this._alias]);
   final VerificationMeta _idMeta = const VerificationMeta('id');
   GeneratedIntColumn _id;
   @override
@@ -2000,13 +2000,13 @@ class $TabsTable extends Tabs with TableInfo<$TabsTable, Tab> {
   @override
   List<GeneratedColumn> get $columns => [id, label, order];
   @override
-  $TabsTable get asDslTable => this;
+  $FlexTabsTable get asDslTable => this;
   @override
-  String get $tableName => _alias ?? 'tabs';
+  String get $tableName => _alias ?? 'flex_tabs';
   @override
-  final String actualTableName = 'tabs';
+  final String actualTableName = 'flex_tabs';
   @override
-  VerificationContext validateIntegrity(Insertable<Tab> instance,
+  VerificationContext validateIntegrity(Insertable<FlexTab> instance,
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
@@ -2031,19 +2031,20 @@ class $TabsTable extends Tabs with TableInfo<$TabsTable, Tab> {
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
-  Tab map(Map<String, dynamic> data, {String tablePrefix}) {
+  FlexTab map(Map<String, dynamic> data, {String tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : null;
-    return Tab.fromData(data, _db, prefix: effectivePrefix);
+    return FlexTab.fromData(data, _db, prefix: effectivePrefix);
   }
 
   @override
-  $TabsTable createAlias(String alias) {
-    return $TabsTable(_db, alias);
+  $FlexTabsTable createAlias(String alias) {
+    return $FlexTabsTable(_db, alias);
   }
 }
 
-class Card extends DataClass implements Insertable<Card> {
+class FlexCard extends DataClass implements Insertable<FlexCard> {
   final int id;
+  final int tabId;
   final String type;
   final int stateId;
   final int parentId;
@@ -2053,8 +2054,9 @@ class Card extends DataClass implements Insertable<Card> {
   final int verticalFlex;
   final int width;
   final int height;
-  Card(
+  FlexCard(
       {@required this.id,
+      @required this.tabId,
       @required this.type,
       this.stateId,
       this.parentId,
@@ -2064,13 +2066,14 @@ class Card extends DataClass implements Insertable<Card> {
       @required this.verticalFlex,
       @required this.width,
       @required this.height});
-  factory Card.fromData(Map<String, dynamic> data, GeneratedDatabase db,
+  factory FlexCard.fromData(Map<String, dynamic> data, GeneratedDatabase db,
       {String prefix}) {
     final effectivePrefix = prefix ?? '';
     final intType = db.typeSystem.forDartType<int>();
     final stringType = db.typeSystem.forDartType<String>();
-    return Card(
+    return FlexCard(
       id: intType.mapFromDatabaseResponse(data['${effectivePrefix}id']),
+      tabId: intType.mapFromDatabaseResponse(data['${effectivePrefix}tab_id']),
       type: stringType.mapFromDatabaseResponse(data['${effectivePrefix}type']),
       stateId:
           intType.mapFromDatabaseResponse(data['${effectivePrefix}state_id']),
@@ -2093,6 +2096,9 @@ class Card extends DataClass implements Insertable<Card> {
     final map = <String, Expression>{};
     if (!nullToAbsent || id != null) {
       map['id'] = Variable<int>(id);
+    }
+    if (!nullToAbsent || tabId != null) {
+      map['tab_id'] = Variable<int>(tabId);
     }
     if (!nullToAbsent || type != null) {
       map['type'] = Variable<String>(type);
@@ -2124,9 +2130,11 @@ class Card extends DataClass implements Insertable<Card> {
     return map;
   }
 
-  CardsCompanion toCompanion(bool nullToAbsent) {
-    return CardsCompanion(
+  FlexCardsCompanion toCompanion(bool nullToAbsent) {
+    return FlexCardsCompanion(
       id: id == null && nullToAbsent ? const Value.absent() : Value(id),
+      tabId:
+          tabId == null && nullToAbsent ? const Value.absent() : Value(tabId),
       type: type == null && nullToAbsent ? const Value.absent() : Value(type),
       stateId: stateId == null && nullToAbsent
           ? const Value.absent()
@@ -2153,11 +2161,12 @@ class Card extends DataClass implements Insertable<Card> {
     );
   }
 
-  factory Card.fromJson(Map<String, dynamic> json,
+  factory FlexCard.fromJson(Map<String, dynamic> json,
       {ValueSerializer serializer}) {
     serializer ??= moorRuntimeOptions.defaultSerializer;
-    return Card(
+    return FlexCard(
       id: serializer.fromJson<int>(json['id']),
+      tabId: serializer.fromJson<int>(json['tabId']),
       type: serializer.fromJson<String>(json['type']),
       stateId: serializer.fromJson<int>(json['stateId']),
       parentId: serializer.fromJson<int>(json['parentId']),
@@ -2174,6 +2183,7 @@ class Card extends DataClass implements Insertable<Card> {
     serializer ??= moorRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
+      'tabId': serializer.toJson<int>(tabId),
       'type': serializer.toJson<String>(type),
       'stateId': serializer.toJson<int>(stateId),
       'parentId': serializer.toJson<int>(parentId),
@@ -2186,8 +2196,9 @@ class Card extends DataClass implements Insertable<Card> {
     };
   }
 
-  Card copyWith(
+  FlexCard copyWith(
           {int id,
+          int tabId,
           String type,
           int stateId,
           int parentId,
@@ -2197,8 +2208,9 @@ class Card extends DataClass implements Insertable<Card> {
           int verticalFlex,
           int width,
           int height}) =>
-      Card(
+      FlexCard(
         id: id ?? this.id,
+        tabId: tabId ?? this.tabId,
         type: type ?? this.type,
         stateId: stateId ?? this.stateId,
         parentId: parentId ?? this.parentId,
@@ -2211,8 +2223,9 @@ class Card extends DataClass implements Insertable<Card> {
       );
   @override
   String toString() {
-    return (StringBuffer('Card(')
+    return (StringBuffer('FlexCard(')
           ..write('id: $id, ')
+          ..write('tabId: $tabId, ')
           ..write('type: $type, ')
           ..write('stateId: $stateId, ')
           ..write('parentId: $parentId, ')
@@ -2230,26 +2243,29 @@ class Card extends DataClass implements Insertable<Card> {
   int get hashCode => $mrjf($mrjc(
       id.hashCode,
       $mrjc(
-          type.hashCode,
+          tabId.hashCode,
           $mrjc(
-              stateId.hashCode,
+              type.hashCode,
               $mrjc(
-                  parentId.hashCode,
+                  stateId.hashCode,
                   $mrjc(
-                      horizontalPosition.hashCode,
+                      parentId.hashCode,
                       $mrjc(
-                          verticalPosition.hashCode,
+                          horizontalPosition.hashCode,
                           $mrjc(
-                              horizontalFlex.hashCode,
+                              verticalPosition.hashCode,
                               $mrjc(
-                                  verticalFlex.hashCode,
+                                  horizontalFlex.hashCode,
                                   $mrjc(
-                                      width.hashCode, height.hashCode))))))))));
+                                      verticalFlex.hashCode,
+                                      $mrjc(width.hashCode,
+                                          height.hashCode)))))))))));
   @override
   bool operator ==(dynamic other) =>
       identical(this, other) ||
-      (other is Card &&
+      (other is FlexCard &&
           other.id == this.id &&
+          other.tabId == this.tabId &&
           other.type == this.type &&
           other.stateId == this.stateId &&
           other.parentId == this.parentId &&
@@ -2261,8 +2277,9 @@ class Card extends DataClass implements Insertable<Card> {
           other.height == this.height);
 }
 
-class CardsCompanion extends UpdateCompanion<Card> {
+class FlexCardsCompanion extends UpdateCompanion<FlexCard> {
   final Value<int> id;
+  final Value<int> tabId;
   final Value<String> type;
   final Value<int> stateId;
   final Value<int> parentId;
@@ -2272,8 +2289,9 @@ class CardsCompanion extends UpdateCompanion<Card> {
   final Value<int> verticalFlex;
   final Value<int> width;
   final Value<int> height;
-  const CardsCompanion({
+  const FlexCardsCompanion({
     this.id = const Value.absent(),
+    this.tabId = const Value.absent(),
     this.type = const Value.absent(),
     this.stateId = const Value.absent(),
     this.parentId = const Value.absent(),
@@ -2284,8 +2302,9 @@ class CardsCompanion extends UpdateCompanion<Card> {
     this.width = const Value.absent(),
     this.height = const Value.absent(),
   });
-  CardsCompanion.insert({
+  FlexCardsCompanion.insert({
     this.id = const Value.absent(),
+    @required int tabId,
     @required String type,
     this.stateId = const Value.absent(),
     this.parentId = const Value.absent(),
@@ -2295,15 +2314,17 @@ class CardsCompanion extends UpdateCompanion<Card> {
     @required int verticalFlex,
     @required int width,
     @required int height,
-  })  : type = Value(type),
+  })  : tabId = Value(tabId),
+        type = Value(type),
         horizontalPosition = Value(horizontalPosition),
         verticalPosition = Value(verticalPosition),
         horizontalFlex = Value(horizontalFlex),
         verticalFlex = Value(verticalFlex),
         width = Value(width),
         height = Value(height);
-  static Insertable<Card> custom({
+  static Insertable<FlexCard> custom({
     Expression<int> id,
+    Expression<int> tabId,
     Expression<String> type,
     Expression<int> stateId,
     Expression<int> parentId,
@@ -2316,6 +2337,7 @@ class CardsCompanion extends UpdateCompanion<Card> {
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
+      if (tabId != null) 'tab_id': tabId,
       if (type != null) 'type': type,
       if (stateId != null) 'state_id': stateId,
       if (parentId != null) 'parent_id': parentId,
@@ -2328,8 +2350,9 @@ class CardsCompanion extends UpdateCompanion<Card> {
     });
   }
 
-  CardsCompanion copyWith(
+  FlexCardsCompanion copyWith(
       {Value<int> id,
+      Value<int> tabId,
       Value<String> type,
       Value<int> stateId,
       Value<int> parentId,
@@ -2339,8 +2362,9 @@ class CardsCompanion extends UpdateCompanion<Card> {
       Value<int> verticalFlex,
       Value<int> width,
       Value<int> height}) {
-    return CardsCompanion(
+    return FlexCardsCompanion(
       id: id ?? this.id,
+      tabId: tabId ?? this.tabId,
       type: type ?? this.type,
       stateId: stateId ?? this.stateId,
       parentId: parentId ?? this.parentId,
@@ -2358,6 +2382,9 @@ class CardsCompanion extends UpdateCompanion<Card> {
     final map = <String, Expression>{};
     if (id.present) {
       map['id'] = Variable<int>(id.value);
+    }
+    if (tabId.present) {
+      map['tab_id'] = Variable<int>(tabId.value);
     }
     if (type.present) {
       map['type'] = Variable<String>(type.value);
@@ -2391,8 +2418,9 @@ class CardsCompanion extends UpdateCompanion<Card> {
 
   @override
   String toString() {
-    return (StringBuffer('CardsCompanion(')
+    return (StringBuffer('FlexCardsCompanion(')
           ..write('id: $id, ')
+          ..write('tabId: $tabId, ')
           ..write('type: $type, ')
           ..write('stateId: $stateId, ')
           ..write('parentId: $parentId, ')
@@ -2407,10 +2435,11 @@ class CardsCompanion extends UpdateCompanion<Card> {
   }
 }
 
-class $CardsTable extends Cards with TableInfo<$CardsTable, Card> {
+class $FlexCardsTable extends FlexCards
+    with TableInfo<$FlexCardsTable, FlexCard> {
   final GeneratedDatabase _db;
   final String _alias;
-  $CardsTable(this._db, [this._alias]);
+  $FlexCardsTable(this._db, [this._alias]);
   final VerificationMeta _idMeta = const VerificationMeta('id');
   GeneratedIntColumn _id;
   @override
@@ -2418,6 +2447,18 @@ class $CardsTable extends Cards with TableInfo<$CardsTable, Card> {
   GeneratedIntColumn _constructId() {
     return GeneratedIntColumn('id', $tableName, false,
         hasAutoIncrement: true, declaredAsPrimaryKey: true);
+  }
+
+  final VerificationMeta _tabIdMeta = const VerificationMeta('tabId');
+  GeneratedIntColumn _tabId;
+  @override
+  GeneratedIntColumn get tabId => _tabId ??= _constructTabId();
+  GeneratedIntColumn _constructTabId() {
+    return GeneratedIntColumn(
+      'tab_id',
+      $tableName,
+      false,
+    );
   }
 
   final VerificationMeta _typeMeta = const VerificationMeta('type');
@@ -2539,6 +2580,7 @@ class $CardsTable extends Cards with TableInfo<$CardsTable, Card> {
   @override
   List<GeneratedColumn> get $columns => [
         id,
+        tabId,
         type,
         stateId,
         parentId,
@@ -2550,18 +2592,24 @@ class $CardsTable extends Cards with TableInfo<$CardsTable, Card> {
         height
       ];
   @override
-  $CardsTable get asDslTable => this;
+  $FlexCardsTable get asDslTable => this;
   @override
-  String get $tableName => _alias ?? 'cards';
+  String get $tableName => _alias ?? 'flex_cards';
   @override
-  final String actualTableName = 'cards';
+  final String actualTableName = 'flex_cards';
   @override
-  VerificationContext validateIntegrity(Insertable<Card> instance,
+  VerificationContext validateIntegrity(Insertable<FlexCard> instance,
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id'], _idMeta));
+    }
+    if (data.containsKey('tab_id')) {
+      context.handle(
+          _tabIdMeta, tabId.isAcceptableOrUnknown(data['tab_id'], _tabIdMeta));
+    } else if (isInserting) {
+      context.missing(_tabIdMeta);
     }
     if (data.containsKey('type')) {
       context.handle(
@@ -2627,14 +2675,14 @@ class $CardsTable extends Cards with TableInfo<$CardsTable, Card> {
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
-  Card map(Map<String, dynamic> data, {String tablePrefix}) {
+  FlexCard map(Map<String, dynamic> data, {String tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : null;
-    return Card.fromData(data, _db, prefix: effectivePrefix);
+    return FlexCard.fromData(data, _db, prefix: effectivePrefix);
   }
 
   @override
-  $CardsTable createAlias(String alias) {
-    return $CardsTable(_db, alias);
+  $FlexCardsTable createAlias(String alias) {
+    return $FlexCardsTable(_db, alias);
   }
 }
 
@@ -2644,13 +2692,13 @@ abstract class _$Database extends GeneratedDatabase {
   $ConfigsTable get configs => _configs ??= $ConfigsTable(this);
   $StatesTable _states;
   $StatesTable get states => _states ??= $StatesTable(this);
-  $TabsTable _tabs;
-  $TabsTable get tabs => _tabs ??= $TabsTable(this);
-  $CardsTable _cards;
-  $CardsTable get cards => _cards ??= $CardsTable(this);
+  $FlexTabsTable _flexTabs;
+  $FlexTabsTable get flexTabs => _flexTabs ??= $FlexTabsTable(this);
+  $FlexCardsTable _flexCards;
+  $FlexCardsTable get flexCards => _flexCards ??= $FlexCardsTable(this);
   @override
   Iterable<TableInfo> get allTables => allSchemaEntities.whereType<TableInfo>();
   @override
   List<DatabaseSchemaEntity> get allSchemaEntities =>
-      [configs, states, tabs, cards];
+      [configs, states, flexTabs, flexCards];
 }

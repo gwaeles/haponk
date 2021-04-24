@@ -24,7 +24,7 @@ class LauncherScreenState extends State<LauncherScreen> {
               if (value?.lastConnection != null) {
                 context.read<ConnectionProvider>().connect(value);
 
-                Navigator.of(context).pushReplacementNamed("/devices");
+                Navigator.of(context).pushReplacementNamed("/supervisor");
               } else {
                 Navigator.of(context).pushReplacementNamed("/config");
               }
