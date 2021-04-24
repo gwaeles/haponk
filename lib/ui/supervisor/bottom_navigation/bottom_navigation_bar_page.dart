@@ -3,8 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:haponk/ui/supervisor/bottom_navigation/bottom_navigation_bar_controller.dart';
 
 class BottomNavigationBarPage extends StatefulWidget {
-
-  const BottomNavigationBarPage({Key key, @required this.pageIndex, @required this.child, @required this.pageIndexController}) : super(key: key);
+  const BottomNavigationBarPage(
+      {Key key,
+      @required this.pageIndex,
+      @required this.child,
+      @required this.pageIndexController})
+      : super(key: key);
 
   final int pageIndex;
   final Widget child;
@@ -16,12 +20,10 @@ class BottomNavigationBarPage extends StatefulWidget {
 
 class _BottomBarPageState extends State<BottomNavigationBarPage>
     with SingleTickerProviderStateMixin {
-
   Widget _child;
-
-  AnimationController controller;
-  Animation<double> fadeAnimation;
-  Animation<Offset> slideAnimation;
+  Duration _duration;
+  double _opacity;
+  Matrix4 _matrix;
 
   ///
   /// Lifecycle
@@ -32,21 +34,12 @@ class _BottomBarPageState extends State<BottomNavigationBarPage>
     super.initState();
     widget.pageIndexController?.addListener(_onPageIndexChange);
 
-    // Animation
-    controller =
-        AnimationController(vsync: this, duration: Duration(milliseconds: 450));
-    fadeAnimation =
-        CurvedAnimation(parent: controller, curve: Curves.easeIn);
-    // No slide animation on the first display
-    slideAnimation = Tween<Offset>(
-      begin: Offset.zero,
-      end: Offset.zero,
-    ).animate(CurvedAnimation(
-      parent: controller,
-      curve: Curves.easeIn,
-    ));
+    _duration = const Duration(milliseconds: 450);
+    _opacity = 0;
+    _matrix = Matrix4.identity();
 
-    _onPageIndexChange();
+    WidgetsBinding.instance
+        .addPostFrameCallback((timeStamp) => _onPageIndexChange());
   }
 
   @override
@@ -61,12 +54,15 @@ class _BottomBarPageState extends State<BottomNavigationBarPage>
 
   @override
   Widget build(BuildContext context) {
-
-    return SlideTransition(
-      position: slideAnimation,
-      child: FadeTransition(
-        opacity: fadeAnimation,
-        child: _child
+    return AnimatedOpacity(
+      duration: _duration,
+      opacity: _opacity,
+      curve: Curves.easeIn,
+      child: AnimatedContainer(
+        duration: _duration,
+        transform: _matrix,
+        curve: Curves.easeIn,
+        child: _child,
       ),
     );
   }
@@ -76,30 +72,26 @@ class _BottomBarPageState extends State<BottomNavigationBarPage>
   ///
 
   _onPageIndexChange() {
-    if (_child  == null && widget.pageIndexController.value == widget.pageIndex) {
+    if (_child == null &&
+        widget.pageIndexController.value == widget.pageIndex) {
       setState(() {
         _child = widget.child;
+        _opacity = 1;
+        _matrix = Matrix4.identity();
+      });
+    } else if (_child != null &&
+        widget.pageIndexController.value != widget.pageIndex) {
+      setState(() {
+        _duration = const Duration(milliseconds: 250);
+        _opacity = 0;
+        _matrix = Matrix4.identity()..translate(0.0, 20.0);
+      });
+    } else if (widget.pageIndexController.value == widget.pageIndex) {
+      setState(() {
+        _duration = const Duration(milliseconds: 250);
+        _opacity = 1;
+        _matrix = Matrix4.identity();
       });
     }
-    else {
-      if (controller.duration.inMilliseconds == 450) {
-        //setState(() {
-          controller.duration = Duration(milliseconds: 250);
-          slideAnimation = Tween<Offset>(
-            begin: const Offset(0.0, 0.03),
-            end: Offset.zero,
-          ).animate(CurvedAnimation(
-            parent: controller,
-            curve: Curves.easeIn,
-          ));
-        //});
-      }
-    }
-      if (widget.pageIndexController.value == widget.pageIndex) {
-        controller.forward();
-      }
-      else {
-        controller.reverse();
-      }
   }
 }
