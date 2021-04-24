@@ -2048,8 +2048,7 @@ class FlexCard extends DataClass implements Insertable<FlexCard> {
   final String type;
   final int stateId;
   final int parentId;
-  final int horizontalPosition;
-  final int verticalPosition;
+  final int position;
   final int horizontalFlex;
   final int verticalFlex;
   final int width;
@@ -2060,8 +2059,7 @@ class FlexCard extends DataClass implements Insertable<FlexCard> {
       @required this.type,
       this.stateId,
       this.parentId,
-      @required this.horizontalPosition,
-      @required this.verticalPosition,
+      @required this.position,
       @required this.horizontalFlex,
       @required this.verticalFlex,
       @required this.width,
@@ -2079,10 +2077,8 @@ class FlexCard extends DataClass implements Insertable<FlexCard> {
           intType.mapFromDatabaseResponse(data['${effectivePrefix}state_id']),
       parentId:
           intType.mapFromDatabaseResponse(data['${effectivePrefix}parent_id']),
-      horizontalPosition: intType.mapFromDatabaseResponse(
-          data['${effectivePrefix}horizontal_position']),
-      verticalPosition: intType
-          .mapFromDatabaseResponse(data['${effectivePrefix}vertical_position']),
+      position:
+          intType.mapFromDatabaseResponse(data['${effectivePrefix}position']),
       horizontalFlex: intType
           .mapFromDatabaseResponse(data['${effectivePrefix}horizontal_flex']),
       verticalFlex: intType
@@ -2109,11 +2105,8 @@ class FlexCard extends DataClass implements Insertable<FlexCard> {
     if (!nullToAbsent || parentId != null) {
       map['parent_id'] = Variable<int>(parentId);
     }
-    if (!nullToAbsent || horizontalPosition != null) {
-      map['horizontal_position'] = Variable<int>(horizontalPosition);
-    }
-    if (!nullToAbsent || verticalPosition != null) {
-      map['vertical_position'] = Variable<int>(verticalPosition);
+    if (!nullToAbsent || position != null) {
+      map['position'] = Variable<int>(position);
     }
     if (!nullToAbsent || horizontalFlex != null) {
       map['horizontal_flex'] = Variable<int>(horizontalFlex);
@@ -2142,12 +2135,9 @@ class FlexCard extends DataClass implements Insertable<FlexCard> {
       parentId: parentId == null && nullToAbsent
           ? const Value.absent()
           : Value(parentId),
-      horizontalPosition: horizontalPosition == null && nullToAbsent
+      position: position == null && nullToAbsent
           ? const Value.absent()
-          : Value(horizontalPosition),
-      verticalPosition: verticalPosition == null && nullToAbsent
-          ? const Value.absent()
-          : Value(verticalPosition),
+          : Value(position),
       horizontalFlex: horizontalFlex == null && nullToAbsent
           ? const Value.absent()
           : Value(horizontalFlex),
@@ -2170,8 +2160,7 @@ class FlexCard extends DataClass implements Insertable<FlexCard> {
       type: serializer.fromJson<String>(json['type']),
       stateId: serializer.fromJson<int>(json['stateId']),
       parentId: serializer.fromJson<int>(json['parentId']),
-      horizontalPosition: serializer.fromJson<int>(json['horizontalPosition']),
-      verticalPosition: serializer.fromJson<int>(json['verticalPosition']),
+      position: serializer.fromJson<int>(json['position']),
       horizontalFlex: serializer.fromJson<int>(json['horizontalFlex']),
       verticalFlex: serializer.fromJson<int>(json['verticalFlex']),
       width: serializer.fromJson<int>(json['width']),
@@ -2187,8 +2176,7 @@ class FlexCard extends DataClass implements Insertable<FlexCard> {
       'type': serializer.toJson<String>(type),
       'stateId': serializer.toJson<int>(stateId),
       'parentId': serializer.toJson<int>(parentId),
-      'horizontalPosition': serializer.toJson<int>(horizontalPosition),
-      'verticalPosition': serializer.toJson<int>(verticalPosition),
+      'position': serializer.toJson<int>(position),
       'horizontalFlex': serializer.toJson<int>(horizontalFlex),
       'verticalFlex': serializer.toJson<int>(verticalFlex),
       'width': serializer.toJson<int>(width),
@@ -2202,8 +2190,7 @@ class FlexCard extends DataClass implements Insertable<FlexCard> {
           String type,
           int stateId,
           int parentId,
-          int horizontalPosition,
-          int verticalPosition,
+          int position,
           int horizontalFlex,
           int verticalFlex,
           int width,
@@ -2214,8 +2201,7 @@ class FlexCard extends DataClass implements Insertable<FlexCard> {
         type: type ?? this.type,
         stateId: stateId ?? this.stateId,
         parentId: parentId ?? this.parentId,
-        horizontalPosition: horizontalPosition ?? this.horizontalPosition,
-        verticalPosition: verticalPosition ?? this.verticalPosition,
+        position: position ?? this.position,
         horizontalFlex: horizontalFlex ?? this.horizontalFlex,
         verticalFlex: verticalFlex ?? this.verticalFlex,
         width: width ?? this.width,
@@ -2229,8 +2215,7 @@ class FlexCard extends DataClass implements Insertable<FlexCard> {
           ..write('type: $type, ')
           ..write('stateId: $stateId, ')
           ..write('parentId: $parentId, ')
-          ..write('horizontalPosition: $horizontalPosition, ')
-          ..write('verticalPosition: $verticalPosition, ')
+          ..write('position: $position, ')
           ..write('horizontalFlex: $horizontalFlex, ')
           ..write('verticalFlex: $verticalFlex, ')
           ..write('width: $width, ')
@@ -2251,15 +2236,13 @@ class FlexCard extends DataClass implements Insertable<FlexCard> {
                   $mrjc(
                       parentId.hashCode,
                       $mrjc(
-                          horizontalPosition.hashCode,
+                          position.hashCode,
                           $mrjc(
-                              verticalPosition.hashCode,
+                              horizontalFlex.hashCode,
                               $mrjc(
-                                  horizontalFlex.hashCode,
+                                  verticalFlex.hashCode,
                                   $mrjc(
-                                      verticalFlex.hashCode,
-                                      $mrjc(width.hashCode,
-                                          height.hashCode)))))))))));
+                                      width.hashCode, height.hashCode))))))))));
   @override
   bool operator ==(dynamic other) =>
       identical(this, other) ||
@@ -2269,8 +2252,7 @@ class FlexCard extends DataClass implements Insertable<FlexCard> {
           other.type == this.type &&
           other.stateId == this.stateId &&
           other.parentId == this.parentId &&
-          other.horizontalPosition == this.horizontalPosition &&
-          other.verticalPosition == this.verticalPosition &&
+          other.position == this.position &&
           other.horizontalFlex == this.horizontalFlex &&
           other.verticalFlex == this.verticalFlex &&
           other.width == this.width &&
@@ -2283,8 +2265,7 @@ class FlexCardsCompanion extends UpdateCompanion<FlexCard> {
   final Value<String> type;
   final Value<int> stateId;
   final Value<int> parentId;
-  final Value<int> horizontalPosition;
-  final Value<int> verticalPosition;
+  final Value<int> position;
   final Value<int> horizontalFlex;
   final Value<int> verticalFlex;
   final Value<int> width;
@@ -2295,8 +2276,7 @@ class FlexCardsCompanion extends UpdateCompanion<FlexCard> {
     this.type = const Value.absent(),
     this.stateId = const Value.absent(),
     this.parentId = const Value.absent(),
-    this.horizontalPosition = const Value.absent(),
-    this.verticalPosition = const Value.absent(),
+    this.position = const Value.absent(),
     this.horizontalFlex = const Value.absent(),
     this.verticalFlex = const Value.absent(),
     this.width = const Value.absent(),
@@ -2308,16 +2288,14 @@ class FlexCardsCompanion extends UpdateCompanion<FlexCard> {
     @required String type,
     this.stateId = const Value.absent(),
     this.parentId = const Value.absent(),
-    @required int horizontalPosition,
-    @required int verticalPosition,
+    @required int position,
     @required int horizontalFlex,
     @required int verticalFlex,
     @required int width,
     @required int height,
   })  : tabId = Value(tabId),
         type = Value(type),
-        horizontalPosition = Value(horizontalPosition),
-        verticalPosition = Value(verticalPosition),
+        position = Value(position),
         horizontalFlex = Value(horizontalFlex),
         verticalFlex = Value(verticalFlex),
         width = Value(width),
@@ -2328,8 +2306,7 @@ class FlexCardsCompanion extends UpdateCompanion<FlexCard> {
     Expression<String> type,
     Expression<int> stateId,
     Expression<int> parentId,
-    Expression<int> horizontalPosition,
-    Expression<int> verticalPosition,
+    Expression<int> position,
     Expression<int> horizontalFlex,
     Expression<int> verticalFlex,
     Expression<int> width,
@@ -2341,8 +2318,7 @@ class FlexCardsCompanion extends UpdateCompanion<FlexCard> {
       if (type != null) 'type': type,
       if (stateId != null) 'state_id': stateId,
       if (parentId != null) 'parent_id': parentId,
-      if (horizontalPosition != null) 'horizontal_position': horizontalPosition,
-      if (verticalPosition != null) 'vertical_position': verticalPosition,
+      if (position != null) 'position': position,
       if (horizontalFlex != null) 'horizontal_flex': horizontalFlex,
       if (verticalFlex != null) 'vertical_flex': verticalFlex,
       if (width != null) 'width': width,
@@ -2356,8 +2332,7 @@ class FlexCardsCompanion extends UpdateCompanion<FlexCard> {
       Value<String> type,
       Value<int> stateId,
       Value<int> parentId,
-      Value<int> horizontalPosition,
-      Value<int> verticalPosition,
+      Value<int> position,
       Value<int> horizontalFlex,
       Value<int> verticalFlex,
       Value<int> width,
@@ -2368,8 +2343,7 @@ class FlexCardsCompanion extends UpdateCompanion<FlexCard> {
       type: type ?? this.type,
       stateId: stateId ?? this.stateId,
       parentId: parentId ?? this.parentId,
-      horizontalPosition: horizontalPosition ?? this.horizontalPosition,
-      verticalPosition: verticalPosition ?? this.verticalPosition,
+      position: position ?? this.position,
       horizontalFlex: horizontalFlex ?? this.horizontalFlex,
       verticalFlex: verticalFlex ?? this.verticalFlex,
       width: width ?? this.width,
@@ -2395,11 +2369,8 @@ class FlexCardsCompanion extends UpdateCompanion<FlexCard> {
     if (parentId.present) {
       map['parent_id'] = Variable<int>(parentId.value);
     }
-    if (horizontalPosition.present) {
-      map['horizontal_position'] = Variable<int>(horizontalPosition.value);
-    }
-    if (verticalPosition.present) {
-      map['vertical_position'] = Variable<int>(verticalPosition.value);
+    if (position.present) {
+      map['position'] = Variable<int>(position.value);
     }
     if (horizontalFlex.present) {
       map['horizontal_flex'] = Variable<int>(horizontalFlex.value);
@@ -2424,8 +2395,7 @@ class FlexCardsCompanion extends UpdateCompanion<FlexCard> {
           ..write('type: $type, ')
           ..write('stateId: $stateId, ')
           ..write('parentId: $parentId, ')
-          ..write('horizontalPosition: $horizontalPosition, ')
-          ..write('verticalPosition: $verticalPosition, ')
+          ..write('position: $position, ')
           ..write('horizontalFlex: $horizontalFlex, ')
           ..write('verticalFlex: $verticalFlex, ')
           ..write('width: $width, ')
@@ -2497,29 +2467,13 @@ class $FlexCardsTable extends FlexCards
     );
   }
 
-  final VerificationMeta _horizontalPositionMeta =
-      const VerificationMeta('horizontalPosition');
-  GeneratedIntColumn _horizontalPosition;
+  final VerificationMeta _positionMeta = const VerificationMeta('position');
+  GeneratedIntColumn _position;
   @override
-  GeneratedIntColumn get horizontalPosition =>
-      _horizontalPosition ??= _constructHorizontalPosition();
-  GeneratedIntColumn _constructHorizontalPosition() {
+  GeneratedIntColumn get position => _position ??= _constructPosition();
+  GeneratedIntColumn _constructPosition() {
     return GeneratedIntColumn(
-      'horizontal_position',
-      $tableName,
-      false,
-    );
-  }
-
-  final VerificationMeta _verticalPositionMeta =
-      const VerificationMeta('verticalPosition');
-  GeneratedIntColumn _verticalPosition;
-  @override
-  GeneratedIntColumn get verticalPosition =>
-      _verticalPosition ??= _constructVerticalPosition();
-  GeneratedIntColumn _constructVerticalPosition() {
-    return GeneratedIntColumn(
-      'vertical_position',
+      'position',
       $tableName,
       false,
     );
@@ -2584,8 +2538,7 @@ class $FlexCardsTable extends FlexCards
         type,
         stateId,
         parentId,
-        horizontalPosition,
-        verticalPosition,
+        position,
         horizontalFlex,
         verticalFlex,
         width,
@@ -2625,21 +2578,11 @@ class $FlexCardsTable extends FlexCards
       context.handle(_parentIdMeta,
           parentId.isAcceptableOrUnknown(data['parent_id'], _parentIdMeta));
     }
-    if (data.containsKey('horizontal_position')) {
-      context.handle(
-          _horizontalPositionMeta,
-          horizontalPosition.isAcceptableOrUnknown(
-              data['horizontal_position'], _horizontalPositionMeta));
+    if (data.containsKey('position')) {
+      context.handle(_positionMeta,
+          position.isAcceptableOrUnknown(data['position'], _positionMeta));
     } else if (isInserting) {
-      context.missing(_horizontalPositionMeta);
-    }
-    if (data.containsKey('vertical_position')) {
-      context.handle(
-          _verticalPositionMeta,
-          verticalPosition.isAcceptableOrUnknown(
-              data['vertical_position'], _verticalPositionMeta));
-    } else if (isInserting) {
-      context.missing(_verticalPositionMeta);
+      context.missing(_positionMeta);
     }
     if (data.containsKey('horizontal_flex')) {
       context.handle(

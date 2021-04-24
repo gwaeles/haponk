@@ -19,16 +19,18 @@ class AppTheme {
   ///
 
   Color get inputBackgroungColor => brightness == Brightness.light
-            ? AppColors.blue
-            : AppColors.lightGrey;
+      ? AppColors.blue
+      : AppColors.inputBackgroungDarkColor;
 
-  Color get inputHintColor => brightness == Brightness.light
-            ? AppColors.lightBlue
-            : AppColors.darkGrey;
+  Color get inputBorderColor => brightness == Brightness.light
+      ? Colors.transparent
+      : AppColors.inputBorderDarkColor;
 
-  Color get inputTextColor => brightness == Brightness.light
-            ? Colors.white
-            : Colors.grey.shade900;
+  Color get inputHintColor =>
+      brightness == Brightness.light ? AppColors.lightBlue : Colors.white54;
+
+  Color get inputTextColor =>
+      brightness == Brightness.light ? Colors.white : Colors.white;
 
   ///
   /// --- Styles --- ///
@@ -37,9 +39,7 @@ class AppTheme {
   TextStyle get listItemTitleTextStyle {
     return TextStyle(
         fontSize: 16,
-        color: isLight
-            ? AppColors.blue
-            : Colors.white,
+        color: isLight ? AppColors.blue : Colors.white,
         fontWeight: FontWeight.bold);
   }
 
@@ -47,9 +47,7 @@ class AppTheme {
     return TextStyle(
       fontSize: 12,
       fontWeight: FontWeight.w300,
-      color: isLight
-          ? AppColors.darkGrey
-          : Colors.white54,
+      color: isLight ? AppColors.darkGrey : Colors.white54,
     );
   }
 }
@@ -60,11 +58,6 @@ ThemeData get lightTheme => ThemeData(
       disabledColor: AppColors.lightBlue,
       scaffoldBackgroundColor: AppColors.white,
       fontFamily: 'Avenir',
-      textTheme: TextTheme(
-        headline1: TextStyle(fontSize: 72.0, fontWeight: FontWeight.bold),
-        headline6: TextStyle(fontSize: 36.0, fontStyle: FontStyle.italic),
-        bodyText2: TextStyle(fontSize: 14.0),
-      ),
     );
 
 ThemeData get darkTheme => ThemeData(
@@ -72,11 +65,6 @@ ThemeData get darkTheme => ThemeData(
       focusColor: Colors.white70,
       disabledColor: Colors.white24,
       brightness: Brightness.dark,
-      scaffoldBackgroundColor: Colors.grey.shade900,
+      scaffoldBackgroundColor: AppColors.scaffoldBackgroundDarkColor,
       fontFamily: 'Avenir',
-      textTheme: TextTheme(
-        headline1: TextStyle(fontSize: 72.0, fontWeight: FontWeight.bold),
-        headline6: TextStyle(fontSize: 36.0, fontStyle: FontStyle.italic),
-        bodyText2: TextStyle(fontSize: 14.0),
-      ),
     );

@@ -14,18 +14,17 @@ class DevicesPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
-      providers: [
-        Provider(create: (_) => DevicesProvider(getIt())),
-        StreamProvider(
-            create: (context) => context.read<DevicesProvider>().deviceStream)
-      ],
-      child: CustomScrollView(
-        controller: controller,
-        slivers: <Widget>[
-          DevicesAppBar(),
-          DeviceList(),
+        providers: [
+          Provider(create: (_) => DevicesProvider(getIt())),
+          StreamProvider(
+              create: (context) => context.read<DevicesProvider>().deviceStream)
         ],
-      )
-    );
+        child: CustomScrollView(
+          controller: controller,
+          slivers: <Widget>[
+            DevicesAppBar(),
+            DeviceList(),
+          ],
+        ));
   }
 }

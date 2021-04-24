@@ -30,6 +30,14 @@ class TabsRepositoryImpl implements TabsRepository {
   }
 
   @override
+  Future<int> insert({String label, int order}) async {
+    return await db.insertFlexTab(data.FlexTabsCompanion.insert(
+      label: label,
+      order: order,
+    ));
+  }
+
+  @override
   void dispose() {
     debugPrint("[TABS] dispose");
     for (var _controller in _controllers) {

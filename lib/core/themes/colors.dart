@@ -9,4 +9,7 @@ class AppColors {
   static const blue = Color(0xFF3F5AA6);
   static const darkBlue = Color(0xFF192A59);
   static const red = Color(0xFFA63F3F);
+  static const scaffoldBackgroundDarkColor = Color(0xFF202124);
+  static const inputBackgroungDarkColor = Color(0xFF35363a);
+  static const inputBorderDarkColor = Color(0xFF191a1d);
 }

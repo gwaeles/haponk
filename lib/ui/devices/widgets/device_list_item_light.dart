@@ -17,22 +17,22 @@ class DeviceListItemLight extends DeviceListItem {
     final path = AppTheme.of(context).isDark ? "dark/" : "";
 
     return Consumer<ConnectionProvider>(
-        builder: (context, provider, child) {
-          return InkWell(
-            borderRadius: BorderRadius.all(Radius.circular(24)),
-            child: child,
-            onTap: () => provider.callService(
-                domain: "light", service: "toggle", entityId: device.entityId),
-          );
-        },
-        child: SvgPicture.asset(
-          device.state == "on"
-                ? 'assets/images/${path}light_on.svg'
-                : 'assets/images/${path}light_off.svg',
-          width: 48,
-          height: 48,
-        ),
-      );
+      builder: (context, provider, child) {
+        return InkWell(
+          borderRadius: BorderRadius.all(Radius.circular(24)),
+          child: child,
+          onTap: () => provider.callService(
+              domain: "light", service: "toggle", entityId: device.entityId),
+        );
+      },
+      child: SvgPicture.asset(
+        device.state == "on"
+            ? 'assets/images/${path}light_on.svg'
+            : 'assets/images/${path}light_off.svg',
+        width: 48,
+        height: 48,
+      ),
+    );
   }
 
   @override
