@@ -8,9 +8,7 @@ class ListItemActionIcon extends StatelessWidget {
   final IconData icon;
   final GestureTapCallback onTap;
 
-  const ListItemActionIcon(
-      {Key key, this.icon, this.onTap})
-      : super(key: key);
+  const ListItemActionIcon({Key key, this.icon, this.onTap}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -25,8 +23,8 @@ class ListItemActionIcon extends StatelessWidget {
         child: Icon(
           icon,
           color: onTap == null
-            ? Theme.of(context).disabledColor
-            : Theme.of(context).focusColor,
+              ? Theme.of(context).disabledColor
+              : Theme.of(context).focusColor,
         ),
       ),
     );

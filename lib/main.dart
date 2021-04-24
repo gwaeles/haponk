@@ -36,16 +36,16 @@ class MyApp extends StatelessWidget {
     return ChangeNotifierProvider(
       create: (context) => ConnectionProvider(getIt()),
       child: MaterialApp(
-          title: 'app_name'.tr(),
-          theme: lightTheme,
-          darkTheme: darkTheme,
-          routes: {
-            "/launcher": (context) => LauncherScreen(),
-            "/config": (context) => ConfigScreen(),
-            "/supervisor": (context) => SupervisorScreen(),
-          },
-          initialRoute: "/launcher",
-        ),
+        title: 'app_name'.tr(),
+        theme: lightTheme,
+        darkTheme: darkTheme,
+        routes: {
+          "/launcher": (context) => LauncherScreen(),
+          "/config": (context) => ConfigScreen(),
+          "/supervisor": (context) => SupervisorScreen(),
+        },
+        initialRoute: "/launcher",
+      ),
     );
   }
 }

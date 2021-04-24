@@ -3,9 +3,5 @@ class FlexTab {
   final String label;
   final int order;
 
-  FlexTab({
-    this.id,
-    this.label,
-    this.order
-  });
+  FlexTab({this.id, this.label, this.order});
 }

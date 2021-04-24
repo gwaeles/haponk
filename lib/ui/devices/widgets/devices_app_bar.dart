@@ -11,6 +11,7 @@ class DevicesAppBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final backgroundColor = AppTheme.of(context).inputBackgroungColor;
+    final borderColor = AppTheme.of(context).inputBorderColor;
     final hintColor = AppTheme.of(context).inputHintColor;
     final textColor = AppTheme.of(context).inputTextColor;
 
@@ -25,13 +26,13 @@ class DevicesAppBar extends StatelessWidget {
           fillColor: backgroundColor,
           border: OutlineInputBorder(
               borderRadius: BorderRadius.all(Radius.circular(32)),
-              borderSide: BorderSide(width: 0, color: backgroundColor)),
+              borderSide: BorderSide(color: borderColor)),
           focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.all(Radius.circular(32)),
-              borderSide: BorderSide(width: 0, color: backgroundColor)),
+              borderSide: BorderSide(color: borderColor)),
           enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.all(Radius.circular(32)),
-              borderSide: BorderSide(width: 0, color: backgroundColor)),
+              borderSide: BorderSide(color: borderColor)),
           hintStyle: TextStyle(color: hintColor),
           isDense: true,
           contentPadding:
@@ -41,7 +42,7 @@ class DevicesAppBar extends StatelessWidget {
             padding: const EdgeInsets.only(right: 16.0),
             child: SvgPicture.asset(
               'assets/images/search.svg',
-              color: hintColor,
+              color: textColor,
             ),
           ),
         ),

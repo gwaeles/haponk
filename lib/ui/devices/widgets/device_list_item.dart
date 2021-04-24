@@ -93,5 +93,4 @@ abstract class DeviceListItem extends StatelessWidget {
 
   Widget buildLeading(BuildContext context) => null;
   Widget buildTrailing(BuildContext context) => null;
-
 }

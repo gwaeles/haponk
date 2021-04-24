@@ -56,8 +56,7 @@ class Database extends _$Database {
                 requiresApiPassword: null,
               );
               await insertConfig(newConfig);
-            }
-            else {
+            } else {
               final Config updatedConfig = config.copyWith(
                 internalUrl: internalUrl,
               );
@@ -66,12 +65,10 @@ class Database extends _$Database {
           }
 
           // Tabs data
-          for (int i = 1 ; i < 50 ; i++) {
-            await insertFlexTab(FlexTabsCompanion.insert(
-              label: "Flex Tab $i",
-              order: i,
-            ));
-          }
+          await insertFlexTab(FlexTabsCompanion.insert(
+            label: "Flex Tab",
+            order: 1,
+          ));
         }
       },
       beforeOpen: (details) async {
@@ -128,4 +125,25 @@ class Database extends _$Database {
   Stream<List<FlexTab>> watchTabs() => select(flexTabs).watch();
   Future insertFlexTab(FlexTabsCompanion flexTab) =>
       into(flexTabs).insert(flexTab);
+  Future<FlexTab> getFlexTab(int tabId) =>
+      (select(flexTabs)..where((item) => item.id.equals(tabId))).getSingle();
+
+  Stream<List<FlexCard>> watchCards(int tabId) => (select(flexCards)
+        ..where((item) => item.tabId.equals(tabId))
+        ..orderBy([
+          (item) => OrderingTerm(expression: item.position),
+          (item) => OrderingTerm(expression: item.id)
+        ]))
+      .watch();
+  Future insertFlexCard(FlexCardsCompanion flexCard) =>
+      into(flexCards).insert(flexCard);
+  Future updateFlexCard(FlexCard flexCard) =>
+      update(flexCards).replace(flexCard);
+  Future deleteFlexCard(int cardId) =>
+      (delete(flexCards)..where((item) => item.id.equals(cardId))).go();
+  Future removeParentFlexCard(int parentCardId) =>
+      (update(flexCards)..where((item) => item.parentId.equals(parentCardId)))
+          .write(FlexCardsCompanion(
+        parentId: Value(null),
+      ));
 }

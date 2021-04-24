@@ -13,7 +13,6 @@ class TabListItem extends StatelessWidget {
   }
 
   Widget buildChild(BuildContext context) {
-
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       child: Expanded(

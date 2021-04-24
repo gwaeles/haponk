@@ -15,7 +15,7 @@ class DeviceListItemSensor extends DeviceListItem {
     final path = AppTheme.of(context).isDark ? "dark/" : "";
 
     return SvgPicture.asset(
-        imagePath(device, path),
+      imagePath(device, path),
       width: 48,
       height: 48,
     );

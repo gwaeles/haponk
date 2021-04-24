@@ -15,6 +15,8 @@ import 'package:haponk/features/discovery/domain/repositories/discovery_reposito
 import 'package:haponk/features/discovery/domain/usecases/listen_discover_use_case.dart';
 import 'package:haponk/features/discovery/domain/usecases/start_discover_use_case.dart';
 import 'package:haponk/features/discovery/domain/usecases/stop_discover_use_case.dart';
+import 'package:haponk/features/tabs/repositories/cards_repository.dart';
+import 'package:haponk/features/tabs/repositories/cards_repositoty_impl.dart';
 import 'package:haponk/features/tabs/repositories/tabs_repository.dart';
 import 'package:haponk/features/tabs/repositories/tabs_repositoty_impl.dart';
 import 'package:moor_flutter/moor_flutter.dart';
@@ -46,8 +48,10 @@ ServiceDeclaration declareServices = () {
       () => DiscoveryRepositoryImpl(getIt()));
   getIt.registerLazySingleton<DevicesRepository>(
       () => DevicesRepositoryImpl(getIt()));
-  getIt.registerLazySingleton<TabsRepository>(
-      () => TabsRepositoryImpl(getIt()));
+  getIt
+      .registerLazySingleton<TabsRepository>(() => TabsRepositoryImpl(getIt()));
+  getIt.registerFactoryParam<CardsRepository, int, int>(
+      (tabId, _) => CardsRepositoryImpl(db: getIt(), tabId: tabId));
 
   // --- USECASES --- //
   getIt.registerLazySingleton(() => ListenDiscoverUseCase(getIt()));

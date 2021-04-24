@@ -14,10 +14,11 @@ class DeviceList extends StatelessWidget {
           return Column(
             children: <Widget>[
               if (index == 0) SizedBox(height: 8),
-              if (index != 0) Divider(
-                height: 1,
-                color: Colors.grey,
-              ),
+              if (index != 0)
+                Divider(
+                  height: 1,
+                  color: Colors.grey,
+                ),
               DeviceListItem.fromDevice(devices[index]),
               if (index == (devices.length - 1)) SizedBox(height: 16),
             ],

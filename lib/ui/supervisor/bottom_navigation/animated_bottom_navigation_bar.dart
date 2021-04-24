@@ -3,12 +3,10 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 
 class AnimatedBottomNavigationBar extends StatefulWidget {
-  final List<ScrollController> controllers;
-  final int currentIndex;
+  final ScrollController controller;
   final Widget child;
 
-  const AnimatedBottomNavigationBar(
-      {Key key, this.controllers, this.currentIndex, this.child})
+  const AnimatedBottomNavigationBar({Key key, this.controller, this.child})
       : super(key: key);
 
   @override
@@ -24,29 +22,24 @@ class AnimatedBottomNavigationBarState
   @override
   void initState() {
     super.initState();
-    for (var controller in widget.controllers) {
-      controller.addListener(_onScroll);
-    }
+    widget.controller.addListener(_onScroll);
 
     globalKey = GlobalKey();
   }
 
   @override
   void dispose() {
-    for (var controller in widget.controllers) {
-      controller.removeListener(_onScroll);
-    }
+    widget.controller.removeListener(_onScroll);
     super.dispose();
   }
 
   void _onScroll() {
     final widgetHeight = globalKey?.currentContext?.size?.height ?? 57.0;
     double gap = 0.0;
-    final controller = widget.controllers[widget.currentIndex];
-    if (controller.offset > scrollOffset) {
-      scrollOffset = controller.offset;
+    if (widget.controller.offset > scrollOffset) {
+      scrollOffset = widget.controller.offset;
     } else {
-      gap = scrollOffset - controller.offset;
+      gap = scrollOffset - widget.controller.offset;
     }
     if (gap > widgetHeight) {
       scrollOffset -= gap - widgetHeight;
