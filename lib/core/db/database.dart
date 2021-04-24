@@ -4,15 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:moor_flutter/moor_flutter.dart';
 
-import 'tables/cards.dart';
+import 'tables/flex_cards.dart';
 import 'tables/configs.dart';
 import 'tables/states.dart';
-import 'tables/tabs.dart';
+import 'tables/flex_tabs.dart';
 
 part 'database.g.dart';
 
 @UseMoor(
-  tables: [Configs, States, Tabs, Cards],
+  tables: [Configs, States, FlexTabs, FlexCards],
 )
 class Database extends _$Database {
   Database(QueryExecutor e) : super(e);
@@ -32,8 +32,46 @@ class Database extends _$Database {
         if (from == 1) {
           await m.addColumn(states, states.displayLabel);
           await m.addColumn(states, states.displayType);
-          await m.createTable(tabs);
-          await m.createTable(cards);
+          await m.createTable(flexTabs);
+          await m.createTable(flexCards);
+
+          // Update config
+          String internalUrl;
+          try {
+            final String json =
+                await rootBundle.loadString("assets/config/config.json");
+            final defaultConfig = jsonDecode(json) as Map<String, dynamic>;
+            internalUrl = defaultConfig.containsKey("internalUrl")
+                ? defaultConfig["internalUrl"]
+                : null;
+          } catch (e) {
+            debugPrint("[MOOR] No config file");
+          }
+          if (internalUrl != null) {
+            Config config = await getConfig();
+            if (config == null) {
+              final Config newConfig = Config(
+                id: 1,
+                internalUrl: internalUrl,
+                requiresApiPassword: null,
+              );
+              await insertConfig(newConfig);
+            }
+            else {
+              final Config updatedConfig = config.copyWith(
+                internalUrl: internalUrl,
+              );
+              await updateConfig(updatedConfig);
+            }
+          }
+
+          // Tabs data
+          for (int i = 1 ; i < 50 ; i++) {
+            await insertFlexTab(FlexTabsCompanion.insert(
+              label: "Flex Tab $i",
+              order: i,
+            ));
+          }
         }
       },
       beforeOpen: (details) async {
@@ -86,4 +124,8 @@ class Database extends _$Database {
   Future updateState(State state) => update(states).replace(state);
 
   Stream<List<State>> watchStates() => select(states).watch();
+
+  Stream<List<FlexTab>> watchTabs() => select(flexTabs).watch();
+  Future insertFlexTab(FlexTabsCompanion flexTab) =>
+      into(flexTabs).insert(flexTab);
 }

@@ -12,7 +12,7 @@ class ValidButton extends StatelessWidget {
     return connectionType != ConnectionType.IDLE
         ? ElevatedButton(
             onPressed: () => Navigator.of(context).pushReplacementNamed(
-                "/devices",
+                "/supervisor",
                 arguments: context.read<ConfigProvider>().currentConfig),
             child: Text("Go home"))
         : ElevatedButton(

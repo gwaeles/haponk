@@ -3,10 +3,12 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 
 class AnimatedBottomNavigationBar extends StatefulWidget {
-  final ScrollController controller;
+  final List<ScrollController> controllers;
+  final int currentIndex;
   final Widget child;
 
-  const AnimatedBottomNavigationBar({Key key, this.controller, this.child})
+  const AnimatedBottomNavigationBar(
+      {Key key, this.controllers, this.currentIndex, this.child})
       : super(key: key);
 
   @override
@@ -17,31 +19,34 @@ class AnimatedBottomNavigationBarState
     extends State<AnimatedBottomNavigationBar> {
   double bottomOffset = 0.0;
   double scrollOffset = 0.0;
-  GlobalKey navBarKey;
+  GlobalKey globalKey;
 
   @override
   void initState() {
     super.initState();
-    widget.controller.addListener(_onScroll);
-
-    if (widget.child.key is GlobalKey) {
-      navBarKey = widget.key;
+    for (var controller in widget.controllers) {
+      controller.addListener(_onScroll);
     }
+
+    globalKey = GlobalKey();
   }
 
   @override
   void dispose() {
-    widget.controller.removeListener(_onScroll);
+    for (var controller in widget.controllers) {
+      controller.removeListener(_onScroll);
+    }
     super.dispose();
   }
 
   void _onScroll() {
-    final widgetHeight = navBarKey?.currentContext?.size?.height ?? 57.0;
+    final widgetHeight = globalKey?.currentContext?.size?.height ?? 57.0;
     double gap = 0.0;
-    if (widget.controller.offset > scrollOffset) {
-      scrollOffset = widget.controller.offset;
+    final controller = widget.controllers[widget.currentIndex];
+    if (controller.offset > scrollOffset) {
+      scrollOffset = controller.offset;
     } else {
-      gap = scrollOffset - widget.controller.offset;
+      gap = scrollOffset - controller.offset;
     }
     if (gap > widgetHeight) {
       scrollOffset -= gap - widgetHeight;
@@ -58,6 +63,7 @@ class AnimatedBottomNavigationBarState
   @override
   Widget build(BuildContext context) {
     return Positioned(
+      key: globalKey,
       left: 0,
       right: 0,
       bottom: bottomOffset,

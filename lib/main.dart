@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:haponk/core/themes/app_theme.dart';
 import 'package:haponk/features/connection/providers/connection_provider.dart';
 import 'package:haponk/ui/config/config_screen.dart';
-import 'package:haponk/ui/devices/devices_screen.dart';
 import 'package:haponk/ui/launcher/launcher_screen.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:haponk/ui/supervisor/supervisor_screen.dart';
 import 'package:provider/provider.dart';
 
 import 'dependency_injection.dart';
@@ -42,7 +42,7 @@ class MyApp extends StatelessWidget {
           routes: {
             "/launcher": (context) => LauncherScreen(),
             "/config": (context) => ConfigScreen(),
-            "/devices": (context) => DevicesScreen(),
+            "/supervisor": (context) => SupervisorScreen(),
           },
           initialRoute: "/launcher",
         ),
