@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_speed_dial/flutter_speed_dial.dart';
-import 'package:haponk/core/themes/colors.dart';
 import 'package:haponk/dependency_injection.dart';
 import 'package:haponk/features/tabs/entities/flex_tab.dart';
 import 'package:haponk/features/tabs/providers/cards_provider.dart';
@@ -93,43 +91,6 @@ class TabsPage extends StatelessWidget {
                 children: [
                   TabBarView(
                     children: children,
-                  ),
-                  SpeedDial(
-                    marginEnd: 24,
-                    marginBottom: 81,
-                    icon: Icons.menu,
-                    activeIcon: Icons.close,
-                    curve: Curves.bounceIn,
-                    backgroundColor: AppColors.blue,
-                    children: [
-                      SpeedDialChild(
-                        child: Icon(Icons.add),
-                        label: 'Create new tab',
-                        labelStyle: TextStyle(fontSize: 18.0),
-                        backgroundColor: AppColors.blue,
-                        onTap: () => context.read<TabsProvider>().createItem(),
-                      ),
-                      SpeedDialChild(
-                        child: Icon(Icons.delete),
-                        label: 'Delete current tab',
-                        labelStyle: TextStyle(fontSize: 18.0),
-                        backgroundColor: AppColors.blue,
-                      ),
-                      SpeedDialChild(
-                        child: Icon(Icons.add),
-                        label: 'Add a card',
-                        labelStyle: TextStyle(fontSize: 18.0),
-                        backgroundColor: AppColors.blue,
-                        onTap: () {
-                          if (cardsProviders.isNotEmpty &&
-                              cardsProviders.length > currentIndex.value) {
-                            final cardsProvider =
-                                cardsProviders[currentIndex.value];
-                            cardsProvider.createItem();
-                          }
-                        },
-                      ),
-                    ],
                   ),
                   AnimatedBottomNavigationBar(
                     controller: scrollController,
