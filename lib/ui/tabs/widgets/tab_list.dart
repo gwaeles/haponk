@@ -31,40 +31,57 @@ class TabList extends StatelessWidget {
                       NestedScrollView.sliverOverlapAbsorberHandleFor(context),
                 ),
                 SliverPadding(
-                  padding: const EdgeInsets.only(top: 8.0, bottom: 72),
-                  sliver: SliverList(
-                    delegate: SliverChildBuilderDelegate(
-                      (BuildContext context, int index) {
-                        final item = items[index];
-                        final child =
-                            item.children == null || item.children.isEmpty
-                                ? FlexCardWidget(
-                                    item: item,
-                                    rowCount: items.length,
-                                    rowIndex: index,
-                                    itemCount: 1,
-                                    itemIndex: 0,
-                                  )
-                                : FlexCardRow(
-                                    item: item,
-                                    rowCount: items.length,
-                                    rowIndex: index,
-                                  );
+                  padding: const EdgeInsets.only(top: 8.0, bottom: 16),
+                  sliver: (items?.length ?? 0) == 0
+                      ? SliverFillRemaining(
+                        child: Center(child: InkWell(
+                          onTap: () => context.read<CardsProvider>().createItem(),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text("Tap here to add your firt card"),
+                                SizedBox(height: 16),
+                                Icon(Icons.add_box_outlined),
+                              ]
+                            ),
+                          ),
+                        )),
+                      )
+                      : SliverList(
+                          delegate: SliverChildBuilderDelegate(
+                            (BuildContext context, int index) {
+                              final item = items[index];
+                              final child =
+                                  item.children == null || item.children.isEmpty
+                                      ? FlexCardWidget(
+                                          item: item,
+                                          rowCount: items.length,
+                                          rowIndex: index,
+                                          itemCount: 1,
+                                          itemIndex: 0,
+                                        )
+                                      : FlexCardRow(
+                                          item: item,
+                                          rowCount: items.length,
+                                          rowIndex: index,
+                                        );
 
-                        return Column(
-                          children: <Widget>[
-                            if (index != 0)
-                              Divider(
-                                height: 1,
-                                color: Colors.transparent,
-                              ),
-                            child,
-                          ],
-                        );
-                      },
-                      childCount: items?.length ?? 0,
-                    ),
-                  ),
+                              return Column(
+                                children: <Widget>[
+                                  if (index != 0)
+                                    Divider(
+                                      height: 1,
+                                      color: Colors.transparent,
+                                    ),
+                                  child,
+                                ],
+                              );
+                            },
+                            childCount: items?.length ?? 0,
+                          ),
+                        ),
                 ),
               ]);
         }));
@@ -137,7 +154,6 @@ class FlexCardWidget extends StatelessWidget {
         height: 56,
         color: Colors.pink,
         child: Stack(
-          clipBehavior: Clip.none,
           children: [
             Center(child: Text(item.toString())),
             _iconButton(
@@ -147,7 +163,7 @@ class FlexCardWidget extends StatelessWidget {
                 bottom: 0,
                 icon: Icons.add_circle_outline,
                 onPressed: () =>
-                    context.read<CardsProvider>().createChildItem(item)),
+                    context.read<CardsProvider>().addChildItemToTheLeft(item)),
             _iconButton(
                 displayButton: displayButton,
                 right: -8,
@@ -155,7 +171,7 @@ class FlexCardWidget extends StatelessWidget {
                 bottom: 0,
                 icon: Icons.add_circle_outline,
                 onPressed: () =>
-                    context.read<CardsProvider>().createChildItem(item)),
+                    context.read<CardsProvider>().addChildItemToTheRight(item)),
             _iconButton(
                 displayButton: displayButton,
                 top: -24,
@@ -163,14 +179,15 @@ class FlexCardWidget extends StatelessWidget {
                 right: 0,
                 icon: Icons.add_circle_outline,
                 onPressed: () =>
-                    context.read<CardsProvider>().createChildItem(item)),
+                    context.read<CardsProvider>().addChildItemAbove(item)),
             _iconButton(
                 displayButton: displayButton,
                 bottom: -24,
                 left: 0,
                 right: 0,
                 icon: Icons.add_circle_outline,
-                onPressed: () => context.read<CardsProvider>().createItem()),
+                onPressed: () =>
+                    context.read<CardsProvider>().addChildItemBelow(item)),
             _iconButton(
                 displayButton: customButton,
                 icon: Icons.palette,
@@ -219,49 +236,6 @@ class FlexCardWidget extends StatelessWidget {
             ),
           ),
         ),
-      ),
-    );
-  }
-
-  void _onTap(BuildContext context) {
-    final options = [
-      "Select an entity",
-      "Custom layout",
-      "Add a card on the right",
-      "Add a card on the left",
-      "Delete card"
-    ];
-
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text("Options"),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-                padding: EdgeInsets.fromLTRB(16, 24, 16, 12),
-                child: Text(options[0])),
-            Container(height: 1, color: Colors.white54),
-            Padding(
-                padding: EdgeInsets.fromLTRB(16, 12, 16, 12),
-                child: Text(options[1])),
-            Container(height: 1, color: Colors.white54),
-            Padding(
-                padding: EdgeInsets.fromLTRB(16, 12, 16, 12),
-                child: Text(options[2])),
-            Container(height: 1, color: Colors.white54),
-            Padding(
-                padding: EdgeInsets.fromLTRB(16, 12, 16, 12),
-                child: Text(options[3])),
-            Container(height: 1, color: Colors.white54),
-            Padding(
-                padding: EdgeInsets.fromLTRB(16, 12, 16, 12),
-                child: Text(options[4])),
-          ],
-        ),
-        contentPadding: EdgeInsets.zero,
       ),
     );
   }
