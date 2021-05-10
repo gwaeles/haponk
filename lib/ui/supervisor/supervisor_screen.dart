@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:haponk/ui/devices/devices_page.dart';
 import 'package:haponk/ui/supervisor/bottom_navigation/bottom_navigation_bar_page.dart';
 import 'package:haponk/ui/tabs/tabs_page.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:provider/provider.dart';
 
 import 'bottom_navigation/bottom_navigation_bar_controller.dart';
@@ -36,22 +37,33 @@ class SupervisorScreen extends StatelessWidget {
                       child: FakeListPage(),
                       pageIndexController: navController,
                     ),
+                    BottomNavigationBarPage(
+                      pageIndex: 3,
+                      child: FakeListPage(),
+                      pageIndexController: navController,
+                    ),
                   ],
                 ),
               ),
               BottomNavigationBar(
+                unselectedItemColor: Colors.grey,
+                showUnselectedLabels: true,
                 items: const <BottomNavigationBarItem>[
                   BottomNavigationBarItem(
                     icon: Icon(Icons.home),
                     label: 'Home',
                   ),
                   BottomNavigationBarItem(
-                    icon: Icon(Icons.business),
-                    label: 'Business',
+                    icon: Icon(MdiIcons.viewDashboard),
+                    label: 'Board',
                   ),
                   BottomNavigationBarItem(
-                    icon: Icon(Icons.school),
-                    label: 'School',
+                    icon: Icon(Icons.list_alt),
+                    label: 'Events',
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Icon(MdiIcons.homeAssistant),
+                    label: 'Server',
                   ),
                 ],
                 selectedItemColor: Colors.amber[800],
