@@ -83,18 +83,6 @@ void main() {
 
   group("Config repository: ", () {
     test("Add a listener to config stream", () async {
-      //GIVEN: a listener on the config stream
-      final Config value = aConfig();
-      var stream = configRepositoryImpl.addListener();
-
-      //THEN: the stream emit a config
-      expectLater(stream, emitsInOrder([null, value.toEntity()]));
-
-      //WHEN: a config is inserted in db
-      await db.insertConfig(value);
-    });
-
-    test("Add a listener to config stream method 2", () async {
       //GIVEN: a config is set in db
       final Config value = aConfig();
       final matchers = [value.toEntity()];

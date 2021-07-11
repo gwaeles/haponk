@@ -1,0 +1,45 @@
+on: pull_request
+name: Commit
+jobs:
+  build:
+    name: Check commit(s)
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@v1
+      - name: Check commit name
+        id: checkcommitname
+        if: github.base_ref == 'develop'
+        run: |
+          echo "base ref is develop checking commit(s) name..."
+          count=$(git rev-list --count origin/${{ github.base_ref }}..origin/${{ github.head_ref }})
+          ALLOWED_PREFIXES="feat fix docs style refactor test chore"
+          PREFIXES_ARRAY=$(echo $ALLOWED_PREFIXES | tr " " "\n")
+          ALL_COMMIT_NAME_VALID=true
+          if [ $count == 0 ]; then
+            ALL_COMMIT_NAME_VALID=false
+          else
+            for ((INDEX=0; INDEX<$count; INDEX++)) 
+            do 
+            echo "Checking commit $INDEX"
+            message=$(git log -1 --skip=$INDEX --format=%s origin/${{ github.head_ref }})
+            COMMIT_NAME_VALID=false
+            for PREFIX in $PREFIXES_ARRAY ; 
+            do 
+            if [[ "$message" == $PREFIX\(*\):\ * ]]; then
+                COMMIT_NAME_VALID=true
+                echo "$message respects prefix $PREFIX"
+            else
+                echo "$message DOES NOT respects prefix $PREFIX"
+            fi
+            done
+            if [[ $COMMIT_NAME_VALID == false ]]; then
+                ALL_COMMIT_NAME_VALID=false
+            fi
+            done
+          fi
+          if [[ $ALL_COMMIT_NAME_VALID == true ]]; then
+              echo "[SUCCESS] - All your commit(s) respect the naming convention"  
+          else
+              echo "[FAIL] - At least one commit message does not respect the naming convention, please rename"  
+              exit 1
+          fi

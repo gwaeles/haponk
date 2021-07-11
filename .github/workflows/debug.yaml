@@ -1,0 +1,20 @@
+on: pull_request
+name: Tests and build
+jobs:
+  testing:
+    name: Run tests and build debug apk
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-java@v1
+        with:
+          java-version: '12.x'
+      - uses: subosito/flutter-action@v1
+        with:
+          flutter-version: '2.2.3'
+          channel: 'stable'
+      - run: flutter pub get
+      - run: flutter format --set-exit-if-changed .
+      - run: flutter analyze
+      - run: flutter test
+      - run: flutter build apk --debug -v

@@ -46,6 +46,7 @@ class ConfigProvider with ChangeNotifier implements ListenerRequestState {
       await repository.setAccessToken(typedToken!);
     }
     _connectionSucceed = await repository.tryConnect(typedUrl ?? '');
-    setState(_connectionSucceed == true ? RequestState.LOADED : RequestState.ERROR);
+    setState(
+        _connectionSucceed == true ? RequestState.LOADED : RequestState.ERROR);
   }
 }
