@@ -8,7 +8,8 @@ class ListItemActionIcon extends StatelessWidget {
   final IconData icon;
   final GestureTapCallback? onTap;
 
-  const ListItemActionIcon({Key? key, required this.icon, this.onTap}) : super(key: key);
+  const ListItemActionIcon({Key? key, required this.icon, this.onTap})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {

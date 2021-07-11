@@ -46,7 +46,8 @@ class DiscoveryService {
       return;
     }
 
-    if (event.type == BonsoirDiscoveryEventType.DISCOVERY_SERVICE_RESOLVED && event.service != null) {
+    if (event.type == BonsoirDiscoveryEventType.DISCOVERY_SERVICE_RESOLVED &&
+        event.service != null) {
       onResolvedCallback?.call(event.service as ResolvedBonsoirService);
     }
   }
