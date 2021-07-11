@@ -13,7 +13,7 @@ class UrlTextField extends StatelessWidget {
 
     final checked = configProvider.state == RequestState.LOADED;
     final error = configProvider.state == RequestState.ERROR;
-    final Widget suffixIcon = checked
+    final Widget? suffixIcon = checked
         ? Icon(
             Icons.check_circle,
             color: Colors.green,
@@ -25,10 +25,10 @@ class UrlTextField extends StatelessWidget {
               )
             : null);
 
-    if (textController.text == null || textController.text.isEmpty) {
+    if (textController.text.isEmpty) {
       // Init values
       configProvider.typedUrl = config?.internalUrl;
-      textController.text = config?.internalUrl;
+      textController.text = config?.internalUrl ?? '';
     }
 
     return TextField(

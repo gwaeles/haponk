@@ -10,31 +10,30 @@ import 'package:haponk/features/config/entities/config_entity.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:haponk/core/db/database.dart';
 import 'package:haponk/core/db/database_extension.dart';
+import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:moor/ffi.dart';
 import 'package:retrofit/retrofit.dart';
 import 'package:dio/dio.dart';
 
-class DatabaseMock extends Mock implements Database {}
+import 'config_repository_impl_test.mocks.dart';
 
-class FlutterSecureStorageMock extends Mock implements FlutterSecureStorage {}
-
-class HassApiMock extends Mock implements HassApi {}
-
-class HttpResponseMock extends Mock implements HttpResponse {}
-
-class ResponseMock extends Mock implements Response {}
-
+@GenerateMocks([
+  FlutterSecureStorage,
+  HassApi,
+  HttpResponse,
+  Response,
+])
 void main() {
   // Target of Tests
-  ConfigRepositoryImpl configRepositoryImpl;
+  late ConfigRepositoryImpl configRepositoryImpl;
 
   // Mocks
-  Database db;
-  FlutterSecureStorageMock storage;
-  HassApiMock hassApi;
-  HttpResponseMock httpResponseMock;
-  ResponseMock responseMock;
+  late Database db;
+  late MockFlutterSecureStorage storage;
+  late MockHassApi hassApi;
+  late MockHttpResponse httpResponseMock;
+  late MockResponse responseMock;
 
   final ServiceDeclaration declareServices = () {
     getIt.registerFactoryParam<HassApi, String, String>((param1, _) => hassApi);
@@ -47,7 +46,7 @@ void main() {
   setUpAll(() {
     // Mocks
     db = Database(VmDatabase.memory());
-    storage = FlutterSecureStorageMock();
+    storage = MockFlutterSecureStorage();
 
     // Target
     configRepositoryImpl = ConfigRepositoryImpl(db, storage);
@@ -58,10 +57,10 @@ void main() {
   });
 
   setUp(() async {
-    hassApi = HassApiMock();
+    hassApi = MockHassApi();
     declareServices();
-    httpResponseMock = HttpResponseMock();
-    responseMock = ResponseMock();
+    httpResponseMock = MockHttpResponse();
+    responseMock = MockResponse();
     db.delete(db.configs).go();
   });
 
@@ -99,7 +98,7 @@ void main() {
       //GIVEN: a config is set in db
       final Config value = aConfig();
       final matchers = [value.toEntity()];
-      StreamSubscription<ConfigEntity> subscription;
+      StreamSubscription<ConfigEntity>? subscription;
 
       when(storage.read(key: PREF_LONG_LIVED_ACCESS_TOKEN))
           .thenAnswer((_) => Future.value("token"));
@@ -109,7 +108,7 @@ void main() {
       final expectFunc = expectAsync0(() async {
         verify(storage.read(key: PREF_LONG_LIVED_ACCESS_TOKEN));
 
-        await subscription.cancel();
+        await subscription?.cancel();
         // After subscription cancel, no more entity should be emitted
         await db.updateConfig(value);
 

@@ -11,7 +11,10 @@ import 'device_list_item_sensor.dart';
 abstract class DeviceListItem extends StatelessWidget {
   final Device device;
 
-  const DeviceListItem({Key key, this.device}) : super(key: key);
+  const DeviceListItem({
+    Key? key,
+    required this.device,
+  }) : super(key: key);
 
   factory DeviceListItem.fromDevice(Device device) {
     switch (device.deviceType) {
@@ -32,8 +35,6 @@ abstract class DeviceListItem extends StatelessWidget {
       case DeviceType.MEDIA_PLAYER:
         return DeviceListItemSensor(device: device);
     }
-
-    return DeviceListItemSensor(device: device);
   }
 
   @override
@@ -63,7 +64,7 @@ abstract class DeviceListItem extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    device.friendlyName,
+                    device.friendlyName ?? '',
                     style: AppTheme.of(context).listItemTitleTextStyle,
                   ),
                   SizedBox(height: 2),
@@ -88,9 +89,9 @@ abstract class DeviceListItem extends StatelessWidget {
   /// --- Widgets --- ///
   ///
 
-  Widget get leading => null;
-  Widget get trailing => null;
+  Widget? get leading => null;
+  Widget? get trailing => null;
 
-  Widget buildLeading(BuildContext context) => null;
-  Widget buildTrailing(BuildContext context) => null;
+  Widget? buildLeading(BuildContext context) => null;
+  Widget? buildTrailing(BuildContext context) => null;
 }

@@ -9,8 +9,10 @@ import 'device_list_item.dart';
 import 'list_item_action_icon.dart';
 
 class DeviceListItemLight extends DeviceListItem {
-  const DeviceListItemLight({Key key, Device device})
-      : super(key: key, device: device);
+  const DeviceListItemLight({
+    Key? key,
+    required Device device,
+  }) : super(key: key, device: device);
 
   @override
   Widget buildLeading(BuildContext context) {
@@ -22,7 +24,10 @@ class DeviceListItemLight extends DeviceListItem {
           borderRadius: BorderRadius.all(Radius.circular(24)),
           child: child,
           onTap: () => provider.callService(
-              domain: "light", service: "toggle", entityId: device.entityId),
+            domain: "light",
+            service: "toggle",
+            entityId: device.entityId ?? '',
+          ),
         );
       },
       child: SvgPicture.asset(
@@ -41,15 +46,19 @@ class DeviceListItemLight extends DeviceListItem {
           ListItemActionIcon(
             icon: Icons.lightbulb,
             onTap: (provider) => provider.callService(
-                domain: "light", service: "turn_on", entityId: device.entityId),
+              domain: "light",
+              service: "turn_on",
+              entityId: device.entityId ?? '',
+            ),
           ),
           SizedBox(width: 4),
           ListItemActionIcon(
             icon: Icons.lightbulb_outline,
             onTap: (provider) => provider.callService(
-                domain: "light",
-                service: "turn_off",
-                entityId: device.entityId),
+              domain: "light",
+              service: "turn_off",
+              entityId: device.entityId ?? '',
+            ),
           ),
         ],
       );

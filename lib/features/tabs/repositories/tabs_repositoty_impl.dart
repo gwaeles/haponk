@@ -12,7 +12,7 @@ class TabsRepositoryImpl implements TabsRepository {
   TabsRepositoryImpl(this.db);
 
   final List<StreamController<List<ent.FlexTab>>> _controllers = [];
-  StreamSubscription _dbSubscription;
+  StreamSubscription? _dbSubscription;
 
   @override
   Stream<List<ent.FlexTab>> watch() {
@@ -30,7 +30,10 @@ class TabsRepositoryImpl implements TabsRepository {
   }
 
   @override
-  Future<int> insert({String label, int order}) async {
+  Future<int> insert({
+    required String label,
+    required int order,
+  }) async {
     return await db.insertFlexTab(data.FlexTabsCompanion.insert(
       label: label,
       order: order,
@@ -41,7 +44,7 @@ class TabsRepositoryImpl implements TabsRepository {
   void dispose() {
     debugPrint("[TABS] dispose");
     for (var _controller in _controllers) {
-      _controller?.close();
+      _controller.close();
     }
     _controllers.clear();
 
@@ -70,7 +73,7 @@ class TabsRepositoryImpl implements TabsRepository {
         .toList();
 
     for (var _controller in _controllers) {
-      _controller?.sink?.add(result);
+      _controller.sink.add(result);
     }
   }
 }

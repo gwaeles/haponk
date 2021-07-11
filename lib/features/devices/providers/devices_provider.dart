@@ -8,23 +8,23 @@ class DevicesProvider {
 
   DevicesProvider(this.repository);
 
-  StreamController<List<Device>> _controller;
-  StreamSubscription _repoSubscription;
-  List<Device> _data;
-  String _searchText;
+  StreamController<List<Device>?>? _controller;
+  StreamSubscription? _repoSubscription;
+  List<Device>? _data;
+  String? _searchText;
 
-  Stream<List<Device>> get deviceStream {
-    _controller = StreamController<List<Device>>();
-    _controller.onCancel = () => _onControllerCancelled(_controller);
+  Stream<List<Device>?> get deviceStream {
+    _controller = StreamController<List<Device>?>();
+    _controller!.onCancel = () => _onControllerCancelled(_controller!);
 
     // Repo stream subscription
     _repoSubscription?.cancel();
     _repoSubscription = repository.addListener().listen(_onData);
 
-    return _controller.stream;
+    return _controller!.stream;
   }
 
-  void _onControllerCancelled(StreamController<List<Device>> controller) {
+  void _onControllerCancelled(StreamController<List<Device>?> controller) {
     print("[GWA] Provider _controller.onCancel");
     dispose();
   }
@@ -54,17 +54,17 @@ class DevicesProvider {
   }
 
   Future<void> _onFilterData() async {
-    List<Device> result;
+    List<Device>? result;
 
     if (_data != null) {
-      result = _data
+      result = _data!
           .where((element) =>
               _searchText == null ||
-              _searchText.isEmpty ||
-              element.friendlyName.contains(_searchText))
+              _searchText!.isEmpty ||
+              element.friendlyName?.contains(_searchText!) == true)
           .toList();
     }
 
-    _controller?.sink?.add(result);
+    _controller?.sink.add(result);
   }
 }

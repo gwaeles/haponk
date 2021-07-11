@@ -12,10 +12,13 @@ part 'message_model.g.dart';
 @JsonSerializable(createFactory: false)
 abstract class MessageModel {
   @JsonKey(includeIfNull: false)
-  final int id;
+  final int? id;
   final MessageType type;
 
-  const MessageModel(this.type, {this.id});
+  const MessageModel(
+    this.type, {
+    this.id,
+  });
 
   factory MessageModel.fromJson(Map<String, dynamic> json) {
     final type = messageTypeFromString(json['type']);
@@ -45,7 +48,7 @@ abstract class MessageModel {
   Map<String, dynamic> toJson() => _$MessageModelToJson(this);
 }
 
-MessageType messageTypeFromString(String source) {
+MessageType? messageTypeFromString(String? source) {
   if (source == null) return null;
 
   return _$MessageTypeEnumMap.entries

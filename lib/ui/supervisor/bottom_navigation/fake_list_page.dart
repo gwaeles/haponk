@@ -2,9 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:haponk/core/themes/app_theme.dart';
 
 class FakeListPage extends StatelessWidget {
-  final ScrollController controller;
+  final ScrollController? controller;
 
-  const FakeListPage({Key key, this.controller}) : super(key: key);
+  const FakeListPage({
+    Key? key,
+    this.controller,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +44,7 @@ class FakeListPage extends StatelessWidget {
                 ],
               );
             },
-            childCount: items?.length ?? 0,
+            childCount: items.length,
           ),
         ),
       ],

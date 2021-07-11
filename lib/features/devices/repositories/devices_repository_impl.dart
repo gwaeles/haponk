@@ -11,8 +11,8 @@ class DevicesRepositoryImpl implements DevicesRepository {
 
   DevicesRepositoryImpl(this.db);
 
-  final List<StreamController<List<Device>>> _controllers = [];
-  StreamSubscription _dbSubscription;
+  final List<StreamController<List<Device>?>> _controllers = [];
+  StreamSubscription? _dbSubscription;
 
   @override
   Stream<List<Device>> addListener() {
@@ -36,7 +36,7 @@ class DevicesRepositoryImpl implements DevicesRepository {
   void dispose() {
     print("[GWA] dispose");
     for (var _controller in _controllers) {
-      _controller?.close();
+      _controller.close();
     }
     _controllers.clear();
 
@@ -59,8 +59,9 @@ class DevicesRepositoryImpl implements DevicesRepository {
     final result = data
         .where((element) => element.deviceType() != null)
         .map((state) => Device(
+              id: state.id,
               entityId: state.entityId,
-              deviceType: state.deviceType(),
+              deviceType: state.deviceType()!,
               state: state.state,
               lastChanged: state.lastChanged,
               lastUpdated: state.lastUpdated,
@@ -84,7 +85,7 @@ class DevicesRepositoryImpl implements DevicesRepository {
         .toList();
 
     for (var _controller in _controllers) {
-      _controller?.sink?.add(result);
+      _controller.sink.add(result);
     }
   }
 }

@@ -63,7 +63,11 @@ class ConnectionProvider with ChangeNotifier {
     connectionRepository.getStates();
   }
 
-  void callService({String domain, String service, String entityId}) {
+  void callService({
+    required String domain,
+    required String service,
+    required String entityId,
+  }) {
     connectionRepository.callService(domain, service, entityId);
   }
 }

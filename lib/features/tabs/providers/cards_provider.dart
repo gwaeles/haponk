@@ -9,9 +9,9 @@ class CardsProvider {
 
   CardsProvider(this.repository);
 
-  StreamController<List<FlexCard>> _controller;
-  StreamSubscription _repoSubscription;
-  List<FlexCard> _data;
+  StreamController<List<FlexCard>>? _controller;
+  StreamSubscription? _repoSubscription;
+  List<FlexCard>? _data;
 
   ///
   /// --- DATA STREAM --- ///
@@ -19,13 +19,13 @@ class CardsProvider {
 
   Stream<List<FlexCard>> get cardsStream {
     _controller = StreamController<List<FlexCard>>();
-    _controller.onCancel = () => _onControllerCancelled(_controller);
+    _controller!.onCancel = () => _onControllerCancelled(_controller!);
 
     // Repo stream subscription
     _repoSubscription?.cancel();
     _repoSubscription = repository.watch().listen(_onData);
 
-    return _controller.stream;
+    return _controller!.stream;
   }
 
   void _onControllerCancelled(StreamController<List<FlexCard>> controller) {
@@ -44,7 +44,7 @@ class CardsProvider {
 
   Future<void> _onData(List<FlexCard> data) async {
     _data = data;
-    _controller?.sink?.add(data);
+    _controller?.sink.add(data);
   }
 
   ///
@@ -66,15 +66,14 @@ class CardsProvider {
   }
 
   Future<void> addChildItemAbove(FlexCard item) async {
-    final dady = _data?.firstWhere((element) => element.id == item.parentId,
-        orElse: () => null);
+    final dady = _data?.firstWhere((element) => element.id == item.parentId);
 
-    int position = dady?.position ?? item.position;
-    
+    int position = (dady?.position ?? item.position);
+
     final List<FlexCard> updates = [];
 
     _data?.forEach((element) {
-      if (position <= element.position) {
+      if (position <= (element.position)) {
         updates.add(element.copyWith(
           position: element.position + 1,
         ));
@@ -93,11 +92,10 @@ class CardsProvider {
   }
 
   Future<void> addChildItemBelow(FlexCard item) async {
-    final dady = _data?.firstWhere((element) => element.id == item.parentId,
-        orElse: () => null);
+    final dady = _data?.firstWhere((element) => element.id == item.parentId);
 
-    int position = (dady?.position ?? item.position) + 1;
-    
+    int position = dady?.position ?? item.position + 1;
+
     final List<FlexCard> updates = [];
 
     _data?.forEach((element) {
@@ -120,8 +118,7 @@ class CardsProvider {
   }
 
   Future<void> addChildItemToTheLeft(FlexCard item) async {
-    final dady = _data?.firstWhere((element) => element.id == item.parentId,
-        orElse: () => null);
+    final dady = _data?.firstWhere((element) => element.id == item.parentId);
 
     if (dady == null) {
       // Create parent
@@ -153,8 +150,7 @@ class CardsProvider {
   }
 
   Future<void> addChildItemToTheRight(FlexCard item) async {
-    final dady = _data?.firstWhere((element) => element.id == item.parentId,
-        orElse: () => null);
+    final dady = _data?.firstWhere((element) => element.id == item.parentId);
 
     if (dady == null) {
       // Create parent
@@ -209,15 +205,14 @@ class CardsProvider {
   }
 
   void deleteItem(FlexCard item) {
-    if (item.parentId == null || item.parentId <= 0) {
+    if (item.parentId == null || item.parentId! <= 0) {
       repository.delete(id: item.id);
     } else {
-      final dady = _data?.firstWhere((element) => element.id == item.parentId,
-          orElse: () => null);
+      final dady = _data?.firstWhere((element) => element.id == item.parentId);
       if (dady == null) {
         repository.delete(id: item.id);
       } else {
-        if (dady.children.length <= 2) {
+        if ((dady.children?.length ?? 0) <= 2) {
           repository.delete(id: item.id);
           repository.delete(id: dady.id);
         } else {

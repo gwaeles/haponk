@@ -16,9 +16,10 @@ class ConfigScreen extends StatelessWidget {
         ListenableProvider(
           create: (_) => ConfigProvider(getIt()),
         ),
-        StreamProvider<ConfigEntity>(
-            initialData: null,
-            create: (context) => context.read<ConfigProvider>().messageStream),
+        StreamProvider<ConfigEntity?>(
+          initialData: null,
+          create: (context) => context.read<ConfigProvider>().messageStream,
+        ),
         StreamProvider<ConnectionType>(
             initialData: ConnectionType.IDLE,
             create: (context) =>

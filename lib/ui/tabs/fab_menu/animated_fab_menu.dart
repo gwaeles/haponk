@@ -13,10 +13,10 @@ class AnimatedFloatingActionButtonMenu extends StatelessWidget {
 @immutable
 class ExpandableFab extends StatefulWidget {
   const ExpandableFab({
-    Key key,
-    this.initialOpen,
-    @required this.distance,
-    @required this.children,
+    Key? key,
+    this.initialOpen = false,
+    required this.distance,
+    required this.children,
   }) : super(key: key);
 
   final bool initialOpen;
@@ -29,14 +29,14 @@ class ExpandableFab extends StatefulWidget {
 
 class _ExpandableFabState extends State<ExpandableFab>
     with SingleTickerProviderStateMixin {
-  AnimationController _controller;
-  Animation<double> _expandAnimation;
+  late AnimationController _controller;
+  late Animation<double> _expandAnimation;
   bool _open = false;
 
   @override
   void initState() {
     super.initState();
-    _open = widget.initialOpen ?? false;
+    _open = widget.initialOpen;
     _controller = AnimationController(
       value: _open ? 1.0 : 0.0,
       duration: const Duration(milliseconds: 250),
@@ -156,11 +156,11 @@ class _ExpandableFabState extends State<ExpandableFab>
 @immutable
 class _ExpandingActionButton extends StatelessWidget {
   _ExpandingActionButton({
-    Key key,
-    @required this.directionInDegrees,
-    @required this.maxDistance,
-    @required this.progress,
-    @required this.child,
+    Key? key,
+    required this.directionInDegrees,
+    required this.maxDistance,
+    required this.progress,
+    required this.child,
   }) : super(key: key);
 
   final double directionInDegrees;
@@ -180,7 +180,7 @@ class _ExpandingActionButton extends StatelessWidget {
         return Positioned(
           right: 4.0 + offset.dx,
           bottom: 4.0 + offset.dy,
-          child: child,
+          child: child!,
         );
       },
       child: FadeTransition(
@@ -194,12 +194,12 @@ class _ExpandingActionButton extends StatelessWidget {
 @immutable
 class ActionButton extends StatelessWidget {
   const ActionButton({
-    Key key,
+    Key? key,
     this.onPressed,
-    @required this.icon,
+    required this.icon,
   }) : super(key: key);
 
-  final VoidCallback onPressed;
+  final VoidCallback? onPressed;
   final Widget icon;
 
   @override

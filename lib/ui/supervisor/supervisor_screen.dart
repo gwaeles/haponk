@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:haponk/ui/devices/devices_page.dart';
 import 'package:haponk/ui/supervisor/bottom_navigation/bottom_navigation_bar_page.dart';
 import 'package:haponk/ui/tabs/tabs_page.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:provider/provider.dart';
 
 import 'bottom_navigation/bottom_navigation_bar_controller.dart';
@@ -54,7 +53,7 @@ class SupervisorScreen extends StatelessWidget {
                     label: 'Home',
                   ),
                   BottomNavigationBarItem(
-                    icon: Icon(MdiIcons.viewDashboard),
+                    icon: Icon(Icons.dashboard),
                     label: 'Board',
                   ),
                   BottomNavigationBarItem(
@@ -62,7 +61,7 @@ class SupervisorScreen extends StatelessWidget {
                     label: 'Events',
                   ),
                   BottomNavigationBarItem(
-                    icon: Icon(MdiIcons.homeAssistant),
+                    icon: Icon(Icons.airplay),
                     label: 'Server',
                   ),
                 ],

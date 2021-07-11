@@ -9,8 +9,8 @@ part of 'context_model.dart';
 ContextModel _$ContextModelFromJson(Map<String, dynamic> json) {
   return ContextModel(
     id: json['id'] as String,
-    parentId: json['parent_id'] as String,
-    userId: json['user_id'] as String,
+    parentId: json['parent_id'] as String?,
+    userId: json['user_id'] as String?,
   );
 }
 

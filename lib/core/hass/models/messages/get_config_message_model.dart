@@ -7,7 +7,9 @@ part 'get_config_message_model.g.dart';
 
 @JsonSerializable(createFactory: false)
 class GetConfigMessageModel extends SendMessageModel {
-  const GetConfigMessageModel({int id}) : super(MessageType.GET_CONFIG, id: id);
+  const GetConfigMessageModel({
+    required int id,
+  }) : super(MessageType.GET_CONFIG, id: id);
 
   Map<String, dynamic> toJson() => _$GetConfigMessageModelToJson(this);
 }

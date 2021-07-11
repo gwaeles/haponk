@@ -8,14 +8,17 @@ part 'call_service_message_model.g.dart';
 
 @JsonSerializable(createFactory: false)
 class CallServiceMessageModel extends SendMessageModel {
-  final String domain;
-  final String service;
+  final String? domain;
+  final String? service;
   @JsonKey(name: "service_data")
-  final DataModel serviceData;
+  final DataModel? serviceData;
 
-  const CallServiceMessageModel(
-      {int id, this.domain, this.service, this.serviceData})
-      : super(MessageType.CALL_SERVICE, id: id);
+  const CallServiceMessageModel({
+    required int id,
+    this.domain,
+    this.service,
+    this.serviceData,
+  }) : super(MessageType.CALL_SERVICE, id: id);
 
   Map<String, dynamic> toJson() => _$CallServiceMessageModelToJson(this);
 }

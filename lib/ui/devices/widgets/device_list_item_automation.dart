@@ -7,8 +7,10 @@ import 'device_list_item.dart';
 import 'list_item_action_icon.dart';
 
 class DeviceListItemAutomation extends DeviceListItem {
-  const DeviceListItemAutomation({Key key, Device device})
-      : super(key: key, device: device);
+  const DeviceListItemAutomation({
+    Key? key,
+    required Device device,
+  }) : super(key: key, device: device);
 
   @override
   Widget buildLeading(BuildContext context) {
@@ -27,9 +29,10 @@ class DeviceListItemAutomation extends DeviceListItem {
           ListItemActionIcon(
             icon: Icons.play_arrow,
             onTap: (provider) => provider.callService(
-                domain: "automation",
-                service: "trigger",
-                entityId: device.entityId),
+              domain: "automation",
+              service: "trigger",
+              entityId: device.entityId ?? '',
+            ),
           ),
         ],
       );

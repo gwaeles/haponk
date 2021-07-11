@@ -25,16 +25,16 @@ class ConnectionRepositoryImpl extends ConnectionRepository {
 
   ConnectionRepositoryImpl(this.db);
 
-  StreamController<Message> _controller;
-  String _accessToken;
-  String _configUuid;
-  WebSocketService localWebSocket;
-  WebSocketService distantWebSocket;
+  StreamController<Message>? _controller;
+  String? _accessToken;
+  String? _configUuid;
+  WebSocketService? localWebSocket;
+  WebSocketService? distantWebSocket;
 
   ConnectionType _connectionType = ConnectionType.IDLE;
-  StreamController<ConnectionType> _controllerConnectionType;
+  StreamController<ConnectionType>? _controllerConnectionType;
 
-  WebSocketService get currentWebSocket {
+  WebSocketService? get currentWebSocket {
     if (_connectionType == ConnectionType.LOCAL) {
       return localWebSocket;
     }
@@ -52,7 +52,7 @@ class ConnectionRepositoryImpl extends ConnectionRepository {
     _controller?.close();
     _controller = null;
     _controller = StreamController();
-    return _controller.stream;
+    return _controller!.stream;
   }
 
   @override
@@ -72,22 +72,24 @@ class ConnectionRepositoryImpl extends ConnectionRepository {
     _controllerConnectionType?.close();
     _controllerConnectionType = null;
     _controllerConnectionType = StreamController();
-    return _controllerConnectionType.stream;
+    return _controllerConnectionType!.stream;
   }
 
   @override
   Future<bool> connect(ConfigEntity config) async {
-    if (_connectionType != ConnectionType.IDLE) {
+    if (_connectionType != ConnectionType.IDLE ||
+        config.accessToken == null ||
+        config.internalUrl == null) {
       return false;
     }
 
-    _controller?.sink?.add(Message("Connecting"));
+    _controller?.sink.add(Message("Connecting"));
     _accessToken = config.accessToken;
     _configUuid = config.uuid;
 
     localWebSocket = WebSocketService(
-      accessToken: _accessToken,
-      url: config.internalUrl,
+      accessToken: _accessToken!,
+      url: config.internalUrl!,
       connectionType: ConnectionType.LOCAL,
       onAuthOk: _onAuthOk,
       onState: _onState,
@@ -96,10 +98,10 @@ class ConnectionRepositoryImpl extends ConnectionRepository {
       onDone: _onDone,
     )..connect();
 
-    if (config?.externalUrl != null) {
+    if (config.externalUrl != null) {
       distantWebSocket = WebSocketService(
-        accessToken: _accessToken,
-        url: config.externalUrl,
+        accessToken: _accessToken!,
+        url: config.externalUrl!,
         connectionType: ConnectionType.DISTANT,
         onAuthOk: _onAuthOk,
         onState: _onState,
@@ -114,7 +116,7 @@ class ConnectionRepositoryImpl extends ConnectionRepository {
 
   @override
   void disconnect() {
-    _controller?.sink?.add(Message("Disconnected"));
+    _controller?.sink.add(Message("Disconnected"));
 
     unsubscribe();
 
@@ -125,7 +127,7 @@ class ConnectionRepositoryImpl extends ConnectionRepository {
 
     _connectionType = ConnectionType.IDLE;
 
-    _controllerConnectionType?.sink?.add(_connectionType);
+    _controllerConnectionType?.sink.add(_connectionType);
   }
 
   ///
@@ -135,17 +137,19 @@ class ConnectionRepositoryImpl extends ConnectionRepository {
   void _onAuthOk(ConnectionType connectionType) {
     print("$connectionType: _onAuthOk");
     if (_connectionType == ConnectionType.IDLE) {
-      _connectionType = connectionType;
+      if (_configUuid != null) {
+        _connectionType = connectionType;
 
-      db.updateConfigDate(_configUuid);
+        db.updateConfigDate(_configUuid!);
 
-      _controllerConnectionType?.sink?.add(_connectionType);
+        _controllerConnectionType?.sink.add(_connectionType);
 
-      subscribe();
+        subscribe();
 
-      getStates();
+        getStates();
 
-      getServices();
+        getServices();
+      }
     } else {
       // Already connected
       if (connectionType == ConnectionType.DISTANT) {
@@ -160,18 +164,18 @@ class ConnectionRepositoryImpl extends ConnectionRepository {
 
   void _onInfo(ConnectionType connectionType, String message) {
     if (connectionType == _connectionType) {
-      _controller?.sink?.add(Message(message));
+      _controller?.sink.add(Message(message));
     }
   }
 
   void _onState(ConnectionType connectionType, StateModel state) async {
-    if (connectionType == _connectionType) {
-      final State stateDao = await db.getState(state.entityId);
+    if (connectionType == _connectionType && state.entityId != null) {
+      final stateDao = await db.getState(state.entityId!);
 
       if (stateDao == null) {
         // Create state
         final StatesCompanion newState = StatesCompanion(
-          entityId: state.entityId?.toValue() ?? Value.absent(),
+          entityId: state.entityId!.toValue(),
           state: state.state?.toValue() ?? Value.absent(),
           lastChanged: state.lastChanged?.toValue() ?? Value.absent(),
           lastUpdated: state.lastUpdated?.toValue() ?? Value.absent(),
@@ -235,14 +239,14 @@ class ConnectionRepositoryImpl extends ConnectionRepository {
   void _onError(ConnectionType connectionType, Object error) {
     print("$connectionType: _onError");
     if (connectionType == _connectionType) {
-      _controller?.sink?.add(Message("on Error"));
+      _controller?.sink.add(Message("on Error"));
     }
   }
 
   void _onDone(ConnectionType connectionType) {
     print("$connectionType: _onDone");
     if (connectionType == _connectionType) {
-      _controller?.sink?.add(Message("on Done"));
+      _controller?.sink.add(Message("on Done"));
     }
   }
 
@@ -278,10 +282,11 @@ class ConnectionRepositoryImpl extends ConnectionRepository {
   @override
   void callService(String domain, String service, String entityId) {
     _send(CallServiceMessageModel(
-        id: _getNextCommandId(),
-        domain: domain,
-        service: service,
-        serviceData: DataModel(entityId: entityId)));
+      id: _getNextCommandId(),
+      domain: domain,
+      service: service,
+      serviceData: DataModel(entityId: entityId),
+    ));
   }
 
   ///
@@ -293,7 +298,7 @@ class ConnectionRepositoryImpl extends ConnectionRepository {
   }
 
   void _send(SendMessageModel object) {
-    if ((object?.id ?? 0) <= 0) return;
+    if ((object.id ?? 0) <= 0) return;
 
     currentWebSocket?.send(object);
   }

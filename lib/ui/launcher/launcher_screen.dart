@@ -11,7 +11,7 @@ class LauncherScreen extends StatefulWidget {
 }
 
 class LauncherScreenState extends State<LauncherScreen> {
-  ConfigProvider configProvider;
+  late ConfigProvider configProvider;
 
   @override
   void initState() {
@@ -21,7 +21,7 @@ class LauncherScreenState extends State<LauncherScreen> {
 // Todo: replace the stream by a future to avoid creation of streamController in repo
     Future.delayed(Duration(milliseconds: 250))
         .then((value) => configProvider.messageStream.first.then((value) {
-              if (value?.lastConnection != null) {
+              if (value.lastConnection != null) {
                 context.read<ConnectionProvider>().connect(value);
 
                 Navigator.of(context).pushReplacementNamed("/supervisor");

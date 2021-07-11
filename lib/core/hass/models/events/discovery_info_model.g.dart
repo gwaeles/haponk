@@ -8,14 +8,14 @@ part of 'discovery_info_model.dart';
 
 DiscoveryInfoModel _$DiscoveryInfoModelFromJson(Map<String, dynamic> json) {
   return DiscoveryInfoModel(
-    uuid: json['uuid'] as String,
-    baseUrl: json['base_url'] as String,
-    externalUrl: json['external_url'] as String,
-    internalUrl: json['internal_url'] as String,
-    locationName: json['location_name'] as String,
-    installationType: json['installation_type'] as String,
-    requiresApiPassword: json['requires_api_password'] as bool,
-    version: json['version'] as String,
+    uuid: json['uuid'] as String?,
+    baseUrl: json['base_url'] as String?,
+    externalUrl: json['external_url'] as String?,
+    internalUrl: json['internal_url'] as String?,
+    locationName: json['location_name'] as String?,
+    installationType: json['installation_type'] as String?,
+    requiresApiPassword: json['requires_api_password'] as bool?,
+    version: json['version'] as String?,
   );
 }
 

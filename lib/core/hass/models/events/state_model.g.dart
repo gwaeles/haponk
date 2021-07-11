@@ -8,8 +8,8 @@ part of 'state_model.dart';
 
 StateModel _$StateModelFromJson(Map<String, dynamic> json) {
   return StateModel(
-    entityId: json['entity_id'] as String,
-    state: json['state'] as String,
+    entityId: json['entity_id'] as String?,
+    state: json['state'] as String?,
     attributes: json['attributes'] == null
         ? null
         : AttributesModel.fromJson(json['attributes'] as Map<String, dynamic>),

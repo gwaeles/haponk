@@ -5,7 +5,10 @@ import 'package:haponk/features/tabs/entities/flex_tab.dart';
 class TabListItem extends StatelessWidget {
   final FlexTab item;
 
-  const TabListItem({Key key, this.item}) : super(key: key);
+  const TabListItem({
+    Key? key,
+    required this.item,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +20,7 @@ class TabListItem extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       child: Expanded(
         child: Text(
-          item.label,
+          item.label ?? '',
           style: AppTheme.of(context).listItemTitleTextStyle,
         ),
       ),

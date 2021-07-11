@@ -7,8 +7,10 @@ import 'device_list_item.dart';
 import 'list_item_action_icon.dart';
 
 class DeviceListItemCover extends DeviceListItem {
-  const DeviceListItemCover({Key key, Device device})
-      : super(key: key, device: device);
+  const DeviceListItemCover({
+    Key? key,
+    required Device device,
+  }) : super(key: key, device: device);
 
   @override
   Widget buildLeading(BuildContext context) {
@@ -47,17 +49,19 @@ class DeviceListItemCover extends DeviceListItem {
           onTap: isOpened
               ? null
               : (provider) => provider.callService(
-                  domain: "cover",
-                  service: "open_cover",
-                  entityId: device.entityId),
+                    domain: "cover",
+                    service: "open_cover",
+                    entityId: device.entityId ?? '',
+                  ),
         ),
         SizedBox(width: 4),
         ListItemActionIcon(
           icon: Icons.stop,
           onTap: (provider) => provider.callService(
-              domain: "cover",
-              service: "stop_cover",
-              entityId: device.entityId),
+            domain: "cover",
+            service: "stop_cover",
+            entityId: device.entityId ?? '',
+          ),
         ),
         SizedBox(width: 4),
         ListItemActionIcon(
@@ -65,9 +69,10 @@ class DeviceListItemCover extends DeviceListItem {
           onTap: isClosed
               ? null
               : (provider) => provider.callService(
-                  domain: "cover",
-                  service: "close_cover",
-                  entityId: device.entityId),
+                    domain: "cover",
+                    service: "close_cover",
+                    entityId: device.entityId ?? '',
+                  ),
         ),
       ],
     );

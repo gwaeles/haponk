@@ -10,9 +10,11 @@ class TabList extends StatelessWidget {
   final FlexTab flexTabItem;
   final CardsProvider cardsProvider;
 
-  const TabList(
-      {Key key, @required this.flexTabItem, @required this.cardsProvider})
-      : super(key: key);
+  const TabList({
+    Key? key,
+    required this.flexTabItem,
+    required this.cardsProvider,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -20,11 +22,13 @@ class TabList extends StatelessWidget {
         providers: [
           Provider.value(value: cardsProvider),
           StreamProvider(
-              create: (context) => context.read<CardsProvider>().cardsStream)
+            initialData: [],
+            create: (context) => context.read<CardsProvider>().cardsStream,
+          )
         ],
         child: Consumer(builder: (context, List<FlexCard> items, child) {
           return CustomScrollView(
-              key: PageStorageKey<String>(flexTabItem.label),
+              key: PageStorageKey<String>(flexTabItem.label ?? ''),
               slivers: <Widget>[
                 SliverOverlapInjector(
                   handle:
@@ -32,41 +36,42 @@ class TabList extends StatelessWidget {
                 ),
                 SliverPadding(
                   padding: const EdgeInsets.only(top: 8.0, bottom: 16),
-                  sliver: (items?.length ?? 0) == 0
+                  sliver: items.length == 0
                       ? SliverFillRemaining(
-                        child: Center(child: InkWell(
-                          onTap: () => context.read<CardsProvider>().createItem(),
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Text("Tap here to add your firt card"),
-                                SizedBox(height: 16),
-                                Icon(Icons.add_box_outlined),
-                              ]
+                          child: Center(
+                              child: InkWell(
+                            onTap: () =>
+                                context.read<CardsProvider>().createItem(),
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Text("Tap here to add your firt card"),
+                                    SizedBox(height: 16),
+                                    Icon(Icons.add_box_outlined),
+                                  ]),
                             ),
-                          ),
-                        )),
-                      )
+                          )),
+                        )
                       : SliverList(
                           delegate: SliverChildBuilderDelegate(
                             (BuildContext context, int index) {
                               final item = items[index];
-                              final child =
-                                  item.children == null || item.children.isEmpty
-                                      ? FlexCardWidget(
-                                          item: item,
-                                          rowCount: items.length,
-                                          rowIndex: index,
-                                          itemCount: 1,
-                                          itemIndex: 0,
-                                        )
-                                      : FlexCardRow(
-                                          item: item,
-                                          rowCount: items.length,
-                                          rowIndex: index,
-                                        );
+                              final child = item.children == null ||
+                                      item.children!.isEmpty
+                                  ? FlexCardWidget(
+                                      item: item,
+                                      rowCount: items.length,
+                                      rowIndex: index,
+                                      itemCount: 1,
+                                      itemIndex: 0,
+                                    )
+                                  : FlexCardRow(
+                                      item: item,
+                                      rowCount: items.length,
+                                      rowIndex: index,
+                                    );
 
                               return Column(
                                 children: <Widget>[
@@ -79,7 +84,7 @@ class TabList extends StatelessWidget {
                                 ],
                               );
                             },
-                            childCount: items?.length ?? 0,
+                            childCount: items.length,
                           ),
                         ),
                 ),
@@ -93,19 +98,19 @@ class FlexCardRow extends StatelessWidget {
   final int rowIndex;
   final int rowCount;
 
-  const FlexCardRow(
-      {Key key,
-      @required this.item,
-      @required this.rowIndex,
-      @required this.rowCount})
-      : super(key: key);
+  const FlexCardRow({
+    Key? key,
+    required this.item,
+    required this.rowIndex,
+    required this.rowCount,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final List<Widget> children = [];
 
-    for (int i = 0; i < item.children.length; i++) {
-      final element = item.children[i];
+    for (int i = 0; i < (item.children?.length ?? 0); i++) {
+      final element = item.children![i];
       if (i != 0) {
         children.add(SizedBox(width: 1));
       }
@@ -114,7 +119,7 @@ class FlexCardRow extends StatelessWidget {
         item: element,
         rowCount: rowCount,
         rowIndex: rowIndex,
-        itemCount: item.children.length,
+        itemCount: item.children?.length ?? 0,
         itemIndex: i,
       )));
     }
@@ -130,14 +135,14 @@ class FlexCardWidget extends StatelessWidget {
   final int itemIndex;
   final int itemCount;
 
-  const FlexCardWidget(
-      {Key key,
-      @required this.item,
-      @required this.rowIndex,
-      @required this.rowCount,
-      @required this.itemIndex,
-      @required this.itemCount})
-      : super(key: key);
+  const FlexCardWidget({
+    Key? key,
+    required this.item,
+    required this.rowIndex,
+    required this.rowCount,
+    required this.itemIndex,
+    required this.itemCount,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -207,14 +212,15 @@ class FlexCardWidget extends StatelessWidget {
     );
   }
 
-  Widget _iconButton(
-      {bool displayButton = false,
-      double left,
-      double top,
-      double right,
-      double bottom,
-      IconData icon,
-      VoidCallback onPressed}) {
+  Widget _iconButton({
+    bool displayButton = false,
+    double? left,
+    double? top,
+    double? right,
+    double? bottom,
+    required IconData icon,
+    VoidCallback? onPressed,
+  }) {
     return Positioned(
       top: top,
       bottom: bottom,
@@ -232,7 +238,10 @@ class FlexCardWidget extends StatelessWidget {
                 shape: CircleBorder(),
               ),
               child: IconButton(
-                  icon: Icon(icon), splashRadius: 24, onPressed: onPressed),
+                icon: Icon(icon),
+                splashRadius: 24,
+                onPressed: onPressed,
+              ),
             ),
           ),
         ),

@@ -8,12 +8,12 @@ part of 'forecast_model.dart';
 
 ForecastModel _$ForecastModelFromJson(Map<String, dynamic> json) {
   return ForecastModel(
-    condition: json['condition'] as String,
-    precipitation: (json['precipitation'] as num)?.toDouble(),
-    temperature: (json['temperature'] as num)?.toDouble(),
-    templow: (json['templow'] as num)?.toDouble(),
-    windBearing: (json['wind_bearing'] as num)?.toDouble(),
-    windSpeed: (json['wind_speed'] as num)?.toDouble(),
+    condition: json['condition'] as String?,
+    precipitation: (json['precipitation'] as num?)?.toDouble(),
+    temperature: (json['temperature'] as num?)?.toDouble(),
+    templow: (json['templow'] as num?)?.toDouble(),
+    windBearing: (json['wind_bearing'] as num?)?.toDouble(),
+    windSpeed: (json['wind_speed'] as num?)?.toDouble(),
     datetime: json['datetime'] == null
         ? null
         : DateTime.parse(json['datetime'] as String),

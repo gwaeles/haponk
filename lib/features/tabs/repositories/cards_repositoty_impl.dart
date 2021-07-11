@@ -11,10 +11,13 @@ class CardsRepositoryImpl implements CardsRepository {
   final data.Database db;
   final int tabId;
 
-  CardsRepositoryImpl({this.db, this.tabId});
+  CardsRepositoryImpl({
+    required this.db,
+    required this.tabId,
+  });
 
   final List<StreamController<List<ent.FlexCard>>> _controllers = [];
-  StreamSubscription _dbSubscription;
+  StreamSubscription? _dbSubscription;
 
   @override
   Stream<List<ent.FlexCard>> watch() {
@@ -32,15 +35,16 @@ class CardsRepositoryImpl implements CardsRepository {
   }
 
   @override
-  Future<int> insert(
-      {String type,
-      int stateId,
-      int parentId,
-      int position,
-      int horizontalFlex,
-      int verticalFlex,
-      int width,
-      int height}) async {
+  Future<int> insert({
+    required String type,
+    int? stateId,
+    int? parentId,
+    required int position,
+    required int horizontalFlex,
+    required int verticalFlex,
+    required int width,
+    required int height,
+  }) async {
     return await db.insertFlexCard(data.FlexCardsCompanion.insert(
       tabId: tabId,
       parentId:
@@ -70,7 +74,9 @@ class CardsRepositoryImpl implements CardsRepository {
   }
 
   @override
-  Future<int> delete({int id}) async {
+  Future<int> delete({
+    required int id,
+  }) async {
     await db.removeParentFlexCard(id);
     return await db.deleteFlexCard(id);
   }
@@ -79,7 +85,7 @@ class CardsRepositoryImpl implements CardsRepository {
   void dispose() {
     debugPrint("[CARDS] dispose");
     for (var _controller in _controllers) {
-      _controller?.close();
+      _controller.close();
     }
     _controllers.clear();
 
@@ -103,7 +109,7 @@ class CardsRepositoryImpl implements CardsRepository {
 
     // Children
     dataList
-        .where((element) => element.parentId != null && element.parentId > 0)
+        .where((element) => element.parentId != null && element.parentId! > 0)
         .map((object) => ent.FlexCard(
               id: object.id,
               tabId: object.tabId,
@@ -116,15 +122,15 @@ class CardsRepositoryImpl implements CardsRepository {
               height: object.height,
             ))
         .forEach((element) {
-      if (!children.containsKey(element.parentId)) {
-        children[element.parentId] = [];
+      if (element.parentId != null && !children.containsKey(element.parentId)) {
+        children[element.parentId!] = [];
       }
-      children[element.parentId].add(element);
+      children[element.parentId]!.add(element);
     });
 
     // Parents
     final result = dataList
-        .where((element) => element.parentId == null || element.parentId <= 0)
+        .where((element) => element.parentId == null || element.parentId! <= 0)
         .map((object) => ent.FlexCard(
               id: object.id,
               tabId: object.tabId,
@@ -139,7 +145,7 @@ class CardsRepositoryImpl implements CardsRepository {
         .toList();
 
     for (var _controller in _controllers) {
-      _controller?.sink?.add(result);
+      _controller.sink.add(result);
     }
   }
 }

@@ -7,7 +7,7 @@ class ConfigProvider with ChangeNotifier implements ListenerRequestState {
   final ConfigRepository repository;
 
   RequestState _state = RequestState.INITIAL;
-  bool _connectionSucceed;
+  bool? _connectionSucceed;
 
   ConfigProvider(this.repository);
 
@@ -29,23 +29,23 @@ class ConfigProvider with ChangeNotifier implements ListenerRequestState {
   ///
 
   Stream<ConfigEntity> get messageStream => repository.addListener();
-  ConfigEntity get currentConfig => repository.currentConfig;
+  ConfigEntity? get currentConfig => repository.currentConfig;
 
   ///
   /// --- Request --- ///
   ///
 
-  bool get connectionSucceed => _connectionSucceed;
+  bool? get connectionSucceed => _connectionSucceed;
 
-  String typedUrl;
-  String typedToken;
+  String? typedUrl;
+  String? typedToken;
 
   Future<void> tryConnect() async {
     setState(RequestState.LOADING);
     if (typedToken != null) {
-      await repository.setAccessToken(typedToken);
+      await repository.setAccessToken(typedToken!);
     }
-    _connectionSucceed = await repository.tryConnect(typedUrl);
-    setState(_connectionSucceed ? RequestState.LOADED : RequestState.ERROR);
+    _connectionSucceed = await repository.tryConnect(typedUrl ?? '');
+    setState(_connectionSucceed == true ? RequestState.LOADED : RequestState.ERROR);
   }
 }

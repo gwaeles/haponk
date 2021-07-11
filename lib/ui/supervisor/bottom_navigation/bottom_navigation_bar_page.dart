@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:haponk/ui/supervisor/bottom_navigation/bottom_navigation_bar_controller.dart';
 
 class BottomNavigationBarPage extends StatefulWidget {
-  const BottomNavigationBarPage(
-      {Key key,
-      @required this.pageIndex,
-      @required this.child,
-      @required this.pageIndexController})
-      : super(key: key);
+  const BottomNavigationBarPage({
+    Key? key,
+    required this.pageIndex,
+    required this.child,
+    required this.pageIndexController,
+  }) : super(key: key);
 
   final int pageIndex;
   final Widget child;
@@ -20,10 +20,10 @@ class BottomNavigationBarPage extends StatefulWidget {
 
 class _BottomBarPageState extends State<BottomNavigationBarPage>
     with SingleTickerProviderStateMixin {
-  Widget _child;
-  Duration _duration;
-  double _opacity;
-  Matrix4 _matrix;
+  Widget? _child;
+  late Duration _duration;
+  late double _opacity;
+  late Matrix4 _matrix;
 
   ///
   /// Lifecycle
@@ -32,19 +32,19 @@ class _BottomBarPageState extends State<BottomNavigationBarPage>
   @override
   void initState() {
     super.initState();
-    widget.pageIndexController?.addListener(_onPageIndexChange);
+    widget.pageIndexController.addListener(_onPageIndexChange);
 
     _duration = const Duration(milliseconds: 450);
     _opacity = 0;
     _matrix = Matrix4.identity();
 
     WidgetsBinding.instance
-        .addPostFrameCallback((timeStamp) => _onPageIndexChange());
+        ?.addPostFrameCallback((timeStamp) => _onPageIndexChange());
   }
 
   @override
   void dispose() {
-    widget.pageIndexController?.removeListener(_onPageIndexChange);
+    widget.pageIndexController.removeListener(_onPageIndexChange);
     super.dispose();
   }
 

@@ -12,14 +12,14 @@ class DiscoveryRepositoryImpl extends DiscoveryRepository {
 
   List<ServiceEntity> _items = [];
 
-  StreamController<List<ServiceEntity>> _controller;
+  StreamController<List<ServiceEntity>>? _controller;
 
   @override
   Stream<List<ServiceEntity>> listenDiscover() {
     _controller?.close();
     _controller = StreamController();
     _bonsoirService.onResolvedCallback = _onDiscover;
-    return _controller.stream;
+    return _controller!.stream;
   }
 
   @override
@@ -32,16 +32,19 @@ class DiscoveryRepositoryImpl extends DiscoveryRepository {
   void stopDiscover() {
     _bonsoirService.onResolvedCallback = null;
     _controller?.close();
-    _bonsoirService?.stop();
+    _bonsoirService.stop();
     _controller = null;
   }
 
   void _onDiscover(ResolvedBonsoirService service) {
-    _items.add(ServiceEntity(
+    if (service.ip != null) {
+      _items.add(ServiceEntity(
         name: service.name,
         type: service.type,
-        address: service.ip,
-        port: service.port));
-    _controller?.sink?.add(_items);
+        address: service.ip!,
+        port: service.port,
+      ));
+      _controller?.sink.add(_items);
+    }
   }
 }

@@ -8,7 +8,7 @@ part of 'data_model.dart';
 
 DataModel _$DataModelFromJson(Map<String, dynamic> json) {
   return DataModel(
-    entityId: json['entity_id'] as String,
+    entityId: json['entity_id'] as String?,
     oldState: json['old_state'] == null
         ? null
         : StateModel.fromJson(json['old_state'] as Map<String, dynamic>),

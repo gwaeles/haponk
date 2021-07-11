@@ -9,15 +9,20 @@ part 'event_model.g.dart';
 @JsonSerializable()
 class EventModel {
   @JsonKey(name: "event_type")
-  final EventType eventType;
-  final DataModel data;
-  final String origin;
+  final EventType? eventType;
+  final DataModel? data;
+  final String? origin;
   @JsonKey(name: "time_fired")
-  final DateTime timeFired;
-  final ContextModel context;
+  final DateTime? timeFired;
+  final ContextModel? context;
 
-  const EventModel(
-      {this.eventType, this.data, this.origin, this.timeFired, this.context});
+  const EventModel({
+    this.eventType,
+    this.data,
+    this.origin,
+    this.timeFired,
+    this.context,
+  });
 
   factory EventModel.fromJson(Map<String, dynamic> json) =>
       _$EventModelFromJson(json);

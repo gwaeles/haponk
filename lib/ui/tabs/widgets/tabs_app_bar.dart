@@ -6,7 +6,7 @@ import 'package:haponk/features/devices/providers/devices_provider.dart';
 import 'package:provider/provider.dart';
 
 class TabsAppBar extends StatelessWidget {
-  const TabsAppBar({Key key}) : super(key: key);
+  const TabsAppBar({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
