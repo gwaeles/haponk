@@ -18,7 +18,7 @@ class TokenTextField extends StatelessWidget {
         connectionType != ConnectionType.IDLE;
     final error = configProvider.state == RequestState.LOADED &&
         connectionType == ConnectionType.IDLE;
-    final Widget suffixIcon = checked
+    final Widget? suffixIcon = checked
         ? Icon(
             Icons.check_circle,
             color: Colors.green,
@@ -30,10 +30,10 @@ class TokenTextField extends StatelessWidget {
               )
             : null);
 
-    if (textController.text == null || textController.text.isEmpty) {
+    if (textController.text.isEmpty) {
       // Init values
-      configProvider.typedToken = config?.accessToken;
-      textController.text = config?.accessToken;
+      configProvider.typedToken = config.accessToken;
+      textController.text = config.accessToken ?? '';
     }
 
     return TextField(

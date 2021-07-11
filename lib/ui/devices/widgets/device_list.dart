@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 class DeviceList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final devices = context.watch<List<Device>>();
+    final devices = context.watch<List<Device>?>() ?? [];
 
     return SliverList(
       delegate: SliverChildBuilderDelegate(
@@ -24,7 +24,7 @@ class DeviceList extends StatelessWidget {
             ],
           );
         },
-        childCount: devices?.length ?? 0,
+        childCount: devices.length,
       ),
     );
   }

@@ -12,7 +12,7 @@ import 'widgets/tab_list.dart';
 import 'widgets/tabs_app_bar_title.dart';
 
 class TabsPage extends StatelessWidget {
-  TabsPage({Key key}) : super(key: key);
+  TabsPage({Key? key}) : super(key: key);
 
   final currentIndex = ValueNotifier<int>(0);
   final scrollController = ScrollController();
@@ -24,14 +24,16 @@ class TabsPage extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => EditorController()),
         Provider(create: (_) => TabsProvider(getIt())),
         StreamProvider(
-            create: (context) => context.read<TabsProvider>().tabsStream)
+          initialData: [],
+          create: (context) => context.read<TabsProvider>().tabsStream,
+        )
       ],
       child: Consumer(builder: (context, List<FlexTab> value, child) {
         final List<CardsProvider> cardsProviders = [];
         final List<Widget> children = [];
         final List<Widget> tabs = [];
 
-        for (var i = 0; i < (value?.length ?? 0); i++) {
+        for (var i = 0; i < value.length; i++) {
           final FlexTab item = value[i];
           final cardsProvider = CardsProvider(getIt(param1: item.id));
           cardsProviders.add(cardsProvider);
@@ -154,7 +156,7 @@ class TabsPage extends StatelessWidget {
                 color: selected ? Colors.purple : Colors.purple.shade300,
                 borderRadius: BorderRadius.circular(24),
               ),
-              child: Center(child: Text(item.label)),
+              child: Center(child: Text(item.label ?? '')),
             );
           }),
         );

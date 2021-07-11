@@ -6,11 +6,15 @@ part 'context_model.g.dart';
 class ContextModel {
   final String id;
   @JsonKey(name: "parent_id")
-  final String parentId;
+  final String? parentId;
   @JsonKey(name: "user_id")
-  final String userId;
+  final String? userId;
 
-  const ContextModel({this.id, this.parentId, this.userId});
+  const ContextModel({
+    required this.id,
+    this.parentId,
+    this.userId,
+  });
 
   factory ContextModel.fromJson(Map<String, dynamic> json) =>
       _$ContextModelFromJson(json);

@@ -9,19 +9,19 @@ class TabsProvider {
 
   TabsProvider(this.repository);
 
-  StreamController<List<FlexTab>> _controller;
-  StreamSubscription _repoSubscription;
-  List<FlexTab> _data;
+  StreamController<List<FlexTab>>? _controller;
+  StreamSubscription? _repoSubscription;
+  List<FlexTab>? _data;
 
   Stream<List<FlexTab>> get tabsStream {
     _controller = StreamController<List<FlexTab>>();
-    _controller.onCancel = () => _onControllerCancelled(_controller);
+    _controller!.onCancel = () => _onControllerCancelled(_controller!);
 
     // Repo stream subscription
     _repoSubscription?.cancel();
     _repoSubscription = repository.watch().listen(_onData);
 
-    return _controller.stream;
+    return _controller!.stream;
   }
 
   void _onControllerCancelled(StreamController<List<FlexTab>> controller) {
@@ -40,7 +40,7 @@ class TabsProvider {
 
   Future<void> _onData(List<FlexTab> data) async {
     _data = data;
-    _controller?.sink?.add(_data);
+    _controller?.sink.add(_data!);
   }
 
   ///

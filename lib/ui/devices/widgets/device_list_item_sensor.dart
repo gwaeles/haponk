@@ -7,8 +7,10 @@ import 'package:haponk/features/devices/entities/device.dart';
 import 'device_list_item.dart';
 
 class DeviceListItemSensor extends DeviceListItem {
-  const DeviceListItemSensor({Key key, Device device})
-      : super(key: key, device: device);
+  const DeviceListItemSensor({
+    Key? key,
+    required Device device,
+  }) : super(key: key, device: device);
 
   @override
   Widget buildLeading(BuildContext context) {
@@ -28,7 +30,7 @@ class DeviceListItemSensor extends DeviceListItem {
       } else if (device.deviceClass == "humidity") {
         return 'assets/images/${path}humidity.svg';
       } else if (device.deviceClass == "battery") {
-        int level = int.tryParse(device.state);
+        final level = int.tryParse(device.state ?? '');
         if (level == null) {
           return 'assets/images/${path}battery.svg';
         } else if (level >= 50) {

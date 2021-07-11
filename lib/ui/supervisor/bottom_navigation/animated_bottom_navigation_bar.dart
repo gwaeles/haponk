@@ -6,8 +6,11 @@ class AnimatedBottomNavigationBar extends StatefulWidget {
   final ScrollController controller;
   final Widget child;
 
-  const AnimatedBottomNavigationBar({Key key, this.controller, this.child})
-      : super(key: key);
+  const AnimatedBottomNavigationBar({
+    Key? key,
+    required this.controller,
+    required this.child,
+  }) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => AnimatedBottomNavigationBarState();
@@ -17,7 +20,7 @@ class AnimatedBottomNavigationBarState
     extends State<AnimatedBottomNavigationBar> {
   double bottomOffset = 0.0;
   double scrollOffset = 0.0;
-  GlobalKey globalKey;
+  late GlobalKey globalKey;
 
   @override
   void initState() {
@@ -34,7 +37,7 @@ class AnimatedBottomNavigationBarState
   }
 
   void _onScroll() {
-    final widgetHeight = globalKey?.currentContext?.size?.height ?? 57.0;
+    final widgetHeight = globalKey.currentContext?.size?.height ?? 57.0;
     double gap = 0.0;
     if (widget.controller.offset > scrollOffset) {
       scrollOffset = widget.controller.offset;

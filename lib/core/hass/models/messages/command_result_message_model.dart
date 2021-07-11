@@ -7,11 +7,17 @@ part 'command_result_message_model.g.dart';
 
 @JsonSerializable(createFactory: false)
 class CommandResultMessageModel extends MessageModel {
-  final bool success;
+  final bool? success;
   final dynamic result;
 
-  const CommandResultMessageModel({int id, this.success, this.result})
-      : super(MessageType.RESULT, id: id);
+  const CommandResultMessageModel({
+    required int id,
+    this.success,
+    this.result,
+  }) : super(
+          MessageType.RESULT,
+          id: id,
+        );
 
   Map<String, dynamic> toJson() => _$CommandResultMessageModelToJson(this);
 }

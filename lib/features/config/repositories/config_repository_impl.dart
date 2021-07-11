@@ -22,9 +22,9 @@ class ConfigRepositoryImpl extends ConfigRepository {
 
   ConfigRepositoryImpl(this.db, this.secureStorage);
 
-  List<StreamController<ConfigEntity>> _controllers = [];
-  StreamSubscription _dbSubscription;
-  ConfigEntity _currentConfig;
+  List<StreamController<ConfigEntity>?> _controllers = [];
+  StreamSubscription? _dbSubscription;
+  ConfigEntity? _currentConfig;
 
   ///
   /// --- CONFIG STREAM --- ///
@@ -44,7 +44,7 @@ class ConfigRepositoryImpl extends ConfigRepository {
   }
 
   @override
-  ConfigEntity get currentConfig => _currentConfig;
+  ConfigEntity? get currentConfig => _currentConfig;
 
   @override
   void dispose() {
@@ -66,8 +66,8 @@ class ConfigRepositoryImpl extends ConfigRepository {
     }
   }
 
-  Future<void> _onConfigData(Config event) async {
-    String accessToken =
+  Future<void> _onConfigData(Config? event) async {
+    String? accessToken =
         await secureStorage.read(key: PREF_LONG_LIVED_ACCESS_TOKEN);
 
     if (accessToken == null) {
@@ -88,18 +88,20 @@ class ConfigRepositoryImpl extends ConfigRepository {
       }
     }
 
-    final entity = event?.toEntity()?.copyWith(accessToken: accessToken);
+    final entity = event?.toEntity().copyWith(accessToken: accessToken);
 
     if (entity != null) {
       _currentConfig = entity;
     } else if (_currentConfig != null) {
-      _currentConfig = _currentConfig.copyWith(
+      _currentConfig = _currentConfig!.copyWith(
         accessToken: accessToken,
       );
     }
 
-    for (var _controller in _controllers) {
-      _controller?.sink?.add(entity);
+    if (_currentConfig != null) {
+      for (var _controller in _controllers) {
+        _controller?.sink.add(_currentConfig!);
+      }
     }
   }
 
@@ -108,12 +110,12 @@ class ConfigRepositoryImpl extends ConfigRepository {
   ///
 
   @override
-  Future<bool> tryConnect(String url) async {
+  Future<bool> tryConnect(String? url) async {
     if (url == null) {
       return false;
     }
 
-    Uri uri = Uri.tryParse(url);
+    Uri uri = Uri.parse(url);
     List<String> pathSegments = []
       ..addAll(uri.pathSegments)
       ..add("api");
@@ -122,14 +124,14 @@ class ConfigRepositoryImpl extends ConfigRepository {
     HassApi _hassApi = getIt(param1: uri.toString());
 
     try {
-      Config config = await db.getConfig();
+      Config? config = await db.getConfig();
 
       if (config == null) {
         // Create config
         final Config newConfig = Config(
           id: 1,
           internalUrl: url,
-          requiresApiPassword: null,
+          requiresApiPassword: false,
         );
 
         await db.insertConfig(newConfig);
@@ -143,7 +145,7 @@ class ConfigRepositoryImpl extends ConfigRepository {
               response.data as Map<String, dynamic>);
 
           // Update config
-          final Config updatedConfig = config.copyWith(
+          final updatedConfig = config!.copyWith(
             uuid: discoveryInfo.uuid,
             baseUrl: discoveryInfo.baseUrl,
             externalUrl: discoveryInfo.externalUrl,
@@ -168,7 +170,7 @@ class ConfigRepositoryImpl extends ConfigRepository {
 
   @override
   Future<void> setAccessToken(String value) async {
-    if (value != null && value.isNotEmpty) {
+    if (value.isNotEmpty) {
       await secureStorage.write(
           key: PREF_LONG_LIVED_ACCESS_TOKEN, value: value);
       _onConfigData(null);

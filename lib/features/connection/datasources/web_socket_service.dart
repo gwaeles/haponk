@@ -27,21 +27,22 @@ class WebSocketService {
   final Function(ConnectionType connectionType, Object error) onError;
   final Function(ConnectionType connectionType) onDone;
 
-  String _webSocketUrl;
-  IOWebSocketChannel _channel;
+  String? _webSocketUrl;
+  IOWebSocketChannel? _channel;
   int _nextCommandId = 1;
-  int _subscribeId;
-  int _statesId;
+  int? _subscribeId;
+  int? _statesId;
 
-  WebSocketService(
-      {this.accessToken,
-      this.url,
-      this.onAuthOk,
-      this.onState,
-      this.onError,
-      this.onDone,
-      this.onInfo,
-      this.connectionType});
+  WebSocketService({
+    required this.accessToken,
+    required this.url,
+    required this.onAuthOk,
+    required this.onState,
+    required this.onError,
+    required this.onDone,
+    required this.onInfo,
+    required this.connectionType,
+  });
 
   int get nextCommandId {
     final result = _nextCommandId;
@@ -53,9 +54,9 @@ class WebSocketService {
     try {
       _webSocketUrl = webSocketTransform(url);
 
-      _channel = IOWebSocketChannel.connect(_webSocketUrl);
+      _channel = IOWebSocketChannel.connect(_webSocketUrl!);
 
-      _channel.stream.listen(_onData, onError: _onError, onDone: _onDone);
+      _channel!.stream.listen(_onData, onError: _onError, onDone: _onDone);
     } catch (WebSocketChannelException) {
       return false;
     }
@@ -64,7 +65,7 @@ class WebSocketService {
   }
 
   String webSocketTransform(String url) {
-    Uri uri = Uri.tryParse(url);
+    Uri uri = Uri.parse(url);
     List<String> pathSegments = []
       ..addAll(uri.pathSegments)
       ..add("api")
@@ -75,7 +76,7 @@ class WebSocketService {
   }
 
   void disconnect() {
-    _channel?.sink?.close(status.goingAway);
+    _channel?.sink.close(status.goingAway);
     _channel = null;
   }
 
@@ -87,11 +88,13 @@ class WebSocketService {
       _statesId = object.id;
     }
     if (object is UnsubscribeMessageModel) {
-      object =
-          UnsubscribeMessageModel(id: object.id, subscription: _subscribeId);
+      object = UnsubscribeMessageModel(
+        id: object.id!,
+        subscription: _subscribeId!,
+      );
     }
 
-    _channel?.sink?.add(jsonEncode(object.toJson()));
+    _channel?.sink.add(jsonEncode(object.toJson()));
   }
 
   ///
@@ -106,12 +109,12 @@ class WebSocketService {
       final response = AuthMessageModel(accessToken: accessToken);
       send(response);
     } else if (model is AuthOkMessageModel) {
-      onAuthOk?.call(connectionType);
-      onInfo?.call(connectionType, "Authenticated");
+      onAuthOk.call(connectionType);
+      onInfo.call(connectionType, "Authenticated");
     } else if (model is AuthInvalidMessageModel) {
-      onInfo?.call(connectionType, "Invalid Auth");
+      onInfo.call(connectionType, "Invalid Auth");
     } else if (model is CommandResultMessageModel) {
-      onInfo?.call(
+      onInfo.call(
           connectionType, "Result id:${model.id}, success:${model.success}");
 
       if (model.id == _statesId && model.result != null) {
@@ -119,30 +122,30 @@ class WebSocketService {
         final stateList = result
             .map((item) => StateModel.fromJson(item as Map<String, dynamic>));
         for (var state in stateList) {
-          onState?.call(connectionType, state);
+          onState.call(connectionType, state);
         }
       }
     } else if (model is EventMessageModel) {
-      final entityId = model.event.data.entityId;
-      final friendlyName = model.event.data.newState.attributes.friendlyName;
-      final newState = model.event.data.newState.state;
-      final oldState = model.event.data.oldState.state;
+      final entityId = model.event.data?.entityId;
+      final friendlyName = model.event.data?.newState?.attributes?.friendlyName;
+      final newState = model.event.data?.newState?.state;
+      final oldState = model.event.data?.oldState?.state;
       if (newState != oldState) {
-        onInfo?.call(connectionType, "$entityId $friendlyName $newState");
-        onState?.call(connectionType, model.event.data.newState);
+        onInfo.call(connectionType, "$entityId $friendlyName $newState");
+        onState.call(connectionType, model.event.data!.newState!);
       }
     }
   }
 
   void _onError(Object error) {
-    _channel?.sink?.close(status.goingAway);
+    _channel?.sink.close(status.goingAway);
     _channel = null;
-    onError?.call(connectionType, error);
+    onError.call(connectionType, error);
   }
 
   void _onDone() {
-    _channel?.sink?.close(status.goingAway);
+    _channel?.sink.close(status.goingAway);
     _channel = null;
-    onDone?.call(connectionType);
+    onDone.call(connectionType);
   }
 }

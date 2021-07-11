@@ -6,7 +6,7 @@ import 'package:haponk/features/devices/providers/devices_provider.dart';
 import 'package:provider/provider.dart';
 
 class DevicesAppBar extends StatelessWidget {
-  const DevicesAppBar({Key key}) : super(key: key);
+  const DevicesAppBar({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

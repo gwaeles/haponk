@@ -10,11 +10,11 @@ class SubscribeMessageModel extends SendMessageModel {
   @JsonKey(name: "event_type")
   final String eventType;
 
-  const SubscribeMessageModel(
-      {int id,
-      this.eventType = "state_changed",
-      MessageType type = MessageType.SUBSCRIBE_EVENTS})
-      : super(type, id: id);
+  const SubscribeMessageModel({
+    required int id,
+    this.eventType = "state_changed",
+    MessageType type = MessageType.SUBSCRIBE_EVENTS,
+  }) : super(type, id: id);
 
   Map<String, dynamic> toJson() => _$SubscribeMessageModelToJson(this);
 }

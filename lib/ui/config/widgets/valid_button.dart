@@ -18,10 +18,10 @@ class ValidButton extends StatelessWidget {
         : ElevatedButton(
             onPressed: () =>
                 context.read<ConfigProvider>().tryConnect().then((_) {
-                  if (context.read<ConfigProvider>().connectionSucceed) {
+                  if (context.read<ConfigProvider>().connectionSucceed == true) {
                     context
                         .read<ConnectionProvider>()
-                        .connect(context.read<ConfigProvider>().currentConfig);
+                        .connect(context.read<ConfigProvider>().currentConfig!);
                   }
                 }),
             child: Text("Test connection"));

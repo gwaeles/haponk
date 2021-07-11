@@ -6,31 +6,31 @@ import 'package:moor_flutter/moor_flutter.dart';
 import 'database.dart';
 
 extension StringValueExtension on String {
-  Value toValue() {
+  Value<String> toValue() {
     return Value<String>(this);
   }
 }
 
 extension IntValueExtension on int {
-  Value toValue() {
+  Value<int> toValue() {
     return Value<int>(this);
   }
 }
 
 extension DoubleValueExtension on double {
-  Value toValue() {
+  Value<double> toValue() {
     return Value<double>(this);
   }
 }
 
 extension DateTimeValueExtension on DateTime {
-  Value toValue() {
+  Value<DateTime> toValue() {
     return Value<DateTime>(this);
   }
 }
 
 extension BoolValueExtension on bool {
-  Value toValue() {
+  Value<bool> toValue() {
     return Value<bool>(this);
   }
 }
@@ -51,10 +51,10 @@ extension ConfigEntityExtension on Config {
 }
 
 extension StateTypeExtension on State {
-  DeviceType deviceType() {
+  DeviceType? deviceType() {
     final converter = CustomDeviceTypeConverter();
 
-    String type = entityId?.substring(0, entityId.indexOf('.'));
+    String? type = entityId?.substring(0, entityId?.indexOf('.'));
 
     return converter.fromJson(type);
   }

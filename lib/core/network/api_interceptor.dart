@@ -10,14 +10,14 @@ class ApiInterceptor implements Interceptor {
   ApiInterceptor(this.dio);
 
   @override
-  Future onError(DioError e) async {
+  void onError(DioError err, ErrorInterceptorHandler handler) {
     stderr.writeln(
-        "ERROR[${e?.response?.statusCode}] => PATH: ${e?.request?.path} Error : ${e?.response?.data}");
-    return e; //continue
+        "ERROR[${err.response?.statusCode}] => PATH: ${err.requestOptions.path} Error : ${err.response?.data}");
+    handler.next(err); //continue
   }
 
   @override
-  Future onRequest(RequestOptions options) async {
+  void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
     dio.interceptors.requestLock.lock();
     final String headerAuthorization = "Bearer token";
 
@@ -26,11 +26,11 @@ class ApiInterceptor implements Interceptor {
     options.headers
       ..putIfAbsent(HttpHeaders.contentTypeHeader, () => "application/json");
     dio.interceptors.requestLock.unlock();
-    return options;
+    handler.next(options);
   }
 
   @override
-  Future onResponse(Response response) async {
-    return response; // continue
+  void onResponse(Response response, ResponseInterceptorHandler handler) {
+    handler.next(response); // continue
   }
 }

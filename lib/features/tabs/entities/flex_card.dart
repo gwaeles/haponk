@@ -2,48 +2,50 @@ class FlexCard {
   final int id;
   final int tabId;
   final String type;
-  final int stateId;
-  final int parentId;
+  final int? stateId;
+  final int? parentId;
   final int position;
   final int horizontalFlex;
   final int verticalFlex;
   final int width;
   final int height;
-  final List<FlexCard> children;
+  final List<FlexCard>? children;
 
-  FlexCard(
-      {this.id,
-      this.tabId,
-      this.type,
-      this.stateId,
-      this.parentId,
-      this.position,
-      this.horizontalFlex,
-      this.verticalFlex,
-      this.width,
-      this.height,
-      this.children});
+  FlexCard({
+    required this.id,
+    required this.tabId,
+    required this.type,
+    this.stateId,
+    this.parentId,
+    required this.position,
+    required this.horizontalFlex,
+    required this.verticalFlex,
+    required this.width,
+    required this.height,
+    this.children,
+  });
 
   String toString() {
-    if (parentId != null && parentId > 0) {
+    if (parentId != null && parentId! > 0) {
       return "$position ($parentId-$id)";
     }
 
     return "$position ($id)";
   }
 
-  FlexCard copyWith(
-          {final int id,
-          final int tabId,
-          final String type,
-          final int stateId,
-          final int parentId,
-          final int position,
-          final int horizontalFlex,
-          final int verticalFlex,
-          final int width,
-          final int height,
-          final List<FlexCard> children}) =>
+  FlexCard copyWith({
+    final int? id,
+    final int? tabId,
+    final String? type,
+    final int? stateId,
+    final int? parentId,
+    final int? position,
+    final int? horizontalFlex,
+    final int? verticalFlex,
+    final int? width,
+    final int? height,
+    final List<FlexCard>? children,
+  }) =>
       FlexCard(
         id: id ?? this.id,
         tabId: tabId ?? this.tabId,

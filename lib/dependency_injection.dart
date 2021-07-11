@@ -37,7 +37,10 @@ ServiceDeclaration declareServices = () {
   getIt.registerLazySingleton(() => DiscoveryService());
 
   // --- API --- //
-  getIt.registerFactoryParam((param1, _) => HassApi(getIt(), baseUrl: param1));
+  getIt.registerFactoryParam<HassApi, String, String>((param1, _) => HassApi(
+        getIt(),
+        baseUrl: param1 ?? '',
+      ));
 
   // --- REPOSITORIES --- //
   getIt.registerLazySingleton<ConfigRepository>(
@@ -51,7 +54,10 @@ ServiceDeclaration declareServices = () {
   getIt
       .registerLazySingleton<TabsRepository>(() => TabsRepositoryImpl(getIt()));
   getIt.registerFactoryParam<CardsRepository, int, int>(
-      (tabId, _) => CardsRepositoryImpl(db: getIt(), tabId: tabId));
+      (tabId, _) => CardsRepositoryImpl(
+            db: getIt(),
+            tabId: tabId ?? 0,
+          ));
 
   // --- USECASES --- //
   getIt.registerLazySingleton(() => ListenDiscoverUseCase(getIt()));

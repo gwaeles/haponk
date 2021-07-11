@@ -6,9 +6,9 @@ typedef GestureTapCallback = void Function(ConnectionProvider provider);
 
 class ListItemActionIcon extends StatelessWidget {
   final IconData icon;
-  final GestureTapCallback onTap;
+  final GestureTapCallback? onTap;
 
-  const ListItemActionIcon({Key key, this.icon, this.onTap}) : super(key: key);
+  const ListItemActionIcon({Key? key, required this.icon, this.onTap}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +16,7 @@ class ListItemActionIcon extends StatelessWidget {
       borderRadius: BorderRadius.all(Radius.circular(24)),
       onTap: onTap == null
           ? null
-          : () => onTap(context.read<ConnectionProvider>()),
+          : () => onTap!(context.read<ConnectionProvider>()),
       child: Ink(
         width: 48,
         height: 48,

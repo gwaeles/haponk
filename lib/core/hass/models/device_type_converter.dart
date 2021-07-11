@@ -2,11 +2,11 @@ import 'package:json_annotation/json_annotation.dart';
 
 import 'constants.dart';
 
-class CustomDeviceTypeConverter implements JsonConverter<DeviceType, String> {
+class CustomDeviceTypeConverter implements JsonConverter<DeviceType?, String?> {
   const CustomDeviceTypeConverter();
 
   @override
-  DeviceType fromJson(String json) {
+  DeviceType? fromJson(String? json) {
     if (json == null) {
       return null;
     }
@@ -33,7 +33,7 @@ class CustomDeviceTypeConverter implements JsonConverter<DeviceType, String> {
   }
 
   @override
-  String toJson(DeviceType deviceType) {
+  String? toJson(DeviceType? deviceType) {
     if (deviceType == null) {
       return null;
     }
@@ -55,7 +55,5 @@ class CustomDeviceTypeConverter implements JsonConverter<DeviceType, String> {
       case DeviceType.MEDIA_PLAYER:
         return 'media_player';
     }
-
-    return null;
   }
 }

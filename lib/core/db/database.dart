@@ -36,7 +36,7 @@ class Database extends _$Database {
           await m.createTable(flexCards);
 
           // Update config
-          String internalUrl;
+          String? internalUrl;
           try {
             final String json =
                 await rootBundle.loadString("assets/config/config.json");
@@ -48,12 +48,12 @@ class Database extends _$Database {
             debugPrint("[MOOR] No config file");
           }
           if (internalUrl != null) {
-            Config config = await getConfig();
+            Config? config = await getConfig();
             if (config == null) {
               final Config newConfig = Config(
                 id: 1,
                 internalUrl: internalUrl,
-                requiresApiPassword: null,
+                requiresApiPassword: false,
               );
               await insertConfig(newConfig);
             } else {
@@ -74,7 +74,7 @@ class Database extends _$Database {
       beforeOpen: (details) async {
         if (details.wasCreated) {
           // Initiale config
-          String internalUrl;
+          String? internalUrl;
           try {
             final String json =
                 await rootBundle.loadString("assets/config/config.json");
@@ -89,7 +89,7 @@ class Database extends _$Database {
             final Config newConfig = Config(
               id: 1,
               internalUrl: internalUrl,
-              requiresApiPassword: null,
+              requiresApiPassword: false,
             );
             await insertConfig(newConfig);
           }
@@ -99,8 +99,8 @@ class Database extends _$Database {
   }
 
   // CONFIG
-  Future<Config> getConfig() =>
-      (select(configs)..where((item) => item.id.equals(1))).getSingle();
+  Future<Config?> getConfig() =>
+      (select(configs)..where((item) => item.id.equals(1))).getSingleOrNull();
   Stream<Config> watchConfig() =>
       (select(configs)..where((item) => item.id.equals(1))).watchSingle();
 
@@ -113,9 +113,9 @@ class Database extends _$Database {
   Future deleteConfig(Config config) => delete(configs).delete(config);
 
   // STATES
-  Future<State> getState(String entityId) =>
+  Future<State?> getState(String entityId) =>
       (select(states)..where((item) => item.entityId.equals(entityId)))
-          .getSingle();
+          .getSingleOrNull();
   Future insertState(StatesCompanion state) =>
       into(states).insert(state, mode: InsertMode.insertOrReplace);
   Future updateState(State state) => update(states).replace(state);
@@ -125,8 +125,9 @@ class Database extends _$Database {
   Stream<List<FlexTab>> watchTabs() => select(flexTabs).watch();
   Future insertFlexTab(FlexTabsCompanion flexTab) =>
       into(flexTabs).insert(flexTab);
-  Future<FlexTab> getFlexTab(int tabId) =>
-      (select(flexTabs)..where((item) => item.id.equals(tabId))).getSingle();
+  Future<FlexTab?> getFlexTab(int tabId) =>
+      (select(flexTabs)..where((item) => item.id.equals(tabId)))
+          .getSingleOrNull();
 
   Stream<List<FlexCard>> watchCards(int tabId) => (select(flexCards)
         ..where((item) => item.tabId.equals(tabId))

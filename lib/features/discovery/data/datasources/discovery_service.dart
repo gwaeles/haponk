@@ -7,26 +7,26 @@ class DiscoveryService {
   final String _serviceType = '_home-assistant._tcp.local';
 
   /// The current Bonsoir discovery object instance.
-  BonsoirDiscovery _bonsoirDiscovery;
+  BonsoirDiscovery? _bonsoirDiscovery;
 
-  Function(ResolvedBonsoirService service) onResolvedCallback;
+  Function(ResolvedBonsoirService service)? onResolvedCallback;
 
   /// The subscription object.
-  StreamSubscription<BonsoirDiscoveryEvent> _subscription;
+  StreamSubscription<BonsoirDiscoveryEvent>? _subscription;
 
   /// Creates a new Bonsoir discovery model instance.
   DiscoveryService();
 
   /// Starts the Bonsoir discovery.
   Future<bool> start() async {
-    if (_bonsoirDiscovery == null || _bonsoirDiscovery.isStopped) {
+    if (_bonsoirDiscovery == null || _bonsoirDiscovery!.isStopped) {
       _bonsoirDiscovery = BonsoirDiscovery(type: _serviceType);
-      await _bonsoirDiscovery.ready;
+      await _bonsoirDiscovery!.ready;
     }
 
-    if (_bonsoirDiscovery.isReady) {
-      await _bonsoirDiscovery.start();
-      _subscription = _bonsoirDiscovery.eventStream.listen(_onEventOccurred);
+    if (_bonsoirDiscovery!.isReady) {
+      await _bonsoirDiscovery!.start();
+      _subscription = _bonsoirDiscovery!.eventStream?.listen(_onEventOccurred);
       return true;
     }
 
@@ -46,8 +46,8 @@ class DiscoveryService {
       return;
     }
 
-    if (event.type == BonsoirDiscoveryEventType.DISCOVERY_SERVICE_RESOLVED) {
-      onResolvedCallback?.call(event.service);
+    if (event.type == BonsoirDiscoveryEventType.DISCOVERY_SERVICE_RESOLVED && event.service != null) {
+      onResolvedCallback?.call(event.service as ResolvedBonsoirService);
     }
   }
 }

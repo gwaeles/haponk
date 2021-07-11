@@ -7,11 +7,12 @@ part 'auth_invalid_message_model.g.dart';
 
 @JsonSerializable(createFactory: false)
 class AuthInvalidMessageModel extends MessageModel {
-  final String message;
+  final String? message;
 
-  const AuthInvalidMessageModel(
-      {this.message, MessageType type = MessageType.AUTH_INVALID})
-      : super(type);
+  const AuthInvalidMessageModel({
+    this.message,
+    MessageType type = MessageType.AUTH_INVALID,
+  }) : super(type);
 
   Map<String, dynamic> toJson() => _$AuthInvalidMessageModelToJson(this);
 }
