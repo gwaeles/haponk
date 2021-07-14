@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:haponk/core/states/request_state.dart';
-import 'package:haponk/data/config/providers/config_provider.dart';
+import 'package:haponk/data/config/notifiers/config_notifier.dart';
 import 'package:provider/provider.dart';
 
 class UrlTextField extends StatelessWidget {
@@ -8,11 +8,11 @@ class UrlTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final configProvider = context.watch<ConfigProvider>();
-    final config = configProvider.currentConfig;
+    final configNotifier = context.watch<ConfigNotifier>();
+    final config = configNotifier.currentConfig;
 
-    final checked = configProvider.state == RequestState.LOADED;
-    final error = configProvider.state == RequestState.ERROR;
+    final checked = configNotifier.state == RequestState.LOADED;
+    final error = configNotifier.state == RequestState.ERROR;
     final Widget? suffixIcon = checked
         ? Icon(
             Icons.check_circle,
@@ -27,7 +27,7 @@ class UrlTextField extends StatelessWidget {
 
     if (textController.text.isEmpty) {
       // Init values
-      configProvider.typedUrl = config?.internalUrl;
+      configNotifier.typedUrl = config?.internalUrl;
       textController.text = config?.internalUrl ?? '';
     }
 
@@ -37,7 +37,7 @@ class UrlTextField extends StatelessWidget {
         suffixIcon: suffixIcon,
       ),
       controller: textController,
-      onChanged: (value) => configProvider.typedUrl = value,
+      onChanged: (value) => configNotifier.typedUrl = value,
     );
   }
 }

@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:haponk/dependency_injection.dart';
 import 'package:haponk/data/tabs/entities/flex_tab.dart';
-import 'package:haponk/data/tabs/providers/cards_provider.dart';
-import 'package:haponk/data/tabs/providers/tabs_provider.dart';
+import 'package:haponk/data/tabs/notifiers/cards_notifier.dart';
+import 'package:haponk/data/tabs/notifiers/tabs_notifier.dart';
 import 'package:haponk/ui/supervisor/bottom_navigation/animated_bottom_navigation_bar.dart';
 import 'package:provider/provider.dart';
 
@@ -22,23 +22,29 @@ class TabsPage extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => EditorController()),
-        Provider(create: (_) => TabsProvider(getIt())),
-        StreamProvider(
+        Provider(create: (_) => TabsNotifier(getIt())),
+        StreamProvider<List<FlexTab>>(
           initialData: [],
-          create: (context) => context.read<TabsProvider>().tabsStream,
+          create: (context) => context.read<TabsNotifier>().tabsStream,
         )
       ],
-      child: Consumer(builder: (context, List<FlexTab> value, child) {
-        final List<CardsProvider> cardsProviders = [];
+      child: Consumer(builder: (
+        context,
+        List<FlexTab> value,
+        child,
+      ) {
+        final List<CardsNotifier> cardsNotifiers = [];
         final List<Widget> children = [];
         final List<Widget> tabs = [];
 
         for (var i = 0; i < value.length; i++) {
-          final FlexTab item = value[i];
-          final cardsProvider = CardsProvider(getIt(param1: item.id));
-          cardsProviders.add(cardsProvider);
-          children
-              .add(TabList(flexTabItem: item, cardsProvider: cardsProvider));
+          final item = value[i];
+          final cardsNotifier = CardsNotifier(getIt(param1: item.id));
+          cardsNotifiers.add(cardsNotifier);
+          children.add(TabList(
+            flexTabItem: item,
+            cardsNotifier: cardsNotifier,
+          ));
           tabs.add(_tabItem(i, item));
         }
 
@@ -47,8 +53,10 @@ class TabsPage extends StatelessWidget {
             length: tabs.length,
             child: NestedScrollView(
               controller: scrollController,
-              headerSliverBuilder:
-                  (BuildContext context, bool innerBoxIsScrolled) {
+              headerSliverBuilder: (
+                BuildContext context,
+                bool innerBoxIsScrolled,
+              ) {
                 // These are the slivers that show up in the "outer" scroll view.
                 return <Widget>[
                   SliverOverlapAbsorber(
@@ -79,9 +87,10 @@ class TabsPage extends StatelessWidget {
                               ),
                             ),
                             IconButton(
-                                icon: Icon(Icons.add),
-                                onPressed: () =>
-                                    context.read<TabsProvider>().createItem()),
+                              icon: Icon(Icons.add),
+                              onPressed: () =>
+                                  context.read<TabsNotifier>().createItem(),
+                            ),
                           ],
                         ),
                       ),
@@ -143,9 +152,13 @@ class TabsPage extends StatelessWidget {
   Widget _tabItem(int index, FlexTab item) {
     return Builder(
       builder: (context) {
-        return ChangeNotifierProvider.value(
-          value: DefaultTabController.of(context),
-          child: Consumer(builder: (context, TabController controller, child) {
+        return ChangeNotifierProvider<TabController>.value(
+          value: DefaultTabController.of(context) as TabController,
+          child: Consumer(builder: (
+            context,
+            TabController controller,
+            child,
+          ) {
             currentIndex.value = controller.index;
             final selected = index == controller.index;
             return Container(

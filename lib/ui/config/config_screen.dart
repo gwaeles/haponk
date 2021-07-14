@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:haponk/core/hass/models/constants.dart';
+import 'package:haponk/data/config/notifiers/config_notifier.dart';
+import 'package:haponk/data/connection/notifiers/connection_notifier.dart';
 import 'package:haponk/dependency_injection.dart';
-import 'package:haponk/data/config/entities/config_entity.dart';
-import 'package:haponk/data/config/providers/config_provider.dart';
-import 'package:haponk/data/connection/providers/connection_provider.dart';
+import 'package:haponk/data/config/entities/config.dart';
 import 'package:provider/provider.dart';
 
 import 'widgets/config_page.dart';
@@ -14,16 +14,17 @@ class ConfigScreen extends StatelessWidget {
     return MultiProvider(
       providers: [
         ListenableProvider(
-          create: (_) => ConfigProvider(getIt()),
+          create: (_) => ConfigNotifier(getIt()),
         ),
-        StreamProvider<ConfigEntity?>(
+        StreamProvider<Config?>(
           initialData: null,
-          create: (context) => context.read<ConfigProvider>().messageStream,
+          create: (context) => context.read<ConfigNotifier>().messageStream,
         ),
         StreamProvider<ConnectionType>(
-            initialData: ConnectionType.IDLE,
-            create: (context) =>
-                context.read<ConnectionProvider>().connectionStream),
+          initialData: ConnectionType.IDLE,
+          create: (context) =>
+              context.read<ConnectionNotifier>().connectionStream,
+        ),
       ],
       child: ConfigPage(),
     );

@@ -4,10 +4,10 @@ import 'dart:math';
 import 'package:haponk/data/tabs/entities/flex_card.dart';
 import 'package:haponk/data/tabs/repositories/cards_repository.dart';
 
-class CardsProvider {
+class CardsNotifier {
   final CardsRepository repository;
 
-  CardsProvider(this.repository);
+  CardsNotifier(this.repository);
 
   StreamController<List<FlexCard>>? _controller;
   StreamSubscription? _repoSubscription;

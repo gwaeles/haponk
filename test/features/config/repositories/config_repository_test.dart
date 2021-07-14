@@ -5,8 +5,8 @@ import 'package:haponk/core/hass/datasources/hass_api.dart';
 import 'package:haponk/core/hass/models/events/discovery_info_model.dart';
 import 'package:haponk/core/network/api_status.dart';
 import 'package:haponk/dependency_injection.dart';
-import 'package:haponk/data/config/repositories/config_repository_impl.dart';
-import 'package:haponk/data/config/entities/config_entity.dart';
+import 'package:haponk/data/config/repositories/config_repository.dart';
+import 'package:haponk/data/config/entities/config.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:haponk/core/db/database.dart';
 import 'package:haponk/core/db/database_extension.dart';
@@ -16,7 +16,7 @@ import 'package:moor/ffi.dart';
 import 'package:retrofit/retrofit.dart';
 import 'package:dio/dio.dart';
 
-import 'config_repository_impl_test.mocks.dart';
+import 'config_repository_test.mocks.dart';
 
 @GenerateMocks([
   FlutterSecureStorage,
@@ -26,7 +26,7 @@ import 'config_repository_impl_test.mocks.dart';
 ])
 void main() {
   // Target of Tests
-  late ConfigRepositoryImpl configRepositoryImpl;
+  late ConfigRepository configRepository;
 
   // Mocks
   late Database db;
@@ -49,7 +49,7 @@ void main() {
     storage = MockFlutterSecureStorage();
 
     // Target
-    configRepositoryImpl = ConfigRepositoryImpl(db, storage);
+    configRepository = ConfigRepository(db, storage);
   });
 
   tearDownAll(() async {
@@ -68,7 +68,7 @@ void main() {
     undeclareServices();
   });
 
-  Config aConfig() => Config(
+  ConfigDBO aConfigDBO() => ConfigDBO(
         id: 1,
         uuid: "1",
         baseUrl: "https://localhost:8123",
@@ -84,12 +84,15 @@ void main() {
   group("Config repository: ", () {
     test("Add a listener to config stream", () async {
       //GIVEN: a config is set in db
-      final Config value = aConfig();
-      final matchers = [value.toEntity()];
-      StreamSubscription<ConfigEntity>? subscription;
+      final value = aConfigDBO();
+      final matchers = [
+        value.toEntity().copyWith(accessToken: 'token'),
+      ];
+      StreamSubscription<Config>? subscription;
 
-      when(storage.read(key: PREF_LONG_LIVED_ACCESS_TOKEN))
-          .thenAnswer((_) => Future.value("token"));
+      when(storage.read(key: PREF_LONG_LIVED_ACCESS_TOKEN)).thenAnswer(
+        (_) => Future.value("token"),
+      );
 
       await db.insertConfig(value);
 
@@ -104,11 +107,12 @@ void main() {
       });
 
       //WHEN: add a listener on config stream
-      var stream = configRepositoryImpl.addListener();
+      var stream = configRepository.addListener();
 
       //THEN: The config entity is emitted
       subscription = stream.listen((event) {
-        expect(event, matchers.removeAt(0));
+        final matcher = matchers.removeAt(0).toComparable();
+        expect(event.toComparable(), matcher);
         if (matchers.isEmpty) {
           expectFunc();
         }
@@ -128,15 +132,19 @@ void main() {
           version: "1");
       final url = "http://localhost:8123";
 
-      when(hassApi.discoveryInfo())
-          .thenAnswer((_) => Future.value(httpResponseMock));
+      when(hassApi.discoveryInfo()).thenAnswer(
+        (_) => Future.value(httpResponseMock),
+      );
       when(httpResponseMock.response).thenReturn(responseMock);
       when(responseMock.statusCode).thenReturn(ApiStatus.OK);
       when(httpResponseMock.data).thenReturn(model.toJson());
 
       //WHEN
-      expect(db.select(db.configs).get(), completion(isEmpty));
-      final result = await configRepositoryImpl.tryConnect(url);
+      expect(
+        db.select(db.configs).get(),
+        completion(isEmpty),
+      );
+      final result = await configRepository.tryConnect(url);
 
       //THEN
       expect(true, result);
@@ -160,15 +168,16 @@ void main() {
           version: "1");
       final url = "http://localhost:8123";
 
-      when(hassApi.discoveryInfo())
-          .thenAnswer((_) => Future.value(httpResponseMock));
+      when(hassApi.discoveryInfo()).thenAnswer(
+        (_) => Future.value(httpResponseMock),
+      );
       when(httpResponseMock.response).thenReturn(responseMock);
       when(responseMock.statusCode).thenReturn(ApiStatus.RESOURCE_NOT_FOUND);
       when(httpResponseMock.data).thenReturn(model.toJson());
 
       //WHEN
       expect(db.select(db.configs).get(), completion(isEmpty));
-      final result = await configRepositoryImpl.tryConnect(url);
+      final result = await configRepository.tryConnect(url);
 
       //THEN
       expect(false, result);

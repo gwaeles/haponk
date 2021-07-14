@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:haponk/core/themes/app_theme.dart';
-import 'package:haponk/data/connection/providers/connection_provider.dart';
+import 'package:haponk/data/connection/notifiers/connection_notifier.dart';
 import 'package:haponk/data/devices/entities/device.dart';
 import 'package:provider/provider.dart';
 
@@ -18,7 +18,7 @@ class DeviceListItemLight extends DeviceListItem {
   Widget buildLeading(BuildContext context) {
     final path = AppTheme.of(context).isDark ? "dark/" : "";
 
-    return Consumer<ConnectionProvider>(
+    return Consumer<ConnectionNotifier>(
       builder: (context, provider, child) {
         return InkWell(
           borderRadius: BorderRadius.all(Radius.circular(24)),

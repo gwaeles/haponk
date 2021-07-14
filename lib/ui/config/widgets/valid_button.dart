@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:haponk/core/hass/models/constants.dart';
-import 'package:haponk/data/config/providers/config_provider.dart';
-import 'package:haponk/data/connection/providers/connection_provider.dart';
+import 'package:haponk/data/config/notifiers/config_notifier.dart';
+import 'package:haponk/data/connection/notifiers/connection_notifier.dart';
 import 'package:provider/provider.dart';
 
 class ValidButton extends StatelessWidget {
@@ -12,19 +12,20 @@ class ValidButton extends StatelessWidget {
     return connectionType != ConnectionType.IDLE
         ? ElevatedButton(
             onPressed: () => Navigator.of(context).pushReplacementNamed(
-                "/supervisor",
-                arguments: context.read<ConfigProvider>().currentConfig),
+                  "/supervisor",
+                  arguments: context.read<ConfigNotifier>().currentConfig,
+                ),
             child: Text("Go home"))
         : ElevatedButton(
             onPressed: () =>
-                context.read<ConfigProvider>().tryConnect().then((_) {
-                  if (context.read<ConfigProvider>().connectionSucceed ==
-                      true) {
-                    context
-                        .read<ConnectionProvider>()
-                        .connect(context.read<ConfigProvider>().currentConfig!);
-                  }
-                }),
-            child: Text("Test connection"));
+                context.read<ConfigNotifier>().tryConnect().then((_) {
+              if (context.read<ConfigNotifier>().connectionSucceed == true) {
+                context.read<ConnectionNotifier>().connect(
+                      context.read<ConfigNotifier>().currentConfig!,
+                    );
+              }
+            }),
+            child: Text("Test connection"),
+          );
   }
 }

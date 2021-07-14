@@ -1,6 +1,6 @@
 import 'package:haponk/core/hass/models/constants.dart';
 import 'package:haponk/core/hass/models/device_type_converter.dart';
-import 'package:haponk/data/config/entities/config_entity.dart';
+import 'package:haponk/data/config/entities/config.dart';
 import 'package:moor_flutter/moor_flutter.dart';
 
 import 'database.dart';
@@ -35,9 +35,9 @@ extension BoolValueExtension on bool {
   }
 }
 
-extension ConfigEntityExtension on Config {
-  ConfigEntity toEntity() {
-    return ConfigEntity(
+extension ConfigExtension on ConfigDBO {
+  Config toEntity() {
+    return Config(
         uuid: this.uuid,
         baseUrl: this.baseUrl,
         externalUrl: this.externalUrl,
@@ -50,7 +50,7 @@ extension ConfigEntityExtension on Config {
   }
 }
 
-extension StateTypeExtension on State {
+extension StateTypeExtension on StateDBO {
   DeviceType? deviceType() {
     final converter = CustomDeviceTypeConverter();
 
