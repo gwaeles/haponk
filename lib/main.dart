@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:haponk/core/themes/app_theme.dart';
-import 'package:haponk/features/connection/providers/connection_provider.dart';
+import 'package:haponk/data/connection/providers/connection_provider.dart';
 import 'package:haponk/ui/config/config_screen.dart';
 import 'package:haponk/ui/launcher/launcher_screen.dart';
 import 'package:easy_localization/easy_localization.dart';

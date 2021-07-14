@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:haponk/dependency_injection.dart';
-import 'package:haponk/features/devices/entities/device.dart';
-import 'package:haponk/features/devices/providers/devices_provider.dart';
+import 'package:haponk/data/devices/entities/device.dart';
+import 'package:haponk/data/devices/providers/devices_provider.dart';
 import 'package:provider/provider.dart';
 
 import 'widgets/device_list.dart';

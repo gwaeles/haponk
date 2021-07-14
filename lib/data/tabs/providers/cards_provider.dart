@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'dart:math';
 
-import 'package:haponk/features/tabs/entities/flex_card.dart';
-import 'package:haponk/features/tabs/repositories/cards_repository.dart';
+import 'package:haponk/data/tabs/entities/flex_card.dart';
+import 'package:haponk/data/tabs/repositories/cards_repository.dart';
 
 class CardsProvider {
   final CardsRepository repository;

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:haponk/dependency_injection.dart';
-import 'package:haponk/features/tabs/entities/flex_tab.dart';
-import 'package:haponk/features/tabs/providers/cards_provider.dart';
-import 'package:haponk/features/tabs/providers/tabs_provider.dart';
+import 'package:haponk/data/tabs/entities/flex_tab.dart';
+import 'package:haponk/data/tabs/providers/cards_provider.dart';
+import 'package:haponk/data/tabs/providers/tabs_provider.dart';
 import 'package:haponk/ui/supervisor/bottom_navigation/animated_bottom_navigation_bar.dart';
 import 'package:provider/provider.dart';
 

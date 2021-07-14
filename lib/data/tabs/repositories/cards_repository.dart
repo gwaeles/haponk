@@ -1,4 +1,4 @@
-import 'package:haponk/features/tabs/entities/flex_card.dart';
+import 'package:haponk/data/tabs/entities/flex_card.dart';
 
 abstract class CardsRepository {
   Stream<List<FlexCard>> watch();

@@ -1,4 +1,4 @@
-import 'package:haponk/features/tabs/entities/flex_tab.dart';
+import 'package:haponk/data/tabs/entities/flex_tab.dart';
 
 abstract class TabsRepository {
   Stream<List<FlexTab>> watch();

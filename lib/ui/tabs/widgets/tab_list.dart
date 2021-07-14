@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:haponk/features/tabs/entities/flex_card.dart';
-import 'package:haponk/features/tabs/entities/flex_tab.dart';
-import 'package:haponk/features/tabs/providers/cards_provider.dart';
+import 'package:haponk/data/tabs/entities/flex_card.dart';
+import 'package:haponk/data/tabs/entities/flex_tab.dart';
+import 'package:haponk/data/tabs/providers/cards_provider.dart';
 import 'package:provider/provider.dart';
 
 import 'editor_controller.dart';

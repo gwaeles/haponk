@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:haponk/core/themes/app_theme.dart';
-import 'package:haponk/features/connection/providers/connection_provider.dart';
-import 'package:haponk/features/devices/entities/device.dart';
+import 'package:haponk/data/connection/providers/connection_provider.dart';
+import 'package:haponk/data/devices/entities/device.dart';
 import 'package:provider/provider.dart';
 
 import 'device_list_item.dart';

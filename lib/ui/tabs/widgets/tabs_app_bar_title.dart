@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:haponk/core/themes/app_theme.dart';
-import 'package:haponk/features/devices/providers/devices_provider.dart';
+import 'package:haponk/data/devices/providers/devices_provider.dart';
 import 'package:provider/provider.dart';
 
 class TabsAppBarTitle extends StatelessWidget {

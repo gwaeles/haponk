@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:haponk/core/themes/app_theme.dart';
-import 'package:haponk/features/tabs/entities/flex_tab.dart';
+import 'package:haponk/data/tabs/entities/flex_tab.dart';
 
 class TabListItem extends StatelessWidget {
   final FlexTab item;

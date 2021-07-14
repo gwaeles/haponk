@@ -12,10 +12,10 @@ import 'package:haponk/core/hass/models/messages/get_states_message_model.dart';
 import 'package:haponk/core/hass/models/messages/send_message_model.dart';
 import 'package:haponk/core/hass/models/messages/subscribe_message_model.dart';
 import 'package:haponk/core/hass/models/messages/unsubscribe_message_model.dart';
-import 'package:haponk/features/config/entities/config_entity.dart';
-import 'package:haponk/features/connection/datasources/web_socket_service.dart';
+import 'package:haponk/data/config/entities/config_entity.dart';
+import 'package:haponk/data/connection/datasources/web_socket_service.dart';
 
-import 'package:haponk/features/connection/entities/message.dart';
+import 'package:haponk/data/connection/entities/message.dart';
 import 'package:moor/moor.dart';
 
 import 'connection_repository.dart';

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:haponk/features/config/providers/config_provider.dart';
+import 'package:haponk/data/config/providers/config_provider.dart';
 import 'package:haponk/dependency_injection.dart';
-import 'package:haponk/features/connection/providers/connection_provider.dart';
+import 'package:haponk/data/connection/providers/connection_provider.dart';
 import 'package:provider/provider.dart';
 
 class LauncherScreen extends StatefulWidget {

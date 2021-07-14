@@ -1,7 +1,7 @@
 import 'dart:async';
 
-import 'package:haponk/features/devices/entities/device.dart';
-import 'package:haponk/features/devices/repositories/devices_repository.dart';
+import 'package:haponk/data/devices/entities/device.dart';
+import 'package:haponk/data/devices/repositories/devices_repository.dart';
 
 class DevicesProvider {
   final DevicesRepository repository;

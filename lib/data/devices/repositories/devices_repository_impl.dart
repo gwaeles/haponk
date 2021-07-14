@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:haponk/core/db/database.dart';
-import 'package:haponk/features/devices/entities/device.dart';
+import 'package:haponk/data/devices/entities/device.dart';
 import 'package:haponk/core/db/database_extension.dart';
 
 import 'devices_repository.dart';

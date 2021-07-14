@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
 import 'package:haponk/core/hass/models/constants.dart';
-import 'package:haponk/features/config/entities/config_entity.dart';
-import 'package:haponk/features/connection/entities/message.dart';
-import 'package:haponk/features/connection/repositories/connection_repository.dart';
+import 'package:haponk/data/config/entities/config_entity.dart';
+import 'package:haponk/data/connection/entities/message.dart';
+import 'package:haponk/data/connection/repositories/connection_repository.dart';
 
 class ConnectionProvider with ChangeNotifier {
   ConnectionRepository connectionRepository;

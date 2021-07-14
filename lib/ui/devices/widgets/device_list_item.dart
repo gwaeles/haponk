@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:haponk/core/hass/models/constants.dart';
 import 'package:haponk/core/themes/app_theme.dart';
-import 'package:haponk/features/devices/entities/device.dart';
+import 'package:haponk/data/devices/entities/device.dart';
 
 import 'device_list_item_automation.dart';
 import 'device_list_item_cover.dart';

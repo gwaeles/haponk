@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:haponk/core/db/database.dart' as data;
-import 'package:haponk/features/tabs/entities/flex_card.dart' as ent;
+import 'package:haponk/data/tabs/entities/flex_card.dart' as ent;
 import 'package:moor_flutter/moor_flutter.dart';
 
 import 'cards_repository.dart';
