@@ -9,12 +9,6 @@ import 'package:haponk/features/connection/repositories/connection_repository.da
 import 'package:haponk/features/connection/repositories/connection_repository_impl.dart';
 import 'package:haponk/features/devices/repositories/devices_repository.dart';
 import 'package:haponk/features/devices/repositories/devices_repository_impl.dart';
-import 'package:haponk/features/discovery/data/datasources/discovery_service.dart';
-import 'package:haponk/features/discovery/data/repositories/discovery_repository_impl.dart';
-import 'package:haponk/features/discovery/domain/repositories/discovery_repository.dart';
-import 'package:haponk/features/discovery/domain/usecases/listen_discover_use_case.dart';
-import 'package:haponk/features/discovery/domain/usecases/start_discover_use_case.dart';
-import 'package:haponk/features/discovery/domain/usecases/stop_discover_use_case.dart';
 import 'package:haponk/features/tabs/repositories/cards_repository.dart';
 import 'package:haponk/features/tabs/repositories/cards_repositoty_impl.dart';
 import 'package:haponk/features/tabs/repositories/tabs_repository.dart';
@@ -34,7 +28,6 @@ ServiceDeclaration declareServices = () {
     logStatements: true,
   ))));
   getIt.registerLazySingleton(() => client.configureDio());
-  getIt.registerLazySingleton(() => DiscoveryService());
 
   // --- API --- //
   getIt.registerFactoryParam<HassApi, String, String>((param1, _) => HassApi(
@@ -47,8 +40,6 @@ ServiceDeclaration declareServices = () {
       () => ConfigRepositoryImpl(getIt(), getIt()));
   getIt.registerLazySingleton<ConnectionRepository>(
       () => ConnectionRepositoryImpl(getIt()));
-  getIt.registerLazySingleton<DiscoveryRepository>(
-      () => DiscoveryRepositoryImpl(getIt()));
   getIt.registerLazySingleton<DevicesRepository>(
       () => DevicesRepositoryImpl(getIt()));
   getIt
@@ -58,9 +49,4 @@ ServiceDeclaration declareServices = () {
             db: getIt(),
             tabId: tabId ?? 0,
           ));
-
-  // --- USECASES --- //
-  getIt.registerLazySingleton(() => ListenDiscoverUseCase(getIt()));
-  getIt.registerLazySingleton(() => StartDiscoverUseCase(getIt()));
-  getIt.registerLazySingleton(() => StopDiscoverUseCase(getIt()));
 };
