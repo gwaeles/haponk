@@ -12,7 +12,12 @@ import 'tables/flex_tabs.dart';
 part 'database.g.dart';
 
 @UseMoor(
-  tables: [Configs, States, FlexTabs, FlexCards],
+  tables: [
+    Configs,
+    States,
+    FlexTabs,
+    FlexCards,
+  ],
 )
 class Database extends _$Database {
   Database(QueryExecutor e) : super(e);
@@ -48,16 +53,16 @@ class Database extends _$Database {
             debugPrint("[MOOR] No config file");
           }
           if (internalUrl != null) {
-            Config? config = await getConfig();
+            ConfigDBO? config = await getConfig();
             if (config == null) {
-              final Config newConfig = Config(
+              final ConfigDBO newConfig = ConfigDBO(
                 id: 1,
                 internalUrl: internalUrl,
                 requiresApiPassword: false,
               );
               await insertConfig(newConfig);
             } else {
-              final Config updatedConfig = config.copyWith(
+              final ConfigDBO updatedConfig = config.copyWith(
                 internalUrl: internalUrl,
               );
               await updateConfig(updatedConfig);
@@ -86,7 +91,7 @@ class Database extends _$Database {
             debugPrint("[MOOR] No config file");
           }
           if (internalUrl != null) {
-            final Config newConfig = Config(
+            final ConfigDBO newConfig = ConfigDBO(
               id: 1,
               internalUrl: internalUrl,
               requiresApiPassword: false,
@@ -99,37 +104,55 @@ class Database extends _$Database {
   }
 
   // CONFIG
-  Future<Config?> getConfig() =>
-      (select(configs)..where((item) => item.id.equals(1))).getSingleOrNull();
-  Stream<Config> watchConfig() =>
-      (select(configs)..where((item) => item.id.equals(1))).watchSingle();
+  Future<ConfigDBO?> getConfig() => (select(configs)
+        ..where(
+          (item) => item.id.equals(1),
+        ))
+      .getSingleOrNull();
+  Stream<ConfigDBO> watchConfig() => (select(configs)
+        ..where(
+          (item) => item.id.equals(1),
+        ))
+      .watchSingle();
 
-  Future insertConfig(Config config) =>
-      into(configs).insert(config, mode: InsertMode.insertOrReplace);
-  Future updateConfig(Config config) => update(configs).replace(config);
-  Future updateConfigDate(String uuid) =>
-      (update(configs)..where((item) => item.uuid.equals(uuid)))
-          .write(ConfigsCompanion(lastConnection: Value(DateTime.now())));
-  Future deleteConfig(Config config) => delete(configs).delete(config);
+  Future insertConfig(ConfigDBO config) => into(configs).insert(
+        config,
+        mode: InsertMode.insertOrReplace,
+      );
+  Future updateConfig(ConfigDBO config) => update(configs).replace(config);
+  Future updateConfigDate(String uuid) => (update(configs)
+            ..where(
+              (item) => item.uuid.equals(uuid),
+            ))
+          .write(ConfigsCompanion(
+        lastConnection: Value(DateTime.now()),
+      ));
+  Future deleteConfig(ConfigDBO config) => delete(configs).delete(config);
 
   // STATES
-  Future<State?> getState(String entityId) =>
-      (select(states)..where((item) => item.entityId.equals(entityId)))
-          .getSingleOrNull();
-  Future insertState(StatesCompanion state) =>
-      into(states).insert(state, mode: InsertMode.insertOrReplace);
-  Future updateState(State state) => update(states).replace(state);
+  Future<StateDBO?> getState(String entityId) => (select(states)
+        ..where(
+          (item) => item.entityId.equals(entityId),
+        ))
+      .getSingleOrNull();
+  Future insertState(StatesCompanion state) => into(states).insert(
+        state,
+        mode: InsertMode.insertOrReplace,
+      );
+  Future updateState(StateDBO state) => update(states).replace(state);
 
-  Stream<List<State>> watchStates() => select(states).watch();
+  Stream<List<StateDBO>> watchStates() => select(states).watch();
 
-  Stream<List<FlexTab>> watchTabs() => select(flexTabs).watch();
+  Stream<List<FlexTabDBO>> watchTabs() => select(flexTabs).watch();
   Future insertFlexTab(FlexTabsCompanion flexTab) =>
       into(flexTabs).insert(flexTab);
-  Future<FlexTab?> getFlexTab(int tabId) =>
-      (select(flexTabs)..where((item) => item.id.equals(tabId)))
-          .getSingleOrNull();
+  Future<FlexTabDBO?> getFlexTab(int tabId) => (select(flexTabs)
+        ..where(
+          (item) => item.id.equals(tabId),
+        ))
+      .getSingleOrNull();
 
-  Stream<List<FlexCard>> watchCards(int tabId) => (select(flexCards)
+  Stream<List<FlexCardDBO>> watchCards(int tabId) => (select(flexCards)
         ..where((item) => item.tabId.equals(tabId))
         ..orderBy([
           (item) => OrderingTerm(expression: item.position),
@@ -138,10 +161,13 @@ class Database extends _$Database {
       .watch();
   Future insertFlexCard(FlexCardsCompanion flexCard) =>
       into(flexCards).insert(flexCard);
-  Future updateFlexCard(FlexCard flexCard) =>
+  Future updateFlexCard(FlexCardDBO flexCard) =>
       update(flexCards).replace(flexCard);
-  Future deleteFlexCard(int cardId) =>
-      (delete(flexCards)..where((item) => item.id.equals(cardId))).go();
+  Future deleteFlexCard(int cardId) => (delete(flexCards)
+        ..where(
+          (item) => item.id.equals(cardId),
+        ))
+      .go();
   Future removeParentFlexCard(int parentCardId) =>
       (update(flexCards)..where((item) => item.parentId.equals(parentCardId)))
           .write(FlexCardsCompanion(

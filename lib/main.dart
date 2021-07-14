@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:haponk/core/themes/app_theme.dart';
-import 'package:haponk/data/connection/providers/connection_provider.dart';
+import 'package:haponk/data/connection/notifiers/connection_notifier.dart';
 import 'package:haponk/ui/config/config_screen.dart';
 import 'package:haponk/ui/launcher/launcher_screen.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -35,7 +35,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (context) => ConnectionProvider(getIt()),
+      create: (context) => ConnectionNotifier(getIt()),
       child: MaterialApp(
         title: 'app_name'.tr(),
         theme: lightTheme,

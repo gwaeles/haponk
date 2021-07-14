@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 
 import 'package:haponk/core/hass/models/constants.dart';
-import 'package:haponk/data/config/entities/config_entity.dart';
+import 'package:haponk/data/config/entities/config.dart';
 import 'package:haponk/data/connection/entities/message.dart';
 import 'package:haponk/data/connection/repositories/connection_repository.dart';
 
-class ConnectionProvider with ChangeNotifier {
+class ConnectionNotifier with ChangeNotifier {
   ConnectionRepository connectionRepository;
 
-  ConnectionProvider(this.connectionRepository);
+  ConnectionNotifier(this.connectionRepository);
 
   ConnectionType get currentConnectionType =>
       connectionRepository.currentConnectionType;
@@ -35,7 +35,7 @@ class ConnectionProvider with ChangeNotifier {
   bool get isConnected => currentConnectionType != ConnectionType.IDLE;
   bool get isNotConnected => currentConnectionType == ConnectionType.IDLE;
 
-  void connect(ConfigEntity config) {
+  void connect(Config config) {
     connectionRepository.connect(config);
   }
 

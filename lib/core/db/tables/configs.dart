@@ -1,5 +1,6 @@
 import 'package:moor_flutter/moor_flutter.dart';
 
+@DataClassName('ConfigDBO')
 class Configs extends Table {
   IntColumn get id => integer()();
   TextColumn get uuid => text().nullable()();

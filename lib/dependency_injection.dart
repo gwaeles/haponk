@@ -4,15 +4,10 @@ import 'package:haponk/core/db/database.dart';
 import 'package:haponk/core/hass/datasources/hass_api.dart';
 import 'package:haponk/core/network/client.dart' as client;
 import 'package:haponk/data/config/repositories/config_repository.dart';
-import 'package:haponk/data/config/repositories/config_repository_impl.dart';
 import 'package:haponk/data/connection/repositories/connection_repository.dart';
-import 'package:haponk/data/connection/repositories/connection_repository_impl.dart';
 import 'package:haponk/data/devices/repositories/devices_repository.dart';
-import 'package:haponk/data/devices/repositories/devices_repository_impl.dart';
 import 'package:haponk/data/tabs/repositories/cards_repository.dart';
-import 'package:haponk/data/tabs/repositories/cards_repositoty_impl.dart';
 import 'package:haponk/data/tabs/repositories/tabs_repository.dart';
-import 'package:haponk/data/tabs/repositories/tabs_repositoty_impl.dart';
 import 'package:moor_flutter/moor_flutter.dart';
 
 GetIt getIt = GetIt.instance;
@@ -37,15 +32,14 @@ ServiceDeclaration declareServices = () {
 
   // --- REPOSITORIES --- //
   getIt.registerLazySingleton<ConfigRepository>(
-      () => ConfigRepositoryImpl(getIt(), getIt()));
+      () => ConfigRepository(getIt(), getIt()));
   getIt.registerLazySingleton<ConnectionRepository>(
-      () => ConnectionRepositoryImpl(getIt()));
+      () => ConnectionRepository(getIt()));
   getIt.registerLazySingleton<DevicesRepository>(
-      () => DevicesRepositoryImpl(getIt()));
-  getIt
-      .registerLazySingleton<TabsRepository>(() => TabsRepositoryImpl(getIt()));
+      () => DevicesRepository(getIt()));
+  getIt.registerLazySingleton<TabsRepository>(() => TabsRepository(getIt()));
   getIt.registerFactoryParam<CardsRepository, int, int>(
-      (tabId, _) => CardsRepositoryImpl(
+      (tabId, _) => CardsRepository(
             db: getIt(),
             tabId: tabId ?? 0,
           ));

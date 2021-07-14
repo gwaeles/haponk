@@ -1,5 +1,6 @@
 import 'package:moor_flutter/moor_flutter.dart';
 
+@DataClassName('StateDBO')
 class States extends Table {
   IntColumn get id => integer().autoIncrement()();
   TextColumn get entityId => text().nullable()();

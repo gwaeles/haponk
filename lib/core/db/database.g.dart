@@ -7,7 +7,7 @@ part of 'database.dart';
 // **************************************************************************
 
 // ignore_for_file: unnecessary_brace_in_string_interps, unnecessary_this
-class Config extends DataClass implements Insertable<Config> {
+class ConfigDBO extends DataClass implements Insertable<ConfigDBO> {
   final int id;
   final String? uuid;
   final String? baseUrl;
@@ -18,7 +18,7 @@ class Config extends DataClass implements Insertable<Config> {
   final bool requiresApiPassword;
   final String? version;
   final DateTime? lastConnection;
-  Config(
+  ConfigDBO(
       {required this.id,
       this.uuid,
       this.baseUrl,
@@ -29,10 +29,10 @@ class Config extends DataClass implements Insertable<Config> {
       required this.requiresApiPassword,
       this.version,
       this.lastConnection});
-  factory Config.fromData(Map<String, dynamic> data, GeneratedDatabase db,
+  factory ConfigDBO.fromData(Map<String, dynamic> data, GeneratedDatabase db,
       {String? prefix}) {
     final effectivePrefix = prefix ?? '';
-    return Config(
+    return ConfigDBO(
       id: const IntType()
           .mapFromDatabaseResponse(data['${effectivePrefix}id'])!,
       uuid: const StringType()
@@ -116,10 +116,10 @@ class Config extends DataClass implements Insertable<Config> {
     );
   }
 
-  factory Config.fromJson(Map<String, dynamic> json,
+  factory ConfigDBO.fromJson(Map<String, dynamic> json,
       {ValueSerializer? serializer}) {
     serializer ??= moorRuntimeOptions.defaultSerializer;
-    return Config(
+    return ConfigDBO(
       id: serializer.fromJson<int>(json['id']),
       uuid: serializer.fromJson<String?>(json['uuid']),
       baseUrl: serializer.fromJson<String?>(json['baseUrl']),
@@ -150,7 +150,7 @@ class Config extends DataClass implements Insertable<Config> {
     };
   }
 
-  Config copyWith(
+  ConfigDBO copyWith(
           {int? id,
           String? uuid,
           String? baseUrl,
@@ -161,7 +161,7 @@ class Config extends DataClass implements Insertable<Config> {
           bool? requiresApiPassword,
           String? version,
           DateTime? lastConnection}) =>
-      Config(
+      ConfigDBO(
         id: id ?? this.id,
         uuid: uuid ?? this.uuid,
         baseUrl: baseUrl ?? this.baseUrl,
@@ -175,7 +175,7 @@ class Config extends DataClass implements Insertable<Config> {
       );
   @override
   String toString() {
-    return (StringBuffer('Config(')
+    return (StringBuffer('ConfigDBO(')
           ..write('id: $id, ')
           ..write('uuid: $uuid, ')
           ..write('baseUrl: $baseUrl, ')
@@ -212,7 +212,7 @@ class Config extends DataClass implements Insertable<Config> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      (other is Config &&
+      (other is ConfigDBO &&
           other.id == this.id &&
           other.uuid == this.uuid &&
           other.baseUrl == this.baseUrl &&
@@ -225,7 +225,7 @@ class Config extends DataClass implements Insertable<Config> {
           other.lastConnection == this.lastConnection);
 }
 
-class ConfigsCompanion extends UpdateCompanion<Config> {
+class ConfigsCompanion extends UpdateCompanion<ConfigDBO> {
   final Value<int> id;
   final Value<String?> uuid;
   final Value<String?> baseUrl;
@@ -260,7 +260,7 @@ class ConfigsCompanion extends UpdateCompanion<Config> {
     this.version = const Value.absent(),
     this.lastConnection = const Value.absent(),
   });
-  static Insertable<Config> custom({
+  static Insertable<ConfigDBO> custom({
     Expression<int>? id,
     Expression<String?>? uuid,
     Expression<String?>? baseUrl,
@@ -366,7 +366,7 @@ class ConfigsCompanion extends UpdateCompanion<Config> {
   }
 }
 
-class $ConfigsTable extends Configs with TableInfo<$ConfigsTable, Config> {
+class $ConfigsTable extends Configs with TableInfo<$ConfigsTable, ConfigDBO> {
   final GeneratedDatabase _db;
   final String? _alias;
   $ConfigsTable(this._db, [this._alias]);
@@ -437,7 +437,7 @@ class $ConfigsTable extends Configs with TableInfo<$ConfigsTable, Config> {
   @override
   String get actualTableName => 'configs';
   @override
-  VerificationContext validateIntegrity(Insertable<Config> instance,
+  VerificationContext validateIntegrity(Insertable<ConfigDBO> instance,
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
@@ -498,8 +498,8 @@ class $ConfigsTable extends Configs with TableInfo<$ConfigsTable, Config> {
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
-  Config map(Map<String, dynamic> data, {String? tablePrefix}) {
-    return Config.fromData(data, _db,
+  ConfigDBO map(Map<String, dynamic> data, {String? tablePrefix}) {
+    return ConfigDBO.fromData(data, _db,
         prefix: tablePrefix != null ? '$tablePrefix.' : null);
   }
 
@@ -509,7 +509,7 @@ class $ConfigsTable extends Configs with TableInfo<$ConfigsTable, Config> {
   }
 }
 
-class State extends DataClass implements Insertable<State> {
+class StateDBO extends DataClass implements Insertable<StateDBO> {
   final int id;
   final String? entityId;
   final String? state;
@@ -533,7 +533,7 @@ class State extends DataClass implements Insertable<State> {
   final String? unitOfMeasurement;
   final int? current;
   final int? voltage;
-  State(
+  StateDBO(
       {required this.id,
       this.entityId,
       this.state,
@@ -557,10 +557,10 @@ class State extends DataClass implements Insertable<State> {
       this.unitOfMeasurement,
       this.current,
       this.voltage});
-  factory State.fromData(Map<String, dynamic> data, GeneratedDatabase db,
+  factory StateDBO.fromData(Map<String, dynamic> data, GeneratedDatabase db,
       {String? prefix}) {
     final effectivePrefix = prefix ?? '';
-    return State(
+    return StateDBO(
       id: const IntType()
           .mapFromDatabaseResponse(data['${effectivePrefix}id'])!,
       entityId: const StringType()
@@ -749,10 +749,10 @@ class State extends DataClass implements Insertable<State> {
     );
   }
 
-  factory State.fromJson(Map<String, dynamic> json,
+  factory StateDBO.fromJson(Map<String, dynamic> json,
       {ValueSerializer? serializer}) {
     serializer ??= moorRuntimeOptions.defaultSerializer;
-    return State(
+    return StateDBO(
       id: serializer.fromJson<int>(json['id']),
       entityId: serializer.fromJson<String?>(json['entityId']),
       state: serializer.fromJson<String?>(json['state']),
@@ -809,7 +809,7 @@ class State extends DataClass implements Insertable<State> {
     };
   }
 
-  State copyWith(
+  StateDBO copyWith(
           {int? id,
           String? entityId,
           String? state,
@@ -833,7 +833,7 @@ class State extends DataClass implements Insertable<State> {
           String? unitOfMeasurement,
           int? current,
           int? voltage}) =>
-      State(
+      StateDBO(
         id: id ?? this.id,
         entityId: entityId ?? this.entityId,
         state: state ?? this.state,
@@ -860,7 +860,7 @@ class State extends DataClass implements Insertable<State> {
       );
   @override
   String toString() {
-    return (StringBuffer('State(')
+    return (StringBuffer('StateDBO(')
           ..write('id: $id, ')
           ..write('entityId: $entityId, ')
           ..write('state: $state, ')
@@ -934,7 +934,7 @@ class State extends DataClass implements Insertable<State> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      (other is State &&
+      (other is StateDBO &&
           other.id == this.id &&
           other.entityId == this.entityId &&
           other.state == this.state &&
@@ -960,7 +960,7 @@ class State extends DataClass implements Insertable<State> {
           other.voltage == this.voltage);
 }
 
-class StatesCompanion extends UpdateCompanion<State> {
+class StatesCompanion extends UpdateCompanion<StateDBO> {
   final Value<int> id;
   final Value<String?> entityId;
   final Value<String?> state;
@@ -1034,7 +1034,7 @@ class StatesCompanion extends UpdateCompanion<State> {
     this.current = const Value.absent(),
     this.voltage = const Value.absent(),
   });
-  static Insertable<State> custom({
+  static Insertable<StateDBO> custom({
     Expression<int>? id,
     Expression<String?>? entityId,
     Expression<String?>? state,
@@ -1243,7 +1243,7 @@ class StatesCompanion extends UpdateCompanion<State> {
   }
 }
 
-class $StatesTable extends States with TableInfo<$StatesTable, State> {
+class $StatesTable extends States with TableInfo<$StatesTable, StateDBO> {
   final GeneratedDatabase _db;
   final String? _alias;
   $StatesTable(this._db, [this._alias]);
@@ -1387,7 +1387,7 @@ class $StatesTable extends States with TableInfo<$StatesTable, State> {
   @override
   String get actualTableName => 'states';
   @override
-  VerificationContext validateIntegrity(Insertable<State> instance,
+  VerificationContext validateIntegrity(Insertable<StateDBO> instance,
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
@@ -1514,8 +1514,8 @@ class $StatesTable extends States with TableInfo<$StatesTable, State> {
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
-  State map(Map<String, dynamic> data, {String? tablePrefix}) {
-    return State.fromData(data, _db,
+  StateDBO map(Map<String, dynamic> data, {String? tablePrefix}) {
+    return StateDBO.fromData(data, _db,
         prefix: tablePrefix != null ? '$tablePrefix.' : null);
   }
 
@@ -1525,15 +1525,15 @@ class $StatesTable extends States with TableInfo<$StatesTable, State> {
   }
 }
 
-class FlexTab extends DataClass implements Insertable<FlexTab> {
+class FlexTabDBO extends DataClass implements Insertable<FlexTabDBO> {
   final int id;
   final String label;
   final int order;
-  FlexTab({required this.id, required this.label, required this.order});
-  factory FlexTab.fromData(Map<String, dynamic> data, GeneratedDatabase db,
+  FlexTabDBO({required this.id, required this.label, required this.order});
+  factory FlexTabDBO.fromData(Map<String, dynamic> data, GeneratedDatabase db,
       {String? prefix}) {
     final effectivePrefix = prefix ?? '';
-    return FlexTab(
+    return FlexTabDBO(
       id: const IntType()
           .mapFromDatabaseResponse(data['${effectivePrefix}id'])!,
       label: const StringType()
@@ -1559,10 +1559,10 @@ class FlexTab extends DataClass implements Insertable<FlexTab> {
     );
   }
 
-  factory FlexTab.fromJson(Map<String, dynamic> json,
+  factory FlexTabDBO.fromJson(Map<String, dynamic> json,
       {ValueSerializer? serializer}) {
     serializer ??= moorRuntimeOptions.defaultSerializer;
-    return FlexTab(
+    return FlexTabDBO(
       id: serializer.fromJson<int>(json['id']),
       label: serializer.fromJson<String>(json['label']),
       order: serializer.fromJson<int>(json['order']),
@@ -1578,14 +1578,14 @@ class FlexTab extends DataClass implements Insertable<FlexTab> {
     };
   }
 
-  FlexTab copyWith({int? id, String? label, int? order}) => FlexTab(
+  FlexTabDBO copyWith({int? id, String? label, int? order}) => FlexTabDBO(
         id: id ?? this.id,
         label: label ?? this.label,
         order: order ?? this.order,
       );
   @override
   String toString() {
-    return (StringBuffer('FlexTab(')
+    return (StringBuffer('FlexTabDBO(')
           ..write('id: $id, ')
           ..write('label: $label, ')
           ..write('order: $order')
@@ -1599,13 +1599,13 @@ class FlexTab extends DataClass implements Insertable<FlexTab> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      (other is FlexTab &&
+      (other is FlexTabDBO &&
           other.id == this.id &&
           other.label == this.label &&
           other.order == this.order);
 }
 
-class FlexTabsCompanion extends UpdateCompanion<FlexTab> {
+class FlexTabsCompanion extends UpdateCompanion<FlexTabDBO> {
   final Value<int> id;
   final Value<String> label;
   final Value<int> order;
@@ -1620,7 +1620,7 @@ class FlexTabsCompanion extends UpdateCompanion<FlexTab> {
     required int order,
   })  : label = Value(label),
         order = Value(order);
-  static Insertable<FlexTab> custom({
+  static Insertable<FlexTabDBO> custom({
     Expression<int>? id,
     Expression<String>? label,
     Expression<int>? order,
@@ -1667,7 +1667,8 @@ class FlexTabsCompanion extends UpdateCompanion<FlexTab> {
   }
 }
 
-class $FlexTabsTable extends FlexTabs with TableInfo<$FlexTabsTable, FlexTab> {
+class $FlexTabsTable extends FlexTabs
+    with TableInfo<$FlexTabsTable, FlexTabDBO> {
   final GeneratedDatabase _db;
   final String? _alias;
   $FlexTabsTable(this._db, [this._alias]);
@@ -1692,7 +1693,7 @@ class $FlexTabsTable extends FlexTabs with TableInfo<$FlexTabsTable, FlexTab> {
   @override
   String get actualTableName => 'flex_tabs';
   @override
-  VerificationContext validateIntegrity(Insertable<FlexTab> instance,
+  VerificationContext validateIntegrity(Insertable<FlexTabDBO> instance,
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
@@ -1717,8 +1718,8 @@ class $FlexTabsTable extends FlexTabs with TableInfo<$FlexTabsTable, FlexTab> {
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
-  FlexTab map(Map<String, dynamic> data, {String? tablePrefix}) {
-    return FlexTab.fromData(data, _db,
+  FlexTabDBO map(Map<String, dynamic> data, {String? tablePrefix}) {
+    return FlexTabDBO.fromData(data, _db,
         prefix: tablePrefix != null ? '$tablePrefix.' : null);
   }
 
@@ -1728,7 +1729,7 @@ class $FlexTabsTable extends FlexTabs with TableInfo<$FlexTabsTable, FlexTab> {
   }
 }
 
-class FlexCard extends DataClass implements Insertable<FlexCard> {
+class FlexCardDBO extends DataClass implements Insertable<FlexCardDBO> {
   final int id;
   final int tabId;
   final String type;
@@ -1739,7 +1740,7 @@ class FlexCard extends DataClass implements Insertable<FlexCard> {
   final int verticalFlex;
   final int width;
   final int height;
-  FlexCard(
+  FlexCardDBO(
       {required this.id,
       required this.tabId,
       required this.type,
@@ -1750,10 +1751,10 @@ class FlexCard extends DataClass implements Insertable<FlexCard> {
       required this.verticalFlex,
       required this.width,
       required this.height});
-  factory FlexCard.fromData(Map<String, dynamic> data, GeneratedDatabase db,
+  factory FlexCardDBO.fromData(Map<String, dynamic> data, GeneratedDatabase db,
       {String? prefix}) {
     final effectivePrefix = prefix ?? '';
-    return FlexCard(
+    return FlexCardDBO(
       id: const IntType()
           .mapFromDatabaseResponse(data['${effectivePrefix}id'])!,
       tabId: const IntType()
@@ -1815,10 +1816,10 @@ class FlexCard extends DataClass implements Insertable<FlexCard> {
     );
   }
 
-  factory FlexCard.fromJson(Map<String, dynamic> json,
+  factory FlexCardDBO.fromJson(Map<String, dynamic> json,
       {ValueSerializer? serializer}) {
     serializer ??= moorRuntimeOptions.defaultSerializer;
-    return FlexCard(
+    return FlexCardDBO(
       id: serializer.fromJson<int>(json['id']),
       tabId: serializer.fromJson<int>(json['tabId']),
       type: serializer.fromJson<String>(json['type']),
@@ -1848,7 +1849,7 @@ class FlexCard extends DataClass implements Insertable<FlexCard> {
     };
   }
 
-  FlexCard copyWith(
+  FlexCardDBO copyWith(
           {int? id,
           int? tabId,
           String? type,
@@ -1859,7 +1860,7 @@ class FlexCard extends DataClass implements Insertable<FlexCard> {
           int? verticalFlex,
           int? width,
           int? height}) =>
-      FlexCard(
+      FlexCardDBO(
         id: id ?? this.id,
         tabId: tabId ?? this.tabId,
         type: type ?? this.type,
@@ -1873,7 +1874,7 @@ class FlexCard extends DataClass implements Insertable<FlexCard> {
       );
   @override
   String toString() {
-    return (StringBuffer('FlexCard(')
+    return (StringBuffer('FlexCardDBO(')
           ..write('id: $id, ')
           ..write('tabId: $tabId, ')
           ..write('type: $type, ')
@@ -1910,7 +1911,7 @@ class FlexCard extends DataClass implements Insertable<FlexCard> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      (other is FlexCard &&
+      (other is FlexCardDBO &&
           other.id == this.id &&
           other.tabId == this.tabId &&
           other.type == this.type &&
@@ -1923,7 +1924,7 @@ class FlexCard extends DataClass implements Insertable<FlexCard> {
           other.height == this.height);
 }
 
-class FlexCardsCompanion extends UpdateCompanion<FlexCard> {
+class FlexCardsCompanion extends UpdateCompanion<FlexCardDBO> {
   final Value<int> id;
   final Value<int> tabId;
   final Value<String> type;
@@ -1964,7 +1965,7 @@ class FlexCardsCompanion extends UpdateCompanion<FlexCard> {
         verticalFlex = Value(verticalFlex),
         width = Value(width),
         height = Value(height);
-  static Insertable<FlexCard> custom({
+  static Insertable<FlexCardDBO> custom({
     Expression<int>? id,
     Expression<int>? tabId,
     Expression<String>? type,
@@ -2070,7 +2071,7 @@ class FlexCardsCompanion extends UpdateCompanion<FlexCard> {
 }
 
 class $FlexCardsTable extends FlexCards
-    with TableInfo<$FlexCardsTable, FlexCard> {
+    with TableInfo<$FlexCardsTable, FlexCardDBO> {
   final GeneratedDatabase _db;
   final String? _alias;
   $FlexCardsTable(this._db, [this._alias]);
@@ -2136,7 +2137,7 @@ class $FlexCardsTable extends FlexCards
   @override
   String get actualTableName => 'flex_cards';
   @override
-  VerificationContext validateIntegrity(Insertable<FlexCard> instance,
+  VerificationContext validateIntegrity(Insertable<FlexCardDBO> instance,
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
@@ -2203,8 +2204,8 @@ class $FlexCardsTable extends FlexCards
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
-  FlexCard map(Map<String, dynamic> data, {String? tablePrefix}) {
-    return FlexCard.fromData(data, _db,
+  FlexCardDBO map(Map<String, dynamic> data, {String? tablePrefix}) {
+    return FlexCardDBO.fromData(data, _db,
         prefix: tablePrefix != null ? '$tablePrefix.' : null);
   }
 

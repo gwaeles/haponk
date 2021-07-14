@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:haponk/data/config/providers/config_provider.dart';
+import 'package:haponk/data/config/notifiers/config_notifier.dart';
+import 'package:haponk/data/connection/notifiers/connection_notifier.dart';
 import 'package:haponk/dependency_injection.dart';
-import 'package:haponk/data/connection/providers/connection_provider.dart';
 import 'package:provider/provider.dart';
 
 class LauncherScreen extends StatefulWidget {
@@ -11,18 +11,18 @@ class LauncherScreen extends StatefulWidget {
 }
 
 class LauncherScreenState extends State<LauncherScreen> {
-  late ConfigProvider configProvider;
+  late ConfigNotifier configNotifier;
 
   @override
   void initState() {
     super.initState();
-    configProvider = ConfigProvider(getIt());
+    configNotifier = ConfigNotifier(getIt());
 
 // Todo: replace the stream by a future to avoid creation of streamController in repo
     Future.delayed(Duration(milliseconds: 250))
-        .then((value) => configProvider.messageStream.first.then((value) {
+        .then((value) => configNotifier.messageStream.first.then((value) {
               if (value.lastConnection != null) {
-                context.read<ConnectionProvider>().connect(value);
+                context.read<ConnectionNotifier>().connect(value);
 
                 Navigator.of(context).pushReplacementNamed("/supervisor");
               } else {
@@ -33,7 +33,7 @@ class LauncherScreenState extends State<LauncherScreen> {
 
   @override
   void dispose() {
-    configProvider.dispose();
+    configNotifier.dispose();
     super.dispose();
   }
 

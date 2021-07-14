@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:haponk/core/states/request_state.dart';
-import 'package:haponk/data/config/entities/config_entity.dart';
+import 'package:haponk/data/config/entities/config.dart';
 import 'package:haponk/data/config/repositories/config_repository.dart';
 
-class ConfigProvider with ChangeNotifier implements ListenerRequestState {
+class ConfigNotifier with ChangeNotifier implements ListenerRequestState {
   final ConfigRepository repository;
 
   RequestState _state = RequestState.INITIAL;
   bool? _connectionSucceed;
 
-  ConfigProvider(this.repository);
+  ConfigNotifier(this.repository);
 
   ///
   /// --- State --- ///
@@ -28,8 +28,8 @@ class ConfigProvider with ChangeNotifier implements ListenerRequestState {
   /// --- Config --- ///
   ///
 
-  Stream<ConfigEntity> get messageStream => repository.addListener();
-  ConfigEntity? get currentConfig => repository.currentConfig;
+  Stream<Config> get messageStream => repository.addListener();
+  Config? get currentConfig => repository.currentConfig;
 
   ///
   /// --- Request --- ///

@@ -1,32 +1,38 @@
 import 'package:flutter/material.dart';
 import 'package:haponk/data/tabs/entities/flex_card.dart';
 import 'package:haponk/data/tabs/entities/flex_tab.dart';
-import 'package:haponk/data/tabs/providers/cards_provider.dart';
+import 'package:haponk/data/tabs/notifiers/cards_notifier.dart';
 import 'package:provider/provider.dart';
 
 import 'editor_controller.dart';
 
 class TabList extends StatelessWidget {
   final FlexTab flexTabItem;
-  final CardsProvider cardsProvider;
+  final CardsNotifier cardsNotifier;
 
   const TabList({
     Key? key,
     required this.flexTabItem,
-    required this.cardsProvider,
+    required this.cardsNotifier,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
         providers: [
-          Provider.value(value: cardsProvider),
-          StreamProvider(
+          Provider<CardsNotifier>.value(
+            value: cardsNotifier,
+          ),
+          StreamProvider<List<FlexCard>>(
             initialData: [],
-            create: (context) => context.read<CardsProvider>().cardsStream,
+            create: (context) => context.read<CardsNotifier>().cardsStream,
           )
         ],
-        child: Consumer(builder: (context, List<FlexCard> items, child) {
+        child: Consumer(builder: (
+          context,
+          List<FlexCard> items,
+          child,
+        ) {
           return CustomScrollView(
               key: PageStorageKey<String>(flexTabItem.label ?? ''),
               slivers: <Widget>[
@@ -41,7 +47,7 @@ class TabList extends StatelessWidget {
                           child: Center(
                               child: InkWell(
                             onTap: () =>
-                                context.read<CardsProvider>().createItem(),
+                                context.read<CardsNotifier>().createItem(),
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: Column(
@@ -114,14 +120,17 @@ class FlexCardRow extends StatelessWidget {
       if (i != 0) {
         children.add(SizedBox(width: 1));
       }
-      children.add(Expanded(
+      children.add(
+        Expanded(
           child: FlexCardWidget(
-        item: element,
-        rowCount: rowCount,
-        rowIndex: rowIndex,
-        itemCount: item.children?.length ?? 0,
-        itemIndex: i,
-      )));
+            item: element,
+            rowCount: rowCount,
+            rowIndex: rowIndex,
+            itemCount: item.children?.length ?? 0,
+            itemIndex: i,
+          ),
+        ),
+      );
     }
 
     return Row(children: children);
@@ -168,7 +177,7 @@ class FlexCardWidget extends StatelessWidget {
                 bottom: 0,
                 icon: Icons.add_circle_outline,
                 onPressed: () =>
-                    context.read<CardsProvider>().addChildItemToTheLeft(item)),
+                    context.read<CardsNotifier>().addChildItemToTheLeft(item)),
             _iconButton(
                 displayButton: displayButton,
                 right: -8,
@@ -176,7 +185,7 @@ class FlexCardWidget extends StatelessWidget {
                 bottom: 0,
                 icon: Icons.add_circle_outline,
                 onPressed: () =>
-                    context.read<CardsProvider>().addChildItemToTheRight(item)),
+                    context.read<CardsNotifier>().addChildItemToTheRight(item)),
             _iconButton(
                 displayButton: displayButton,
                 top: -24,
@@ -184,7 +193,7 @@ class FlexCardWidget extends StatelessWidget {
                 right: 0,
                 icon: Icons.add_circle_outline,
                 onPressed: () =>
-                    context.read<CardsProvider>().addChildItemAbove(item)),
+                    context.read<CardsNotifier>().addChildItemAbove(item)),
             _iconButton(
                 displayButton: displayButton,
                 bottom: -24,
@@ -192,7 +201,7 @@ class FlexCardWidget extends StatelessWidget {
                 right: 0,
                 icon: Icons.add_circle_outline,
                 onPressed: () =>
-                    context.read<CardsProvider>().addChildItemBelow(item)),
+                    context.read<CardsNotifier>().addChildItemBelow(item)),
             _iconButton(
                 displayButton: customButton,
                 icon: Icons.palette,
@@ -205,7 +214,7 @@ class FlexCardWidget extends StatelessWidget {
                 displayButton: removeButton,
                 icon: Icons.delete,
                 onPressed: () =>
-                    context.read<CardsProvider>().deleteItem(item)),
+                    context.read<CardsNotifier>().deleteItem(item)),
           ],
         ),
       ),

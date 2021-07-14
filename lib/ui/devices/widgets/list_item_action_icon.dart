@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:haponk/data/connection/providers/connection_provider.dart';
+import 'package:haponk/data/connection/notifiers/connection_notifier.dart';
 import 'package:provider/provider.dart';
 
-typedef GestureTapCallback = void Function(ConnectionProvider provider);
+typedef GestureTapCallback = void Function(ConnectionNotifier provider);
 
 class ListItemActionIcon extends StatelessWidget {
   final IconData icon;
@@ -17,7 +17,7 @@ class ListItemActionIcon extends StatelessWidget {
       borderRadius: BorderRadius.all(Radius.circular(24)),
       onTap: onTap == null
           ? null
-          : () => onTap!(context.read<ConnectionProvider>()),
+          : () => onTap!(context.read<ConnectionNotifier>()),
       child: Ink(
         width: 48,
         height: 48,

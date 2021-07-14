@@ -4,10 +4,10 @@ import 'dart:math';
 import 'package:haponk/data/tabs/entities/flex_tab.dart';
 import 'package:haponk/data/tabs/repositories/tabs_repository.dart';
 
-class TabsProvider {
+class TabsNotifier {
   final TabsRepository repository;
 
-  TabsProvider(this.repository);
+  TabsNotifier(this.repository);
 
   StreamController<List<FlexTab>>? _controller;
   StreamSubscription? _repoSubscription;
