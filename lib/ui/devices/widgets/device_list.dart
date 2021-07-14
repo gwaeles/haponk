@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:haponk/features/devices/entities/device.dart';
+import 'package:haponk/data/devices/entities/device.dart';
 import 'package:haponk/ui/devices/widgets/device_list_item.dart';
 import 'package:provider/provider.dart';
 

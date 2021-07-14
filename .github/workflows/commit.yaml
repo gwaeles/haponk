@@ -1,8 +1,8 @@
 on: pull_request
-name: Commit
+name: Commit naming
 jobs:
   build:
-    name: Check commit(s)
+    name: Check commit(s) name
     runs-on: ubuntu-18.04
     steps:
       - uses: actions/checkout@v1

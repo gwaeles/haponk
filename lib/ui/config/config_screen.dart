@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:haponk/core/hass/models/constants.dart';
 import 'package:haponk/dependency_injection.dart';
-import 'package:haponk/features/config/entities/config_entity.dart';
-import 'package:haponk/features/config/providers/config_provider.dart';
-import 'package:haponk/features/connection/providers/connection_provider.dart';
+import 'package:haponk/data/config/entities/config_entity.dart';
+import 'package:haponk/data/config/providers/config_provider.dart';
+import 'package:haponk/data/connection/providers/connection_provider.dart';
 import 'package:provider/provider.dart';
 
 import 'widgets/config_page.dart';

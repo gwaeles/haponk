@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:haponk/core/db/database.dart' as data;
-import 'package:haponk/features/tabs/entities/flex_tab.dart' as ent;
+import 'package:haponk/data/tabs/entities/flex_tab.dart' as ent;
 
 import 'tabs_repository.dart';
 

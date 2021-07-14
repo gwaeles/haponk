@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:haponk/core/states/request_state.dart';
-import 'package:haponk/features/config/providers/config_provider.dart';
+import 'package:haponk/data/config/providers/config_provider.dart';
 import 'package:provider/provider.dart';
 
 class UrlTextField extends StatelessWidget {

@@ -10,8 +10,8 @@ import 'package:haponk/core/hass/datasources/hass_api.dart';
 import 'package:haponk/core/hass/models/events/discovery_info_model.dart';
 import 'package:haponk/core/network/api_status.dart';
 import 'package:haponk/dependency_injection.dart';
-import 'package:haponk/features/config/entities/config_entity.dart';
-import 'package:haponk/features/config/repositories/config_repository.dart';
+import 'package:haponk/data/config/entities/config_entity.dart';
+import 'package:haponk/data/config/repositories/config_repository.dart';
 import 'package:haponk/core/db/database_extension.dart';
 
 const String PREF_LONG_LIVED_ACCESS_TOKEN = "PREF_LONG_LIVED_ACCESS_TOKEN";

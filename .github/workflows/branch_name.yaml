@@ -1,5 +1,5 @@
 on: pull_request
-name: Branch name
+name: Branch naming
 jobs:
   build:
     name: Check branch name
