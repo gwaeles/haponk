@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:haponk/core/hass/models/constants.dart';
 import 'package:haponk/core/states/request_state.dart';
 import 'package:haponk/data/config/entities/config.dart';
-import 'package:haponk/data/config/notifiers/config_notifier.dart';
+import 'package:haponk/data/config/providers/config_notifier.dart';
 import 'package:provider/provider.dart';
 
 class TokenTextField extends StatelessWidget {

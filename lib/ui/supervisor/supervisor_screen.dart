@@ -13,8 +13,11 @@ class SupervisorScreen extends StatelessWidget {
     return ListenableProvider(
       create: (_) => BottomNavigationBarController(0),
       child: Scaffold(
-        body: Consumer(builder:
-            (context, BottomNavigationBarController navController, child) {
+        body: Consumer(builder: (
+          context,
+          BottomNavigationBarController navController,
+          child,
+        ) {
           return Column(
             children: [
               Expanded(

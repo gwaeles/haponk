@@ -1,29 +1,23 @@
-class FlexCard {
-  final int id;
-  final int tabId;
-  final String type;
-  final int? stateId;
-  final int? parentId;
-  final int position;
-  final int horizontalFlex;
-  final int verticalFlex;
-  final int width;
-  final int height;
-  final List<FlexCard>? children;
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-  FlexCard({
-    required this.id,
-    required this.tabId,
-    required this.type,
-    this.stateId,
-    this.parentId,
-    required this.position,
-    required this.horizontalFlex,
-    required this.verticalFlex,
-    required this.width,
-    required this.height,
-    this.children,
-  });
+part 'flex_card.freezed.dart';
+
+@freezed
+class FlexCard with _$FlexCard {
+  const factory FlexCard({
+    required int id,
+    required int tabId,
+    required String type,
+    int? stateId,
+    int? parentId,
+    required int position,
+    required int horizontalFlex,
+    required int verticalFlex,
+    required int width,
+    required int height,
+    List<FlexCard>? children,
+  }) = _FlexCard;
+  const FlexCard._();
 
   String toString() {
     if (parentId != null && parentId! > 0) {
@@ -32,31 +26,4 @@ class FlexCard {
 
     return "$position ($id)";
   }
-
-  FlexCard copyWith({
-    final int? id,
-    final int? tabId,
-    final String? type,
-    final int? stateId,
-    final int? parentId,
-    final int? position,
-    final int? horizontalFlex,
-    final int? verticalFlex,
-    final int? width,
-    final int? height,
-    final List<FlexCard>? children,
-  }) =>
-      FlexCard(
-        id: id ?? this.id,
-        tabId: tabId ?? this.tabId,
-        type: type ?? this.type,
-        stateId: stateId ?? this.stateId,
-        parentId: parentId ?? this.parentId,
-        position: position ?? this.position,
-        horizontalFlex: horizontalFlex ?? this.horizontalFlex,
-        verticalFlex: verticalFlex ?? this.verticalFlex,
-        width: width ?? this.width,
-        height: height ?? this.height,
-        children: children ?? this.children,
-      );
 }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:haponk/data/config/notifiers/config_notifier.dart';
-import 'package:haponk/data/connection/notifiers/connection_notifier.dart';
+import 'package:haponk/data/config/providers/config_notifier.dart';
+import 'package:haponk/data/connection/providers/connection_notifier.dart';
 import 'package:haponk/dependency_injection.dart';
 import 'package:provider/provider.dart';
 
