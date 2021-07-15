@@ -2,12 +2,13 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:haponk/data/tabs/entities/flex_card.dart';
+import 'package:haponk/data/tabs/entities/positioned_flex_card.dart';
 import 'package:haponk/data/tabs/repositories/cards_repository.dart';
 
-class CardsNotifier {
+class CardsProvider {
   final CardsRepository repository;
 
-  CardsNotifier(this.repository);
+  CardsProvider(this.repository);
 
   StreamController<List<FlexCard>>? _controller;
   StreamSubscription? _repoSubscription;
@@ -45,6 +46,62 @@ class CardsNotifier {
   Future<void> _onData(List<FlexCard> data) async {
     _data = data;
     _controller?.sink.add(data);
+  }
+
+  List<PositionedFlexCard> buildPositionedCard({
+    required List<FlexCard> data,
+    required double width,
+  }) {
+    final List<PositionedFlexCard> result = [];
+    double top = 0;
+
+    for (int i = 0; i < data.length; i++) {
+      final item = data[i];
+
+      if (item.children?.isNotEmpty == true) {
+        // Row
+        double left = 0;
+
+        for (int j = 0; j < item.children!.length; j++) {
+          final child = item.children![j];
+          final count = item.children!.length;
+          final itemWidth = (width - count + 1) / count;
+
+          result.add(
+            PositionedFlexCard(
+              top: top,
+              left: left,
+              width: itemWidth,
+              height: 56,
+              card: child,
+              rowCount: data.length,
+              rowIndex: i,
+              itemCount: count,
+              itemIndex: j,
+            ),
+          );
+
+          left += itemWidth + 1;
+        }
+      } else {
+        // Unique item
+        result.add(
+          PositionedFlexCard(
+            top: top,
+            left: 0,
+            width: width,
+            height: 56,
+            card: item,
+            rowCount: data.length,
+            rowIndex: i,
+          ),
+        );
+      }
+
+      top += 57;
+    }
+
+    return result;
   }
 
   ///

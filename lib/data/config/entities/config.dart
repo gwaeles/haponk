@@ -3,7 +3,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'config.freezed.dart';
 
 @freezed
-abstract class Config with _$Config {
+class Config with _$Config {
   const factory Config({
     String? uuid,
     String? baseUrl,

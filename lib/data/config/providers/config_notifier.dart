@@ -47,6 +47,7 @@ class ConfigNotifier with ChangeNotifier implements ListenerRequestState {
     }
     _connectionSucceed = await repository.tryConnect(typedUrl ?? '');
     setState(
-        _connectionSucceed == true ? RequestState.LOADED : RequestState.ERROR);
+      _connectionSucceed == true ? RequestState.LOADED : RequestState.ERROR,
+    );
   }
 }

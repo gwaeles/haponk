@@ -3,10 +3,10 @@ import 'dart:async';
 import 'package:haponk/data/devices/entities/device.dart';
 import 'package:haponk/data/devices/repositories/devices_repository.dart';
 
-class DevicesNotifier {
+class DevicesProvider {
   final DevicesRepository repository;
 
-  DevicesNotifier(this.repository);
+  DevicesProvider(this.repository);
 
   StreamController<List<Device>?>? _controller;
   StreamSubscription? _repoSubscription;
