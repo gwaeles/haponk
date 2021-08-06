@@ -19,14 +19,14 @@ class _$FlexCardTearOff {
   _FlexCard call(
       {required int id,
       required int tabId,
-      required String type,
+      String type = 'deft',
       int? stateId,
       int? parentId,
       required int position,
-      required int horizontalFlex,
-      required int verticalFlex,
-      required int width,
-      required int height,
+      int horizontalFlex = 1,
+      int verticalFlex = 0,
+      int width = 0,
+      int height = 0,
       List<FlexCard>? children}) {
     return _FlexCard(
       id: id,
@@ -252,14 +252,14 @@ class _$_FlexCard extends _FlexCard {
   const _$_FlexCard(
       {required this.id,
       required this.tabId,
-      required this.type,
+      this.type = 'deft',
       this.stateId,
       this.parentId,
       required this.position,
-      required this.horizontalFlex,
-      required this.verticalFlex,
-      required this.width,
-      required this.height,
+      this.horizontalFlex = 1,
+      this.verticalFlex = 0,
+      this.width = 0,
+      this.height = 0,
       this.children})
       : super._();
 
@@ -267,6 +267,7 @@ class _$_FlexCard extends _FlexCard {
   final int id;
   @override
   final int tabId;
+  @JsonKey(defaultValue: 'deft')
   @override
   final String type;
   @override
@@ -275,12 +276,16 @@ class _$_FlexCard extends _FlexCard {
   final int? parentId;
   @override
   final int position;
+  @JsonKey(defaultValue: 1)
   @override
   final int horizontalFlex;
+  @JsonKey(defaultValue: 0)
   @override
   final int verticalFlex;
+  @JsonKey(defaultValue: 0)
   @override
   final int width;
+  @JsonKey(defaultValue: 0)
   @override
   final int height;
   @override
@@ -345,14 +350,14 @@ abstract class _FlexCard extends FlexCard {
   const factory _FlexCard(
       {required int id,
       required int tabId,
-      required String type,
+      String type,
       int? stateId,
       int? parentId,
       required int position,
-      required int horizontalFlex,
-      required int verticalFlex,
-      required int width,
-      required int height,
+      int horizontalFlex,
+      int verticalFlex,
+      int width,
+      int height,
       List<FlexCard>? children}) = _$_FlexCard;
   const _FlexCard._() : super._();
 

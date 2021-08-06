@@ -36,6 +36,13 @@ class TabsRepository {
     ));
   }
 
+  Future<int> delete({
+    required int id,
+  }) async {
+    await db.removeFlexCardByTab(id);
+    return await db.deleteFlexTab(id);
+  }
+
   void dispose() {
     debugPrint("[TABS] dispose");
     for (var _controller in _controllers) {

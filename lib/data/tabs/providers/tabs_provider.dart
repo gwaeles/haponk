@@ -57,4 +57,12 @@ class TabsProvider {
       order: position,
     );
   }
+
+  void deleteItemByIndex(int index) {
+    if (_data != null && index >= 0 && index < _data!.length) {
+      int tabId = _data!.elementAt(index).id ?? 0;
+
+      repository.delete(id: tabId);
+    }
+  }
 }

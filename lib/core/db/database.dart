@@ -151,6 +151,11 @@ class Database extends _$Database {
           (item) => item.id.equals(tabId),
         ))
       .getSingleOrNull();
+  Future deleteFlexTab(int tabId) => (delete(flexTabs)
+        ..where(
+          (item) => item.id.equals(tabId),
+        ))
+      .go();
 
   Stream<List<FlexCardDBO>> watchCards(int tabId) => (select(flexCards)
         ..where((item) => item.tabId.equals(tabId))
@@ -168,6 +173,8 @@ class Database extends _$Database {
           (item) => item.id.equals(cardId),
         ))
       .go();
+  Future removeFlexCardByTab(int tabId) =>
+      (delete(flexCards)..where((item) => item.tabId.equals(tabId))).go();
   Future removeParentFlexCard(int parentCardId) =>
       (update(flexCards)..where((item) => item.parentId.equals(parentCardId)))
           .write(FlexCardsCompanion(

@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:haponk/data/tabs/entities/flex_card.dart';
-import 'package:haponk/data/tabs/entities/positioned_flex_card.dart';
 import 'package:haponk/data/tabs/repositories/cards_repository.dart';
 
 class CardsProvider {
@@ -48,62 +47,6 @@ class CardsProvider {
     _controller?.sink.add(data);
   }
 
-  List<PositionedFlexCard> buildPositionedCard({
-    required List<FlexCard> data,
-    required double width,
-  }) {
-    final List<PositionedFlexCard> result = [];
-    double top = 0;
-
-    for (int i = 0; i < data.length; i++) {
-      final item = data[i];
-
-      if (item.children?.isNotEmpty == true) {
-        // Row
-        double left = 0;
-
-        for (int j = 0; j < item.children!.length; j++) {
-          final child = item.children![j];
-          final count = item.children!.length;
-          final itemWidth = (width - count + 1) / count;
-
-          result.add(
-            PositionedFlexCard(
-              top: top,
-              left: left,
-              width: itemWidth,
-              height: 56,
-              card: child,
-              rowCount: data.length,
-              rowIndex: i,
-              itemCount: count,
-              itemIndex: j,
-            ),
-          );
-
-          left += itemWidth + 1;
-        }
-      } else {
-        // Unique item
-        result.add(
-          PositionedFlexCard(
-            top: top,
-            left: 0,
-            width: width,
-            height: 56,
-            card: item,
-            rowCount: data.length,
-            rowIndex: i,
-          ),
-        );
-      }
-
-      top += 57;
-    }
-
-    return result;
-  }
-
   ///
   /// --- ACTIONS --- ///
   ///
@@ -123,9 +66,16 @@ class CardsProvider {
   }
 
   Future<void> addChildItemAbove(FlexCard item) async {
-    final dady = _data?.firstWhere((element) => element.id == item.parentId);
+    final dady = _data?.firstWhere(
+      (element) => element.id == item.parentId,
+      orElse: () => FlexCard(
+        id: 0,
+        position: 0,
+        tabId: 0,
+      ),
+    );
 
-    int position = (dady?.position ?? item.position);
+    int position = dady == null || dady.id == 0 ? item.position : dady.position;
 
     final List<FlexCard> updates = [];
 
@@ -149,9 +99,17 @@ class CardsProvider {
   }
 
   Future<void> addChildItemBelow(FlexCard item) async {
-    final dady = _data?.firstWhere((element) => element.id == item.parentId);
+    final dady = _data?.firstWhere(
+      (element) => element.id == item.parentId,
+      orElse: () => FlexCard(
+        id: 0,
+        position: 0,
+        tabId: 0,
+      ),
+    );
 
-    int position = dady?.position ?? item.position + 1;
+    int position =
+        dady == null || dady.id == 0 ? item.position + 1 : dady.position + 1;
 
     final List<FlexCard> updates = [];
 
@@ -166,18 +124,26 @@ class CardsProvider {
     updates.forEach((element) => repository.update(element));
 
     repository.insert(
-        type: "deft",
-        position: position,
-        horizontalFlex: 1,
-        verticalFlex: 0,
-        width: 0,
-        height: 0);
+      type: "deft",
+      position: position,
+      horizontalFlex: 1,
+      verticalFlex: 0,
+      width: 0,
+      height: 0,
+    );
   }
 
   Future<void> addChildItemToTheLeft(FlexCard item) async {
-    final dady = _data?.firstWhere((element) => element.id == item.parentId);
+    final dady = _data?.firstWhere(
+      (element) => element.id == item.parentId,
+      orElse: () => FlexCard(
+        id: 0,
+        position: 0,
+        tabId: 0,
+      ),
+    );
 
-    if (dady == null) {
+    if (dady == null || dady.id == 0) {
       // Create parent
       final parentId = await repository.insert(
           type: "row",
@@ -194,22 +160,30 @@ class CardsProvider {
       await repository.update(firstChild);
       // Add new child
       repository.insert(
-          parentId: parentId,
-          type: "deft",
-          position: 1,
-          horizontalFlex: 1,
-          verticalFlex: 0,
-          width: 0,
-          height: 0);
+        parentId: parentId,
+        type: "deft",
+        position: 1,
+        horizontalFlex: 1,
+        verticalFlex: 0,
+        width: 0,
+        height: 0,
+      );
     } else {
       _createChildItem(dady, item.position);
     }
   }
 
   Future<void> addChildItemToTheRight(FlexCard item) async {
-    final dady = _data?.firstWhere((element) => element.id == item.parentId);
+    final dady = _data?.firstWhere(
+      (element) => element.id == item.parentId,
+      orElse: () => FlexCard(
+        id: 0,
+        position: 0,
+        tabId: 0,
+      ),
+    );
 
-    if (dady == null) {
+    if (dady == null || dady.id == 0) {
       // Create parent
       final parentId = await repository.insert(
           type: "row",
@@ -265,8 +239,16 @@ class CardsProvider {
     if (item.parentId == null || item.parentId! <= 0) {
       repository.delete(id: item.id);
     } else {
-      final dady = _data?.firstWhere((element) => element.id == item.parentId);
-      if (dady == null) {
+      final dady = _data?.firstWhere(
+        (element) => element.id == item.parentId,
+        orElse: () => FlexCard(
+          id: 0,
+          position: 0,
+          tabId: 0,
+        ),
+      );
+
+      if (dady == null || dady.id == 0) {
         repository.delete(id: item.id);
       } else {
         if ((dady.children?.length ?? 0) <= 2) {

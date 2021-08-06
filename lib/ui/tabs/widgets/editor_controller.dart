@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-enum EditorMode { IDLE, CUSTOM, MOVE, REMOVE }
+enum EditorMode { IDLE, CUSTOM, REMOVE }
 
 class EditorController extends ChangeNotifier {
   ///
@@ -11,8 +11,8 @@ class EditorController extends ChangeNotifier {
 
   int get selectedItemId => _selectedItemId;
 
-  void setSelectedItemId(int itemId) {
-    _selectedItemId = itemId;
+  set selectedItemId(int itemId) {
+    _selectedItemId = _selectedItemId == itemId ? 0 : itemId;
     _editorMode = EditorMode.IDLE;
     notifyListeners();
   }

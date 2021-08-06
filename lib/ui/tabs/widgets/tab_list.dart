@@ -1,8 +1,13 @@
+import 'dart:async';
+import 'dart:math';
+
 import 'package:flutter/material.dart';
+import 'package:haponk/data/tabs/entities/fake_flex_card.dart';
 import 'package:haponk/data/tabs/entities/flex_card.dart';
 import 'package:haponk/data/tabs/entities/flex_tab.dart';
 import 'package:haponk/data/tabs/entities/positioned_flex_card.dart';
 import 'package:haponk/data/tabs/providers/cards_provider.dart';
+import 'package:haponk/ui/tabs/providers/drag_targets_notifier.dart';
 import 'package:provider/provider.dart';
 
 import 'editor_controller.dart';
@@ -10,90 +15,244 @@ import 'editor_controller.dart';
 class TabList extends StatelessWidget {
   final FlexTab flexTabItem;
   final CardsProvider cardsNotifier;
+  final GlobalKey<NestedScrollViewState> nestedScrollViewGlobalKey;
+  late final AutoScrollTimer _autoScrollTimer;
 
-  const TabList({
+  TabList({
     Key? key,
     required this.flexTabItem,
     required this.cardsNotifier,
-  }) : super(key: key);
+    required this.nestedScrollViewGlobalKey,
+  }) : super(key: key) {
+    _autoScrollTimer = AutoScrollTimer(
+      nestedScrollViewGlobalKey: this.nestedScrollViewGlobalKey,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
+    final maxWidth = MediaQuery.of(context).size.width;
+
     return MultiProvider(
-        providers: [
-          Provider<CardsProvider>.value(
-            value: cardsNotifier,
-          ),
-          StreamProvider<List<FlexCard>>(
-            initialData: [],
-            create: (context) => context.read<CardsProvider>().cardsStream,
-          ),
-        ],
-        child: Consumer2<CardsProvider, List<FlexCard>>(builder: (
-          context,
-          cardsProvider,
-          items,
-          child,
-        ) {
-          return CustomScrollView(
-            key: PageStorageKey<String>(flexTabItem.label ?? ''),
-            slivers: <Widget>[
-              SliverOverlapInjector(
-                handle:
-                    NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+      providers: [
+        Provider<CardsProvider>.value(
+          value: cardsNotifier,
+        ),
+        StreamProvider<List<FlexCard>>(
+          initialData: [],
+          create: (context) => context.read<CardsProvider>().cardsStream,
+        ),
+        ChangeNotifierProxyProvider<List<FlexCard>, DragTargetsNotifier>(
+          create: (context) => DragTargetsNotifier(
+            maxWidth: maxWidth,
+          )..flexCards = context.read<List<FlexCard>>(),
+          update: (context, value, previous) => previous!..flexCards = value,
+        )
+      ],
+      child: Consumer<DragTargetsNotifier>(
+        builder: (context, dragTargetsNotifier, child) {
+          return Stack(
+            children: [
+              child!,
+              // Auto scroll to top
+              Positioned(
+                top: 0,
+                left: 0,
+                right: 0,
+                child: IgnorePointer(
+                  ignoring: !dragTargetsNotifier.dragging,
+                  child: DragTarget<PositionedFlexCard>(
+                    onWillAccept: (value) {
+                      _autoScrollTimer.startUp();
+                      return false;
+                    },
+                    onLeave: (value) => _autoScrollTimer.stop(),
+                    builder: (context, candidateData, rejectedData) =>
+                        Container(
+                      color: Colors.transparent,
+                      height: 40,
+                    ),
+                  ),
+                ),
               ),
-              SliverPadding(
-                padding: const EdgeInsets.only(top: 8.0, bottom: 16),
-                sliver: items.length == 0
-                    ? SliverFillRemaining(
-                        child: Center(
-                            child: InkWell(
-                          onTap: () =>
-                              context.read<CardsProvider>().createItem(),
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Text("Tap here to add your firt card"),
-                                  SizedBox(height: 16),
-                                  Icon(Icons.add_box_outlined),
-                                ]),
-                          ),
-                        )),
-                      )
-                    : SliverToBoxAdapter(
-                        child: FlexCardGrid(
-                          cards: cardsProvider.buildPositionedCard(
-                            data: items,
-                            width: MediaQuery.of(context).size.width,
-                          ),
+              // Auto scroll to down
+              Positioned(
+                bottom: 0,
+                left: 0,
+                right: 0,
+                child: IgnorePointer(
+                  ignoring: !dragTargetsNotifier.dragging,
+                  child: DragTarget<PositionedFlexCard>(
+                    onWillAccept: (value) {
+                      _autoScrollTimer.startDown();
+                      return false;
+                    },
+                    onLeave: (value) => _autoScrollTimer.stop(),
+                    builder: (context, candidateData, rejectedData) =>
+                        Container(
+                      color: Colors.transparent,
+                      height: 40,
+                    ),
+                  ),
+                ),
+              ),
+              // Remove button
+              AnimatedPositioned(
+                duration: const Duration(milliseconds: 250),
+                key: ValueKey("REMOVE_BUTTON"),
+                top: dragTargetsNotifier.dragging ? 16 : -56,
+                left: 0,
+                right: 0,
+                child: Center(
+                  child: Container(
+                    width: 48,
+                    height: 48,
+                    decoration: BoxDecoration(
+                      color: Colors.black54,
+                      borderRadius: BorderRadius.circular(8),
+                      border: Border.all(
+                        color: Colors.white,
+                        width: 2,
+                      ),
+                    ),
+                    child: DragTarget<PositionedFlexCard>(
+                      onWillAccept: (value) => value?.card.id != null,
+                      onAccept: (value) =>
+                          context.read<CardsProvider>().deleteItem(value.card),
+                      builder: (context, candidateData, rejectedData) => Center(
+                        child: Icon(
+                          Icons.delete,
+                          color: candidateData.length > 0
+                              ? Colors.red
+                              : Colors.white,
                         ),
                       ),
+                    ),
+                  ),
+                ),
               ),
             ],
           );
-        }));
+        },
+        child: CustomScrollView(
+          key: PageStorageKey<String>(flexTabItem.label ?? ''),
+          slivers: <Widget>[
+            SliverOverlapInjector(
+              handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+            ),
+            SliverPadding(
+              padding: const EdgeInsets.only(top: 8.0, bottom: 16),
+              sliver: Consumer<List<FlexCard>>(
+                builder: (
+                  context,
+                  items,
+                  child,
+                ) =>
+                    items.length == 0
+                        ? SliverFillRemaining(
+                            child: Center(
+                                child: InkWell(
+                              onTap: () =>
+                                  context.read<CardsProvider>().createItem(),
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Text("Tap here to add your firt card"),
+                                    SizedBox(height: 16),
+                                    Icon(Icons.add_box_outlined),
+                                  ],
+                                ),
+                              ),
+                            )),
+                          )
+                        : child!,
+                child: SliverToBoxAdapter(
+                  child: FlexCardGrid(),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
 
 class FlexCardGrid extends StatelessWidget {
-  final List<PositionedFlexCard> cards;
-
-  const FlexCardGrid({
-    Key? key,
-    required this.cards,
-  }) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
-    final List<Widget> children = [];
+    return Consumer2<DragTargetsNotifier, EditorController>(
+      builder: (
+        context,
+        dragTargetsNotifier,
+        editorController,
+        child,
+      ) {
+        return Container(
+          color: Colors.transparent,
+          height: calculateMaxHeight(
+            dragTargetsNotifier.positionedFlexCards,
+          ),
+          child: Stack(
+            fit: StackFit.loose,
+            children: buildChildren(
+              dragTargetsNotifier,
+              editorController,
+              context.read<CardsProvider>(),
+            ),
+          ),
+        );
+      },
+    );
+  }
 
+  double calculateMaxHeight(
+    List<PositionedFlexCard> cards,
+  ) {
+    double maxHeight = 0;
+
+    // Cards management
     for (int i = 0; i < cards.length; i++) {
       final item = cards[i];
 
+      maxHeight = max(maxHeight, item.top + item.height);
+    }
+
+    return maxHeight + 49;
+  }
+
+  List<Widget> buildChildren(
+    DragTargetsNotifier dragTargetsNotifier,
+    EditorController editorController,
+    CardsProvider cardsProvider,
+  ) {
+    debugPrint('GARY buildChildren');
+    final List<Widget> children = [];
+    final cards = dragTargetsNotifier.positionedFlexCards;
+    final dragTargets = dragTargetsNotifier.positionedDragTargets;
+    PositionedFlexCard? _selectedItem;
+    double maxWidth = 0;
+    double maxHeight = 0;
+
+    // Cards management
+    for (int i = 0; i < cards.length; i++) {
+      final item = cards[i];
+
+      if (!dragTargetsNotifier.dragging &&
+          editorController.selectedItemId > 0 &&
+          editorController.selectedItemId == item.card.id) {
+        _selectedItem = item;
+      }
+
+      maxWidth = max(maxWidth, item.left + item.width);
+      maxHeight = max(maxHeight, item.top + item.height);
+
       children.add(
-        Positioned(
+        AnimatedPositioned(
+          duration: const Duration(milliseconds: 250),
+          key: item.card.id > 0 ? ValueKey(item.card.id) : null,
           top: item.top,
           left: item.left,
           width: item.width,
@@ -105,14 +264,130 @@ class FlexCardGrid extends StatelessWidget {
       );
     }
 
-    return Container(
-      color: Colors.purple,
-      height: 2500,
-      child: Stack(
-        fit: StackFit.loose,
-        children: children,
+    // Permanent add button item
+    children.add(
+      AnimatedPositioned(
+        duration: const Duration(milliseconds: 250),
+        key: ValueKey("ADD_BUTTON_ITEM"),
+        top: maxHeight + 1,
+        left: 0,
+        width: maxWidth,
+        height: 48,
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.white12,
+            borderRadius: BorderRadius.circular(8),
+            border: Border.all(
+              color: Colors.white,
+              width: 2,
+            ),
+          ),
+          child: InkWell(
+            onTap: () => cardsProvider.createItem(),
+            child: Center(
+              child: Icon(Icons.add_circle_outline),
+            ),
+          ),
+        ),
       ),
     );
+    maxHeight = maxHeight + 49;
+
+    // Drag targets management
+    for (int i = 0; i < dragTargets.length; i++) {
+      final dragTarget = dragTargets[i];
+
+      children.add(
+        Positioned(
+          key: ObjectKey(dragTarget),
+          top: dragTarget.top,
+          left: dragTarget.left,
+          width: dragTarget.width,
+          height: dragTarget.height,
+          child: Container(
+            child: DragTarget<PositionedFlexCard>(
+              onWillAccept: (value) {
+                final isRowChild =
+                    value?.card.parentId != null && value!.card.parentId! > 0;
+                final sameRowPosition = value?.rowIndex ==
+                        dragTarget.rowIndex ||
+                    (!isRowChild && value?.rowIndex == dragTarget.rowIndex - 1);
+                final sameChildPosition = isRowChild &&
+                    sameRowPosition &&
+                    dragTarget.itemIndex != -1 &&
+                    (value?.itemIndex == max(0, dragTarget.itemIndex) ||
+                        value?.itemIndex == max(0, dragTarget.itemIndex - 1));
+                final accepted = value?.card.id != null &&
+                    (!sameRowPosition || (isRowChild && !sameChildPosition));
+                if (accepted && value?.card != null) {
+                  dragTargetsNotifier.activeDragTarget = FakeFlexCard(
+                    card: value!.card,
+                    rowIndex: dragTarget.rowIndex,
+                    itemIndex: dragTarget.itemIndex,
+                  );
+                }
+                return accepted;
+              },
+              onAccept: (value) => dragTargetsNotifier.activeDragTarget = null,
+              onLeave: (value) => dragTargetsNotifier.activeDragTarget = null,
+              builder: (context, candidateData, rejectedData) => Container(),
+            ),
+          ),
+        ),
+      );
+    }
+
+    // Add buttons
+    if (_selectedItem != null) {
+      children.add(
+        ActionButton(
+          displayButton: true,
+          top: _selectedItem.top + (_selectedItem.height - 48) / 2,
+          left: max(-8, _selectedItem.left - 24),
+          icon: Icons.add_circle_outline,
+          onPressed: () => cardsProvider.addChildItemToTheLeft(
+            _selectedItem!.card,
+          ),
+        ),
+      );
+      children.add(
+        ActionButton(
+          displayButton: true,
+          top: _selectedItem.top + (_selectedItem.height - 48) / 2,
+          left:
+              min(maxWidth - 40, _selectedItem.left + _selectedItem.width - 24),
+          icon: Icons.add_circle_outline,
+          onPressed: () => cardsProvider.addChildItemToTheRight(
+            _selectedItem!.card,
+          ),
+        ),
+      );
+      children.add(
+        ActionButton(
+          displayButton: true,
+          top: max(-8, _selectedItem.top - 24),
+          left: _selectedItem.left - 24 + _selectedItem.width / 2,
+          icon: Icons.add_circle_outline,
+          onPressed: () => cardsProvider.addChildItemAbove(
+            _selectedItem!.card,
+          ),
+        ),
+      );
+      children.add(
+        ActionButton(
+          displayButton: true,
+          top: min(
+              maxHeight - 40, _selectedItem.top + _selectedItem.height - 24),
+          left: _selectedItem.left - 24 + _selectedItem.width / 2,
+          icon: Icons.add_circle_outline,
+          onPressed: () => cardsProvider.addChildItemBelow(
+            _selectedItem!.card,
+          ),
+        ),
+      );
+    }
+
+    return children;
   }
 }
 
@@ -126,118 +401,51 @@ class FlexCardWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final editorController = context.watch<EditorController>();
-    final displayButton = editorController.selectedItemId == item.card.id;
-    final customButton = editorController.editorMode == EditorMode.CUSTOM;
-    final moveButton = editorController.editorMode == EditorMode.MOVE;
-    final removeButton = editorController.editorMode == EditorMode.REMOVE;
+    final dragTargetsNotifier = context.read<DragTargetsNotifier>();
+    final editorController = context.read<EditorController>();
+    final isFake = item.card.id == 0;
 
     return Container(
       width: item.width,
       height: item.height,
-      color: Colors.pink,
+      color: isFake ? Colors.green : Colors.pink,
       child: InkWell(
-        onTap: () => editorController
-            .setSelectedItemId(displayButton ? 0 : item.card.id),
+        onTap: () => editorController.selectedItemId = item.card.id,
         child: Stack(
           children: [
-            Draggable(
-              data: item.card,
-              feedback: Material(
-                child: Container(
-                  width: item.width,
-                  height: item.height,
-                  color: Colors.blue.withOpacity(0.3),
-                  child: Center(
-                    child: Text(
-                      item.card.toString(),
+            if (!isFake)
+              LongPressDraggable(
+                data: item,
+                feedback: Material(
+                  color: Colors.transparent,
+                  child: Container(
+                    color: Colors.blue.withOpacity(0.3),
+                    width: item.width,
+                    height: item.height,
+                    child: Center(
+                      child: Text(
+                        item.card.toString(),
+                      ),
                     ),
                   ),
                 ),
-              ),
-              childWhenDragging: Stack(
-                children: [
-                  ActionButton(
-                    displayButton: moveButton,
-                    icon: Icons.open_with_rounded,
-                    onPressed: () {},
-                  ),
-                ],
-              ),
-              child: Stack(
-                children: [
-                  Center(
-                    child: Text(
-                      item.card.toString(),
+                onDragStarted: () => dragTargetsNotifier.dragging = true,
+                onDragEnd: (details) => dragTargetsNotifier.dragging = false,
+                onDraggableCanceled: (velocity, offset) =>
+                    dragTargetsNotifier.dragging = false,
+                child: Stack(
+                  children: [
+                    Container(
+                      color: Colors.transparent,
+                      child: Center(
+                        child: Text(
+                          item.card.toString(),
+                        ),
+                      ),
                     ),
-                  ),
-                  ActionButton(
-                    displayButton: moveButton,
-                    icon: Icons.open_with_rounded,
-                    onPressed: () {},
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-            DragTarget<FlexCard>(
-              onWillAccept: (value) => value?.id != item.card.id,
-              builder: (context, candidateData, rejectedData) =>
-                  candidateData.length > 0
-                      ? Container(
-                          color: Colors.green,
-                        )
-                      : Container(),
-            ),
-            ActionButton(
-              displayButton: displayButton,
-              left: -8,
-              top: 0,
-              bottom: 0,
-              icon: Icons.add_circle_outline,
-              onPressed: () => context
-                  .read<CardsProvider>()
-                  .addChildItemToTheLeft(item.card),
-            ),
-            ActionButton(
-              displayButton: displayButton,
-              right: -8,
-              top: 0,
-              bottom: 0,
-              icon: Icons.add_circle_outline,
-              onPressed: () => context
-                  .read<CardsProvider>()
-                  .addChildItemToTheRight(item.card),
-            ),
-            ActionButton(
-              displayButton: displayButton,
-              top: -24,
-              left: 0,
-              right: 0,
-              icon: Icons.add_circle_outline,
-              onPressed: () =>
-                  context.read<CardsProvider>().addChildItemAbove(item.card),
-            ),
-            ActionButton(
-              displayButton: displayButton,
-              bottom: -24,
-              left: 0,
-              right: 0,
-              icon: Icons.add_circle_outline,
-              onPressed: () =>
-                  context.read<CardsProvider>().addChildItemBelow(item.card),
-            ),
-            ActionButton(
-              displayButton: customButton,
-              icon: Icons.palette,
-              onPressed: () {},
-            ),
-            ActionButton(
-              displayButton: removeButton,
-              icon: Icons.delete,
-              onPressed: () => context.read<CardsProvider>().deleteItem(
-                    item.card,
-                  ),
-            ),
           ],
         ),
       ),
@@ -293,5 +501,51 @@ class ActionButton extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class AutoScrollTimer {
+  Timer? _timer;
+  // https://github.com/flutter/flutter/issues/62363
+  final GlobalKey<NestedScrollViewState> nestedScrollViewGlobalKey;
+
+  AutoScrollTimer({
+    required this.nestedScrollViewGlobalKey,
+  });
+
+  startUp() {
+    _timer?.cancel();
+    _timer = Timer.periodic(
+      Duration(milliseconds: 300),
+      (timer) {
+        final controller =
+            nestedScrollViewGlobalKey.currentState?.innerController;
+        controller?.animateTo(
+          controller.position.pixels - 100,
+          duration: Duration(milliseconds: 400),
+          curve: Curves.linear,
+        );
+      },
+    );
+  }
+
+  startDown() {
+    _timer?.cancel();
+    _timer = Timer.periodic(
+      Duration(milliseconds: 300),
+      (timer) {
+        final controller =
+            nestedScrollViewGlobalKey.currentState?.innerController;
+        controller?.animateTo(
+          controller.position.pixels + 100,
+          duration: Duration(milliseconds: 400),
+          curve: Curves.linear,
+        );
+      },
+    );
+  }
+
+  stop() {
+    _timer?.cancel();
   }
 }

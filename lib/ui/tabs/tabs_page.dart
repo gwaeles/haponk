@@ -6,7 +6,6 @@ import 'package:haponk/data/tabs/repositories/cards_repository.dart';
 import 'package:haponk/data/tabs/repositories/tabs_repository.dart';
 import 'package:haponk/dependency_injection.dart';
 import 'package:haponk/data/tabs/entities/flex_tab.dart';
-import 'package:haponk/ui/supervisor/bottom_navigation/animated_bottom_navigation_bar.dart';
 import 'package:provider/provider.dart';
 
 import 'widgets/editor_controller.dart';
@@ -38,20 +37,14 @@ class TabsPage extends StatelessWidget {
           create: (context) => context.read<TabsProvider>().tabsStream,
         )
       ],
-      child: TabsPageContent(
-        controller: ScrollController(),
-      ),
+      child: TabsPageContent(),
     );
   }
 }
 
 class TabsPageContent extends StatelessWidget {
-  final ScrollController controller;
-
-  const TabsPageContent({
-    Key? key,
-    required this.controller,
-  }) : super(key: key);
+  // https://github.com/flutter/flutter/issues/62363
+  final GlobalKey<NestedScrollViewState> globalKey = GlobalKey();
 
   @override
   Widget build(BuildContext context) {
@@ -77,6 +70,7 @@ class TabsPageContent extends StatelessWidget {
           children.add(TabList(
             flexTabItem: item,
             cardsNotifier: cardsNotifier,
+            nestedScrollViewGlobalKey: globalKey,
           ));
           tabs.add(TabWidget(
             index: i,
@@ -88,7 +82,7 @@ class TabsPageContent extends StatelessWidget {
           child: DefaultTabController(
             length: tabs.length,
             child: NestedScrollView(
-              controller: controller,
+              key: globalKey,
               headerSliverBuilder: (
                 BuildContext context,
                 bool innerBoxIsScrolled,
@@ -132,6 +126,16 @@ class TabsPageContent extends StatelessWidget {
                               onPressed: () =>
                                   context.read<TabsProvider>().createItem(),
                             ),
+                            IconButton(
+                              icon: Icon(Icons.remove),
+                              onPressed: () => context
+                                  .read<TabsProvider>()
+                                  .deleteItemByIndex(
+                                    (DefaultTabController.of(context)
+                                            as TabController)
+                                        .index,
+                                  ),
+                            ),
                           ],
                         ),
                       ),
@@ -139,45 +143,8 @@ class TabsPageContent extends StatelessWidget {
                   ),
                 ];
               },
-              body: Stack(
-                children: [
-                  TabBarView(
-                    children: children,
-                  ),
-                  AnimatedBottomNavigationBar(
-                    controller: controller,
-                    child: Container(
-                      height: 48,
-                      color: Colors.black54,
-                      child: Consumer<EditorController>(
-                          builder: (context, snapshot, _) {
-                        return Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            BottomBarItem(
-                              controller: snapshot,
-                              mode: EditorMode.CUSTOM,
-                              icon: Icons.palette,
-                              title: "Custom",
-                            ),
-                            BottomBarItem(
-                              controller: snapshot,
-                              mode: EditorMode.MOVE,
-                              icon: Icons.open_with_rounded,
-                              title: "Move",
-                            ),
-                            BottomBarItem(
-                              controller: snapshot,
-                              mode: EditorMode.REMOVE,
-                              icon: Icons.delete,
-                              title: "Remove",
-                            ),
-                          ],
-                        );
-                      }),
-                    ),
-                  ),
-                ],
+              body: TabBarView(
+                children: children,
               ),
             ),
           ),

@@ -7,14 +7,14 @@ class FlexCard with _$FlexCard {
   const factory FlexCard({
     required int id,
     required int tabId,
-    required String type,
+    @Default('deft') String type,
     int? stateId,
     int? parentId,
     required int position,
-    required int horizontalFlex,
-    required int verticalFlex,
-    required int width,
-    required int height,
+    @Default(1) int horizontalFlex,
+    @Default(0) int verticalFlex,
+    @Default(0) int width,
+    @Default(0) int height,
     List<FlexCard>? children,
   }) = _FlexCard;
   const FlexCard._();
