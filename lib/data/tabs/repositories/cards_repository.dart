@@ -68,6 +68,28 @@ class CardsRepository {
     ));
   }
 
+  Future updateList(List<FlexCard> items, List<FlexCard> itemsToDelete) async {
+    final List<FlexCardDBO> list = [];
+
+    for (FlexCard item in items) {
+      list.add(FlexCardDBO(
+        id: item.id,
+        parentId: item.parentId,
+        tabId: item.tabId,
+        type: item.type,
+        position: item.position,
+        horizontalFlex: item.horizontalFlex,
+        verticalFlex: item.verticalFlex,
+        width: item.width,
+        height: item.height,
+      ));
+    }
+
+    final cardIdsToDelete = itemsToDelete.map((e) => e.id).toList();
+
+    return await db.updateFlexCardList(list, cardIdsToDelete);
+  }
+
   Future<int> delete({
     required int id,
   }) async {

@@ -183,11 +183,10 @@ class TabList extends StatelessWidget {
 class FlexCardGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Consumer2<DragTargetsNotifier, EditorController>(
+    return Consumer<DragTargetsNotifier>(
       builder: (
         context,
         dragTargetsNotifier,
-        editorController,
         child,
       ) {
         return Container(
@@ -195,16 +194,10 @@ class FlexCardGrid extends StatelessWidget {
           height: calculateMaxHeight(
             dragTargetsNotifier.positionedFlexCards,
           ),
-          child: Stack(
-            fit: StackFit.loose,
-            children: buildChildren(
-              dragTargetsNotifier,
-              editorController,
-              context.read<CardsProvider>(),
-            ),
-          ),
+          child: child,
         );
       },
+      child: FlexCardGridChildren(),
     );
   }
 
@@ -220,7 +213,31 @@ class FlexCardGrid extends StatelessWidget {
       maxHeight = max(maxHeight, item.top + item.height);
     }
 
+    // Add 49px for the add button item
     return maxHeight + 49;
+  }
+}
+
+class FlexCardGridChildren extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Consumer2<DragTargetsNotifier, EditorController>(
+      builder: (
+        context,
+        dragTargetsNotifier,
+        editorController,
+        child,
+      ) {
+        return Stack(
+          fit: StackFit.loose,
+          children: buildChildren(
+            dragTargetsNotifier,
+            editorController,
+            context.read<CardsProvider>(),
+          ),
+        );
+      },
+    );
   }
 
   List<Widget> buildChildren(
@@ -307,18 +324,15 @@ class FlexCardGrid extends StatelessWidget {
           child: Container(
             child: DragTarget<PositionedFlexCard>(
               onWillAccept: (value) {
-                final isRowChild =
-                    value?.card.parentId != null && value!.card.parentId! > 0;
-                final sameRowPosition = value?.rowIndex ==
-                        dragTarget.rowIndex ||
-                    (!isRowChild && value?.rowIndex == dragTarget.rowIndex - 1);
-                final sameChildPosition = isRowChild &&
-                    sameRowPosition &&
-                    dragTarget.itemIndex != -1 &&
-                    (value?.itemIndex == max(0, dragTarget.itemIndex) ||
-                        value?.itemIndex == max(0, dragTarget.itemIndex - 1));
                 final accepted = value?.card.id != null &&
-                    (!sameRowPosition || (isRowChild && !sameChildPosition));
+                    (!value!.isSameRowPosition(
+                          rowIndex: dragTarget.rowIndex,
+                        ) ||
+                        (value.isRowChild &&
+                            !value.isSameChildPosition(
+                              rowIndex: dragTarget.rowIndex,
+                              itemIndex: dragTarget.itemIndex,
+                            )));
                 if (accepted && value?.card != null) {
                   dragTargetsNotifier.activeDragTarget = FakeFlexCard(
                     card: value!.card,
@@ -328,7 +342,14 @@ class FlexCardGrid extends StatelessWidget {
                 }
                 return accepted;
               },
-              onAccept: (value) => dragTargetsNotifier.activeDragTarget = null,
+              onAccept: (value) {
+                cardsProvider.moveItem(
+                  item: value,
+                  rowIndex: dragTarget.rowIndex,
+                  itemIndex: dragTarget.itemIndex,
+                );
+                dragTargetsNotifier.activeDragTarget = null;
+              },
               onLeave: (value) => dragTargetsNotifier.activeDragTarget = null,
               builder: (context, candidateData, rejectedData) => Container(),
             ),

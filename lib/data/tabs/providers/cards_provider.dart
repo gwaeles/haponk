@@ -1,7 +1,9 @@
 import 'dart:async';
 import 'dart:math';
 
+import 'package:flutter/material.dart';
 import 'package:haponk/data/tabs/entities/flex_card.dart';
+import 'package:haponk/data/tabs/entities/positioned_flex_card.dart';
 import 'package:haponk/data/tabs/repositories/cards_repository.dart';
 
 class CardsProvider {
@@ -258,6 +260,169 @@ class CardsProvider {
           repository.delete(id: item.id);
         }
       }
+    }
+  }
+
+  void moveItem({
+    required PositionedFlexCard item,
+    required int rowIndex,
+    required int itemIndex,
+  }) {
+    // Procceed case by case
+    debugPrint(
+        '[CARDS] moveItem rowIndex: ${item.rowIndex} => $rowIndex, itemIndex: ${item.itemIndex} => $itemIndex');
+
+    final List<FlexCard> updatedItems = [];
+    final List<FlexCard> toDeleteItems = [];
+
+    // Target is a full row
+    if (itemIndex == -1) {
+      // Source is a full row
+      if (!item.isRowChild) {
+        final rowsOnly =
+            _data?.where((element) => element.parentId == null).toList() ?? [];
+        if (item.rowIndex < rowIndex) {
+          // rowIndex: ${item.rowIndex} => $rowIndex, itemIndex: ${item.itemIndex} => $itemIndex');
+          // rowIndex: 1 => 5, itemIndex: 0 => -1
+          for (int index = 0; index < rowsOnly.length; index++) {
+            FlexCard card = rowsOnly[index];
+            if (index == item.rowIndex) {
+              updatedItems.add(
+                card.copyWith(
+                  position: rowIndex - 1,
+                ),
+              );
+            } else if (index > item.rowIndex && index < rowIndex) {
+              updatedItems.add(
+                card.copyWith(
+                  position: index - 1,
+                ),
+              );
+            } else if (card.position != index) {
+              updatedItems.add(
+                card.copyWith(
+                  position: index,
+                ),
+              );
+            }
+          }
+        } else if (item.rowIndex > rowIndex) {
+          // rowIndex: ${item.rowIndex} => $rowIndex, itemIndex: ${item.itemIndex} => $itemIndex');
+          // rowIndex: 4 => 2, itemIndex: 0 => -1
+          for (int index = 0; index < rowsOnly.length; index++) {
+            FlexCard card = rowsOnly[index];
+            if (index == item.rowIndex) {
+              updatedItems.add(
+                card.copyWith(
+                  position: rowIndex,
+                ),
+              );
+              toDeleteItems.add(card);
+            } else if (index >= rowIndex && index < item.rowIndex) {
+              updatedItems.add(
+                card.copyWith(
+                  position: index + 1,
+                ),
+              );
+            } else if (card.position != index) {
+              updatedItems.add(
+                card.copyWith(
+                  position: index,
+                ),
+              );
+            }
+          }
+        }
+      } else {
+        // Source is a child of a row
+        // rowIndex: ${item.rowIndex} => $rowIndex, itemIndex: ${item.itemIndex} => $itemIndex');
+        // 5 => 4, itemIndex: 4 => -1
+        final rowsOnly =
+            _data?.where((element) => element.parentId == null).toList() ?? [];
+        final FlexCard? parentItem = _data?.firstWhere(
+          (element) => element.id == item.card.parentId,
+          orElse: () => FlexCard(
+            id: 0,
+            position: 0,
+            tabId: 0,
+          ),
+        );
+        final sourceChildren = parentItem?.children ?? [];
+        updatedItems.add(
+          item.card.copyWith(
+            parentId: null,
+            position: rowIndex,
+          ),
+        );
+        for (int index = 0; index < rowsOnly.length; index++) {
+          FlexCard card = rowsOnly[index];
+          if (index == item.rowIndex && sourceChildren.length == 1) {
+            // Source row kepps only one child => change to item
+            FlexCard lastChildItem = sourceChildren[0];
+            updatedItems.add(
+              lastChildItem.copyWith(
+                parentId: null,
+                position: index >= rowIndex ? index + 1 : index,
+              ),
+            );
+          } else if (index >= rowIndex) {
+            updatedItems.add(
+              card.copyWith(
+                position: index + 1,
+              ),
+            );
+          } else if (card.position != index) {
+            updatedItems.add(
+              card.copyWith(
+                position: index,
+              ),
+            );
+          }
+        }
+      }
+    } else {
+      // Target is a child of an existing row
+      // rowIndex: ${item.rowIndex} => $rowIndex, itemIndex: ${item.itemIndex} => $itemIndex');
+      if (item.rowIndex == rowIndex) {
+        // From the same parent row
+        // 6 => 6, itemIndex: 2 => 1
+        final FlexCard? parentItem = _data?.firstWhere(
+          (element) => element.id == item.card.parentId,
+          orElse: () => FlexCard(
+            id: 0,
+            position: 0,
+            tabId: 0,
+          ),
+        );
+        final sourceChildren = parentItem?.children ?? [];
+        for (int index = 0; index < sourceChildren.length; index++) {
+          FlexCard card = sourceChildren[index];
+          if (index == item.itemIndex) {
+            updatedItems.add(
+              card.copyWith(
+                position: itemIndex,
+              ),
+            );
+          } else {
+            updatedItems.add(
+              card.copyWith(
+                position: index >= itemIndex ? index + 1 : index,
+              ),
+            );
+          }
+        }
+      }
+
+      // From another row
+      // 7 => 6, itemIndex: 2 => 2
+      // From a 'no child' item
+      // 3 => 6, itemIndex: 0 => 2
+
+      // Target is a 'no child' item to a row
+    }
+
+    if (updatedItems.isNotEmpty) {
+      repository.updateList(updatedItems, toDeleteItems);
     }
   }
 }

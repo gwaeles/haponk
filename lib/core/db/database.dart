@@ -168,6 +168,16 @@ class Database extends _$Database {
       into(flexCards).insert(flexCard);
   Future updateFlexCard(FlexCardDBO flexCard) =>
       update(flexCards).replace(flexCard);
+  Future updateFlexCardList(List<FlexCardDBO> cards, List<int> cardIdsToDelete) {
+    return transaction(() async {
+      for (FlexCardDBO card in cards) {
+        await updateFlexCard(card);
+      }
+      for (int cardId in cardIdsToDelete) {
+        await deleteFlexCard(cardId);
+      }
+    });
+  }
   Future deleteFlexCard(int cardId) => (delete(flexCards)
         ..where(
           (item) => item.id.equals(cardId),
@@ -180,4 +190,5 @@ class Database extends _$Database {
           .write(FlexCardsCompanion(
         parentId: Value(null),
       ));
+
 }
