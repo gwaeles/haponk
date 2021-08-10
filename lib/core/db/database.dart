@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:haponk/data/tabs/entities/flex_card.dart';
 import 'package:moor_flutter/moor_flutter.dart';
 
 import 'tables/flex_cards.dart';
@@ -168,16 +169,53 @@ class Database extends _$Database {
       into(flexCards).insert(flexCard);
   Future updateFlexCard(FlexCardDBO flexCard) =>
       update(flexCards).replace(flexCard);
-  Future updateFlexCardList(List<FlexCardDBO> cards, List<int> cardIdsToDelete) {
+  Future updateFlexCardList(
+    List<FlexCard> cards,
+    List<int> cardIdsToDelete,
+    FlexCard? newRowSourceChild,
+    FlexCard? newRowAddedChild,
+    int newRowAddedChildIndex,
+  ) {
     return transaction(() async {
-      for (FlexCardDBO card in cards) {
-        await updateFlexCard(card);
+      for (FlexCard card in cards) {
+        await updateFlexCard(card.toDBO());
       }
       for (int cardId in cardIdsToDelete) {
         await deleteFlexCard(cardId);
       }
+      if (newRowSourceChild != null && newRowAddedChild != null) {
+        final parentId = await insertFlexCard(
+          FlexCardsCompanion.insert(
+            tabId: newRowSourceChild.tabId,
+            parentId: Value.absent(),
+            type: 'row',
+            position: newRowSourceChild.position,
+            horizontalFlex: 1,
+            verticalFlex: 0,
+            width: 0,
+            height: 0,
+          ),
+        );
+        await updateFlexCard(
+          newRowSourceChild
+              .copyWith(
+                parentId: parentId,
+                position: newRowAddedChildIndex == 0 ? 1 : 0,
+              )
+              .toDBO(),
+        );
+        await updateFlexCard(
+          newRowAddedChild
+              .copyWith(
+                parentId: parentId,
+                position: newRowAddedChildIndex == 0 ? 0 : 1,
+              )
+              .toDBO(),
+        );
+      }
     });
   }
+
   Future deleteFlexCard(int cardId) => (delete(flexCards)
         ..where(
           (item) => item.id.equals(cardId),
@@ -190,5 +228,4 @@ class Database extends _$Database {
           .write(FlexCardsCompanion(
         parentId: Value(null),
       ));
-
 }

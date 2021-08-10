@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:haponk/core/db/database.dart';
 
 part 'flex_card.freezed.dart';
 
@@ -25,5 +26,22 @@ class FlexCard with _$FlexCard {
     }
 
     return "$position ($id)";
+  }
+
+  bool get isChild => parentId != null && parentId! > 0;
+  bool get hasChildren => (children?.length ?? 0) > 0;
+
+  FlexCardDBO toDBO() {
+    return FlexCardDBO(
+      id: id,
+      parentId: parentId,
+      tabId: tabId,
+      type: type,
+      position: position,
+      horizontalFlex: horizontalFlex,
+      verticalFlex: verticalFlex,
+      width: width,
+      height: height,
+    );
   }
 }

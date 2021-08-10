@@ -328,7 +328,7 @@ class FlexCardGridChildren extends StatelessWidget {
                     (!value!.isSameRowPosition(
                           rowIndex: dragTarget.rowIndex,
                         ) ||
-                        (value.isRowChild &&
+                        (value.isChild &&
                             !value.isSameChildPosition(
                               rowIndex: dragTarget.rowIndex,
                               itemIndex: dragTarget.itemIndex,

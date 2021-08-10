@@ -41,17 +41,20 @@ class CardsRepository {
     required int width,
     required int height,
   }) async {
-    return await db.insertFlexCard(FlexCardsCompanion.insert(
-      tabId: tabId,
-      parentId:
-          parentId == null || parentId <= 0 ? Value.absent() : Value(parentId),
-      type: type,
-      position: position,
-      horizontalFlex: horizontalFlex,
-      verticalFlex: verticalFlex,
-      width: width,
-      height: height,
-    ));
+    return await db.insertFlexCard(
+      FlexCardsCompanion.insert(
+        tabId: tabId,
+        parentId: parentId == null || parentId <= 0
+            ? Value.absent()
+            : Value(parentId),
+        type: type,
+        position: position,
+        horizontalFlex: horizontalFlex,
+        verticalFlex: verticalFlex,
+        width: width,
+        height: height,
+      ),
+    );
   }
 
   Future<bool> update(FlexCard item) async {
@@ -68,26 +71,22 @@ class CardsRepository {
     ));
   }
 
-  Future updateList(List<FlexCard> items, List<FlexCard> itemsToDelete) async {
-    final List<FlexCardDBO> list = [];
-
-    for (FlexCard item in items) {
-      list.add(FlexCardDBO(
-        id: item.id,
-        parentId: item.parentId,
-        tabId: item.tabId,
-        type: item.type,
-        position: item.position,
-        horizontalFlex: item.horizontalFlex,
-        verticalFlex: item.verticalFlex,
-        width: item.width,
-        height: item.height,
-      ));
-    }
-
+  Future updateList(
+    List<FlexCard> items,
+    List<FlexCard> itemsToDelete,
+    FlexCard? newRowSourceChild,
+    FlexCard? newRowAddedChild,
+    int newRowAddedChildIndex,
+  ) async {
     final cardIdsToDelete = itemsToDelete.map((e) => e.id).toList();
 
-    return await db.updateFlexCardList(list, cardIdsToDelete);
+    return await db.updateFlexCardList(
+      items,
+      cardIdsToDelete,
+      newRowSourceChild,
+      newRowAddedChild,
+      newRowAddedChildIndex,
+    );
   }
 
   Future<int> delete({

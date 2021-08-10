@@ -25,20 +25,20 @@ class PositionedFlexCard {
     this.itemCount = 1,
   });
 
-  bool get isRowChild => card.parentId != null && card.parentId! > 0;
+  bool get isChild => card.isChild;
 
   bool isSameRowPosition({
     required int rowIndex,
   }) {
     return this.rowIndex == rowIndex ||
-        (!isRowChild && this.rowIndex == rowIndex - 1);
+        (!isChild && this.rowIndex == rowIndex - 1);
   }
 
   bool isSameChildPosition({
     required int rowIndex,
     required int itemIndex,
   }) {
-    return isRowChild &&
+    return isChild &&
         isSameRowPosition(rowIndex: rowIndex) &&
         itemIndex != -1 &&
         (this.itemIndex == max(0, itemIndex) ||
