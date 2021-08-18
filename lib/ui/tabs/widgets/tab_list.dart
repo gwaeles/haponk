@@ -8,6 +8,7 @@ import 'package:haponk/data/tabs/entities/flex_tab.dart';
 import 'package:haponk/data/tabs/entities/positioned_flex_card.dart';
 import 'package:haponk/data/tabs/providers/cards_provider.dart';
 import 'package:haponk/ui/tabs/providers/drag_targets_notifier.dart';
+import 'package:haponk/ui/tabs/providers/scroll_edge_notifier.dart';
 import 'package:provider/provider.dart';
 
 import 'editor_controller.dart';
@@ -16,25 +17,37 @@ class TabList extends StatelessWidget {
   final FlexTab flexTabItem;
   final CardsProvider cardsNotifier;
   final GlobalKey<NestedScrollViewState> nestedScrollViewGlobalKey;
-  late final AutoScrollTimer _autoScrollTimer;
 
   TabList({
     Key? key,
     required this.flexTabItem,
     required this.cardsNotifier,
     required this.nestedScrollViewGlobalKey,
-  }) : super(key: key) {
-    _autoScrollTimer = AutoScrollTimer(
-      nestedScrollViewGlobalKey: this.nestedScrollViewGlobalKey,
-    );
-  }
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final maxWidth = MediaQuery.of(context).size.width;
+    final _maxWidth = MediaQuery.of(context).size.width;
 
     return MultiProvider(
       providers: [
+        ChangeNotifierProvider<ScrollController>.value(
+          value: nestedScrollViewGlobalKey.currentState!.innerController,
+        ),
+        ProxyProvider<ScrollController, AutoScrollTimer>(
+          create: (context) => AutoScrollTimer(
+            nestedScrollViewGlobalKey: this.nestedScrollViewGlobalKey,
+          ),
+          update: (context, value, previous) => previous!,
+        ),
+        ChangeNotifierProxyProvider<ScrollController, ScrollEdgeNotifier>(
+          create: (context) => ScrollEdgeNotifier(),
+          update: (context, controller, previous) => previous!
+            ..updateScroll(
+              controller.offset,
+              controller.position.maxScrollExtent,
+            ),
+        ),
         Provider<CardsProvider>.value(
           value: cardsNotifier,
         ),
@@ -43,14 +56,17 @@ class TabList extends StatelessWidget {
           create: (context) => context.read<CardsProvider>().cardsStream,
         ),
         ChangeNotifierProxyProvider<List<FlexCard>, DragTargetsNotifier>(
-          create: (context) => DragTargetsNotifier(
-            maxWidth: maxWidth,
-          )..flexCards = context.read<List<FlexCard>>(),
-          update: (context, value, previous) => previous!..flexCards = value,
+          create: (context) => DragTargetsNotifier()
+            ..maxWidth = _maxWidth
+            ..flexCards = context.read<List<FlexCard>>(),
+          update: (context, cards, previous) => previous!..flexCards = cards,
         )
       ],
       child: Consumer<DragTargetsNotifier>(
         builder: (context, dragTargetsNotifier, child) {
+          // Bind the notifier to the screen size
+          dragTargetsNotifier.maxWidth = MediaQuery.of(context).size.width;
+
           return Stack(
             children: [
               child!,
@@ -59,20 +75,12 @@ class TabList extends StatelessWidget {
                 top: 0,
                 left: 0,
                 right: 0,
-                child: IgnorePointer(
-                  ignoring: !dragTargetsNotifier.dragging,
-                  child: DragTarget<PositionedFlexCard>(
-                    onWillAccept: (value) {
-                      _autoScrollTimer.startUp();
-                      return false;
-                    },
-                    onLeave: (value) => _autoScrollTimer.stop(),
-                    builder: (context, candidateData, rejectedData) =>
-                        Container(
-                      color: Colors.transparent,
-                      height: 40,
-                    ),
-                  ),
+                child: AutoScrollDragTarget(
+                  onWillAccept: (value) {
+                    context.read<AutoScrollTimer>().startUp();
+                    return false;
+                  },
+                  onLeave: (value) => context.read<AutoScrollTimer>().stop(),
                 ),
               ),
               // Auto scroll to down
@@ -80,20 +88,12 @@ class TabList extends StatelessWidget {
                 bottom: 0,
                 left: 0,
                 right: 0,
-                child: IgnorePointer(
-                  ignoring: !dragTargetsNotifier.dragging,
-                  child: DragTarget<PositionedFlexCard>(
-                    onWillAccept: (value) {
-                      _autoScrollTimer.startDown();
-                      return false;
-                    },
-                    onLeave: (value) => _autoScrollTimer.stop(),
-                    builder: (context, candidateData, rejectedData) =>
-                        Container(
-                      color: Colors.transparent,
-                      height: 40,
-                    ),
-                  ),
+                child: AutoScrollDragTarget(
+                  onWillAccept: (value) {
+                    context.read<AutoScrollTimer>().startDown();
+                    return false;
+                  },
+                  onLeave: (value) => context.read<AutoScrollTimer>().stop(),
                 ),
               ),
               // Remove button
@@ -174,6 +174,38 @@ class TabList extends StatelessWidget {
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class AutoScrollDragTarget extends StatelessWidget {
+  final DragTargetWillAccept<PositionedFlexCard> onWillAccept;
+  final DragTargetLeave<PositionedFlexCard> onLeave;
+
+  const AutoScrollDragTarget({
+    Key? key,
+    required this.onWillAccept,
+    required this.onLeave,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final dragTargetsNotifier = context.watch<DragTargetsNotifier>();
+    final scrollEdgeNotifier = context.watch<ScrollEdgeNotifier>();
+
+    return IgnorePointer(
+      ignoring: !dragTargetsNotifier.dragging || scrollEdgeNotifier.scrollOnTop,
+      child: DragTarget<PositionedFlexCard>(
+        onWillAccept: (value) {
+          context.read<AutoScrollTimer>().startUp();
+          return false;
+        },
+        onLeave: (value) => context.read<AutoScrollTimer>().stop(),
+        builder: (context, candidateData, rejectedData) => Container(
+          color: Colors.transparent,
+          height: 40,
         ),
       ),
     );
@@ -276,6 +308,7 @@ class FlexCardGridChildren extends StatelessWidget {
           height: item.height,
           child: FlexCardWidget(
             item: item,
+            isSelected: _selectedItem == item,
           ),
         ),
       );
@@ -290,19 +323,22 @@ class FlexCardGridChildren extends StatelessWidget {
         left: 0,
         width: maxWidth,
         height: 48,
-        child: Container(
-          decoration: BoxDecoration(
-            color: Colors.white12,
-            borderRadius: BorderRadius.circular(8),
-            border: Border.all(
-              color: Colors.white,
-              width: 2,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 4.0),
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.white12,
+              borderRadius: BorderRadius.circular(24),
+              border: Border.all(
+                color: Colors.white,
+                width: 2,
+              ),
             ),
-          ),
-          child: InkWell(
-            onTap: () => cardsProvider.createItem(),
-            child: Center(
-              child: Icon(Icons.add_circle_outline),
+            child: InkWell(
+              onTap: () => cardsProvider.createItem(),
+              child: Center(
+                child: Icon(Icons.add),
+              ),
             ),
           ),
         ),
@@ -351,7 +387,9 @@ class FlexCardGridChildren extends StatelessWidget {
                 dragTargetsNotifier.activeDragTarget = null;
               },
               onLeave: (value) => dragTargetsNotifier.activeDragTarget = null,
-              builder: (context, candidateData, rejectedData) => Container(),
+              builder: (context, candidateData, rejectedData) => Container(
+                color: Colors.transparent,
+              ),
             ),
           ),
         ),
@@ -362,10 +400,11 @@ class FlexCardGridChildren extends StatelessWidget {
     if (_selectedItem != null) {
       children.add(
         ActionButton(
+          key: ValueKey('ADD_TO_LEFT_BUTTON'),
           displayButton: true,
           top: _selectedItem.top + (_selectedItem.height - 48) / 2,
-          left: max(-8, _selectedItem.left - 24),
-          icon: Icons.add_circle_outline,
+          left: max(-8, _selectedItem.left - 23),
+          icon: Icons.add,
           onPressed: () => cardsProvider.addChildItemToTheLeft(
             _selectedItem!.card,
           ),
@@ -376,8 +415,8 @@ class FlexCardGridChildren extends StatelessWidget {
           displayButton: true,
           top: _selectedItem.top + (_selectedItem.height - 48) / 2,
           left:
-              min(maxWidth - 40, _selectedItem.left + _selectedItem.width - 24),
-          icon: Icons.add_circle_outline,
+              min(maxWidth - 40, _selectedItem.left + _selectedItem.width - 25),
+          icon: Icons.add,
           onPressed: () => cardsProvider.addChildItemToTheRight(
             _selectedItem!.card,
           ),
@@ -386,9 +425,9 @@ class FlexCardGridChildren extends StatelessWidget {
       children.add(
         ActionButton(
           displayButton: true,
-          top: max(-8, _selectedItem.top - 24),
+          top: max(-8, _selectedItem.top - 23),
           left: _selectedItem.left - 24 + _selectedItem.width / 2,
-          icon: Icons.add_circle_outline,
+          icon: Icons.add,
           onPressed: () => cardsProvider.addChildItemAbove(
             _selectedItem!.card,
           ),
@@ -398,9 +437,9 @@ class FlexCardGridChildren extends StatelessWidget {
         ActionButton(
           displayButton: true,
           top: min(
-              maxHeight - 40, _selectedItem.top + _selectedItem.height - 24),
+              maxHeight - 40, _selectedItem.top + _selectedItem.height - 25),
           left: _selectedItem.left - 24 + _selectedItem.width / 2,
-          icon: Icons.add_circle_outline,
+          icon: Icons.add,
           onPressed: () => cardsProvider.addChildItemBelow(
             _selectedItem!.card,
           ),
@@ -414,10 +453,12 @@ class FlexCardGridChildren extends StatelessWidget {
 
 class FlexCardWidget extends StatelessWidget {
   final PositionedFlexCard item;
+  final isSelected;
 
   const FlexCardWidget({
     Key? key,
     required this.item,
+    this.isSelected = false,
   }) : super(key: key);
 
   @override
@@ -429,7 +470,15 @@ class FlexCardWidget extends StatelessWidget {
     return Container(
       width: item.width,
       height: item.height,
-      color: isFake ? Colors.green : Colors.pink,
+      decoration: BoxDecoration(
+        color: isFake ? Colors.green : Colors.pink,
+        border: isSelected
+            ? Border.all(
+                color: Colors.lightBlue.shade200,
+                width: 2,
+              )
+            : null,
+      ),
       child: InkWell(
         onTap: () => editorController.selectedItemId = item.card.id,
         child: Stack(
@@ -440,7 +489,7 @@ class FlexCardWidget extends StatelessWidget {
                 feedback: Material(
                   color: Colors.transparent,
                   child: Container(
-                    color: Colors.blue.withOpacity(0.3),
+                    color: Colors.transparent,
                     width: item.width,
                     height: item.height,
                     child: Center(
@@ -501,23 +550,32 @@ class ActionButton extends StatelessWidget {
       bottom: bottom,
       left: left,
       right: right,
-      child: Center(
-        child: AnimatedOpacity(
-          opacity: displayButton ? 1 : 0,
-          duration: const Duration(milliseconds: 250),
-          child: IgnorePointer(
-            ignoring: !displayButton,
-            child: Container(
-              decoration: const ShapeDecoration(
-                color: Colors.black26,
-                shape: CircleBorder(),
+      child: AnimatedOpacity(
+        opacity: displayButton ? 1 : 0,
+        duration: const Duration(milliseconds: 2500),
+        child: IgnorePointer(
+          ignoring: !displayButton,
+          child: Stack(
+            children: [
+              Padding(
+                padding: EdgeInsets.all(12.0),
+                child: Container(
+                  width: 24,
+                  height: 24,
+                  decoration: BoxDecoration(
+                    color: Colors.lightBlue.shade200,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
               ),
-              child: IconButton(
+              IconButton(
+                color: Colors.white,
+                splashColor: Colors.lightBlue.shade200,
                 icon: Icon(icon),
                 splashRadius: 24,
                 onPressed: onPressed,
               ),
-            ),
+            ],
           ),
         ),
       ),
@@ -533,6 +591,17 @@ class AutoScrollTimer {
   AutoScrollTimer({
     required this.nestedScrollViewGlobalKey,
   });
+
+  double get currentPosition {
+    if (nestedScrollViewGlobalKey.currentState?.innerController.hasClients ==
+        true) {
+      return nestedScrollViewGlobalKey
+              .currentState?.innerController.position.pixels ??
+          0.0;
+    }
+
+    return 0.0;
+  }
 
   startUp() {
     _timer?.cancel();

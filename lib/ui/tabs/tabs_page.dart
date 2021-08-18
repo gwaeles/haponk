@@ -67,11 +67,13 @@ class TabsPageContent extends StatelessWidget {
             ),
           );
           cardsNotifiers.add(cardsNotifier);
-          children.add(TabList(
-            flexTabItem: item,
-            cardsNotifier: cardsNotifier,
-            nestedScrollViewGlobalKey: globalKey,
-          ));
+          children.add(
+            TabList(
+              flexTabItem: item,
+              cardsNotifier: cardsNotifier,
+              nestedScrollViewGlobalKey: globalKey,
+            ),
+          );
           tabs.add(TabWidget(
             index: i,
             item: item,

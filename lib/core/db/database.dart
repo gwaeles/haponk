@@ -172,6 +172,7 @@ class Database extends _$Database {
   Future updateFlexCardList(
     List<FlexCard> cards,
     List<int> cardIdsToDelete,
+    FlexCard? itemToCreate,
     FlexCard? newRowSourceChild,
     FlexCard? newRowAddedChild,
     int newRowAddedChildIndex,
@@ -182,6 +183,22 @@ class Database extends _$Database {
       }
       for (int cardId in cardIdsToDelete) {
         await deleteFlexCard(cardId);
+      }
+      if (itemToCreate != null) {
+        await insertFlexCard(
+          FlexCardsCompanion.insert(
+            tabId: itemToCreate.tabId,
+            parentId: itemToCreate.parentId == null
+                ? Value.absent()
+                : Value(itemToCreate.parentId),
+            type: itemToCreate.type,
+            position: itemToCreate.position,
+            horizontalFlex: itemToCreate.horizontalFlex,
+            verticalFlex: itemToCreate.verticalFlex,
+            width: itemToCreate.width,
+            height: itemToCreate.height,
+          ),
+        );
       }
       if (newRowSourceChild != null && newRowAddedChild != null) {
         final parentId = await insertFlexCard(
@@ -204,14 +221,29 @@ class Database extends _$Database {
               )
               .toDBO(),
         );
-        await updateFlexCard(
-          newRowAddedChild
-              .copyWith(
-                parentId: parentId,
-                position: newRowAddedChildIndex == 0 ? 0 : 1,
-              )
-              .toDBO(),
-        );
+        if (newRowAddedChild.id > 0) {
+          await updateFlexCard(
+            newRowAddedChild
+                .copyWith(
+                  parentId: parentId,
+                  position: newRowAddedChildIndex == 0 ? 0 : 1,
+                )
+                .toDBO(),
+          );
+        } else {
+          await insertFlexCard(
+            FlexCardsCompanion.insert(
+              tabId: newRowAddedChild.tabId,
+              parentId: Value(parentId),
+              type: newRowAddedChild.type,
+              position: newRowAddedChildIndex == 0 ? 0 : 1,
+              horizontalFlex: newRowAddedChild.horizontalFlex,
+              verticalFlex: newRowAddedChild.verticalFlex,
+              width: newRowAddedChild.width,
+              height: newRowAddedChild.height,
+            ),
+          );
+        }
       }
     });
   }

@@ -71,19 +71,21 @@ class CardsRepository {
     ));
   }
 
-  Future updateList(
-    List<FlexCard> items,
-    List<FlexCard> itemsToDelete,
-    FlexCard? newRowSourceChild,
+  Future updateList({
+    List<FlexCard> itemsToUpdate = const [],
+    List<FlexCard> itemsToDelete = const [],
+    FlexCard? itemToCreate,
+    FlexCard? newRowTargetChild,
     FlexCard? newRowAddedChild,
-    int newRowAddedChildIndex,
-  ) async {
+    int newRowAddedChildIndex = 0,
+  }) async {
     final cardIdsToDelete = itemsToDelete.map((e) => e.id).toList();
 
-    return await db.updateFlexCardList(
-      items,
+    await db.updateFlexCardList(
+      itemsToUpdate,
       cardIdsToDelete,
-      newRowSourceChild,
+      itemToCreate,
+      newRowTargetChild,
       newRowAddedChild,
       newRowAddedChildIndex,
     );
@@ -94,6 +96,19 @@ class CardsRepository {
   }) async {
     await db.removeParentFlexCard(id);
     return await db.deleteFlexCard(id);
+  }
+
+  Future deleteList({
+    required List<int> cardIdsToDelete,
+  }) async {
+    await db.updateFlexCardList(
+      [],
+      cardIdsToDelete,
+      null,
+      null,
+      null,
+      0,
+    );
   }
 
   void dispose() {

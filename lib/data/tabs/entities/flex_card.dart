@@ -21,11 +21,12 @@ class FlexCard with _$FlexCard {
   const FlexCard._();
 
   String toString() {
+    final prefix = type == 'row' ? 'R' : '';
     if (parentId != null && parentId! > 0) {
       return "$position ($parentId-$id)";
     }
 
-    return "$position ($id)";
+    return "$prefix$position ($id)";
   }
 
   bool get isChild => parentId != null && parentId! > 0;

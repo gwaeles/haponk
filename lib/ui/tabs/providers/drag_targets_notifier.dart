@@ -7,7 +7,7 @@ import 'package:haponk/data/tabs/entities/positioned_drag_target.dart';
 import 'package:haponk/data/tabs/entities/positioned_flex_card.dart';
 
 class DragTargetsNotifier extends ChangeNotifier {
-  final double maxWidth;
+  double _maxWidth = 360;
   List<PositionedFlexCard> _positionedFlexCards = [];
   List<PositionedDragTarget> _positionedDragTargets = [];
   List<FlexCard>? _flexCards;
@@ -15,13 +15,19 @@ class DragTargetsNotifier extends ChangeNotifier {
   bool _dragging = false;
   Timer? _timer;
 
-  DragTargetsNotifier({
-    required this.maxWidth,
-  });
-
   List<PositionedFlexCard> get positionedFlexCards => _positionedFlexCards;
   List<PositionedDragTarget> get positionedDragTargets =>
       _positionedDragTargets;
+
+  double get maxWidth => _maxWidth;
+  set maxWidth(double value) {
+    if (_maxWidth != value && value > 0) {
+      _maxWidth = value;
+      _buildPositionedCards();
+      _buildPositionedDragTargets();
+      //notifyListeners();
+    }
+  }
 
   List<FlexCard>? get flexCards => _flexCards;
   set flexCards(List<FlexCard>? value) {
@@ -200,6 +206,7 @@ class DragTargetsNotifier extends ChangeNotifier {
   _buildPositionedDragTargets() {
     final List<PositionedDragTarget> result = [];
     double top = 0;
+    final targetSize = 20.0;
 
     for (int i = 0; i < (_flexCards?.length ?? 0); i++) {
       final item = _flexCards![i];
@@ -211,15 +218,18 @@ class DragTargetsNotifier extends ChangeNotifier {
         for (int j = 0; j < item.children!.length; j++) {
           final count = item.children!.length;
           final itemWidth = (maxWidth - count + 1) / count;
+          final _targetLeftSize = j == 0 ? 2 * targetSize : targetSize;
+          final _targetRightSize =
+              j == (item.children!.length - 1) ? 2 * targetSize : targetSize;
 
           // New row item above
           // Take into account the height of the divider
           result.add(
             PositionedDragTarget(
               top: top - 1,
-              left: left + 16,
-              width: itemWidth - 32,
-              height: 17,
+              left: left + _targetLeftSize,
+              width: itemWidth - (_targetLeftSize + _targetRightSize),
+              height: targetSize + 1,
               rowIndex: i,
             ),
           );
@@ -227,10 +237,10 @@ class DragTargetsNotifier extends ChangeNotifier {
           // New row item below
           result.add(
             PositionedDragTarget(
-              top: top + 40,
-              left: left + 16,
-              width: itemWidth - 32,
-              height: 16,
+              top: top + 56 - targetSize,
+              left: left + _targetLeftSize,
+              width: itemWidth - (_targetLeftSize + _targetRightSize),
+              height: targetSize,
               rowIndex: i + 1,
             ),
           );
@@ -241,7 +251,7 @@ class DragTargetsNotifier extends ChangeNotifier {
             PositionedDragTarget(
               top: top,
               left: left - 1,
-              width: 17,
+              width: _targetLeftSize + 1,
               height: 56,
               rowIndex: i,
               itemIndex: j,
@@ -252,8 +262,8 @@ class DragTargetsNotifier extends ChangeNotifier {
           result.add(
             PositionedDragTarget(
               top: top,
-              left: left + itemWidth - 16,
-              width: 16,
+              left: left + itemWidth - _targetRightSize,
+              width: _targetRightSize,
               height: 56,
               rowIndex: i,
               itemIndex: j + 1,
@@ -263,14 +273,16 @@ class DragTargetsNotifier extends ChangeNotifier {
           left += itemWidth + 1;
         }
       } else {
+        final _targetSize = 2 * targetSize;
+
         // New row item above
         // Take into account the height of the divider
         result.add(
           PositionedDragTarget(
             top: top - 1,
-            left: 16,
-            width: maxWidth - 32,
-            height: 17,
+            left: _targetSize,
+            width: maxWidth - (2 * _targetSize),
+            height: targetSize + 1,
             rowIndex: i,
           ),
         );
@@ -278,10 +290,10 @@ class DragTargetsNotifier extends ChangeNotifier {
         // New row item below
         result.add(
           PositionedDragTarget(
-            top: top + 40,
-            left: 16,
-            width: maxWidth - 32,
-            height: 16,
+            top: top + 56 - targetSize,
+            left: _targetSize,
+            width: maxWidth - (2 * _targetSize),
+            height: targetSize,
             rowIndex: i + 1,
           ),
         );
@@ -291,7 +303,7 @@ class DragTargetsNotifier extends ChangeNotifier {
           PositionedDragTarget(
             top: top,
             left: 0,
-            width: 16,
+            width: _targetSize,
             height: 56,
             rowIndex: i,
             itemIndex: 0,
@@ -302,8 +314,8 @@ class DragTargetsNotifier extends ChangeNotifier {
         result.add(
           PositionedDragTarget(
             top: top,
-            left: maxWidth - 16,
-            width: 16,
+            left: maxWidth - _targetSize,
+            width: _targetSize,
             height: 56,
             rowIndex: i,
             itemIndex: 1,
