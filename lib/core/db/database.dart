@@ -91,14 +91,12 @@ class Database extends _$Database {
           } catch (e) {
             debugPrint("[MOOR] No config file");
           }
-          if (internalUrl != null) {
-            final ConfigDBO newConfig = ConfigDBO(
-              id: 1,
-              internalUrl: internalUrl,
-              requiresApiPassword: false,
-            );
-            await insertConfig(newConfig);
-          }
+          final ConfigDBO newConfig = ConfigDBO(
+            id: 1,
+            internalUrl: internalUrl,
+            requiresApiPassword: false,
+          );
+          await insertConfig(newConfig);
         }
       },
     );
@@ -193,10 +191,6 @@ class Database extends _$Database {
                 : Value(itemToCreate.parentId),
             type: itemToCreate.type,
             position: itemToCreate.position,
-            horizontalFlex: itemToCreate.horizontalFlex,
-            verticalFlex: itemToCreate.verticalFlex,
-            width: itemToCreate.width,
-            height: itemToCreate.height,
           ),
         );
       }
@@ -207,10 +201,6 @@ class Database extends _$Database {
             parentId: Value.absent(),
             type: 'row',
             position: newRowSourceChild.position,
-            horizontalFlex: 1,
-            verticalFlex: 0,
-            width: 0,
-            height: 0,
           ),
         );
         await updateFlexCard(
@@ -237,10 +227,6 @@ class Database extends _$Database {
               parentId: Value(parentId),
               type: newRowAddedChild.type,
               position: newRowAddedChildIndex == 0 ? 0 : 1,
-              horizontalFlex: newRowAddedChild.horizontalFlex,
-              verticalFlex: newRowAddedChild.verticalFlex,
-              width: newRowAddedChild.width,
-              height: newRowAddedChild.height,
             ),
           );
         }

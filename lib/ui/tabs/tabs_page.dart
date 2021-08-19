@@ -8,7 +8,7 @@ import 'package:haponk/dependency_injection.dart';
 import 'package:haponk/data/tabs/entities/flex_tab.dart';
 import 'package:provider/provider.dart';
 
-import 'widgets/editor_controller.dart';
+import 'providers/editor_controller.dart';
 import 'widgets/tab_list.dart';
 import 'widgets/tabs_app_bar_title.dart';
 
@@ -44,7 +44,7 @@ class TabsPage extends StatelessWidget {
 
 class TabsPageContent extends StatelessWidget {
   // https://github.com/flutter/flutter/issues/62363
-  final GlobalKey<NestedScrollViewState> globalKey = GlobalKey();
+  //final GlobalKey<NestedScrollViewState> globalKey = GlobalKey();
 
   @override
   Widget build(BuildContext context) {
@@ -71,7 +71,6 @@ class TabsPageContent extends StatelessWidget {
             TabList(
               flexTabItem: item,
               cardsNotifier: cardsNotifier,
-              nestedScrollViewGlobalKey: globalKey,
             ),
           );
           tabs.add(TabWidget(
@@ -84,7 +83,6 @@ class TabsPageContent extends StatelessWidget {
           child: DefaultTabController(
             length: tabs.length,
             child: NestedScrollView(
-              key: globalKey,
               headerSliverBuilder: (
                 BuildContext context,
                 bool innerBoxIsScrolled,
@@ -114,6 +112,8 @@ class TabsPageContent extends StatelessWidget {
                             Expanded(
                               child: TabBar(
                                 isScrollable: true,
+                                controller: DefaultTabController.of(context)
+                                    as TabController,
                                 indicatorColor: Colors.transparent,
                                 automaticIndicatorColorAdjustment: false,
                                 indicatorWeight: 1.0,
@@ -185,8 +185,12 @@ class TabWidget extends StatelessWidget {
             padding: EdgeInsets.fromLTRB(12, 3, 12, 3),
             constraints: BoxConstraints(minWidth: 80),
             decoration: BoxDecoration(
-              color: selected ? Colors.purple : Colors.purple.shade300,
+              color: Colors.white12,
               borderRadius: BorderRadius.circular(24),
+              border: Border.all(
+                color: selected ? Colors.white70 : Colors.white12,
+                width: 1,
+              ),
             ),
             child: Center(child: Text(item.label ?? '')),
           );

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:haponk/data/tabs/entities/fake_flex_card.dart';
@@ -7,7 +8,8 @@ import 'package:haponk/data/tabs/entities/positioned_drag_target.dart';
 import 'package:haponk/data/tabs/entities/positioned_flex_card.dart';
 
 class DragTargetsNotifier extends ChangeNotifier {
-  double _maxWidth = 360;
+  double _layoutWidth = 360;
+  double _maxGridHeight = 0;
   List<PositionedFlexCard> _positionedFlexCards = [];
   List<PositionedDragTarget> _positionedDragTargets = [];
   List<FlexCard>? _flexCards;
@@ -19,15 +21,17 @@ class DragTargetsNotifier extends ChangeNotifier {
   List<PositionedDragTarget> get positionedDragTargets =>
       _positionedDragTargets;
 
-  double get maxWidth => _maxWidth;
-  set maxWidth(double value) {
-    if (_maxWidth != value && value > 0) {
-      _maxWidth = value;
+  double get layoutWidth => _layoutWidth;
+  set layoutWidth(double value) {
+    if (_layoutWidth != value && value > 0) {
+      _layoutWidth = value;
       _buildPositionedCards();
       _buildPositionedDragTargets();
       //notifyListeners();
     }
   }
+
+  double get maxGridHeight => _maxGridHeight;
 
   List<FlexCard>? get flexCards => _flexCards;
   set flexCards(List<FlexCard>? value) {
@@ -66,6 +70,7 @@ class DragTargetsNotifier extends ChangeNotifier {
 
   _buildPositionedCards() {
     final List<PositionedFlexCard> result = [];
+    _maxGridHeight = 0;
     double top = 0;
 
     final List<FlexCard> _processedData = []..addAll(
@@ -92,10 +97,6 @@ class DragTargetsNotifier extends ChangeNotifier {
             tabId: fakeItem.card.tabId,
             type: "deft",
             position: fakeItem.rowIndex,
-            horizontalFlex: 1,
-            verticalFlex: 0,
-            width: 0,
-            height: 0,
           ),
         );
       } else {
@@ -110,10 +111,6 @@ class DragTargetsNotifier extends ChangeNotifier {
               tabId: fakeItem.card.tabId,
               type: "deft",
               position: fakeItem.itemIndex,
-              horizontalFlex: 1,
-              verticalFlex: 0,
-              width: 0,
-              height: 0,
             ),
           );
           _processedData.insert(
@@ -129,10 +126,6 @@ class DragTargetsNotifier extends ChangeNotifier {
               tabId: fakeItem.card.tabId,
               type: "deft",
               position: fakeItem.rowIndex,
-              horizontalFlex: 1,
-              verticalFlex: 0,
-              width: 0,
-              height: 0,
               children: []
                 ..add(targetCard)
                 ..insert(
@@ -142,10 +135,6 @@ class DragTargetsNotifier extends ChangeNotifier {
                     tabId: fakeItem.card.tabId,
                     type: "deft",
                     position: fakeItem.itemIndex,
-                    horizontalFlex: 1,
-                    verticalFlex: 0,
-                    width: 0,
-                    height: 0,
                   ),
                 ),
             ),
@@ -164,7 +153,7 @@ class DragTargetsNotifier extends ChangeNotifier {
         for (int j = 0; j < item.children!.length; j++) {
           final child = item.children![j];
           final count = item.children!.length;
-          final itemWidth = (maxWidth - count + 1) / count;
+          final itemWidth = (layoutWidth - count + 1) / count;
 
           result.add(
             PositionedFlexCard(
@@ -188,7 +177,7 @@ class DragTargetsNotifier extends ChangeNotifier {
           PositionedFlexCard(
             top: top,
             left: 0,
-            width: maxWidth,
+            width: layoutWidth,
             height: 56,
             card: item,
             rowCount: _processedData.length,
@@ -197,8 +186,12 @@ class DragTargetsNotifier extends ChangeNotifier {
         );
       }
 
+      _maxGridHeight = max(_maxGridHeight, top + 56);
       top += 57;
     }
+
+    // Add 49px for the add button item
+    _maxGridHeight = _maxGridHeight + 49;
 
     _positionedFlexCards = result;
   }
@@ -217,7 +210,7 @@ class DragTargetsNotifier extends ChangeNotifier {
 
         for (int j = 0; j < item.children!.length; j++) {
           final count = item.children!.length;
-          final itemWidth = (maxWidth - count + 1) / count;
+          final itemWidth = (layoutWidth - count + 1) / count;
           final _targetLeftSize = j == 0 ? 2 * targetSize : targetSize;
           final _targetRightSize =
               j == (item.children!.length - 1) ? 2 * targetSize : targetSize;
@@ -281,7 +274,7 @@ class DragTargetsNotifier extends ChangeNotifier {
           PositionedDragTarget(
             top: top - 1,
             left: _targetSize,
-            width: maxWidth - (2 * _targetSize),
+            width: layoutWidth - (2 * _targetSize),
             height: targetSize + 1,
             rowIndex: i,
           ),
@@ -292,7 +285,7 @@ class DragTargetsNotifier extends ChangeNotifier {
           PositionedDragTarget(
             top: top + 56 - targetSize,
             left: _targetSize,
-            width: maxWidth - (2 * _targetSize),
+            width: layoutWidth - (2 * _targetSize),
             height: targetSize,
             rowIndex: i + 1,
           ),
@@ -314,7 +307,7 @@ class DragTargetsNotifier extends ChangeNotifier {
         result.add(
           PositionedDragTarget(
             top: top,
-            left: maxWidth - _targetSize,
+            left: layoutWidth - _targetSize,
             width: _targetSize,
             height: 56,
             rowIndex: i,

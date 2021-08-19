@@ -11,7 +11,7 @@ class TokenTextField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final configNotifier = context.watch<ConfigNotifier>();
-    final config = context.watch<Config>();
+    final config = context.watch<Config?>();
     final connectionType = context.watch<ConnectionType>();
 
     final checked = configNotifier.state == RequestState.LOADED &&
@@ -32,8 +32,8 @@ class TokenTextField extends StatelessWidget {
 
     if (textController.text.isEmpty) {
       // Init values
-      configNotifier.typedToken = config.accessToken;
-      textController.text = config.accessToken ?? '';
+      configNotifier.typedToken = config?.accessToken;
+      textController.text = config?.accessToken ?? '';
     }
 
     return TextField(

@@ -12,10 +12,10 @@ class FlexCard with _$FlexCard {
     int? stateId,
     int? parentId,
     required int position,
-    @Default(1) int horizontalFlex,
-    @Default(0) int verticalFlex,
-    @Default(0) int width,
-    @Default(0) int height,
+    // @Default(1) int horizontalFlex,
+    // @Default(0) int verticalFlex,
+    // @Default(0) int width,
+    // @Default(0) int height,
     List<FlexCard>? children,
   }) = _FlexCard;
   const FlexCard._();
@@ -39,10 +39,6 @@ class FlexCard with _$FlexCard {
       tabId: tabId,
       type: type,
       position: position,
-      horizontalFlex: horizontalFlex,
-      verticalFlex: verticalFlex,
-      width: width,
-      height: height,
     );
   }
 }

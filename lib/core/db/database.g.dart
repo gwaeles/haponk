@@ -1736,21 +1736,13 @@ class FlexCardDBO extends DataClass implements Insertable<FlexCardDBO> {
   final int? stateId;
   final int? parentId;
   final int position;
-  final int horizontalFlex;
-  final int verticalFlex;
-  final int width;
-  final int height;
   FlexCardDBO(
       {required this.id,
       required this.tabId,
       required this.type,
       this.stateId,
       this.parentId,
-      required this.position,
-      required this.horizontalFlex,
-      required this.verticalFlex,
-      required this.width,
-      required this.height});
+      required this.position});
   factory FlexCardDBO.fromData(Map<String, dynamic> data, GeneratedDatabase db,
       {String? prefix}) {
     final effectivePrefix = prefix ?? '';
@@ -1767,14 +1759,6 @@ class FlexCardDBO extends DataClass implements Insertable<FlexCardDBO> {
           .mapFromDatabaseResponse(data['${effectivePrefix}parent_id']),
       position: const IntType()
           .mapFromDatabaseResponse(data['${effectivePrefix}position'])!,
-      horizontalFlex: const IntType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}horizontal_flex'])!,
-      verticalFlex: const IntType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}vertical_flex'])!,
-      width: const IntType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}width'])!,
-      height: const IntType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}height'])!,
     );
   }
   @override
@@ -1790,10 +1774,6 @@ class FlexCardDBO extends DataClass implements Insertable<FlexCardDBO> {
       map['parent_id'] = Variable<int?>(parentId);
     }
     map['position'] = Variable<int>(position);
-    map['horizontal_flex'] = Variable<int>(horizontalFlex);
-    map['vertical_flex'] = Variable<int>(verticalFlex);
-    map['width'] = Variable<int>(width);
-    map['height'] = Variable<int>(height);
     return map;
   }
 
@@ -1809,10 +1789,6 @@ class FlexCardDBO extends DataClass implements Insertable<FlexCardDBO> {
           ? const Value.absent()
           : Value(parentId),
       position: Value(position),
-      horizontalFlex: Value(horizontalFlex),
-      verticalFlex: Value(verticalFlex),
-      width: Value(width),
-      height: Value(height),
     );
   }
 
@@ -1826,10 +1802,6 @@ class FlexCardDBO extends DataClass implements Insertable<FlexCardDBO> {
       stateId: serializer.fromJson<int?>(json['stateId']),
       parentId: serializer.fromJson<int?>(json['parentId']),
       position: serializer.fromJson<int>(json['position']),
-      horizontalFlex: serializer.fromJson<int>(json['horizontalFlex']),
-      verticalFlex: serializer.fromJson<int>(json['verticalFlex']),
-      width: serializer.fromJson<int>(json['width']),
-      height: serializer.fromJson<int>(json['height']),
     );
   }
   @override
@@ -1842,10 +1814,6 @@ class FlexCardDBO extends DataClass implements Insertable<FlexCardDBO> {
       'stateId': serializer.toJson<int?>(stateId),
       'parentId': serializer.toJson<int?>(parentId),
       'position': serializer.toJson<int>(position),
-      'horizontalFlex': serializer.toJson<int>(horizontalFlex),
-      'verticalFlex': serializer.toJson<int>(verticalFlex),
-      'width': serializer.toJson<int>(width),
-      'height': serializer.toJson<int>(height),
     };
   }
 
@@ -1855,11 +1823,7 @@ class FlexCardDBO extends DataClass implements Insertable<FlexCardDBO> {
           String? type,
           int? stateId,
           int? parentId,
-          int? position,
-          int? horizontalFlex,
-          int? verticalFlex,
-          int? width,
-          int? height}) =>
+          int? position}) =>
       FlexCardDBO(
         id: id ?? this.id,
         tabId: tabId ?? this.tabId,
@@ -1867,10 +1831,6 @@ class FlexCardDBO extends DataClass implements Insertable<FlexCardDBO> {
         stateId: stateId ?? this.stateId,
         parentId: parentId ?? this.parentId,
         position: position ?? this.position,
-        horizontalFlex: horizontalFlex ?? this.horizontalFlex,
-        verticalFlex: verticalFlex ?? this.verticalFlex,
-        width: width ?? this.width,
-        height: height ?? this.height,
       );
   @override
   String toString() {
@@ -1880,11 +1840,7 @@ class FlexCardDBO extends DataClass implements Insertable<FlexCardDBO> {
           ..write('type: $type, ')
           ..write('stateId: $stateId, ')
           ..write('parentId: $parentId, ')
-          ..write('position: $position, ')
-          ..write('horizontalFlex: $horizontalFlex, ')
-          ..write('verticalFlex: $verticalFlex, ')
-          ..write('width: $width, ')
-          ..write('height: $height')
+          ..write('position: $position')
           ..write(')'))
         .toString();
   }
@@ -1896,18 +1852,8 @@ class FlexCardDBO extends DataClass implements Insertable<FlexCardDBO> {
           tabId.hashCode,
           $mrjc(
               type.hashCode,
-              $mrjc(
-                  stateId.hashCode,
-                  $mrjc(
-                      parentId.hashCode,
-                      $mrjc(
-                          position.hashCode,
-                          $mrjc(
-                              horizontalFlex.hashCode,
-                              $mrjc(
-                                  verticalFlex.hashCode,
-                                  $mrjc(
-                                      width.hashCode, height.hashCode))))))))));
+              $mrjc(stateId.hashCode,
+                  $mrjc(parentId.hashCode, position.hashCode))))));
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -1917,11 +1863,7 @@ class FlexCardDBO extends DataClass implements Insertable<FlexCardDBO> {
           other.type == this.type &&
           other.stateId == this.stateId &&
           other.parentId == this.parentId &&
-          other.position == this.position &&
-          other.horizontalFlex == this.horizontalFlex &&
-          other.verticalFlex == this.verticalFlex &&
-          other.width == this.width &&
-          other.height == this.height);
+          other.position == this.position);
 }
 
 class FlexCardsCompanion extends UpdateCompanion<FlexCardDBO> {
@@ -1931,10 +1873,6 @@ class FlexCardsCompanion extends UpdateCompanion<FlexCardDBO> {
   final Value<int?> stateId;
   final Value<int?> parentId;
   final Value<int> position;
-  final Value<int> horizontalFlex;
-  final Value<int> verticalFlex;
-  final Value<int> width;
-  final Value<int> height;
   const FlexCardsCompanion({
     this.id = const Value.absent(),
     this.tabId = const Value.absent(),
@@ -1942,10 +1880,6 @@ class FlexCardsCompanion extends UpdateCompanion<FlexCardDBO> {
     this.stateId = const Value.absent(),
     this.parentId = const Value.absent(),
     this.position = const Value.absent(),
-    this.horizontalFlex = const Value.absent(),
-    this.verticalFlex = const Value.absent(),
-    this.width = const Value.absent(),
-    this.height = const Value.absent(),
   });
   FlexCardsCompanion.insert({
     this.id = const Value.absent(),
@@ -1954,17 +1888,9 @@ class FlexCardsCompanion extends UpdateCompanion<FlexCardDBO> {
     this.stateId = const Value.absent(),
     this.parentId = const Value.absent(),
     required int position,
-    required int horizontalFlex,
-    required int verticalFlex,
-    required int width,
-    required int height,
   })  : tabId = Value(tabId),
         type = Value(type),
-        position = Value(position),
-        horizontalFlex = Value(horizontalFlex),
-        verticalFlex = Value(verticalFlex),
-        width = Value(width),
-        height = Value(height);
+        position = Value(position);
   static Insertable<FlexCardDBO> custom({
     Expression<int>? id,
     Expression<int>? tabId,
@@ -1972,10 +1898,6 @@ class FlexCardsCompanion extends UpdateCompanion<FlexCardDBO> {
     Expression<int?>? stateId,
     Expression<int?>? parentId,
     Expression<int>? position,
-    Expression<int>? horizontalFlex,
-    Expression<int>? verticalFlex,
-    Expression<int>? width,
-    Expression<int>? height,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -1984,10 +1906,6 @@ class FlexCardsCompanion extends UpdateCompanion<FlexCardDBO> {
       if (stateId != null) 'state_id': stateId,
       if (parentId != null) 'parent_id': parentId,
       if (position != null) 'position': position,
-      if (horizontalFlex != null) 'horizontal_flex': horizontalFlex,
-      if (verticalFlex != null) 'vertical_flex': verticalFlex,
-      if (width != null) 'width': width,
-      if (height != null) 'height': height,
     });
   }
 
@@ -1997,11 +1915,7 @@ class FlexCardsCompanion extends UpdateCompanion<FlexCardDBO> {
       Value<String>? type,
       Value<int?>? stateId,
       Value<int?>? parentId,
-      Value<int>? position,
-      Value<int>? horizontalFlex,
-      Value<int>? verticalFlex,
-      Value<int>? width,
-      Value<int>? height}) {
+      Value<int>? position}) {
     return FlexCardsCompanion(
       id: id ?? this.id,
       tabId: tabId ?? this.tabId,
@@ -2009,10 +1923,6 @@ class FlexCardsCompanion extends UpdateCompanion<FlexCardDBO> {
       stateId: stateId ?? this.stateId,
       parentId: parentId ?? this.parentId,
       position: position ?? this.position,
-      horizontalFlex: horizontalFlex ?? this.horizontalFlex,
-      verticalFlex: verticalFlex ?? this.verticalFlex,
-      width: width ?? this.width,
-      height: height ?? this.height,
     );
   }
 
@@ -2037,18 +1947,6 @@ class FlexCardsCompanion extends UpdateCompanion<FlexCardDBO> {
     if (position.present) {
       map['position'] = Variable<int>(position.value);
     }
-    if (horizontalFlex.present) {
-      map['horizontal_flex'] = Variable<int>(horizontalFlex.value);
-    }
-    if (verticalFlex.present) {
-      map['vertical_flex'] = Variable<int>(verticalFlex.value);
-    }
-    if (width.present) {
-      map['width'] = Variable<int>(width.value);
-    }
-    if (height.present) {
-      map['height'] = Variable<int>(height.value);
-    }
     return map;
   }
 
@@ -2060,11 +1958,7 @@ class FlexCardsCompanion extends UpdateCompanion<FlexCardDBO> {
           ..write('type: $type, ')
           ..write('stateId: $stateId, ')
           ..write('parentId: $parentId, ')
-          ..write('position: $position, ')
-          ..write('horizontalFlex: $horizontalFlex, ')
-          ..write('verticalFlex: $verticalFlex, ')
-          ..write('width: $width, ')
-          ..write('height: $height')
+          ..write('position: $position')
           ..write(')'))
         .toString();
   }
@@ -2101,37 +1995,9 @@ class $FlexCardsTable extends FlexCards
   late final GeneratedColumn<int?> position = GeneratedColumn<int?>(
       'position', aliasedName, false,
       typeName: 'INTEGER', requiredDuringInsert: true);
-  final VerificationMeta _horizontalFlexMeta =
-      const VerificationMeta('horizontalFlex');
-  late final GeneratedColumn<int?> horizontalFlex = GeneratedColumn<int?>(
-      'horizontal_flex', aliasedName, false,
-      typeName: 'INTEGER', requiredDuringInsert: true);
-  final VerificationMeta _verticalFlexMeta =
-      const VerificationMeta('verticalFlex');
-  late final GeneratedColumn<int?> verticalFlex = GeneratedColumn<int?>(
-      'vertical_flex', aliasedName, false,
-      typeName: 'INTEGER', requiredDuringInsert: true);
-  final VerificationMeta _widthMeta = const VerificationMeta('width');
-  late final GeneratedColumn<int?> width = GeneratedColumn<int?>(
-      'width', aliasedName, false,
-      typeName: 'INTEGER', requiredDuringInsert: true);
-  final VerificationMeta _heightMeta = const VerificationMeta('height');
-  late final GeneratedColumn<int?> height = GeneratedColumn<int?>(
-      'height', aliasedName, false,
-      typeName: 'INTEGER', requiredDuringInsert: true);
   @override
-  List<GeneratedColumn> get $columns => [
-        id,
-        tabId,
-        type,
-        stateId,
-        parentId,
-        position,
-        horizontalFlex,
-        verticalFlex,
-        width,
-        height
-      ];
+  List<GeneratedColumn> get $columns =>
+      [id, tabId, type, stateId, parentId, position];
   @override
   String get aliasedName => _alias ?? 'flex_cards';
   @override
@@ -2169,34 +2035,6 @@ class $FlexCardsTable extends FlexCards
           position.isAcceptableOrUnknown(data['position']!, _positionMeta));
     } else if (isInserting) {
       context.missing(_positionMeta);
-    }
-    if (data.containsKey('horizontal_flex')) {
-      context.handle(
-          _horizontalFlexMeta,
-          horizontalFlex.isAcceptableOrUnknown(
-              data['horizontal_flex']!, _horizontalFlexMeta));
-    } else if (isInserting) {
-      context.missing(_horizontalFlexMeta);
-    }
-    if (data.containsKey('vertical_flex')) {
-      context.handle(
-          _verticalFlexMeta,
-          verticalFlex.isAcceptableOrUnknown(
-              data['vertical_flex']!, _verticalFlexMeta));
-    } else if (isInserting) {
-      context.missing(_verticalFlexMeta);
-    }
-    if (data.containsKey('width')) {
-      context.handle(
-          _widthMeta, width.isAcceptableOrUnknown(data['width']!, _widthMeta));
-    } else if (isInserting) {
-      context.missing(_widthMeta);
-    }
-    if (data.containsKey('height')) {
-      context.handle(_heightMeta,
-          height.isAcceptableOrUnknown(data['height']!, _heightMeta));
-    } else if (isInserting) {
-      context.missing(_heightMeta);
     }
     return context;
   }

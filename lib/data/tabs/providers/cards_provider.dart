@@ -59,12 +59,9 @@ class CardsProvider {
     _data?.forEach((element) => position = max(position, element.position + 1));
 
     repository.insert(
-        type: "deft",
-        position: position,
-        horizontalFlex: 1,
-        verticalFlex: 0,
-        width: 0,
-        height: 0);
+      type: "deft",
+      position: position,
+    );
   }
 
   Future<void> addChildItemAbove(FlexCard item) async {
@@ -94,10 +91,6 @@ class CardsProvider {
       tabId: item.tabId,
       type: "deft",
       position: position,
-      horizontalFlex: 1,
-      verticalFlex: 0,
-      width: 0,
-      height: 0,
     );
 
     repository.updateList(
@@ -134,10 +127,6 @@ class CardsProvider {
       tabId: item.tabId,
       type: "deft",
       position: position,
-      horizontalFlex: 1,
-      verticalFlex: 0,
-      width: 0,
-      height: 0,
     );
 
     repository.updateList(
@@ -166,10 +155,6 @@ class CardsProvider {
         tabId: item.tabId,
         type: "deft",
         position: 0,
-        horizontalFlex: 1,
-        verticalFlex: 0,
-        width: 0,
-        height: 0,
       );
 
       repository.updateList(
@@ -202,10 +187,6 @@ class CardsProvider {
         tabId: item.tabId,
         type: "deft",
         position: 1,
-        horizontalFlex: 1,
-        verticalFlex: 0,
-        width: 0,
-        height: 0,
       );
 
       repository.updateList(
@@ -235,10 +216,6 @@ class CardsProvider {
       parentId: _parentItem.id,
       type: "deft",
       position: position,
-      horizontalFlex: 1,
-      verticalFlex: 0,
-      width: 0,
-      height: 0,
     );
 
     repository.updateList(

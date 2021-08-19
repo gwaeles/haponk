@@ -36,10 +36,6 @@ class CardsRepository {
     int? stateId,
     int? parentId,
     required int position,
-    required int horizontalFlex,
-    required int verticalFlex,
-    required int width,
-    required int height,
   }) async {
     return await db.insertFlexCard(
       FlexCardsCompanion.insert(
@@ -49,10 +45,6 @@ class CardsRepository {
             : Value(parentId),
         type: type,
         position: position,
-        horizontalFlex: horizontalFlex,
-        verticalFlex: verticalFlex,
-        width: width,
-        height: height,
       ),
     );
   }
@@ -64,10 +56,6 @@ class CardsRepository {
       tabId: item.tabId,
       type: item.type,
       position: item.position,
-      horizontalFlex: item.horizontalFlex,
-      verticalFlex: item.verticalFlex,
-      width: item.width,
-      height: item.height,
     ));
   }
 
@@ -145,10 +133,6 @@ class CardsRepository {
               parentId: object.parentId,
               type: object.type,
               position: object.position,
-              horizontalFlex: object.horizontalFlex,
-              verticalFlex: object.verticalFlex,
-              width: object.width,
-              height: object.height,
             ))
         .forEach((element) {
       if (element.parentId != null && !children.containsKey(element.parentId)) {
@@ -165,10 +149,6 @@ class CardsRepository {
               tabId: object.tabId,
               type: object.type,
               position: object.position,
-              horizontalFlex: object.horizontalFlex,
-              verticalFlex: object.verticalFlex,
-              width: object.width,
-              height: object.height,
               children: children[object.id],
             ))
         .toList();
