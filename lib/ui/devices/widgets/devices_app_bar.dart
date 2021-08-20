@@ -25,18 +25,25 @@ class DevicesAppBar extends StatelessWidget {
           filled: true,
           fillColor: backgroundColor,
           border: OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(32)),
-              borderSide: BorderSide(color: borderColor)),
+            borderRadius: BorderRadius.all(Radius.circular(32)),
+            borderSide: BorderSide(color: borderColor),
+          ),
           focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(32)),
-              borderSide: BorderSide(color: borderColor)),
+            borderRadius: BorderRadius.all(Radius.circular(32)),
+            borderSide: BorderSide(color: borderColor),
+          ),
           enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(32)),
-              borderSide: BorderSide(color: borderColor)),
+            borderRadius: BorderRadius.all(Radius.circular(32)),
+            borderSide: BorderSide(color: borderColor),
+          ),
           hintStyle: TextStyle(color: hintColor),
           isDense: true,
-          contentPadding:
-              EdgeInsets.only(left: 20, top: 11, right: 8, bottom: 11),
+          contentPadding: EdgeInsets.only(
+            left: 20,
+            top: 11,
+            right: 8,
+            bottom: 11,
+          ),
           suffixIconConstraints: BoxConstraints(maxHeight: 28, maxWidth: 44),
           suffixIcon: Padding(
             padding: const EdgeInsets.only(right: 16.0),

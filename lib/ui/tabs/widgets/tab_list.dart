@@ -102,29 +102,35 @@ class TabList extends StatelessWidget {
                   left: 0,
                   right: 0,
                   child: Center(
-                    child: Container(
+                    child: SizedBox(
                       width: 48,
                       height: 48,
-                      decoration: BoxDecoration(
-                        color: Colors.black54,
-                        borderRadius: BorderRadius.circular(8),
-                        border: Border.all(
-                          color: Colors.white,
-                          width: 2,
-                        ),
-                      ),
                       child: DragTarget<PositionedFlexCard>(
                         onWillAccept: (value) => value?.card.id != null,
                         onAccept: (value) => context
                             .read<CardsProvider>()
                             .deleteItem(value.card),
                         builder: (context, candidateData, rejectedData) =>
-                            Center(
-                          child: Icon(
-                            Icons.delete,
-                            color: candidateData.length > 0
-                                ? Colors.red
-                                : Colors.white,
+                            Container(
+                          width: 48,
+                          height: 48,
+                          decoration: BoxDecoration(
+                            color: Colors.black54,
+                            borderRadius: BorderRadius.circular(24),
+                            border: Border.all(
+                              color: candidateData.length > 0
+                                  ? Colors.red
+                                  : Colors.white54,
+                              width: 1,
+                            ),
+                          ),
+                          child: Center(
+                            child: Icon(
+                              Icons.delete,
+                              color: candidateData.length > 0
+                                  ? Colors.red
+                                  : Colors.white,
+                            ),
                           ),
                         ),
                       ),
@@ -143,35 +149,8 @@ class TabList extends StatelessWidget {
               ),
               SliverPadding(
                 padding: const EdgeInsets.only(top: 8.0, bottom: 16),
-                sliver: Consumer<List<FlexCard>>(
-                  builder: (
-                    context,
-                    items,
-                    child,
-                  ) =>
-                      items.length == 0
-                          ? SliverFillRemaining(
-                              child: Center(
-                                  child: InkWell(
-                                onTap: () =>
-                                    context.read<CardsProvider>().createItem(),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Text("Tap here to add your firt card"),
-                                      SizedBox(height: 16),
-                                      Icon(Icons.add_box_outlined),
-                                    ],
-                                  ),
-                                ),
-                              )),
-                            )
-                          : child!,
-                  child: SliverToBoxAdapter(
-                    child: FlexCardGrid(),
-                  ),
+                sliver: SliverToBoxAdapter(
+                  child: FlexCardGrid(),
                 ),
               ),
             ],

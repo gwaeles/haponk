@@ -1,5 +1,8 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:haponk/core/themes/app_theme.dart';
 import 'package:haponk/data/tabs/providers/cards_provider.dart';
 import 'package:haponk/data/tabs/providers/tabs_provider.dart';
 import 'package:haponk/data/tabs/repositories/cards_repository.dart';
@@ -80,6 +83,7 @@ class TabsPageContent extends StatelessWidget {
         }
 
         return Material(
+          color: Colors.transparent,
           child: DefaultTabController(
             length: tabs.length,
             child: NestedScrollView(
@@ -96,9 +100,11 @@ class TabsPageContent extends StatelessWidget {
                     sliver: SliverAppBar(
                       title: TabsAppBarTitle(),
                       floating: true,
+                      toolbarHeight: 90,
                       // expandedHeight: 150.0,
                       forceElevated: innerBoxIsScrolled,
-                      backgroundColor: Colors.transparent,
+                      backgroundColor:
+                          AppTheme.of(context).inputBackgroungColor,
                       systemOverlayStyle: SystemUiOverlayStyle(
                         statusBarColor: Colors.transparent,
                       ),
@@ -117,10 +123,8 @@ class TabsPageContent extends StatelessWidget {
                                 indicatorColor: Colors.transparent,
                                 automaticIndicatorColorAdjustment: false,
                                 indicatorWeight: 1.0,
-                                labelPadding:
-                                    EdgeInsets.only(left: 8, right: 8),
+                                labelPadding: EdgeInsets.zero,
                                 tabs: tabs,
-                                onTap: (value) => debugPrint("GWA $value"),
                               ),
                             ),
                             IconButton(
@@ -182,17 +186,32 @@ class TabWidget extends StatelessWidget {
           final selected = index == controller.index;
           return Container(
             margin: EdgeInsets.only(left: index == 0 ? 8 : 0),
-            padding: EdgeInsets.fromLTRB(12, 3, 12, 3),
-            constraints: BoxConstraints(minWidth: 80),
-            decoration: BoxDecoration(
-              color: Colors.white12,
-              borderRadius: BorderRadius.circular(24),
-              border: Border.all(
-                color: selected ? Colors.white70 : Colors.white12,
-                width: 1,
-              ),
+            padding: EdgeInsets.fromLTRB(12, 3, 12, 1),
+            child: Stack(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 2.0),
+                  child: Text(
+                    item.label ?? '',
+                    style: TextStyle(
+                      color: selected ? Colors.white : Color(0xff979ba0),
+                      fontWeight:
+                          selected ? FontWeight.bold : FontWeight.normal,
+                    ),
+                  ),
+                ),
+                if (selected)
+                  Positioned(
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    child: Container(
+                      height: 2,
+                      color: Color(0xffdadcdf),
+                    ),
+                  ),
+              ],
             ),
-            child: Center(child: Text(item.label ?? '')),
           );
         },
       ),

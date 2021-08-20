@@ -34,6 +34,7 @@ class FlexCardGrid extends StatelessWidget {
               dragTargetsNotifier,
               editorController,
               context.read<CardsProvider>(),
+              MediaQuery.of(context).size.width,
             ),
           );
         },
@@ -45,13 +46,13 @@ class FlexCardGrid extends StatelessWidget {
     DragTargetsNotifier dragTargetsNotifier,
     EditorController editorController,
     CardsProvider cardsProvider,
+    double maxWidth,
   ) {
     debugPrint('GARY buildChildren');
     final List<Widget> children = [];
     final cards = dragTargetsNotifier.positionedFlexCards;
     final dragTargets = dragTargetsNotifier.positionedDragTargets;
     PositionedFlexCard? _selectedItem;
-    double maxWidth = 0;
     double maxHeight = 0;
 
     // Cards management
@@ -64,7 +65,6 @@ class FlexCardGrid extends StatelessWidget {
         _selectedItem = item;
       }
 
-      maxWidth = max(maxWidth, item.left + item.width);
       maxHeight = max(maxHeight, item.top + item.height);
 
       children.add(
@@ -83,6 +83,21 @@ class FlexCardGrid extends StatelessWidget {
       );
     }
 
+    if (cards.length == 0) {
+      // Permanent add button item notice
+      children.add(
+        Positioned(
+          top: 0,
+          left: 0,
+          right: 0,
+          height: 56,
+          child: Center(
+              child: Text("Tap on the button below to add your firt card")),
+        ),
+      );
+      maxHeight = maxHeight + 56;
+    }
+
     // Permanent add button item
     children.add(
       AnimatedPositioned(
@@ -96,11 +111,11 @@ class FlexCardGrid extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 4.0),
           child: Container(
             decoration: BoxDecoration(
-              color: Colors.white12,
+              color: Colors.transparent,
               borderRadius: BorderRadius.circular(24),
               border: Border.all(
                 color: Colors.white,
-                width: 2,
+                width: 1,
               ),
             ),
             child: InkWell(
@@ -135,6 +150,8 @@ class FlexCardGrid extends StatelessWidget {
                       (!value!.isSameRowPosition(
                             rowIndex: dragTarget.rowIndex,
                           ) ||
+                          (value.rowIndex != dragTarget.rowIndex &&
+                              dragTarget.itemIndex != -1) ||
                           (value.isChild &&
                               !value.isSameChildPosition(
                                 rowIndex: dragTarget.rowIndex,
