@@ -23,10 +23,6 @@ class _$FlexCardTearOff {
       int? stateId,
       int? parentId,
       required int position,
-      int horizontalFlex = 1,
-      int verticalFlex = 0,
-      int width = 0,
-      int height = 0,
       List<FlexCard>? children}) {
     return _FlexCard(
       id: id,
@@ -35,10 +31,6 @@ class _$FlexCardTearOff {
       stateId: stateId,
       parentId: parentId,
       position: position,
-      horizontalFlex: horizontalFlex,
-      verticalFlex: verticalFlex,
-      width: width,
-      height: height,
       children: children,
     );
   }
@@ -54,11 +46,11 @@ mixin _$FlexCard {
   String get type => throw _privateConstructorUsedError;
   int? get stateId => throw _privateConstructorUsedError;
   int? get parentId => throw _privateConstructorUsedError;
-  int get position => throw _privateConstructorUsedError;
-  int get horizontalFlex => throw _privateConstructorUsedError;
-  int get verticalFlex => throw _privateConstructorUsedError;
-  int get width => throw _privateConstructorUsedError;
-  int get height => throw _privateConstructorUsedError;
+  int get position =>
+      throw _privateConstructorUsedError; // @Default(1) int horizontalFlex,
+// @Default(0) int verticalFlex,
+// @Default(0) int width,
+// @Default(0) int height,
   List<FlexCard>? get children => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -77,10 +69,6 @@ abstract class $FlexCardCopyWith<$Res> {
       int? stateId,
       int? parentId,
       int position,
-      int horizontalFlex,
-      int verticalFlex,
-      int width,
-      int height,
       List<FlexCard>? children});
 }
 
@@ -100,10 +88,6 @@ class _$FlexCardCopyWithImpl<$Res> implements $FlexCardCopyWith<$Res> {
     Object? stateId = freezed,
     Object? parentId = freezed,
     Object? position = freezed,
-    Object? horizontalFlex = freezed,
-    Object? verticalFlex = freezed,
-    Object? width = freezed,
-    Object? height = freezed,
     Object? children = freezed,
   }) {
     return _then(_value.copyWith(
@@ -131,22 +115,6 @@ class _$FlexCardCopyWithImpl<$Res> implements $FlexCardCopyWith<$Res> {
           ? _value.position
           : position // ignore: cast_nullable_to_non_nullable
               as int,
-      horizontalFlex: horizontalFlex == freezed
-          ? _value.horizontalFlex
-          : horizontalFlex // ignore: cast_nullable_to_non_nullable
-              as int,
-      verticalFlex: verticalFlex == freezed
-          ? _value.verticalFlex
-          : verticalFlex // ignore: cast_nullable_to_non_nullable
-              as int,
-      width: width == freezed
-          ? _value.width
-          : width // ignore: cast_nullable_to_non_nullable
-              as int,
-      height: height == freezed
-          ? _value.height
-          : height // ignore: cast_nullable_to_non_nullable
-              as int,
       children: children == freezed
           ? _value.children
           : children // ignore: cast_nullable_to_non_nullable
@@ -167,10 +135,6 @@ abstract class _$FlexCardCopyWith<$Res> implements $FlexCardCopyWith<$Res> {
       int? stateId,
       int? parentId,
       int position,
-      int horizontalFlex,
-      int verticalFlex,
-      int width,
-      int height,
       List<FlexCard>? children});
 }
 
@@ -191,10 +155,6 @@ class __$FlexCardCopyWithImpl<$Res> extends _$FlexCardCopyWithImpl<$Res>
     Object? stateId = freezed,
     Object? parentId = freezed,
     Object? position = freezed,
-    Object? horizontalFlex = freezed,
-    Object? verticalFlex = freezed,
-    Object? width = freezed,
-    Object? height = freezed,
     Object? children = freezed,
   }) {
     return _then(_FlexCard(
@@ -222,22 +182,6 @@ class __$FlexCardCopyWithImpl<$Res> extends _$FlexCardCopyWithImpl<$Res>
           ? _value.position
           : position // ignore: cast_nullable_to_non_nullable
               as int,
-      horizontalFlex: horizontalFlex == freezed
-          ? _value.horizontalFlex
-          : horizontalFlex // ignore: cast_nullable_to_non_nullable
-              as int,
-      verticalFlex: verticalFlex == freezed
-          ? _value.verticalFlex
-          : verticalFlex // ignore: cast_nullable_to_non_nullable
-              as int,
-      width: width == freezed
-          ? _value.width
-          : width // ignore: cast_nullable_to_non_nullable
-              as int,
-      height: height == freezed
-          ? _value.height
-          : height // ignore: cast_nullable_to_non_nullable
-              as int,
       children: children == freezed
           ? _value.children
           : children // ignore: cast_nullable_to_non_nullable
@@ -256,10 +200,6 @@ class _$_FlexCard extends _FlexCard {
       this.stateId,
       this.parentId,
       required this.position,
-      this.horizontalFlex = 1,
-      this.verticalFlex = 0,
-      this.width = 0,
-      this.height = 0,
       this.children})
       : super._();
 
@@ -276,19 +216,10 @@ class _$_FlexCard extends _FlexCard {
   final int? parentId;
   @override
   final int position;
-  @JsonKey(defaultValue: 1)
-  @override
-  final int horizontalFlex;
-  @JsonKey(defaultValue: 0)
-  @override
-  final int verticalFlex;
-  @JsonKey(defaultValue: 0)
-  @override
-  final int width;
-  @JsonKey(defaultValue: 0)
-  @override
-  final int height;
-  @override
+  @override // @Default(1) int horizontalFlex,
+// @Default(0) int verticalFlex,
+// @Default(0) int width,
+// @Default(0) int height,
   final List<FlexCard>? children;
 
   @override
@@ -310,16 +241,6 @@ class _$_FlexCard extends _FlexCard {
             (identical(other.position, position) ||
                 const DeepCollectionEquality()
                     .equals(other.position, position)) &&
-            (identical(other.horizontalFlex, horizontalFlex) ||
-                const DeepCollectionEquality()
-                    .equals(other.horizontalFlex, horizontalFlex)) &&
-            (identical(other.verticalFlex, verticalFlex) ||
-                const DeepCollectionEquality()
-                    .equals(other.verticalFlex, verticalFlex)) &&
-            (identical(other.width, width) ||
-                const DeepCollectionEquality().equals(other.width, width)) &&
-            (identical(other.height, height) ||
-                const DeepCollectionEquality().equals(other.height, height)) &&
             (identical(other.children, children) ||
                 const DeepCollectionEquality()
                     .equals(other.children, children)));
@@ -334,10 +255,6 @@ class _$_FlexCard extends _FlexCard {
       const DeepCollectionEquality().hash(stateId) ^
       const DeepCollectionEquality().hash(parentId) ^
       const DeepCollectionEquality().hash(position) ^
-      const DeepCollectionEquality().hash(horizontalFlex) ^
-      const DeepCollectionEquality().hash(verticalFlex) ^
-      const DeepCollectionEquality().hash(width) ^
-      const DeepCollectionEquality().hash(height) ^
       const DeepCollectionEquality().hash(children);
 
   @JsonKey(ignore: true)
@@ -354,10 +271,6 @@ abstract class _FlexCard extends FlexCard {
       int? stateId,
       int? parentId,
       required int position,
-      int horizontalFlex,
-      int verticalFlex,
-      int width,
-      int height,
       List<FlexCard>? children}) = _$_FlexCard;
   const _FlexCard._() : super._();
 
@@ -373,15 +286,10 @@ abstract class _FlexCard extends FlexCard {
   int? get parentId => throw _privateConstructorUsedError;
   @override
   int get position => throw _privateConstructorUsedError;
-  @override
-  int get horizontalFlex => throw _privateConstructorUsedError;
-  @override
-  int get verticalFlex => throw _privateConstructorUsedError;
-  @override
-  int get width => throw _privateConstructorUsedError;
-  @override
-  int get height => throw _privateConstructorUsedError;
-  @override
+  @override // @Default(1) int horizontalFlex,
+// @Default(0) int verticalFlex,
+// @Default(0) int width,
+// @Default(0) int height,
   List<FlexCard>? get children => throw _privateConstructorUsedError;
   @override
   @JsonKey(ignore: true)

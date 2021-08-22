@@ -48,6 +48,7 @@ class SupervisorScreen extends StatelessWidget {
                 ),
               ),
               BottomNavigationBar(
+                backgroundColor: Colors.red,
                 unselectedItemColor: Colors.grey,
                 showUnselectedLabels: true,
                 items: const <BottomNavigationBarItem>[
@@ -71,7 +72,7 @@ class SupervisorScreen extends StatelessWidget {
                 selectedItemColor: Colors.amber[800],
                 currentIndex: navController.value,
                 onTap: (value) => navController.value = value,
-              )
+              ),
             ],
           );
         }),

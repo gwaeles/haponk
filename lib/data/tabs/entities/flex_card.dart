@@ -12,20 +12,21 @@ class FlexCard with _$FlexCard {
     int? stateId,
     int? parentId,
     required int position,
-    @Default(1) int horizontalFlex,
-    @Default(0) int verticalFlex,
-    @Default(0) int width,
-    @Default(0) int height,
+    // @Default(1) int horizontalFlex,
+    // @Default(0) int verticalFlex,
+    // @Default(0) int width,
+    // @Default(0) int height,
     List<FlexCard>? children,
   }) = _FlexCard;
   const FlexCard._();
 
   String toString() {
+    final prefix = type == 'row' ? 'R' : '';
     if (parentId != null && parentId! > 0) {
       return "$position ($parentId-$id)";
     }
 
-    return "$position ($id)";
+    return "$prefix$position ($id)";
   }
 
   bool get isChild => parentId != null && parentId! > 0;
@@ -38,10 +39,6 @@ class FlexCard with _$FlexCard {
       tabId: tabId,
       type: type,
       position: position,
-      horizontalFlex: horizontalFlex,
-      verticalFlex: verticalFlex,
-      width: width,
-      height: height,
     );
   }
 }

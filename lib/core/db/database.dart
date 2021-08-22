@@ -91,14 +91,12 @@ class Database extends _$Database {
           } catch (e) {
             debugPrint("[MOOR] No config file");
           }
-          if (internalUrl != null) {
-            final ConfigDBO newConfig = ConfigDBO(
-              id: 1,
-              internalUrl: internalUrl,
-              requiresApiPassword: false,
-            );
-            await insertConfig(newConfig);
-          }
+          final ConfigDBO newConfig = ConfigDBO(
+            id: 1,
+            internalUrl: internalUrl,
+            requiresApiPassword: false,
+          );
+          await insertConfig(newConfig);
         }
       },
     );
@@ -172,6 +170,7 @@ class Database extends _$Database {
   Future updateFlexCardList(
     List<FlexCard> cards,
     List<int> cardIdsToDelete,
+    FlexCard? itemToCreate,
     FlexCard? newRowSourceChild,
     FlexCard? newRowAddedChild,
     int newRowAddedChildIndex,
@@ -183,6 +182,18 @@ class Database extends _$Database {
       for (int cardId in cardIdsToDelete) {
         await deleteFlexCard(cardId);
       }
+      if (itemToCreate != null) {
+        await insertFlexCard(
+          FlexCardsCompanion.insert(
+            tabId: itemToCreate.tabId,
+            parentId: itemToCreate.parentId == null
+                ? Value.absent()
+                : Value(itemToCreate.parentId),
+            type: itemToCreate.type,
+            position: itemToCreate.position,
+          ),
+        );
+      }
       if (newRowSourceChild != null && newRowAddedChild != null) {
         final parentId = await insertFlexCard(
           FlexCardsCompanion.insert(
@@ -190,10 +201,6 @@ class Database extends _$Database {
             parentId: Value.absent(),
             type: 'row',
             position: newRowSourceChild.position,
-            horizontalFlex: 1,
-            verticalFlex: 0,
-            width: 0,
-            height: 0,
           ),
         );
         await updateFlexCard(
@@ -204,14 +211,25 @@ class Database extends _$Database {
               )
               .toDBO(),
         );
-        await updateFlexCard(
-          newRowAddedChild
-              .copyWith(
-                parentId: parentId,
-                position: newRowAddedChildIndex == 0 ? 0 : 1,
-              )
-              .toDBO(),
-        );
+        if (newRowAddedChild.id > 0) {
+          await updateFlexCard(
+            newRowAddedChild
+                .copyWith(
+                  parentId: parentId,
+                  position: newRowAddedChildIndex == 0 ? 0 : 1,
+                )
+                .toDBO(),
+          );
+        } else {
+          await insertFlexCard(
+            FlexCardsCompanion.insert(
+              tabId: newRowAddedChild.tabId,
+              parentId: Value(parentId),
+              type: newRowAddedChild.type,
+              position: newRowAddedChildIndex == 0 ? 0 : 1,
+            ),
+          );
+        }
       }
     });
   }

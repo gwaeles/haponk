@@ -1,5 +1,8 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:haponk/core/themes/app_theme.dart';
 import 'package:haponk/data/tabs/providers/cards_provider.dart';
 import 'package:haponk/data/tabs/providers/tabs_provider.dart';
 import 'package:haponk/data/tabs/repositories/cards_repository.dart';
@@ -8,7 +11,7 @@ import 'package:haponk/dependency_injection.dart';
 import 'package:haponk/data/tabs/entities/flex_tab.dart';
 import 'package:provider/provider.dart';
 
-import 'widgets/editor_controller.dart';
+import 'providers/editor_controller.dart';
 import 'widgets/tab_list.dart';
 import 'widgets/tabs_app_bar_title.dart';
 
@@ -44,7 +47,7 @@ class TabsPage extends StatelessWidget {
 
 class TabsPageContent extends StatelessWidget {
   // https://github.com/flutter/flutter/issues/62363
-  final GlobalKey<NestedScrollViewState> globalKey = GlobalKey();
+  //final GlobalKey<NestedScrollViewState> globalKey = GlobalKey();
 
   @override
   Widget build(BuildContext context) {
@@ -67,11 +70,12 @@ class TabsPageContent extends StatelessWidget {
             ),
           );
           cardsNotifiers.add(cardsNotifier);
-          children.add(TabList(
-            flexTabItem: item,
-            cardsNotifier: cardsNotifier,
-            nestedScrollViewGlobalKey: globalKey,
-          ));
+          children.add(
+            TabList(
+              flexTabItem: item,
+              cardsNotifier: cardsNotifier,
+            ),
+          );
           tabs.add(TabWidget(
             index: i,
             item: item,
@@ -79,10 +83,10 @@ class TabsPageContent extends StatelessWidget {
         }
 
         return Material(
+          color: Colors.transparent,
           child: DefaultTabController(
             length: tabs.length,
             child: NestedScrollView(
-              key: globalKey,
               headerSliverBuilder: (
                 BuildContext context,
                 bool innerBoxIsScrolled,
@@ -96,9 +100,11 @@ class TabsPageContent extends StatelessWidget {
                     sliver: SliverAppBar(
                       title: TabsAppBarTitle(),
                       floating: true,
+                      toolbarHeight: 90,
                       // expandedHeight: 150.0,
                       forceElevated: innerBoxIsScrolled,
-                      backgroundColor: Colors.transparent,
+                      backgroundColor:
+                          AppTheme.of(context).inputBackgroungColor,
                       systemOverlayStyle: SystemUiOverlayStyle(
                         statusBarColor: Colors.transparent,
                       ),
@@ -112,13 +118,13 @@ class TabsPageContent extends StatelessWidget {
                             Expanded(
                               child: TabBar(
                                 isScrollable: true,
+                                controller: DefaultTabController.of(context)
+                                    as TabController,
                                 indicatorColor: Colors.transparent,
                                 automaticIndicatorColorAdjustment: false,
                                 indicatorWeight: 1.0,
-                                labelPadding:
-                                    EdgeInsets.only(left: 8, right: 8),
+                                labelPadding: EdgeInsets.zero,
                                 tabs: tabs,
-                                onTap: (value) => debugPrint("GWA $value"),
                               ),
                             ),
                             IconButton(
@@ -180,13 +186,32 @@ class TabWidget extends StatelessWidget {
           final selected = index == controller.index;
           return Container(
             margin: EdgeInsets.only(left: index == 0 ? 8 : 0),
-            padding: EdgeInsets.fromLTRB(12, 3, 12, 3),
-            constraints: BoxConstraints(minWidth: 80),
-            decoration: BoxDecoration(
-              color: selected ? Colors.purple : Colors.purple.shade300,
-              borderRadius: BorderRadius.circular(24),
+            padding: EdgeInsets.fromLTRB(12, 3, 12, 1),
+            child: Stack(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 2.0),
+                  child: Text(
+                    item.label ?? '',
+                    style: TextStyle(
+                      color: selected ? Colors.white : Color(0xff979ba0),
+                      fontWeight:
+                          selected ? FontWeight.bold : FontWeight.normal,
+                    ),
+                  ),
+                ),
+                if (selected)
+                  Positioned(
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    child: Container(
+                      height: 2,
+                      color: Color(0xffdadcdf),
+                    ),
+                  ),
+              ],
             ),
-            child: Center(child: Text(item.label ?? '')),
           );
         },
       ),
