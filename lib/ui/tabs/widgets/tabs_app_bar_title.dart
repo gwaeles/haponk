@@ -17,8 +17,8 @@ class TabsAppBarTitle extends StatelessWidget {
         boxShadow: [
           BoxShadow(
             color: Colors.black87,
-            blurRadius: 12,
-            offset: const Offset(3, 5),
+            blurRadius: 6,
+            offset: const Offset(2, 3),
           ),
         ],
       ),

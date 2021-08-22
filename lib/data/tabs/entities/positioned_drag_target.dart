@@ -1,4 +1,3 @@
-
 class PositionedDragTarget {
   final double top;
   final double left;
