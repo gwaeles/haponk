@@ -316,7 +316,8 @@ class CardsProvider {
           )
         : null;
     final sourceChildren = _parentItem?.children ?? [];
-    final _targetItem = rowIndex < _mainRows.length ? _mainRows[rowIndex] : null;
+    final _targetItem =
+        rowIndex < _mainRows.length ? _mainRows[rowIndex] : null;
 
     // Target is a full row
     if (itemIndex == -1) {

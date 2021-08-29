@@ -77,8 +77,7 @@ class TabsRepository {
         label: "Tab 1",
         order: 1,
       );
-    }
-    else {
+    } else {
       for (var _controller in _controllers) {
         _controller.sink.add(result);
       }

@@ -41,9 +41,8 @@ class CardsRepository {
         parentId: parentId == null || parentId <= 0
             ? Value.absent()
             : Value(parentId),
-        stateId: stateId == null || stateId <= 0
-            ? Value.absent()
-            : Value(stateId),
+        stateId:
+            stateId == null || stateId <= 0 ? Value.absent() : Value(stateId),
         type: type,
         position: position,
       ),

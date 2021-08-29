@@ -6,7 +6,6 @@ import 'package:haponk/data/devices/entities/device.dart';
 
 import 'device_card_item.dart';
 
-
 class DeviceCardItemSensor extends DeviceCardItem {
   const DeviceCardItemSensor({
     Key? key,
