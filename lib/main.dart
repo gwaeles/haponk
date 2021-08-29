@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:haponk/core/themes/app_theme.dart';
 import 'package:haponk/data/connection/providers/connection_notifier.dart';
 import 'package:haponk/ui/config/config_screen.dart';
@@ -22,6 +23,8 @@ void main() async {
   await EasyLocalization.ensureInitialized();
   declareServices();
 
+  // debugPaintSizeEnabled = true;
+  // debugPaintLayerBordersEnabled = true;
   runApp(
     EasyLocalization(
         supportedLocales: appLocales,

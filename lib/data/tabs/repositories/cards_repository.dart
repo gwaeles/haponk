@@ -18,8 +18,6 @@ class CardsRepository {
   StreamSubscription? _dbSubscription;
 
   Stream<List<FlexCard>> watch() {
-    debugPrint("[CARDS] watch");
-
     final _controller = StreamController<List<FlexCard>>();
     _controller.onCancel = () => _onControllerCancelled(_controller);
     _controllers.add(_controller);
@@ -43,6 +41,9 @@ class CardsRepository {
         parentId: parentId == null || parentId <= 0
             ? Value.absent()
             : Value(parentId),
+        stateId: stateId == null || stateId <= 0
+            ? Value.absent()
+            : Value(stateId),
         type: type,
         position: position,
       ),
@@ -131,6 +132,7 @@ class CardsRepository {
               id: object.id,
               tabId: object.tabId,
               parentId: object.parentId,
+              stateId: object.stateId,
               type: object.type,
               position: object.position,
             ))
@@ -149,6 +151,7 @@ class CardsRepository {
               tabId: object.tabId,
               type: object.type,
               position: object.position,
+              stateId: object.stateId,
               children: children[object.id],
             ))
         .toList();

@@ -13,8 +13,6 @@ class TabsRepository {
   StreamSubscription? _dbSubscription;
 
   Stream<List<FlexTab>> watch() {
-    debugPrint("[TABS] watch");
-
     final _controller = StreamController<List<FlexTab>>();
     _controller.onCancel = () => _onControllerCancelled(_controller);
     _controllers.add(_controller);
@@ -74,8 +72,16 @@ class TabsRepository {
             ))
         .toList();
 
-    for (var _controller in _controllers) {
-      _controller.sink.add(result);
+    if (data.length == 0) {
+      insert(
+        label: "Tab 1",
+        order: 1,
+      );
+    }
+    else {
+      for (var _controller in _controllers) {
+        _controller.sink.add(result);
+      }
     }
   }
 }

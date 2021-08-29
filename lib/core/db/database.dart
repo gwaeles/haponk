@@ -189,6 +189,9 @@ class Database extends _$Database {
             parentId: itemToCreate.parentId == null
                 ? Value.absent()
                 : Value(itemToCreate.parentId),
+            stateId: itemToCreate.stateId == null || itemToCreate.stateId! <= 0
+                ? Value.absent()
+                : Value(itemToCreate.stateId),
             type: itemToCreate.type,
             position: itemToCreate.position,
           ),
@@ -225,6 +228,10 @@ class Database extends _$Database {
             FlexCardsCompanion.insert(
               tabId: newRowAddedChild.tabId,
               parentId: Value(parentId),
+              stateId: newRowAddedChild.stateId == null ||
+                      newRowAddedChild.stateId! <= 0
+                  ? Value.absent()
+                  : Value(newRowAddedChild.stateId),
               type: newRowAddedChild.type,
               position: newRowAddedChildIndex == 0 ? 0 : 1,
             ),

@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:haponk/data/tabs/entities/fake_flex_card.dart';
+import 'package:haponk/data/tabs/entities/flex_card.dart';
 import 'package:haponk/data/tabs/entities/positioned_flex_card.dart';
 import 'package:haponk/data/tabs/providers/cards_provider.dart';
 import 'package:haponk/ui/tabs/providers/drag_targets_notifier.dart';
@@ -10,14 +11,12 @@ import 'package:provider/provider.dart';
 
 import 'action_button.dart';
 import 'flex_card_widget.dart';
+import 'select_device_alert_dialog.dart';
 
 class FlexCardGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final dragTargetsNotifier = context.watch<DragTargetsNotifier>();
-
-    debugPrint(
-        'GARY buildGrid, maxGridHeight: ${dragTargetsNotifier.maxGridHeight}');
 
     return Container(
       color: Colors.transparent,
@@ -31,10 +30,10 @@ class FlexCardGrid extends StatelessWidget {
           return Stack(
             fit: StackFit.loose,
             children: buildChildren(
+              context,
               dragTargetsNotifier,
               editorController,
               context.read<CardsProvider>(),
-              MediaQuery.of(context).size.width,
             ),
           );
         },
@@ -43,21 +42,21 @@ class FlexCardGrid extends StatelessWidget {
   }
 
   List<Widget> buildChildren(
+    BuildContext context,
     DragTargetsNotifier dragTargetsNotifier,
     EditorController editorController,
     CardsProvider cardsProvider,
-    double maxWidth,
   ) {
-    debugPrint('GARY buildChildren');
     final List<Widget> children = [];
     final cards = dragTargetsNotifier.positionedFlexCards;
     final dragTargets = dragTargetsNotifier.positionedDragTargets;
     PositionedFlexCard? _selectedItem;
     double maxHeight = 0;
+    double maxWidth = MediaQuery.of(context).size.width;
 
     // Cards management
-    for (int i = 0; i < cards.length; i++) {
-      final item = cards[i];
+    for (int i = 0; i < (cards?.length ?? 0); i++) {
+      final item = cards![i];
 
       if (!dragTargetsNotifier.dragging &&
           editorController.selectedItemId > 0 &&
@@ -83,7 +82,7 @@ class FlexCardGrid extends StatelessWidget {
       );
     }
 
-    if (cards.length == 0) {
+    if (cards?.length == 0) {
       // Permanent add button item notice
       children.add(
         Positioned(
@@ -98,37 +97,40 @@ class FlexCardGrid extends StatelessWidget {
       maxHeight = maxHeight + 56;
     }
 
-    // Permanent add button item
-    children.add(
-      AnimatedPositioned(
-        duration: const Duration(milliseconds: 250),
-        key: ValueKey("ADD_BUTTON_ITEM"),
-        top: maxHeight + 1,
-        left: 0,
-        width: maxWidth,
-        height: 48,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 4.0),
-          child: Container(
-            decoration: BoxDecoration(
-              color: Colors.transparent,
-              borderRadius: BorderRadius.circular(24),
-              border: Border.all(
-                color: Colors.white,
-                width: 1,
+    if (cards != null) {
+      // Permanent add button item
+      children.add(
+        AnimatedPositioned(
+          duration: const Duration(milliseconds: 250),
+          key: ValueKey("ADD_BUTTON_ITEM_${cardsProvider.tabId}"),
+          top: maxHeight + 1,
+          left: 0,
+          width: maxWidth,
+          height: 48,
+          child: Padding(
+            padding:
+                const EdgeInsets.symmetric(horizontal: 12.0, vertical: 4.0),
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.transparent,
+                borderRadius: BorderRadius.circular(24),
+                border: Border.all(
+                  color: Colors.white,
+                  width: 1,
+                ),
               ),
-            ),
-            child: InkWell(
-              onTap: () => cardsProvider.createItem(),
-              child: Center(
-                child: Icon(Icons.add),
+              child: InkWell(
+                onTap: () => addItem(context),
+                child: Center(
+                  child: Icon(Icons.add),
+                ),
               ),
             ),
           ),
         ),
-      ),
-    );
-    maxHeight = maxHeight + 49;
+      );
+      maxHeight = maxHeight + 49;
+    }
 
     // Drag targets management
     for (int i = 0; i < dragTargets.length; i++) {
@@ -189,13 +191,13 @@ class FlexCardGrid extends StatelessWidget {
     if (_selectedItem != null) {
       children.add(
         ActionButton(
-          key: ValueKey('ADD_TO_LEFT_BUTTON'),
           displayButton: true,
           top: _selectedItem.top + (_selectedItem.height - 48) / 2,
           left: max(-8, _selectedItem.left - 23),
           icon: Icons.add,
-          onPressed: () => cardsProvider.addChildItemToTheLeft(
-            _selectedItem!.card,
+          onPressed: () => addChildItemToTheLeft(
+            context: context,
+            item: _selectedItem!.card,
           ),
         ),
       );
@@ -206,8 +208,9 @@ class FlexCardGrid extends StatelessWidget {
           left:
               min(maxWidth - 40, _selectedItem.left + _selectedItem.width - 25),
           icon: Icons.add,
-          onPressed: () => cardsProvider.addChildItemToTheRight(
-            _selectedItem!.card,
+          onPressed: () => addChildItemToTheRight(
+            context: context,
+            item: _selectedItem!.card,
           ),
         ),
       );
@@ -217,8 +220,9 @@ class FlexCardGrid extends StatelessWidget {
           top: max(-8, _selectedItem.top - 23),
           left: _selectedItem.left - 24 + _selectedItem.width / 2,
           icon: Icons.add,
-          onPressed: () => cardsProvider.addChildItemAbove(
-            _selectedItem!.card,
+          onPressed: () => addChildItemAbove(
+            context: context,
+            item: _selectedItem!.card,
           ),
         ),
       );
@@ -229,13 +233,95 @@ class FlexCardGrid extends StatelessWidget {
               maxHeight - 40, _selectedItem.top + _selectedItem.height - 25),
           left: _selectedItem.left - 24 + _selectedItem.width / 2,
           icon: Icons.add,
-          onPressed: () => cardsProvider.addChildItemBelow(
-            _selectedItem!.card,
+          onPressed: () => addChildItemBelow(
+            context: context,
+            item: _selectedItem!.card,
           ),
         ),
       );
     }
 
     return children;
+  }
+
+  Future<void> addItem(BuildContext context) async {
+    final int? deviceId = await showDialog(
+      context: context,
+      builder: (context) => SelectDeviceAlertDialog(),
+    );
+
+    if (deviceId != null && deviceId > 0) {
+      context.read<CardsProvider>().createItem(
+            deviceId: deviceId,
+          );
+    }
+  }
+
+  Future<void> addChildItemToTheLeft({
+    required BuildContext context,
+    required FlexCard item,
+  }) async {
+    final int? deviceId = await showDialog(
+      context: context,
+      builder: (context) => SelectDeviceAlertDialog(),
+    );
+
+    if (deviceId != null && deviceId > 0) {
+      context.read<CardsProvider>().addChildItemToTheLeft(
+            deviceId: deviceId,
+            item: item,
+          );
+    }
+  }
+
+  Future<void> addChildItemToTheRight({
+    required BuildContext context,
+    required FlexCard item,
+  }) async {
+    final int? deviceId = await showDialog(
+      context: context,
+      builder: (context) => SelectDeviceAlertDialog(),
+    );
+
+    if (deviceId != null && deviceId > 0) {
+      context.read<CardsProvider>().addChildItemToTheRight(
+            deviceId: deviceId,
+            item: item,
+          );
+    }
+  }
+
+  Future<void> addChildItemAbove({
+    required BuildContext context,
+    required FlexCard item,
+  }) async {
+    final int? deviceId = await showDialog(
+      context: context,
+      builder: (context) => SelectDeviceAlertDialog(),
+    );
+
+    if (deviceId != null && deviceId > 0) {
+      context.read<CardsProvider>().addChildItemAbove(
+            deviceId: deviceId,
+            item: item,
+          );
+    }
+  }
+
+  Future<void> addChildItemBelow({
+    required BuildContext context,
+    required FlexCard item,
+  }) async {
+    final int? deviceId = await showDialog(
+      context: context,
+      builder: (context) => SelectDeviceAlertDialog(),
+    );
+
+    if (deviceId != null && deviceId > 0) {
+      context.read<CardsProvider>().addChildItemBelow(
+            deviceId: deviceId,
+            item: item,
+          );
+    }
   }
 }

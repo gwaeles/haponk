@@ -46,9 +46,6 @@ class TabsPage extends StatelessWidget {
 }
 
 class TabsPageContent extends StatelessWidget {
-  // https://github.com/flutter/flutter/issues/62363
-  //final GlobalKey<NestedScrollViewState> globalKey = GlobalKey();
-
   @override
   Widget build(BuildContext context) {
     return Consumer(
@@ -57,23 +54,14 @@ class TabsPageContent extends StatelessWidget {
         List<FlexTab> value,
         child,
       ) {
-        final List<CardsProvider> cardsNotifiers = [];
         final List<Widget> children = [];
         final List<Widget> tabs = [];
 
         for (var i = 0; i < value.length; i++) {
           final item = value[i];
-          final cardsNotifier = CardsProvider(
-            CardsRepository(
-              db: getIt(),
-              tabId: item.id ?? 0,
-            ),
-          );
-          cardsNotifiers.add(cardsNotifier);
           children.add(
             TabList(
               flexTabItem: item,
-              cardsNotifier: cardsNotifier,
             ),
           );
           tabs.add(TabWidget(

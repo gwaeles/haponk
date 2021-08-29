@@ -38,9 +38,10 @@ class AppTheme {
 
   TextStyle get listItemTitleTextStyle {
     return TextStyle(
-        fontSize: 16,
-        color: isLight ? AppColors.blue : Colors.white,
-        fontWeight: FontWeight.bold);
+      fontSize: 16,
+      color: isLight ? AppColors.blue : Colors.white,
+      fontWeight: FontWeight.bold,
+    );
   }
 
   TextStyle get listItemSubtitleTextStyle {

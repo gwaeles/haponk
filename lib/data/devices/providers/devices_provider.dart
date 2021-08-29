@@ -1,36 +1,66 @@
 import 'dart:async';
 
+import 'package:haponk/core/hass/models/constants.dart';
 import 'package:haponk/data/devices/entities/device.dart';
 import 'package:haponk/data/devices/repositories/devices_repository.dart';
+import 'package:rxdart/rxdart.dart';
 
 class DevicesProvider {
   final DevicesRepository repository;
+  // If fetchAllDevicesAllowed is false you have to set a _selectedType or a
+  // _searchText to fetch devices
+  final bool fetchAllDevicesAllowed;
 
-  DevicesProvider(this.repository);
+  DevicesProvider({
+    required this.repository,
+    this.fetchAllDevicesAllowed = true,
+  });
 
-  StreamController<List<Device>?>? _controller;
+  BehaviorSubject<List<Device>?>? _controller;
   StreamSubscription? _repoSubscription;
   List<Device>? _data;
   String? _searchText;
+  DeviceType? _selectedType;
+
+  DeviceType? get selectedType => _selectedType;
+  set selectedType(DeviceType? value) {
+    _selectedType = value;
+    _onFilterData();
+  }
+
+  ///
+  /// --- SUBSCRIBTION --- ///
+  ///
 
   Stream<List<Device>?> get deviceStream {
-    _controller = StreamController<List<Device>?>();
-    _controller!.onCancel = () => _onControllerCancelled(_controller!);
+    if (_controller == null) {
+      print("[GWA] DevicesProvider new _controller");
+      _controller = BehaviorSubject<List<Device>?>();
+      _controller!.onListen = () => _onControllerListened();
+      _controller!.onCancel = () => _onControllerCancelled();
+    }
 
     // Repo stream subscription
     _repoSubscription?.cancel();
-    _repoSubscription = repository.addListener().listen(_onData);
+    _repoSubscription = repository.watchDevices().listen(_onData);
 
     return _controller!.stream;
   }
 
-  void _onControllerCancelled(StreamController<List<Device>?> controller) {
-    print("[GWA] Provider _controller.onCancel");
-    dispose();
+  void _onControllerListened() {
+    print("[GWA] DevicesProvider _controller.onListen");
+  }
+
+  void _onControllerCancelled() {
+    print(
+        "[GWA] DevicesProvider _controller.onCancel hasListener: ${_controller?.hasListener}");
+    if (_controller?.hasListener != true) {
+      dispose();
+    }
   }
 
   void dispose() {
-    print("[GWA] Provider dispose");
+    print("[GWA] DevicesProvider dispose");
     _controller?.close();
     _controller = null;
 
@@ -42,6 +72,10 @@ class DevicesProvider {
     _data = data;
     _onFilterData();
   }
+
+  ///
+  /// --- FILTERING --- ///
+  ///
 
   void search(String value) {
     _searchText = value;
@@ -59,9 +93,13 @@ class DevicesProvider {
     if (_data != null) {
       result = _data!
           .where((element) =>
-              _searchText == null ||
-              _searchText!.isEmpty ||
-              element.friendlyName?.contains(_searchText!) == true)
+              (_selectedType == null && fetchAllDevicesAllowed) ||
+              (_selectedType != null && element.deviceType == _selectedType))
+          .where((element) =>
+              (_searchText == null && fetchAllDevicesAllowed) ||
+              (_searchText == null && _selectedType != null) ||
+              (_searchText?.isNotEmpty == true &&
+                  element.friendlyName?.contains(_searchText!) == true))
           .toList();
     }
 

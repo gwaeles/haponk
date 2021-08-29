@@ -37,6 +37,7 @@ class FlexCard with _$FlexCard {
       id: id,
       parentId: parentId,
       tabId: tabId,
+      stateId: stateId,
       type: type,
       position: position,
     );

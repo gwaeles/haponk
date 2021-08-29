@@ -15,6 +15,8 @@ class CardsProvider {
   StreamSubscription? _repoSubscription;
   List<FlexCard>? _data;
 
+  int get tabId => repository.tabId;
+
   ///
   /// --- DATA STREAM --- ///
   ///
@@ -53,7 +55,9 @@ class CardsProvider {
   /// --- ACTIONS --- ///
   ///
 
-  void createItem() {
+  void createItem({
+    required int deviceId,
+  }) {
     int position = 1;
 
     _data?.forEach((element) => position = max(position, element.position + 1));
@@ -61,10 +65,14 @@ class CardsProvider {
     repository.insert(
       type: "deft",
       position: position,
+      stateId: deviceId,
     );
   }
 
-  Future<void> addChildItemAbove(FlexCard item) async {
+  Future<void> addChildItemAbove({
+    required int deviceId,
+    required FlexCard item,
+  }) async {
     final dady = _data?.firstWhere(
       (element) => element.id == item.parentId,
       orElse: () => FlexCard(
@@ -91,6 +99,7 @@ class CardsProvider {
       tabId: item.tabId,
       type: "deft",
       position: position,
+      stateId: deviceId,
     );
 
     repository.updateList(
@@ -99,7 +108,10 @@ class CardsProvider {
     );
   }
 
-  Future<void> addChildItemBelow(FlexCard item) async {
+  Future<void> addChildItemBelow({
+    required int deviceId,
+    required FlexCard item,
+  }) async {
     final dady = _data?.firstWhere(
       (element) => element.id == item.parentId,
       orElse: () => FlexCard(
@@ -127,6 +139,7 @@ class CardsProvider {
       tabId: item.tabId,
       type: "deft",
       position: position,
+      stateId: deviceId,
     );
 
     repository.updateList(
@@ -135,7 +148,10 @@ class CardsProvider {
     );
   }
 
-  Future<void> addChildItemToTheLeft(FlexCard item) async {
+  Future<void> addChildItemToTheLeft({
+    required int deviceId,
+    required FlexCard item,
+  }) async {
     final dady = _data?.firstWhere(
       (element) => element.id == item.parentId,
       orElse: () => FlexCard(
@@ -153,6 +169,7 @@ class CardsProvider {
       final newRowAddedChild = FlexCard(
         id: 0,
         tabId: item.tabId,
+        stateId: deviceId,
         type: "deft",
         position: 0,
       );
@@ -163,11 +180,18 @@ class CardsProvider {
         newRowAddedChildIndex: newRowAddedChildIndex,
       );
     } else {
-      _createChildItem(dady, item.position);
+      _createChildItem(
+        deviceId: deviceId,
+        parentItem: dady,
+        position: item.position,
+      );
     }
   }
 
-  Future<void> addChildItemToTheRight(FlexCard item) async {
+  Future<void> addChildItemToTheRight({
+    required int deviceId,
+    required FlexCard item,
+  }) async {
     final dady = _data?.firstWhere(
       (element) => element.id == item.parentId,
       orElse: () => FlexCard(
@@ -185,6 +209,7 @@ class CardsProvider {
       final newRowAddedChild = FlexCard(
         id: 0,
         tabId: item.tabId,
+        stateId: deviceId,
         type: "deft",
         position: 1,
       );
@@ -195,14 +220,22 @@ class CardsProvider {
         newRowAddedChildIndex: newRowAddedChildIndex,
       );
     } else {
-      _createChildItem(dady, item.position + 1);
+      _createChildItem(
+        deviceId: deviceId,
+        parentItem: dady,
+        position: item.position + 1,
+      );
     }
   }
 
-  void _createChildItem(FlexCard _parentItem, int position) {
+  void _createChildItem({
+    required int deviceId,
+    required FlexCard parentItem,
+    required int position,
+  }) {
     final List<FlexCard> updatedItems = [];
 
-    _parentItem.children?.forEach((element) {
+    parentItem.children?.forEach((element) {
       if (position <= element.position) {
         updatedItems.add(element.copyWith(
           position: element.position + 1,
@@ -212,10 +245,11 @@ class CardsProvider {
 
     final newItem = FlexCard(
       id: 0,
-      tabId: _parentItem.tabId,
-      parentId: _parentItem.id,
+      tabId: parentItem.tabId,
+      parentId: parentItem.id,
       type: "deft",
       position: position,
+      stateId: deviceId,
     );
 
     repository.updateList(
@@ -282,7 +316,7 @@ class CardsProvider {
           )
         : null;
     final sourceChildren = _parentItem?.children ?? [];
-    final _targetItem = _mainRows[rowIndex];
+    final _targetItem = rowIndex < _mainRows.length ? _mainRows[rowIndex] : null;
 
     // Target is a full row
     if (itemIndex == -1) {
@@ -399,7 +433,7 @@ class CardsProvider {
             );
           }
         }
-      } else if (_targetItem.hasChildren) {
+      } else if (_targetItem?.hasChildren == true) {
         // From another row
         // 7 => 6, itemIndex: 2 => 2
         if (_parentItem != null) {
@@ -431,7 +465,7 @@ class CardsProvider {
             }
           }
         }
-        final _targetChildren = _targetItem.children ?? [];
+        final _targetChildren = _targetItem!.children ?? [];
         for (int index = 0; index < _targetChildren.length; index++) {
           FlexCard card = _targetChildren[index];
           updatedItems.add(
