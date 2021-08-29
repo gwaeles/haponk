@@ -3,30 +3,27 @@ import 'package:haponk/data/tabs/entities/flex_card.dart';
 import 'package:haponk/data/tabs/entities/flex_tab.dart';
 import 'package:haponk/data/tabs/entities/positioned_flex_card.dart';
 import 'package:haponk/data/tabs/providers/cards_provider.dart';
-import 'package:haponk/ui/tabs/providers/auto_scroll_timer.dart';
-import 'package:haponk/ui/tabs/providers/drag_targets_notifier.dart';
-import 'package:haponk/ui/tabs/providers/scroll_edge_notifier.dart';
+import 'package:haponk/data/tabs/repositories/cards_repository.dart';
+import 'package:haponk/dependency_injection.dart';
+import 'package:haponk/ui/dashboard/providers/auto_scroll_timer.dart';
+import 'package:haponk/ui/dashboard/providers/drag_targets_notifier.dart';
+import 'package:haponk/ui/dashboard/providers/scroll_edge_notifier.dart';
 import 'package:provider/provider.dart';
 
 import 'auto_scroll_drag_target.dart';
 import 'flex_card_grid.dart';
 
-class TabList extends StatelessWidget {
+class TabScrollView extends StatelessWidget {
   final FlexTab flexTabItem;
-  final CardsProvider cardsNotifier;
-  //final GlobalKey<NestedScrollViewState> nestedScrollViewGlobalKey;
 
-  TabList({
+  TabScrollView({
     Key? key,
     required this.flexTabItem,
-    required this.cardsNotifier,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, constraints) {
-      debugPrint(
-          '[TAB-LIST] layout maxWidth: ${constraints.maxWidth}, maxHeight: ${constraints.maxHeight}');
       return MultiProvider(
         providers: [
           ChangeNotifierProvider<ScrollController>.value(
@@ -44,17 +41,25 @@ class TabList extends StatelessWidget {
               return previous!..updateScroll(controller);
             },
           ),
-          Provider<CardsProvider>.value(
-            value: cardsNotifier,
+          Provider<CardsRepository>(
+            create: (context) => CardsRepository(
+              db: getIt(),
+              tabId: flexTabItem.id ?? 0,
+            ),
           ),
-          StreamProvider<List<FlexCard>>(
-            initialData: [],
+          Provider<CardsProvider>(
+            create: (context) => CardsProvider(
+              context.read(),
+            ),
+          ),
+          StreamProvider<List<FlexCard>?>(
+            initialData: null,
             create: (context) => context.read<CardsProvider>().cardsStream,
           ),
-          ChangeNotifierProxyProvider<List<FlexCard>, DragTargetsNotifier>(
+          ChangeNotifierProxyProvider<List<FlexCard>?, DragTargetsNotifier>(
             create: (context) => DragTargetsNotifier()
               ..layoutWidth = constraints.maxWidth
-              ..flexCards = context.read<List<FlexCard>>(),
+              ..flexCards = context.read<List<FlexCard>?>(),
             update: (context, cards, previous) => previous!..flexCards = cards,
           )
         ],

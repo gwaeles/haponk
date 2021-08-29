@@ -3,17 +3,15 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:haponk/core/themes/app_theme.dart';
-import 'package:haponk/data/tabs/providers/cards_provider.dart';
 import 'package:haponk/data/tabs/providers/tabs_provider.dart';
-import 'package:haponk/data/tabs/repositories/cards_repository.dart';
 import 'package:haponk/data/tabs/repositories/tabs_repository.dart';
 import 'package:haponk/dependency_injection.dart';
 import 'package:haponk/data/tabs/entities/flex_tab.dart';
 import 'package:provider/provider.dart';
 
 import 'providers/editor_controller.dart';
-import 'widgets/tab_list.dart';
-import 'widgets/tabs_app_bar_title.dart';
+import 'widgets/tabs/tab_scroll_view.dart';
+import 'widgets/tabs/tabs_app_bar_title.dart';
 
 class TabsPage extends StatelessWidget {
   TabsPage({Key? key}) : super(key: key);
@@ -46,9 +44,6 @@ class TabsPage extends StatelessWidget {
 }
 
 class TabsPageContent extends StatelessWidget {
-  // https://github.com/flutter/flutter/issues/62363
-  //final GlobalKey<NestedScrollViewState> globalKey = GlobalKey();
-
   @override
   Widget build(BuildContext context) {
     return Consumer(
@@ -57,23 +52,14 @@ class TabsPageContent extends StatelessWidget {
         List<FlexTab> value,
         child,
       ) {
-        final List<CardsProvider> cardsNotifiers = [];
         final List<Widget> children = [];
         final List<Widget> tabs = [];
 
         for (var i = 0; i < value.length; i++) {
           final item = value[i];
-          final cardsNotifier = CardsProvider(
-            CardsRepository(
-              db: getIt(),
-              tabId: item.id ?? 0,
-            ),
-          );
-          cardsNotifiers.add(cardsNotifier);
           children.add(
-            TabList(
+            TabScrollView(
               flexTabItem: item,
-              cardsNotifier: cardsNotifier,
             ),
           );
           tabs.add(TabWidget(

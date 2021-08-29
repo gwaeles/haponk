@@ -1,12 +1,13 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:haponk/core/themes/app_theme.dart';
 import 'package:haponk/data/connection/providers/connection_notifier.dart';
+import 'package:haponk/ui/app_navigation/app_screen.dart';
 import 'package:haponk/ui/config/config_screen.dart';
 import 'package:haponk/ui/launcher/launcher_screen.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:haponk/ui/supervisor/supervisor_screen.dart';
 import 'package:provider/provider.dart';
 
 import 'dependency_injection.dart';
@@ -22,6 +23,8 @@ void main() async {
   await EasyLocalization.ensureInitialized();
   declareServices();
 
+  // debugPaintSizeEnabled = true;
+  // debugPaintLayerBordersEnabled = true;
   runApp(
     EasyLocalization(
         supportedLocales: appLocales,
@@ -43,7 +46,7 @@ class MyApp extends StatelessWidget {
         routes: {
           "/launcher": (context) => LauncherScreen(),
           "/config": (context) => ConfigScreen(),
-          "/supervisor": (context) => SupervisorScreen(),
+          "/supervisor": (context) => AppNavigationScreen(),
         },
         initialRoute: "/launcher",
       ),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:haponk/data/tabs/entities/positioned_flex_card.dart';
-import 'package:haponk/ui/tabs/providers/drag_targets_notifier.dart';
-import 'package:haponk/ui/tabs/providers/scroll_edge_notifier.dart';
+import 'package:haponk/ui/dashboard/providers/drag_targets_notifier.dart';
+import 'package:haponk/ui/dashboard/providers/scroll_edge_notifier.dart';
 import 'package:provider/provider.dart';
 
 class AutoScrollDragTarget extends StatelessWidget {

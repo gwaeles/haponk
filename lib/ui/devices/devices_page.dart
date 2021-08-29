@@ -19,7 +19,11 @@ class DevicesPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
         providers: [
-          Provider(create: (_) => DevicesProvider(getIt())),
+          Provider(
+            create: (_) => DevicesProvider(
+              repository: getIt(),
+            ),
+          ),
           StreamProvider<List<Device>?>(
             initialData: null,
             create: (context) => context.read<DevicesProvider>().deviceStream,

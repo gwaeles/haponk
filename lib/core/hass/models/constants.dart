@@ -53,6 +53,12 @@ enum DeviceType {
   MEDIA_PLAYER,
 }
 
+extension DeviceTypeToString on DeviceType {
+  String toShortString() {
+    return this.toString().split('.').last;
+  }
+}
+
 enum SensorDeviceType {
   OPENING,
   PLUG,
