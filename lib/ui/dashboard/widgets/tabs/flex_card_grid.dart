@@ -5,13 +5,13 @@ import 'package:haponk/data/tabs/entities/fake_flex_card.dart';
 import 'package:haponk/data/tabs/entities/flex_card.dart';
 import 'package:haponk/data/tabs/entities/positioned_flex_card.dart';
 import 'package:haponk/data/tabs/providers/cards_provider.dart';
-import 'package:haponk/ui/tabs/providers/drag_targets_notifier.dart';
-import 'package:haponk/ui/tabs/providers/editor_controller.dart';
+import 'package:haponk/ui/dashboard/providers/drag_targets_notifier.dart';
+import 'package:haponk/ui/dashboard/providers/editor_controller.dart';
 import 'package:provider/provider.dart';
 
-import 'action_button.dart';
+import '../editor/action_button.dart';
 import 'flex_card_widget.dart';
-import 'select_device_alert_dialog.dart';
+import '../editor/select_device_alert_dialog.dart';
 
 class FlexCardGrid extends StatelessWidget {
   @override

@@ -57,6 +57,8 @@ class DevicesRepository {
     // Cancel DB subscription on last listener cancel
     if (_deviceTypecontroller?.hasListener != true &&
         _deviceController?.hasListener != true) {
+      _deviceTypecontroller?.close();
+      _deviceController?.close();
       dispose();
     }
   }

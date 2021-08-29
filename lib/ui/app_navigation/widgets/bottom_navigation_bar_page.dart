@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:haponk/ui/supervisor/bottom_navigation/bottom_navigation_bar_controller.dart';
+import 'package:haponk/ui/app_navigation/providers/bottom_navigation_bar_controller.dart';
 
 class BottomNavigationBarPage extends StatefulWidget {
   const BottomNavigationBarPage({

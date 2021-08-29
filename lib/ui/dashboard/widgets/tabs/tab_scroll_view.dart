@@ -5,19 +5,18 @@ import 'package:haponk/data/tabs/entities/positioned_flex_card.dart';
 import 'package:haponk/data/tabs/providers/cards_provider.dart';
 import 'package:haponk/data/tabs/repositories/cards_repository.dart';
 import 'package:haponk/dependency_injection.dart';
-import 'package:haponk/ui/tabs/providers/auto_scroll_timer.dart';
-import 'package:haponk/ui/tabs/providers/drag_targets_notifier.dart';
-import 'package:haponk/ui/tabs/providers/scroll_edge_notifier.dart';
+import 'package:haponk/ui/dashboard/providers/auto_scroll_timer.dart';
+import 'package:haponk/ui/dashboard/providers/drag_targets_notifier.dart';
+import 'package:haponk/ui/dashboard/providers/scroll_edge_notifier.dart';
 import 'package:provider/provider.dart';
 
 import 'auto_scroll_drag_target.dart';
 import 'flex_card_grid.dart';
 
-class TabList extends StatelessWidget {
+class TabScrollView extends StatelessWidget {
   final FlexTab flexTabItem;
-  //final GlobalKey<NestedScrollViewState> nestedScrollViewGlobalKey;
 
-  TabList({
+  TabScrollView({
     Key? key,
     required this.flexTabItem,
   }) : super(key: key);

@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:haponk/ui/app_navigation/providers/bottom_navigation_bar_controller.dart';
+import 'package:haponk/ui/app_navigation/widgets/bottom_navigation_bar_page.dart';
+import 'package:haponk/ui/app_navigation/widgets/fake_list_page.dart';
+import 'package:haponk/ui/dashboard/tabs_page.dart';
 import 'package:haponk/ui/devices/devices_page.dart';
-import 'package:haponk/ui/supervisor/bottom_navigation/bottom_navigation_bar_page.dart';
-import 'package:haponk/ui/tabs/tabs_page.dart';
 import 'package:provider/provider.dart';
 
-import 'bottom_navigation/bottom_navigation_bar_controller.dart';
-import 'bottom_navigation/fake_list_page.dart';
-
-class SupervisorScreen extends StatelessWidget {
+class AppNavigationScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListenableProvider(
