@@ -147,6 +147,7 @@ class DragTargetsNotifier extends ChangeNotifier {
       result = [];
       for (int i = 0; i < _processedData.length; i++) {
         final item = _processedData[i];
+        final itemHeight = item.height;
 
         if (item.children?.isNotEmpty == true) {
           // Row
@@ -162,7 +163,7 @@ class DragTargetsNotifier extends ChangeNotifier {
                 top: top,
                 left: left,
                 width: itemWidth,
-                height: 56,
+                height: itemHeight.toDouble(),
                 card: child,
                 rowCount: _processedData.length,
                 rowIndex: i,
@@ -180,7 +181,7 @@ class DragTargetsNotifier extends ChangeNotifier {
               top: top,
               left: 0,
               width: layoutWidth,
-              height: 56,
+              height: itemHeight.toDouble(),
               card: item,
               rowCount: _processedData.length,
               rowIndex: i,
@@ -188,8 +189,8 @@ class DragTargetsNotifier extends ChangeNotifier {
           );
         }
 
-        _maxGridHeight = max(_maxGridHeight, top + 56);
-        top += 57;
+        _maxGridHeight = max(_maxGridHeight, top + itemHeight);
+        top += itemHeight + 1;
       }
     }
 
@@ -207,6 +208,7 @@ class DragTargetsNotifier extends ChangeNotifier {
 
     for (int i = 0; i < (_flexCards?.length ?? 0); i++) {
       final item = _flexCards![i];
+      final itemHeight = item.height;
 
       if (item.children?.isNotEmpty == true) {
         // Row
@@ -234,7 +236,7 @@ class DragTargetsNotifier extends ChangeNotifier {
           // New row item below
           result.add(
             PositionedDragTarget(
-              top: top + 56 - targetSize,
+              top: top + itemHeight - targetSize,
               left: left + _targetLeftSize,
               width: itemWidth - (_targetLeftSize + _targetRightSize),
               height: targetSize,
@@ -249,7 +251,7 @@ class DragTargetsNotifier extends ChangeNotifier {
               top: top,
               left: left - 1,
               width: _targetLeftSize + 1,
-              height: 56,
+              height: itemHeight.toDouble(),
               rowIndex: i,
               itemIndex: j,
             ),
@@ -261,7 +263,7 @@ class DragTargetsNotifier extends ChangeNotifier {
               top: top,
               left: left + itemWidth - _targetRightSize,
               width: _targetRightSize,
-              height: 56,
+              height: itemHeight.toDouble(),
               rowIndex: i,
               itemIndex: j + 1,
             ),
@@ -287,7 +289,7 @@ class DragTargetsNotifier extends ChangeNotifier {
         // New row item below
         result.add(
           PositionedDragTarget(
-            top: top + 56 - targetSize,
+            top: top + itemHeight.toDouble() - targetSize,
             left: _targetSize,
             width: layoutWidth - (2 * _targetSize),
             height: targetSize,
@@ -301,7 +303,7 @@ class DragTargetsNotifier extends ChangeNotifier {
             top: top,
             left: 0,
             width: _targetSize,
-            height: 56,
+            height: itemHeight.toDouble(),
             rowIndex: i,
             itemIndex: 0,
           ),
@@ -313,14 +315,14 @@ class DragTargetsNotifier extends ChangeNotifier {
             top: top,
             left: layoutWidth - _targetSize,
             width: _targetSize,
-            height: 56,
+            height: itemHeight.toDouble(),
             rowIndex: i,
             itemIndex: 1,
           ),
         );
       }
 
-      top += 57;
+      top += itemHeight + 1;
     }
 
     _positionedDragTargets = result;

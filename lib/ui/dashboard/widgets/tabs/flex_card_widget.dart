@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:haponk/data/devices/entities/device.dart';
 import 'package:haponk/data/devices/providers/device_provider.dart';
 import 'package:haponk/data/tabs/entities/positioned_flex_card.dart';
-import 'package:haponk/dependency_injection.dart';
 import 'package:haponk/ui/dashboard/providers/drag_targets_notifier.dart';
 import 'package:haponk/ui/dashboard/providers/editor_controller.dart';
 import 'package:provider/provider.dart';
@@ -28,8 +27,8 @@ class FlexCardWidget extends StatelessWidget {
     return MultiProvider(
       providers: [
         Provider(
-          create: (_) => DeviceProvider(
-            repository: getIt(),
+          create: (context) => DeviceProvider(
+            repository: context.read(),
             deviceId: item.card.stateId ?? 0,
           ),
         ),
@@ -85,7 +84,10 @@ class FlexCardWidget extends StatelessWidget {
                                 child: Text(item.card.toString()),
                               ),
                             )
-                          : DeviceCardItem.fromDevice(device),
+                          : DeviceCardItem.fromDevice(
+                              device: device,
+                              card: item.card,
+                            ),
                     ),
             ),
           );

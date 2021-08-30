@@ -8,4 +8,10 @@ class FlexCards extends Table {
   IntColumn get stateId => integer().nullable()();
   IntColumn get parentId => integer().nullable()();
   IntColumn get position => integer()();
+  IntColumn get horizontalFlex => integer()();
+  IntColumn get height => integer()();
+  IntColumn get displayLeading => integer()();
+  IntColumn get displayTrailing => integer()();
+  IntColumn get displayTitle => integer()();
+  IntColumn get displaySubtitle => integer()();
 }

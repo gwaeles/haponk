@@ -34,6 +34,12 @@ class CardsRepository {
     int? stateId,
     int? parentId,
     required int position,
+    int horizontalFlex = 1,
+    int height = 56,
+    bool displayLeading = true,
+    bool displayTrailing = true,
+    bool displayTitle = true,
+    bool displaySubtitle = true,
   }) async {
     return await db.insertFlexCard(
       FlexCardsCompanion.insert(
@@ -45,6 +51,12 @@ class CardsRepository {
             stateId == null || stateId <= 0 ? Value.absent() : Value(stateId),
         type: type,
         position: position,
+        horizontalFlex: horizontalFlex,
+        height: height,
+        displayLeading: displayLeading ? 1 : 0,
+        displayTrailing: displayTrailing ? 1 : 0,
+        displayTitle: displayTitle ? 1 : 0,
+        displaySubtitle: displaySubtitle ? 1 : 0,
       ),
     );
   }
@@ -54,8 +66,15 @@ class CardsRepository {
       id: item.id,
       parentId: item.parentId,
       tabId: item.tabId,
+      stateId: item.stateId,
       type: item.type,
       position: item.position,
+      horizontalFlex: item.horizontalFlex,
+      height: item.height,
+      displayLeading: item.displayLeading ? 1 : 0,
+      displayTrailing: item.displayTrailing ? 1 : 0,
+      displayTitle: item.displayTitle ? 1 : 0,
+      displaySubtitle: item.displaySubtitle ? 1 : 0,
     ));
   }
 
@@ -134,6 +153,12 @@ class CardsRepository {
               stateId: object.stateId,
               type: object.type,
               position: object.position,
+              horizontalFlex: object.horizontalFlex,
+              height: object.height,
+              displayLeading: object.displayLeading == 1,
+              displayTrailing: object.displayTrailing == 1,
+              displayTitle: object.displayTitle == 1,
+              displaySubtitle: object.displaySubtitle == 1,
             ))
         .forEach((element) {
       if (element.parentId != null && !children.containsKey(element.parentId)) {
@@ -152,6 +177,12 @@ class CardsRepository {
               position: object.position,
               stateId: object.stateId,
               children: children[object.id],
+              horizontalFlex: object.horizontalFlex,
+              height: object.height,
+              displayLeading: object.displayLeading == 1,
+              displayTrailing: object.displayTrailing == 1,
+              displayTitle: object.displayTitle == 1,
+              displaySubtitle: object.displaySubtitle == 1,
             ))
         .toList();
 

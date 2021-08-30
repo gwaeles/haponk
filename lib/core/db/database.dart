@@ -194,6 +194,12 @@ class Database extends _$Database {
                 : Value(itemToCreate.stateId),
             type: itemToCreate.type,
             position: itemToCreate.position,
+            horizontalFlex: itemToCreate.horizontalFlex,
+            height: itemToCreate.height,
+            displayLeading: itemToCreate.displayLeading ? 1 : 0,
+            displayTrailing: itemToCreate.displayTrailing ? 1 : 0,
+            displayTitle: itemToCreate.displayTitle ? 1 : 0,
+            displaySubtitle: itemToCreate.displaySubtitle ? 1 : 0,
           ),
         );
       }
@@ -204,6 +210,12 @@ class Database extends _$Database {
             parentId: Value.absent(),
             type: 'row',
             position: newRowSourceChild.position,
+            horizontalFlex: newRowSourceChild.horizontalFlex,
+            height: newRowSourceChild.height,
+            displayLeading: newRowSourceChild.displayLeading ? 1 : 0,
+            displayTrailing: newRowSourceChild.displayTrailing ? 1 : 0,
+            displayTitle: newRowSourceChild.displayTitle ? 1 : 0,
+            displaySubtitle: newRowSourceChild.displaySubtitle ? 1 : 0,
           ),
         );
         await updateFlexCard(
@@ -234,6 +246,12 @@ class Database extends _$Database {
                   : Value(newRowAddedChild.stateId),
               type: newRowAddedChild.type,
               position: newRowAddedChildIndex == 0 ? 0 : 1,
+              horizontalFlex: newRowAddedChild.horizontalFlex,
+              height: newRowAddedChild.height,
+              displayLeading: newRowAddedChild.displayLeading ? 1 : 0,
+              displayTrailing: newRowAddedChild.displayTrailing ? 1 : 0,
+              displayTitle: newRowAddedChild.displayTitle ? 1 : 0,
+              displaySubtitle: newRowAddedChild.displaySubtitle ? 1 : 0,
             ),
           );
         }

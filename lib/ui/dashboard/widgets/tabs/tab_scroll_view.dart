@@ -7,7 +7,9 @@ import 'package:haponk/data/tabs/repositories/cards_repository.dart';
 import 'package:haponk/dependency_injection.dart';
 import 'package:haponk/ui/dashboard/providers/auto_scroll_timer.dart';
 import 'package:haponk/ui/dashboard/providers/drag_targets_notifier.dart';
+import 'package:haponk/ui/dashboard/providers/editor_controller.dart';
 import 'package:haponk/ui/dashboard/providers/scroll_edge_notifier.dart';
+import 'package:haponk/ui/dashboard/widgets/editor/custom_card_alert_dialog.dart';
 import 'package:provider/provider.dart';
 
 import 'auto_scroll_drag_target.dart';
@@ -63,8 +65,8 @@ class TabScrollView extends StatelessWidget {
             update: (context, cards, previous) => previous!..flexCards = cards,
           )
         ],
-        child: Consumer<DragTargetsNotifier>(
-          builder: (context, dragTargetsNotifier, child) {
+        child: Consumer2<DragTargetsNotifier, EditorController>(
+          builder: (context, dragTargetsNotifier, editorController, child) {
             // Bind the notifier to the screen size
             dragTargetsNotifier.layoutWidth = MediaQuery.of(context).size.width;
 
@@ -142,6 +144,44 @@ class TabScrollView extends StatelessWidget {
                     ),
                   ),
                 ),
+                // Custom button
+                AnimatedPositioned(
+                  duration: const Duration(milliseconds: 250),
+                  key: ValueKey("CUSTOM_BUTTON"),
+                  bottom: editorController.selectedItemId > 0 ? 16 : -56,
+                  left: 0,
+                  right: 0,
+                  child: Center(
+                    child: SizedBox(
+                      width: 48,
+                      height: 48,
+                      child: InkWell(
+                        onTap: () => onCustomItem(
+                          context: context,
+                          itemId: editorController.selectedItemId,
+                        ),
+                        child: Container(
+                          width: 48,
+                          height: 48,
+                          decoration: BoxDecoration(
+                            color: Colors.black54,
+                            borderRadius: BorderRadius.circular(24),
+                            border: Border.all(
+                              color: Colors.white54,
+                              width: 1,
+                            ),
+                          ),
+                          child: Center(
+                            child: Icon(
+                              Icons.color_lens,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
               ],
             );
           },
@@ -163,5 +203,30 @@ class TabScrollView extends StatelessWidget {
         ),
       );
     });
+  }
+
+  Future<void> onCustomItem({
+    required BuildContext context,
+    required int itemId,
+  }) async {
+    final DragTargetsNotifier dragTargetsNotifier = context.read();
+    final cards = dragTargetsNotifier.positionedFlexCards;
+    PositionedFlexCard? _selectedItem;
+
+    for (int i = 0; i < (cards?.length ?? 0); i++) {
+      if (itemId == cards![i].card.id) {
+        _selectedItem = cards[i];
+      }
+    }
+
+    if (_selectedItem?.card != null) {
+      showDialog(
+        context: context,
+        builder: (context) => CustomCardAlertDialog(
+          cardId: _selectedItem!.card.id,
+          tabId: _selectedItem.card.tabId,
+        ),
+      );
+    }
   }
 }

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:haponk/data/devices/providers/devices_provider.dart';
-import 'package:haponk/dependency_injection.dart';
 import 'package:haponk/data/devices/entities/device.dart';
 import 'package:provider/provider.dart';
 
@@ -20,8 +19,8 @@ class DevicesPage extends StatelessWidget {
     return MultiProvider(
         providers: [
           Provider(
-            create: (_) => DevicesProvider(
-              repository: getIt(),
+            create: (context) => DevicesProvider(
+              repository: context.read(),
             ),
           ),
           StreamProvider<List<Device>?>(

@@ -3,6 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:haponk/core/hass/models/constants.dart';
 import 'package:haponk/core/themes/app_theme.dart';
 import 'package:haponk/data/devices/entities/device.dart';
+import 'package:haponk/data/tabs/entities/flex_card.dart';
 
 import 'device_card_item.dart';
 
@@ -10,7 +11,12 @@ class DeviceCardItemSensor extends DeviceCardItem {
   const DeviceCardItemSensor({
     Key? key,
     required Device device,
-  }) : super(key: key, device: device);
+    required FlexCard card,
+  }) : super(
+          key: key,
+          device: device,
+          card: card,
+        );
 
   @override
   Widget buildLeading(BuildContext context) {

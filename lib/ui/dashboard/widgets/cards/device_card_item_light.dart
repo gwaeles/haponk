@@ -3,6 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:haponk/core/themes/app_theme.dart';
 import 'package:haponk/data/connection/providers/connection_notifier.dart';
 import 'package:haponk/data/devices/entities/device.dart';
+import 'package:haponk/data/tabs/entities/flex_card.dart';
 import 'package:haponk/ui/devices/widgets/list_item_action_icon.dart';
 import 'package:provider/provider.dart';
 
@@ -12,7 +13,12 @@ class DeviceCardItemLight extends DeviceCardItem {
   const DeviceCardItemLight({
     Key? key,
     required Device device,
-  }) : super(key: key, device: device);
+    required FlexCard card,
+  }) : super(
+          key: key,
+          device: device,
+          card: card,
+        );
 
   @override
   Widget buildLeading(BuildContext context) {

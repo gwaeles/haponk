@@ -3,6 +3,7 @@ import 'package:haponk/core/hass/models/constants.dart';
 import 'package:haponk/data/devices/entities/device.dart';
 import 'package:haponk/data/devices/providers/device_types_provider.dart';
 import 'package:haponk/data/devices/providers/devices_provider.dart';
+import 'package:haponk/data/devices/repositories/devices_repository.dart';
 import 'package:haponk/dependency_injection.dart';
 import 'package:provider/provider.dart';
 
@@ -11,15 +12,18 @@ class SelectDeviceAlertDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        Provider(
+          create: (context) => DevicesRepository(getIt()),
+        ),
         ChangeNotifierProvider(
           create: (context) => ValueNotifier<int>(0),
         ),
         Provider(
-          create: (_) => DeviceTypesProvider(getIt()),
+          create: (context) => DeviceTypesProvider(context.read()),
         ),
         Provider(
-          create: (_) => DevicesProvider(
-            repository: getIt(),
+          create: (context) => DevicesProvider(
+            repository: context.read(),
             fetchAllDevicesAllowed: false,
           ),
         ),
@@ -114,36 +118,38 @@ class _DeviceListView extends StatelessWidget {
     return Center(
       heightFactor: 1,
       child: SingleChildScrollView(
-        child: Consumer<List<Device>?>(builder: (context, value, child) {
-          final children = <Widget>[];
+        child: Consumer<List<Device>?>(
+          builder: (context, value, child) {
+            final children = <Widget>[];
 
-          if (value == null || value.length == 0) {
-            children.add(CircularProgressIndicator());
-          } else {
-            for (Device device in value) {
-              children.add(
-                Container(
-                  color: Colors.white12,
-                  width: 115,
-                  height: 80,
-                  child: InkWell(
-                    onTap: () => Navigator.of(context).pop(device.id),
-                    child: Center(
-                      child: Text(device.friendlyName ?? ''),
+            if (value == null || value.length == 0) {
+              children.add(CircularProgressIndicator());
+            } else {
+              for (Device device in value) {
+                children.add(
+                  Container(
+                    color: Colors.white12,
+                    width: 115,
+                    height: 80,
+                    child: InkWell(
+                      onTap: () => Navigator.of(context).pop(device.id),
+                      child: Center(
+                        child: Text(device.friendlyName ?? ''),
+                      ),
                     ),
                   ),
-                ),
-              );
+                );
+              }
             }
-          }
 
-          return Wrap(
-            spacing: 5,
-            runSpacing: 5,
-            alignment: WrapAlignment.center,
-            children: children,
-          );
-        }),
+            return Wrap(
+              spacing: 5,
+              runSpacing: 5,
+              alignment: WrapAlignment.center,
+              children: children,
+            );
+          },
+        ),
       ),
     );
   }
