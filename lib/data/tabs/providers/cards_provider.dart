@@ -9,13 +9,16 @@ import 'package:haponk/data/tabs/repositories/cards_repository.dart';
 class CardsProvider {
   final CardsRepository repository;
 
-  CardsProvider(this.repository);
+  CardsProvider(
+    this.repository,
+  );
 
   StreamController<List<FlexCard>>? _controller;
   StreamSubscription? _repoSubscription;
   List<FlexCard>? _data;
 
   int get tabId => repository.tabId;
+  List<FlexCard>? get data => _data;
 
   ///
   /// --- DATA STREAM --- ///

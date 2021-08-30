@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:haponk/data/devices/repositories/devices_repository.dart';
+import 'package:haponk/dependency_injection.dart';
 import 'package:haponk/ui/app_navigation/providers/bottom_navigation_bar_controller.dart';
 import 'package:haponk/ui/app_navigation/widgets/bottom_navigation_bar_page.dart';
 import 'package:haponk/ui/app_navigation/widgets/fake_list_page.dart';
@@ -9,8 +11,15 @@ import 'package:provider/provider.dart';
 class AppNavigationScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return ListenableProvider(
-      create: (_) => BottomNavigationBarController(0),
+    return MultiProvider(
+      providers: [
+        Provider(
+          create: (context) => DevicesRepository(getIt()),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => BottomNavigationBarController(0),
+        )
+      ],
       child: Scaffold(
         body: Consumer(builder: (
           context,
