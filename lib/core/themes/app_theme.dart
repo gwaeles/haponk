@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:haponk/core/hass/models/constants.dart';
 
 import 'colors.dart';
 
@@ -50,6 +51,50 @@ class AppTheme {
       fontWeight: FontWeight.w300,
       color: isLight ? AppColors.darkGrey : Colors.white54,
     );
+  }
+
+  ///
+  /// --- Device Icons --- ///
+  ///
+
+  String get assetAutomation =>
+      'assets/images/${isDark ? "dark/" : ""}scenario.svg';
+
+  String get assetLightOn =>
+      'assets/images/${isDark ? "dark/" : ""}light_on.svg';
+  String get assetLightOff =>
+      'assets/images/${isDark ? "dark/" : ""}light_off.svg';
+
+  String get assetCoverOpened =>
+      'assets/images/${isDark ? "dark/" : ""}cover_open.svg';
+  String get assetCoverClosed =>
+      'assets/images/${isDark ? "dark/" : ""}cover_closed.svg';
+  String get assetCoverHalf =>
+      'assets/images/${isDark ? "dark/" : ""}cover_half.svg';
+
+  String get assetProcessor =>
+      'assets/images/${isDark ? "dark/" : ""}processor.svg';
+  String get assetSensor => 'assets/images/${isDark ? "dark/" : ""}sensor.svg';
+
+  String assetNameOf(DeviceType deviceType) {
+    switch (deviceType) {
+      case DeviceType.AUTOMATION:
+        return assetAutomation;
+      case DeviceType.LIGHT:
+        return assetLightOff;
+      case DeviceType.COVER:
+        return assetCoverHalf;
+      case DeviceType.WEATHER:
+        return assetProcessor;
+      case DeviceType.BINARY_SENSOR:
+        return assetProcessor;
+      case DeviceType.SENSOR:
+        return assetSensor;
+      case DeviceType.SWITCH:
+        return assetProcessor;
+      case DeviceType.MEDIA_PLAYER:
+        return assetProcessor;
+    }
   }
 }
 

@@ -22,7 +22,7 @@ class DeviceCardItemLight extends DeviceCardItem {
 
   @override
   Widget buildLeading(BuildContext context) {
-    final path = AppTheme.of(context).isDark ? "dark/" : "";
+    final appTheme = AppTheme.of(context);
 
     return Consumer<ConnectionNotifier>(
       builder: (context, provider, child) {
@@ -37,9 +37,7 @@ class DeviceCardItemLight extends DeviceCardItem {
         );
       },
       child: SvgPicture.asset(
-        device.state == "on"
-            ? 'assets/images/${path}light_on.svg'
-            : 'assets/images/${path}light_off.svg',
+        device.state == "on" ? appTheme.assetLightOn : appTheme.assetLightOff,
         width: 48,
         height: 48,
       ),

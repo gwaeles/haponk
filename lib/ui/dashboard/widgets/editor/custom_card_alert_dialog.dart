@@ -97,6 +97,8 @@ class _ParameterListView extends StatelessWidget {
 }
 
 class _CardHeightField extends StatelessWidget {
+  final enabledSize = [48, 56, 72, 96, 112, 144];
+
   @override
   Widget build(BuildContext context) {
     return Consumer<CardProvider>(
@@ -107,16 +109,19 @@ class _CardHeightField extends StatelessWidget {
 
         final card = provider.card!;
         final parentCard = provider.parentCard;
+        final item = parentCard ?? card;
+        final sizeIndex = enabledSize.indexOf(item.height);
 
         return Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             InkWell(
               onTap: () {
-                final item = parentCard ?? card;
                 provider.updateCard(
                   item: item.copyWith(
-                    height: item.height == 72 ? 56 : 48,
+                    height: sizeIndex <= 0
+                        ? enabledSize[0]
+                        : enabledSize[sizeIndex - 1],
                   ),
                 );
               },
@@ -127,7 +132,7 @@ class _CardHeightField extends StatelessWidget {
             ),
             Expanded(
               child: SizedBox(
-                height: 72,
+                height: enabledSize[enabledSize.length - 1].toDouble(),
                 child: Stack(
                   children: [
                     Positioned(
@@ -149,10 +154,11 @@ class _CardHeightField extends StatelessWidget {
             ),
             InkWell(
               onTap: () {
-                final item = parentCard ?? card;
                 provider.updateCard(
                   item: item.copyWith(
-                    height: item.height == 48 ? 56 : 72,
+                    height: sizeIndex < 0 || sizeIndex >= enabledSize.length - 1
+                        ? enabledSize[enabledSize.length - 1]
+                        : enabledSize[sizeIndex + 1],
                   ),
                 );
               },

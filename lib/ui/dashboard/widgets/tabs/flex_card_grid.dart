@@ -245,14 +245,14 @@ class FlexCardGrid extends StatelessWidget {
   }
 
   Future<void> addItem(BuildContext context) async {
-    final int? deviceId = await showDialog(
+    final List<int> deviceIds = await showDialog(
       context: context,
       builder: (context) => SelectDeviceAlertDialog(),
     );
 
-    if (deviceId != null && deviceId > 0) {
-      context.read<CardsProvider>().createItem(
-            deviceId: deviceId,
+    if (deviceIds.length > 0) {
+      context.read<CardsProvider>().createItems(
+            deviceIds: deviceIds,
           );
     }
   }
@@ -261,14 +261,14 @@ class FlexCardGrid extends StatelessWidget {
     required BuildContext context,
     required FlexCard item,
   }) async {
-    final int? deviceId = await showDialog(
+    final List<int> deviceIds = await showDialog(
       context: context,
       builder: (context) => SelectDeviceAlertDialog(),
     );
 
-    if (deviceId != null && deviceId > 0) {
+    if (deviceIds.length == 1) {
       context.read<CardsProvider>().addChildItemToTheLeft(
-            deviceId: deviceId,
+            deviceId: deviceIds.first,
             item: item,
           );
     }
@@ -278,14 +278,14 @@ class FlexCardGrid extends StatelessWidget {
     required BuildContext context,
     required FlexCard item,
   }) async {
-    final int? deviceId = await showDialog(
+    final List<int> deviceIds = await showDialog(
       context: context,
       builder: (context) => SelectDeviceAlertDialog(),
     );
 
-    if (deviceId != null && deviceId > 0) {
+    if (deviceIds.length == 1) {
       context.read<CardsProvider>().addChildItemToTheRight(
-            deviceId: deviceId,
+            deviceId: deviceIds.first,
             item: item,
           );
     }
@@ -295,14 +295,14 @@ class FlexCardGrid extends StatelessWidget {
     required BuildContext context,
     required FlexCard item,
   }) async {
-    final int? deviceId = await showDialog(
+    final List<int> deviceIds = await showDialog(
       context: context,
       builder: (context) => SelectDeviceAlertDialog(),
     );
 
-    if (deviceId != null && deviceId > 0) {
+    if (deviceIds.length > 0) {
       context.read<CardsProvider>().addChildItemAbove(
-            deviceId: deviceId,
+            deviceIds: deviceIds,
             item: item,
           );
     }
@@ -312,14 +312,14 @@ class FlexCardGrid extends StatelessWidget {
     required BuildContext context,
     required FlexCard item,
   }) async {
-    final int? deviceId = await showDialog(
+    final List<int> deviceIds = await showDialog(
       context: context,
       builder: (context) => SelectDeviceAlertDialog(),
     );
 
-    if (deviceId != null && deviceId > 0) {
+    if (deviceIds.length > 0) {
       context.read<CardsProvider>().addChildItemBelow(
-            deviceId: deviceId,
+            deviceIds: deviceIds,
             item: item,
           );
     }

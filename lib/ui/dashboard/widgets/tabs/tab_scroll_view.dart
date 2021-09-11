@@ -173,7 +173,8 @@ class TabScrollView extends StatelessWidget {
                           ),
                           child: Center(
                             child: Icon(
-                              Icons.color_lens,
+                              //Icons.color_lens,
+                              Icons.tune,
                               color: Colors.white,
                             ),
                           ),

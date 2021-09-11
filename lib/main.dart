@@ -27,10 +27,11 @@ void main() async {
   // debugPaintLayerBordersEnabled = true;
   runApp(
     EasyLocalization(
-        supportedLocales: appLocales,
-        path: 'assets/translations',
-        fallbackLocale: Locale('en'),
-        child: MyApp()),
+      supportedLocales: appLocales,
+      path: 'assets/translations',
+      fallbackLocale: Locale('en'),
+      child: MyApp(),
+    ),
   );
 }
 
@@ -40,6 +41,9 @@ class MyApp extends StatelessWidget {
     return ChangeNotifierProvider(
       create: (context) => ConnectionNotifier(getIt()),
       child: MaterialApp(
+        localizationsDelegates: context.localizationDelegates,
+        supportedLocales: context.supportedLocales,
+        locale: context.locale,
         title: 'app_name'.tr(),
         theme: lightTheme,
         darkTheme: darkTheme,
