@@ -81,7 +81,7 @@ class CardsRepository {
   Future updateList({
     List<FlexCard> itemsToUpdate = const [],
     List<FlexCard> itemsToDelete = const [],
-    FlexCard? itemToCreate,
+    List<FlexCard> itemsToCreate = const [],
     FlexCard? newRowTargetChild,
     FlexCard? newRowAddedChild,
     int newRowAddedChildIndex = 0,
@@ -91,7 +91,7 @@ class CardsRepository {
     await db.updateFlexCardList(
       itemsToUpdate,
       cardIdsToDelete,
-      itemToCreate,
+      itemsToCreate,
       newRowTargetChild,
       newRowAddedChild,
       newRowAddedChildIndex,
@@ -111,7 +111,7 @@ class CardsRepository {
     await db.updateFlexCardList(
       [],
       cardIdsToDelete,
-      null,
+      [],
       null,
       null,
       0,

@@ -1,13 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:haponk/core/hass/models/constants.dart';
+import 'package:haponk/core/themes/app_theme.dart';
 import 'package:haponk/data/devices/entities/device.dart';
 import 'package:haponk/data/devices/providers/device_types_provider.dart';
 import 'package:haponk/data/devices/providers/devices_provider.dart';
 import 'package:haponk/data/devices/repositories/devices_repository.dart';
 import 'package:haponk/dependency_injection.dart';
+import 'package:haponk/ui/dashboard/providers/device_selection_notifier.dart';
 import 'package:provider/provider.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class SelectDeviceAlertDialog extends StatelessWidget {
+  final int maxItem;
+
+  const SelectDeviceAlertDialog({Key? key, this.maxItem = 0}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
@@ -36,6 +44,9 @@ class SelectDeviceAlertDialog extends StatelessWidget {
           initialData: null,
           create: (context) => context.read<DevicesProvider>().deviceStream,
         ),
+        ChangeNotifierProvider(
+          create: (context) => DeviceSelectionNotifier(maxItem),
+        ),
       ],
       child: _IndexedAlertDialog(),
     );
@@ -48,6 +59,7 @@ class _IndexedAlertDialog extends StatelessWidget {
     final _index = context.watch<ValueNotifier<int>>();
 
     return AlertDialog(
+      contentPadding: const EdgeInsets.fromLTRB(0, 20.0, 0, 24.0),
       title: Text(_index.value == 1 ? 'Devices' : 'Device categories'),
       content: IndexedStack(
         index: _index.value,
@@ -59,7 +71,14 @@ class _IndexedAlertDialog extends StatelessWidget {
       actions: [
         TextButton(
           onPressed: () => Navigator.of(context).pop(),
-          child: Text('Cancel'),
+          child: Text('common_cancel'.tr()),
+        ),
+        TextButton(
+          onPressed: _index.value == 0
+              ? null
+              : () => Navigator.of(context)
+                  .pop(context.read<DeviceSelectionNotifier>().ids),
+          child: Text('common_validate'.tr()),
         ),
       ],
     );
@@ -69,6 +88,8 @@ class _IndexedAlertDialog extends StatelessWidget {
 class _DeviceTypeListView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final appTheme = AppTheme.of(context);
+
     return Center(
       heightFactor: 1,
       child: SingleChildScrollView(
@@ -89,10 +110,24 @@ class _DeviceTypeListView extends StatelessWidget {
                       context.read<DevicesProvider>().selectedType = deviceType;
                       context.read<ValueNotifier<int>>().value = 1;
                     },
-                    child: Center(
-                      child: Text(
-                        deviceType.toShortString(),
-                      ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SvgPicture.asset(
+                          appTheme.assetNameOf(deviceType),
+                          width: 48,
+                          height: 48,
+                        ),
+                        Text(
+                          deviceType.label(),
+                          style: TextStyle(
+                            fontSize: 12,
+                          ),
+                          textAlign: TextAlign.center,
+                          maxLines: 2,
+                        )
+                      ],
                     ),
                   ),
                 ),
@@ -118,8 +153,8 @@ class _DeviceListView extends StatelessWidget {
     return Center(
       heightFactor: 1,
       child: SingleChildScrollView(
-        child: Consumer<List<Device>?>(
-          builder: (context, value, child) {
+        child: Consumer2<List<Device>?, DeviceSelectionNotifier>(
+          builder: (context, value, selection, child) {
             final children = <Widget>[];
 
             if (value == null || value.length == 0) {
@@ -129,23 +164,39 @@ class _DeviceListView extends StatelessWidget {
                 children.add(
                   Container(
                     color: Colors.white12,
-                    width: 115,
-                    height: 80,
+                    height: 48,
                     child: InkWell(
-                      onTap: () => Navigator.of(context).pop(device.id),
-                      child: Center(
-                        child: Text(device.friendlyName ?? ''),
+                      onTap: () => context
+                          .read<DeviceSelectionNotifier>()
+                          .toggle(device.id),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.only(left: 16.0, right: 16),
+                              child: Text(device.friendlyName ?? ''),
+                            ),
+                          ),
+                          if (selection.ids.contains(device.id))
+                            Padding(
+                              padding: const EdgeInsets.only(right: 16),
+                              child: Icon(Icons.check),
+                            ),
+                        ],
                       ),
                     ),
+                  ),
+                );
+                children.add(
+                  Container(
+                    height: 2,
                   ),
                 );
               }
             }
 
-            return Wrap(
-              spacing: 5,
-              runSpacing: 5,
-              alignment: WrapAlignment.center,
+            return Column(
               children: children,
             );
           },

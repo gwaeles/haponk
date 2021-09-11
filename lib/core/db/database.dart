@@ -168,21 +168,21 @@ class Database extends _$Database {
   Future updateFlexCard(FlexCardDBO flexCard) =>
       update(flexCards).replace(flexCard);
   Future updateFlexCardList(
-    List<FlexCard> cards,
+    List<FlexCard> itemsToUpdate,
     List<int> cardIdsToDelete,
-    FlexCard? itemToCreate,
+    List<FlexCard> itemsToCreate,
     FlexCard? newRowSourceChild,
     FlexCard? newRowAddedChild,
     int newRowAddedChildIndex,
   ) {
     return transaction(() async {
-      for (FlexCard card in cards) {
+      for (FlexCard card in itemsToUpdate) {
         await updateFlexCard(card.toDBO());
       }
       for (int cardId in cardIdsToDelete) {
         await deleteFlexCard(cardId);
       }
-      if (itemToCreate != null) {
+      for (FlexCard itemToCreate in itemsToCreate) {
         await insertFlexCard(
           FlexCardsCompanion.insert(
             tabId: itemToCreate.tabId,

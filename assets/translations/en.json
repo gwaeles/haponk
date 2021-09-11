@@ -1,3 +1,14 @@
 {
-    "app_name": "Hass.io POC"
+    "app_name": "Hass.io POC",
+    "common_cancel": "Cancel",
+    "common_validate": "Validate",
+    "common_ok": "OK",
+    "device_type_label_automation": "Automation",
+    "device_type_label_light": "Lights",
+    "device_type_label_cover": "Cover",
+    "device_type_label_weather": "Weather",
+    "device_type_label_binary_sensor": "Binary sensor",
+    "device_type_label_sensor": "Sensor",
+    "device_type_label_switch": "Switch",
+    "device_type_label_media_player": "Media"
 }

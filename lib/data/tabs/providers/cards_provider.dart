@@ -72,8 +72,35 @@ class CardsProvider {
     );
   }
 
+  void createItems({
+    required List<int> deviceIds,
+  }) {
+    int position = 1;
+
+    _data?.forEach((element) => position = max(position, element.position + 1));
+
+    final List<FlexCard> newItems = [];
+
+    deviceIds.forEach((id) {
+      newItems.add(
+        FlexCard(
+          id: 0,
+          tabId: tabId,
+          type: "deft",
+          position: position,
+          stateId: id,
+        ),
+      );
+      position++;
+    });
+
+    repository.updateList(
+      itemsToCreate: newItems,
+    );
+  }
+
   Future<void> addChildItemAbove({
-    required int deviceId,
+    required List<int> deviceIds,
     required FlexCard item,
   }) async {
     final dady = _data?.firstWhere(
@@ -92,27 +119,34 @@ class CardsProvider {
     _data?.forEach((element) {
       if (position <= (element.position)) {
         updatedItems.add(element.copyWith(
-          position: element.position + 1,
+          position: element.position + deviceIds.length,
         ));
       }
     });
 
-    final newItem = FlexCard(
-      id: 0,
-      tabId: item.tabId,
-      type: "deft",
-      position: position,
-      stateId: deviceId,
-    );
+    final List<FlexCard> newItems = [];
+
+    deviceIds.forEach((id) {
+      newItems.add(
+        FlexCard(
+          id: 0,
+          tabId: tabId,
+          type: "deft",
+          position: position,
+          stateId: id,
+        ),
+      );
+      position++;
+    });
 
     repository.updateList(
       itemsToUpdate: updatedItems,
-      itemToCreate: newItem,
+      itemsToCreate: newItems,
     );
   }
 
   Future<void> addChildItemBelow({
-    required int deviceId,
+    required List<int> deviceIds,
     required FlexCard item,
   }) async {
     final dady = _data?.firstWhere(
@@ -137,17 +171,24 @@ class CardsProvider {
       }
     });
 
-    final newItem = FlexCard(
-      id: 0,
-      tabId: item.tabId,
-      type: "deft",
-      position: position,
-      stateId: deviceId,
-    );
+    final List<FlexCard> newItems = [];
+
+    deviceIds.forEach((id) {
+      newItems.add(
+        FlexCard(
+          id: 0,
+          tabId: tabId,
+          type: "deft",
+          position: position,
+          stateId: id,
+        ),
+      );
+      position++;
+    });
 
     repository.updateList(
       itemsToUpdate: updatedItems,
-      itemToCreate: newItem,
+      itemsToCreate: newItems,
     );
   }
 
@@ -257,7 +298,7 @@ class CardsProvider {
 
     repository.updateList(
       itemsToUpdate: updatedItems,
-      itemToCreate: newItem,
+      itemsToCreate: [newItem],
     );
   }
 

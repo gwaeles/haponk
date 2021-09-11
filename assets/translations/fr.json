@@ -1,3 +1,14 @@
 {
-    "app_name": "Hass.io POC"
+    "app_name": "Hass.io POC",
+    "common_cancel": "Annuler",
+    "common_validate": "Valider",
+    "common_ok": "OK",
+    "device_type_label_automation": "Automatisme",
+    "device_type_label_light": "Eclairage",
+    "device_type_label_cover": "Motorisation",
+    "device_type_label_weather": "Météo",
+    "device_type_label_binary_sensor": "Capteur binaire",
+    "device_type_label_sensor": "Capteur",
+    "device_type_label_switch": "TOR",
+    "device_type_label_media_player": "Media"
 }
