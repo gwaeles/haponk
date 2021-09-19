@@ -21,7 +21,9 @@ import 'package:moor/moor.dart';
 class ConnectionRepository {
   final Database db;
 
-  ConnectionRepository(this.db);
+  ConnectionRepository({
+    required this.db,
+  });
 
   StreamController<Message>? _controller;
   String? _accessToken;

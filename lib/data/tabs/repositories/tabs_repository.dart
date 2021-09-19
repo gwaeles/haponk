@@ -7,7 +7,9 @@ import 'package:haponk/data/tabs/entities/flex_tab.dart';
 class TabsRepository {
   final Database db;
 
-  TabsRepository(this.db);
+  TabsRepository({
+    required this.db,
+  });
 
   final List<StreamController<List<FlexTab>>> _controllers = [];
   StreamSubscription? _dbSubscription;

@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:haponk/data/devices/repositories/devices_repository.dart';
-import 'package:haponk/dependency_injection.dart';
 import 'package:haponk/ui/app_navigation/providers/bottom_navigation_bar_controller.dart';
 import 'package:haponk/ui/app_navigation/widgets/bottom_navigation_bar_page.dart';
 import 'package:haponk/ui/app_navigation/widgets/fake_list_page.dart';
-import 'package:haponk/ui/dashboard/tabs_page.dart';
+import 'package:haponk/ui/dashboard/dashboard_screen.dart';
 import 'package:haponk/ui/devices/devices_page.dart';
 import 'package:provider/provider.dart';
 
@@ -14,7 +13,9 @@ class AppNavigationScreen extends StatelessWidget {
     return MultiProvider(
       providers: [
         Provider(
-          create: (context) => DevicesRepository(getIt()),
+          create: (context) => DevicesRepository(
+            db: context.read(),
+          ),
         ),
         ChangeNotifierProvider(
           create: (context) => BottomNavigationBarController(0),
@@ -39,7 +40,7 @@ class AppNavigationScreen extends StatelessWidget {
                     ),
                     BottomNavigationBarPage(
                       pageIndex: 1,
-                      child: TabsPage(),
+                      child: DashboardScreen(),
                       pageIndexController: navController,
                     ),
                     BottomNavigationBarPage(

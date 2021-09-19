@@ -8,7 +8,9 @@ import 'package:haponk/data/connection/repositories/connection_repository.dart';
 class ConnectionNotifier with ChangeNotifier {
   ConnectionRepository connectionRepository;
 
-  ConnectionNotifier(this.connectionRepository);
+  ConnectionNotifier({
+    required this.connectionRepository,
+  });
 
   ConnectionType get currentConnectionType =>
       connectionRepository.currentConnectionType;

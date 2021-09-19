@@ -57,7 +57,7 @@ class WebSocketService {
       _channel = IOWebSocketChannel.connect(_webSocketUrl!);
 
       _channel!.stream.listen(_onData, onError: _onError, onDone: _onDone);
-    } catch (WebSocketChannelException) {
+    } catch (e) {
       return false;
     }
 

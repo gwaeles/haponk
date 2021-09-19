@@ -9,7 +9,9 @@ class ConfigNotifier with ChangeNotifier implements ListenerRequestState {
   RequestState _state = RequestState.INITIAL;
   bool? _connectionSucceed;
 
-  ConfigNotifier(this.repository);
+  ConfigNotifier({
+    required this.repository,
+  });
 
   ///
   /// --- State --- ///

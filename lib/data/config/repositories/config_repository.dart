@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -9,20 +10,21 @@ import 'package:haponk/core/db/database.dart';
 import 'package:haponk/core/hass/datasources/hass_api.dart';
 import 'package:haponk/core/hass/models/events/discovery_info_model.dart';
 import 'package:haponk/core/network/api_status.dart';
-import 'package:haponk/dependency_injection.dart';
 import 'package:haponk/data/config/entities/config.dart';
 import 'package:haponk/core/db/database_extension.dart';
 
 const String PREF_LONG_LIVED_ACCESS_TOKEN = "PREF_LONG_LIVED_ACCESS_TOKEN";
 
 class ConfigRepository {
-  final Database _db;
-  final FlutterSecureStorage _secureStorage;
+  final Database db;
+  final FlutterSecureStorage storage;
+  final Dio dio;
 
-  ConfigRepository(
-    this._db,
-    this._secureStorage,
-  );
+  ConfigRepository({
+    required this.db,
+    required this.storage,
+    required this.dio,
+  });
 
   List<StreamController<Config>?> _controllers = [];
   StreamSubscription? _dbSubscription;
@@ -39,7 +41,7 @@ class ConfigRepository {
 
     // DB subscription
     _dbSubscription?.cancel();
-    _dbSubscription = _db.watchConfig().listen(_onConfigData);
+    _dbSubscription = db.watchConfig().listen(_onConfigData);
 
     return _controller.stream;
   }
@@ -66,7 +68,7 @@ class ConfigRepository {
   }
 
   Future<void> _onConfigData(ConfigDBO? event) async {
-    String? accessToken = await _secureStorage.read(
+    String? accessToken = await storage.read(
       key: PREF_LONG_LIVED_ACCESS_TOKEN,
     );
 
@@ -80,7 +82,7 @@ class ConfigRepository {
             ? defaultConfig["longLivedToken"]
             : null;
         if (accessToken != null && accessToken.isNotEmpty) {
-          await _secureStorage.write(
+          await storage.write(
             key: PREF_LONG_LIVED_ACCESS_TOKEN,
             value: accessToken,
           );
@@ -124,10 +126,13 @@ class ConfigRepository {
       ..add("api");
     uri = uri.replace(pathSegments: pathSegments);
 
-    HassApi _hassApi = getIt(param1: uri.toString());
+    HassApi _hassApi = HassApi(
+      dio,
+      baseUrl: uri.toString(),
+    );
 
     try {
-      ConfigDBO? config = await _db.getConfig();
+      ConfigDBO? config = await db.getConfig();
 
       if (config == null) {
         // Create config
@@ -137,8 +142,8 @@ class ConfigRepository {
           requiresApiPassword: false,
         );
 
-        await _db.insertConfig(newConfig);
-        config = await _db.getConfig();
+        await db.insertConfig(newConfig);
+        config = await db.getConfig();
       }
 
       final response = await _hassApi.discoveryInfo();
@@ -159,7 +164,7 @@ class ConfigRepository {
             version: discoveryInfo.version,
           );
 
-          await _db.updateConfig(updatedConfig);
+          await db.updateConfig(updatedConfig);
 
           return true;
         }
@@ -173,11 +178,10 @@ class ConfigRepository {
 
   Future<void> setAccessToken(String value) async {
     if (value.isNotEmpty) {
-      await _secureStorage.write(
-          key: PREF_LONG_LIVED_ACCESS_TOKEN, value: value);
+      await storage.write(key: PREF_LONG_LIVED_ACCESS_TOKEN, value: value);
       _onConfigData(null);
     } else {
-      await _secureStorage.delete(key: PREF_LONG_LIVED_ACCESS_TOKEN);
+      await storage.delete(key: PREF_LONG_LIVED_ACCESS_TOKEN);
     }
   }
 }

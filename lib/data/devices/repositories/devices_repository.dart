@@ -9,7 +9,9 @@ import 'package:rxdart/rxdart.dart';
 class DevicesRepository {
   final Database db;
 
-  DevicesRepository(this.db);
+  DevicesRepository({
+    required this.db,
+  });
 
   BehaviorSubject<List<DeviceType>>? _deviceTypecontroller;
   BehaviorSubject<List<Device>>? _deviceController;
