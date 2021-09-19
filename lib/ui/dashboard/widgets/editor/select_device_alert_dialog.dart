@@ -6,7 +6,6 @@ import 'package:haponk/data/devices/entities/device.dart';
 import 'package:haponk/data/devices/providers/device_types_provider.dart';
 import 'package:haponk/data/devices/providers/devices_provider.dart';
 import 'package:haponk/data/devices/repositories/devices_repository.dart';
-import 'package:haponk/dependency_injection.dart';
 import 'package:haponk/ui/dashboard/providers/device_selection_notifier.dart';
 import 'package:provider/provider.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -21,13 +20,17 @@ class SelectDeviceAlertDialog extends StatelessWidget {
     return MultiProvider(
       providers: [
         Provider(
-          create: (context) => DevicesRepository(getIt()),
+          create: (context) => DevicesRepository(
+            db: context.read(),
+          ),
         ),
         ChangeNotifierProvider(
           create: (context) => ValueNotifier<int>(0),
         ),
         Provider(
-          create: (context) => DeviceTypesProvider(context.read()),
+          create: (context) => DeviceTypesProvider(
+            context.read(),
+          ),
         ),
         Provider(
           create: (context) => DevicesProvider(

@@ -3,14 +3,11 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:haponk/core/themes/app_theme.dart';
-import 'package:haponk/data/connection/providers/connection_notifier.dart';
+import 'package:haponk/main_providers.dart';
 import 'package:haponk/ui/app_navigation/app_screen.dart';
 import 'package:haponk/ui/config/config_screen.dart';
 import 'package:haponk/ui/launcher/launcher_screen.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:provider/provider.dart';
-
-import 'dependency_injection.dart';
 
 List<Locale> appLocales = [
   const Locale('en'),
@@ -21,7 +18,6 @@ void main() async {
   HttpOverrides.global = new MyHttpOverrides();
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
-  declareServices();
 
   // debugPaintSizeEnabled = true;
   // debugPaintLayerBordersEnabled = true;
@@ -38,8 +34,7 @@ void main() async {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => ConnectionNotifier(getIt()),
+    return MainProviders(
       child: MaterialApp(
         localizationsDelegates: context.localizationDelegates,
         supportedLocales: context.supportedLocales,

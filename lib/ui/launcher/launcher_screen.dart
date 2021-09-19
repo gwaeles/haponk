@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:haponk/data/config/providers/config_notifier.dart';
 import 'package:haponk/data/connection/providers/connection_notifier.dart';
-import 'package:haponk/dependency_injection.dart';
 import 'package:provider/provider.dart';
 
 class LauncherScreen extends StatefulWidget {
@@ -16,7 +15,9 @@ class LauncherScreenState extends State<LauncherScreen> {
   @override
   void initState() {
     super.initState();
-    configNotifier = ConfigNotifier(getIt());
+    configNotifier = ConfigNotifier(
+      repository: context.read(),
+    );
 
 // Todo: replace the stream by a future to avoid creation of streamController in repo
     Future.delayed(Duration(milliseconds: 250))

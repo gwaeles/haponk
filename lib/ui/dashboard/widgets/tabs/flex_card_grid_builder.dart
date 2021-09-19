@@ -13,30 +13,38 @@ import '../editor/action_button.dart';
 import 'flex_card_widget.dart';
 import '../editor/select_device_alert_dialog.dart';
 
-class FlexCardGrid extends StatelessWidget {
+typedef FlexCardGridWidgetBuilder = Widget Function(
+  BuildContext context,
+  List<Widget> children,
+);
+
+class FlexCardGridBuilder extends StatelessWidget {
+  final FlexCardGridWidgetBuilder builder;
+
+  const FlexCardGridBuilder({
+    Key? key,
+    required this.builder,
+  }) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     final dragTargetsNotifier = context.watch<DragTargetsNotifier>();
+    final editorController = context.watch<EditorController>();
+
+    // Bind the notifier to the screen size
+    dragTargetsNotifier.layoutWidth = MediaQuery.of(context).size.width;
 
     return Container(
       color: Colors.transparent,
       height: dragTargetsNotifier.maxGridHeight,
-      child: Consumer<EditorController>(
-        builder: (
+      child: builder(
+        context,
+        buildChildren(
           context,
+          dragTargetsNotifier,
           editorController,
-          child,
-        ) {
-          return Stack(
-            fit: StackFit.loose,
-            children: buildChildren(
-              context,
-              dragTargetsNotifier,
-              editorController,
-              context.read<CardsProvider>(),
-            ),
-          );
-        },
+          context.read<CardsProvider>(),
+        ),
       ),
     );
   }

@@ -1,10 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:haponk/core/hass/datasources/hass_api.dart';
 import 'package:haponk/core/hass/models/events/discovery_info_model.dart';
 import 'package:haponk/core/network/api_status.dart';
-import 'package:haponk/dependency_injection.dart';
 import 'package:haponk/data/config/repositories/config_repository.dart';
 import 'package:haponk/data/config/entities/config.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -13,15 +11,13 @@ import 'package:haponk/core/db/database_extension.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:moor/ffi.dart';
-import 'package:retrofit/retrofit.dart';
 import 'package:dio/dio.dart';
 
 import 'config_repository_test.mocks.dart';
 
 @GenerateMocks([
   FlutterSecureStorage,
-  HassApi,
-  HttpResponse,
+  Dio,
   Response,
 ])
 void main() {
@@ -31,41 +27,27 @@ void main() {
   // Mocks
   late Database db;
   late MockFlutterSecureStorage storage;
-  late MockHassApi hassApi;
-  late MockHttpResponse httpResponseMock;
+  late MockDio dio;
   late MockResponse responseMock;
 
-  final ServiceDeclaration declareServices = () {
-    getIt.registerFactoryParam<HassApi, String, String>((param1, _) => hassApi);
-  };
-
-  final ServiceDeclaration undeclareServices = () {
-    getIt.unregister<HassApi>();
-  };
-
-  setUpAll(() {
+  setUp(() async {
     // Mocks
     db = Database(VmDatabase.memory());
     storage = MockFlutterSecureStorage();
+    dio = MockDio();
+    responseMock = MockResponse();
 
     // Target
-    configRepository = ConfigRepository(db, storage);
-  });
-
-  tearDownAll(() async {
-    await db.close();
-  });
-
-  setUp(() async {
-    hassApi = MockHassApi();
-    declareServices();
-    httpResponseMock = MockHttpResponse();
-    responseMock = MockResponse();
+    configRepository = ConfigRepository(
+      db: db,
+      storage: storage,
+      dio: dio,
+    );
     db.delete(db.configs).go();
   });
 
-  tearDown(() {
-    undeclareServices();
+  tearDown(() async {
+    await db.close();
   });
 
   ConfigDBO aConfigDBO() => ConfigDBO(
@@ -132,12 +114,14 @@ void main() {
           version: "1");
       final url = "http://localhost:8123";
 
-      when(hassApi.discoveryInfo()).thenAnswer(
-        (_) => Future.value(httpResponseMock),
+      when(dio.fetch(any)).thenAnswer(
+        (_) => Future.value(responseMock),
       );
-      when(httpResponseMock.response).thenReturn(responseMock);
+      when(dio.options).thenReturn(
+        BaseOptions(baseUrl: ''),
+      );
       when(responseMock.statusCode).thenReturn(ApiStatus.OK);
-      when(httpResponseMock.data).thenReturn(model.toJson());
+      when(responseMock.data).thenReturn(model.toJson());
 
       //WHEN
       expect(
@@ -168,12 +152,8 @@ void main() {
           version: "1");
       final url = "http://localhost:8123";
 
-      when(hassApi.discoveryInfo()).thenAnswer(
-        (_) => Future.value(httpResponseMock),
-      );
-      when(httpResponseMock.response).thenReturn(responseMock);
       when(responseMock.statusCode).thenReturn(ApiStatus.RESOURCE_NOT_FOUND);
-      when(httpResponseMock.data).thenReturn(model.toJson());
+      when(responseMock.data).thenReturn(model.toJson());
 
       //WHEN
       expect(db.select(db.configs).get(), completion(isEmpty));

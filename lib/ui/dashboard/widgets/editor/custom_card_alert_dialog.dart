@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:haponk/data/tabs/providers/card_provider.dart';
 import 'package:haponk/data/tabs/repositories/cards_repository.dart';
-import 'package:haponk/dependency_injection.dart';
 import 'package:provider/provider.dart';
 
 class CustomCardAlertDialog extends StatelessWidget {
@@ -20,7 +19,7 @@ class CustomCardAlertDialog extends StatelessWidget {
       providers: [
         Provider(
           create: (context) => CardsRepository(
-            db: getIt(),
+            db: context.read(),
             tabId: tabId,
           ),
         ),
