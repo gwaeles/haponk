@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:haponk/core/themes/app_theme.dart';
-import 'package:haponk/data/devices/providers/devices_provider.dart';
+import 'package:haponk/data/devices/blocs/devices_bloc.dart';
 import 'package:provider/provider.dart';
 
 class TabsAppBarTitle extends StatelessWidget {
@@ -60,7 +60,7 @@ class TabsAppBarTitle extends StatelessWidget {
           color: textColor,
         ),
         cursorColor: hintColor,
-        onChanged: (value) => context.read<DevicesProvider>().search(value),
+        onChanged: (value) => context.read<DevicesBloc>().search(value),
       ),
     );
   }

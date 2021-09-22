@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:haponk/data/devices/providers/devices_provider.dart';
-import 'package:haponk/data/devices/entities/device.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:haponk/data/devices/blocs/devices_bloc.dart';
 import 'package:provider/provider.dart';
 
 import 'widgets/device_list.dart';
@@ -18,15 +18,11 @@ class DevicesPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
         providers: [
-          Provider(
-            create: (context) => DevicesProvider(
+          BlocProvider(
+            create: (context) => DevicesBloc(
               repository: context.read(),
             ),
           ),
-          StreamProvider<List<Device>?>(
-            initialData: null,
-            create: (context) => context.read<DevicesProvider>().deviceStream,
-          )
         ],
         child: CustomScrollView(
           controller: controller,

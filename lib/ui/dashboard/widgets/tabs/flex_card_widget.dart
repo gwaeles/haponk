@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:haponk/data/devices/blocs/device_bloc.dart';
 import 'package:haponk/data/devices/entities/device.dart';
-import 'package:haponk/data/devices/providers/device_provider.dart';
+import 'package:haponk/data/devices/states/device_state.dart';
 import 'package:haponk/data/tabs/entities/positioned_flex_card.dart';
 import 'package:haponk/ui/dashboard/providers/drag_targets_notifier.dart';
 import 'package:haponk/ui/dashboard/providers/editor_controller.dart';
@@ -24,21 +26,14 @@ class FlexCardWidget extends StatelessWidget {
     final editorController = context.read<EditorController>();
     final isFake = item.card.id == 0;
 
-    return MultiProvider(
-      providers: [
-        Provider(
-          create: (context) => DeviceProvider(
-            repository: context.read(),
-            deviceId: item.card.stateId ?? 0,
-          ),
-        ),
-        StreamProvider<Device?>(
-          initialData: null,
-          create: (context) => context.read<DeviceProvider>().deviceStream,
-        )
-      ],
-      child: Consumer<Device?>(
-        builder: (context, device, child) {
+    return BlocProvider(
+      create: (context) => DeviceBloc(
+        repository: context.read(),
+        deviceId: item.card.stateId ?? 0,
+      ),
+      child: BlocBuilder<DeviceBloc, DeviceState>(
+        builder: (context, state) {
+          final Device? device = state is DeviceLoaded ? state.device : null;
           return Container(
             width: item.width,
             height: item.height,
