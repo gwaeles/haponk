@@ -12,9 +12,7 @@ class DeviceBloc extends Cubit<DeviceState> {
   DeviceBloc({
     required this.repository,
     required this.deviceId,
-  }) : super(DeviceState.idle()) {
-    _init();
-  }
+  }) : super(DeviceState.idle());
 
   StreamSubscription? _repoSubscription;
 
@@ -22,7 +20,7 @@ class DeviceBloc extends Cubit<DeviceState> {
   /// --- SUBSCRIBTION --- ///
   ///
 
-  void _init() {
+  void init() {
     // Repo stream subscription
     _repoSubscription?.cancel();
     if (deviceId > 0) {

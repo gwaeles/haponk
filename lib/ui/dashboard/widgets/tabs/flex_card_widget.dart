@@ -30,7 +30,7 @@ class FlexCardWidget extends StatelessWidget {
       create: (context) => DeviceBloc(
         repository: context.read(),
         deviceId: item.card.stateId ?? 0,
-      ),
+      )..init(),
       child: BlocBuilder<DeviceBloc, DeviceState>(
         builder: (context, state) {
           final Device? device = state is DeviceLoaded ? state.device : null;

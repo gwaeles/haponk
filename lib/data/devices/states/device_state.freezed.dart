@@ -166,6 +166,8 @@ abstract class $DeviceLoadedCopyWith<$Res> {
           DeviceLoaded value, $Res Function(DeviceLoaded) then) =
       _$DeviceLoadedCopyWithImpl<$Res>;
   $Res call({Device device});
+
+  $DeviceCopyWith<$Res> get device;
 }
 
 /// @nodoc
@@ -188,6 +190,13 @@ class _$DeviceLoadedCopyWithImpl<$Res> extends _$DeviceStateCopyWithImpl<$Res>
           : device // ignore: cast_nullable_to_non_nullable
               as Device,
     ));
+  }
+
+  @override
+  $DeviceCopyWith<$Res> get device {
+    return $DeviceCopyWith<$Res>(_value.device, (value) {
+      return _then(_value.copyWith(device: value));
+    });
   }
 }
 
