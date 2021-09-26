@@ -1,51 +1,32 @@
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:haponk/core/hass/models/constants.dart';
 
-class Device {
-  final int? id;
-  final String? entityId;
-  final DeviceType deviceType;
-  final String? state;
-  final DateTime? lastChanged;
-  final DateTime? lastUpdated;
-  final String? friendlyName;
-  final int? supportedFeatures;
-  final int? currentPosition;
-  final DateTime? lastTriggered;
-  final String? mode;
-  final double? temperature;
-  final int? humidity;
-  final double? pressure;
-  final double? windBearing;
-  final double? windSpeed;
-  final String? attribution;
-  final bool? isOn;
-  final String? deviceClass;
-  final String? unitOfMeasurement;
-  final int? current;
-  final int? voltage;
+part 'device.freezed.dart';
 
-  Device({
-    this.id,
-    this.entityId,
-    required this.deviceType,
-    this.state,
-    this.lastChanged,
-    this.lastUpdated,
-    this.friendlyName,
-    this.supportedFeatures,
-    this.currentPosition,
-    this.lastTriggered,
-    this.mode,
-    this.temperature,
-    this.humidity,
-    this.pressure,
-    this.windBearing,
-    this.windSpeed,
-    this.attribution,
-    this.isOn,
-    this.deviceClass,
-    this.unitOfMeasurement,
-    this.current,
-    this.voltage,
-  });
+@freezed
+class Device with _$Device {
+  const factory Device({
+    int? id,
+    String? entityId,
+    @Default(DeviceType.LIGHT) DeviceType deviceType,
+    String? state,
+    DateTime? lastChanged,
+    DateTime? lastUpdated,
+    String? friendlyName,
+    int? supportedFeatures,
+    int? currentPosition,
+    DateTime? lastTriggered,
+    String? mode,
+    double? temperature,
+    int? humidity,
+    double? pressure,
+    double? windBearing,
+    double? windSpeed,
+    String? attribution,
+    bool? isOn,
+    String? deviceClass,
+    String? unitOfMeasurement,
+    int? current,
+    int? voltage,
+  }) = _Device;
 }

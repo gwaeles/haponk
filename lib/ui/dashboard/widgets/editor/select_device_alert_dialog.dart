@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:haponk/core/hass/models/constants.dart';
 import 'package:haponk/core/themes/app_theme.dart';
+import 'package:haponk/data/devices/blocs/device_types_bloc.dart';
+import 'package:haponk/data/devices/blocs/devices_bloc.dart';
 import 'package:haponk/data/devices/entities/device.dart';
-import 'package:haponk/data/devices/providers/device_types_provider.dart';
-import 'package:haponk/data/devices/providers/devices_provider.dart';
 import 'package:haponk/data/devices/repositories/devices_repository.dart';
+import 'package:haponk/data/devices/states/device_types_state.dart';
+import 'package:haponk/data/devices/states/devices_state.dart';
 import 'package:haponk/ui/dashboard/providers/device_selection_notifier.dart';
 import 'package:provider/provider.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -27,28 +30,19 @@ class SelectDeviceAlertDialog extends StatelessWidget {
         ChangeNotifierProvider(
           create: (context) => ValueNotifier<int>(0),
         ),
-        Provider(
-          create: (context) => DeviceTypesProvider(
-            context.read(),
-          ),
+        ChangeNotifierProvider(
+          create: (context) => DeviceSelectionNotifier(maxItem),
         ),
-        Provider(
-          create: (context) => DevicesProvider(
+        BlocProvider(
+          create: (context) => DevicesBloc(
             repository: context.read(),
             fetchAllDevicesAllowed: false,
           ),
         ),
-        StreamProvider<List<DeviceType>?>(
-          initialData: null,
-          create: (context) =>
-              context.read<DeviceTypesProvider>().deviceTypeStream,
-        ),
-        StreamProvider<List<Device>?>(
-          initialData: null,
-          create: (context) => context.read<DevicesProvider>().deviceStream,
-        ),
-        ChangeNotifierProvider(
-          create: (context) => DeviceSelectionNotifier(maxItem),
+        BlocProvider(
+          create: (context) => DeviceTypesBloc(
+            repository: context.read(),
+          ),
         ),
       ],
       child: _IndexedAlertDialog(),
@@ -96,13 +90,16 @@ class _DeviceTypeListView extends StatelessWidget {
     return Center(
       heightFactor: 1,
       child: SingleChildScrollView(
-        child: Consumer<List<DeviceType>?>(builder: (context, value, child) {
+        child: BlocBuilder<DeviceTypesBloc, DeviceTypesState>(
+            builder: (context, state) {
+          final List<DeviceType> types =
+              state is DeviceTypesLoaded ? state.types : [];
           final children = <Widget>[];
 
-          if (value == null || value.length == 0) {
+          if (types.length == 0) {
             children.add(CircularProgressIndicator());
           } else {
-            for (DeviceType deviceType in value) {
+            for (DeviceType deviceType in types) {
               children.add(
                 Container(
                   color: Colors.white12,
@@ -110,7 +107,7 @@ class _DeviceTypeListView extends StatelessWidget {
                   height: 80,
                   child: InkWell(
                     onTap: () {
-                      context.read<DevicesProvider>().selectedType = deviceType;
+                      context.read<DevicesBloc>().selectedType = deviceType;
                       context.read<ValueNotifier<int>>().value = 1;
                     },
                     child: Column(
@@ -156,14 +153,16 @@ class _DeviceListView extends StatelessWidget {
     return Center(
       heightFactor: 1,
       child: SingleChildScrollView(
-        child: Consumer2<List<Device>?, DeviceSelectionNotifier>(
-          builder: (context, value, selection, child) {
+        child: BlocBuilder<DevicesBloc, DevicesState>(
+          builder: (context, state) {
+            final List<Device> devices =
+                state is DevicesLoaded ? state.devices : [];
             final children = <Widget>[];
 
-            if (value == null || value.length == 0) {
+            if (devices.length == 0) {
               children.add(CircularProgressIndicator());
             } else {
-              for (Device device in value) {
+              for (Device device in devices) {
                 children.add(
                   Container(
                     color: Colors.white12,
@@ -172,21 +171,25 @@ class _DeviceListView extends StatelessWidget {
                       onTap: () => context
                           .read<DeviceSelectionNotifier>()
                           .toggle(device.id),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: Padding(
-                              padding:
-                                  const EdgeInsets.only(left: 16.0, right: 16),
-                              child: Text(device.friendlyName ?? ''),
-                            ),
-                          ),
-                          if (selection.ids.contains(device.id))
-                            Padding(
-                              padding: const EdgeInsets.only(right: 16),
-                              child: Icon(Icons.check),
-                            ),
-                        ],
+                      child: Consumer<DeviceSelectionNotifier>(
+                        builder: (context, selection, child) {
+                          return Row(
+                            children: [
+                              Expanded(
+                                child: Padding(
+                                  padding: const EdgeInsets.only(
+                                      left: 16.0, right: 16),
+                                  child: Text(device.friendlyName ?? ''),
+                                ),
+                              ),
+                              if (selection.ids.contains(device.id))
+                                Padding(
+                                  padding: const EdgeInsets.only(right: 16),
+                                  child: Icon(Icons.check),
+                                ),
+                            ],
+                          );
+                        },
                       ),
                     ),
                   ),

@@ -9,11 +9,14 @@ class CardProvider extends ChangeNotifier {
 
   CardProvider({
     required this.repository,
-  });
+  }) {
+    _init();
+  }
 
   int? _cardId;
   FlexCard? _card;
   FlexCard? _parentCard;
+  List<FlexCard>? _data;
 
   FlexCard? get card => _card;
   FlexCard? get parentCard => _parentCard;
@@ -21,7 +24,7 @@ class CardProvider extends ChangeNotifier {
 
   set cardId(int value) {
     _cardId = value;
-    _init();
+    _onFilterData();
   }
 
   StreamSubscription? _repoSubscription;
@@ -30,7 +33,7 @@ class CardProvider extends ChangeNotifier {
   /// --- DATA STREAM --- ///
   ///
 
-  Future<void> _init() async {
+  void _init() {
     print("[CARD] Provider load card id:$_cardId");
     // Repo stream subscription
     _repoSubscription?.cancel();
@@ -45,18 +48,25 @@ class CardProvider extends ChangeNotifier {
     super.dispose();
   }
 
-  Future<void> _onData(List<FlexCard> data) async {
-    for (FlexCard item in data) {
-      if (item.id == cardId) {
-        _card = item;
-        _parentCard = null;
-        notifyListeners();
-      } else if (item.hasChildren) {
-        for (FlexCard childItem in item.children!) {
-          if (childItem.id == cardId) {
-            _card = childItem;
-            _parentCard = item;
-            notifyListeners();
+  void _onData(List<FlexCard> data) {
+    _data = data;
+    _onFilterData();
+  }
+
+  void _onFilterData() {
+    if (_data != null) {
+      for (FlexCard item in _data!) {
+        if (item.id == cardId) {
+          _card = item;
+          _parentCard = null;
+          notifyListeners();
+        } else if (item.hasChildren) {
+          for (FlexCard childItem in item.children!) {
+            if (childItem.id == cardId) {
+              _card = childItem;
+              _parentCard = item;
+              notifyListeners();
+            }
           }
         }
       }
