@@ -8,8 +8,12 @@ abstract class HassApi {
   factory HassApi(Dio dio, {String baseUrl}) = _HassApi;
 
   @GET("/")
-  Future<HttpResponse> checkHealth();
+  Future<HttpResponse> checkHealth({
+    @Header("Authorization") String? authorization,
+  });
 
-  @GET("/discovery_info")
-  Future<HttpResponse> discoveryInfo();
+  @GET("/config")
+  Future<HttpResponse> config({
+    @Header("Authorization") String? authorization,
+  });
 }

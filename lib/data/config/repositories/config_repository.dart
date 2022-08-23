@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
+import 'package:drift/drift.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -115,7 +116,10 @@ class ConfigRepository {
   /// --- TRY CONNECTION --- ///
   ///
 
-  Future<bool> tryConnect(String? url) async {
+  Future<bool> tryConnect(
+    String? url, [
+    String? accessToken,
+  ]) async {
     if (url == null) {
       return false;
     }
@@ -139,14 +143,15 @@ class ConfigRepository {
         final newConfig = ConfigDBO(
           id: 1,
           internalUrl: url,
-          requiresApiPassword: false,
         );
 
         await db.insertConfig(newConfig);
         config = await db.getConfig();
       }
 
-      final response = await _hassApi.discoveryInfo();
+      final response = await _hassApi.config(
+        authorization: 'Bearer $accessToken',
+      );
       if (response.response.statusCode == ApiStatus.OK) {
         if (response.data != null) {
           final DiscoveryInfoModel discoveryInfo = DiscoveryInfoModel.fromJson(
@@ -154,14 +159,10 @@ class ConfigRepository {
 
           // Update config
           final updatedConfig = config!.copyWith(
-            uuid: discoveryInfo.uuid,
-            baseUrl: discoveryInfo.baseUrl,
-            externalUrl: discoveryInfo.externalUrl,
-            internalUrl: discoveryInfo.internalUrl,
-            locationName: discoveryInfo.locationName,
-            installationType: discoveryInfo.installationType,
-            requiresApiPassword: discoveryInfo.requiresApiPassword,
-            version: discoveryInfo.version,
+            externalUrl: Value(discoveryInfo.externalUrl),
+            internalUrl: Value(discoveryInfo.internalUrl),
+            locationName: Value(discoveryInfo.locationName),
+            version: Value(discoveryInfo.version),
           );
 
           await db.updateConfig(updatedConfig);
@@ -169,6 +170,12 @@ class ConfigRepository {
           return true;
         }
       }
+    } on DioError catch (e) {
+      print(e.message);
+      if (e.response?.statusCode == 401) {
+        print("401 ok");
+      }
+      return true;
     } catch (e) {
       return false;
     }

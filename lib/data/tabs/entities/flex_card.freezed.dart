@@ -1,5 +1,7 @@
+// coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
-// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides
+// ignore_for_file: type=lint
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
 
 part of 'flex_card.dart';
 
@@ -10,46 +12,7 @@ part of 'flex_card.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more informations: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
-
-/// @nodoc
-class _$FlexCardTearOff {
-  const _$FlexCardTearOff();
-
-  _FlexCard call(
-      {required int id,
-      required int tabId,
-      String type = 'deft',
-      int? stateId,
-      int? parentId,
-      required int position,
-      int horizontalFlex = 1,
-      int height = 56,
-      bool displayLeading = true,
-      bool displayTrailing = true,
-      bool displayTitle = true,
-      bool displaySubtitle = true,
-      List<FlexCard>? children}) {
-    return _FlexCard(
-      id: id,
-      tabId: tabId,
-      type: type,
-      stateId: stateId,
-      parentId: parentId,
-      position: position,
-      horizontalFlex: horizontalFlex,
-      height: height,
-      displayLeading: displayLeading,
-      displayTrailing: displayTrailing,
-      displayTitle: displayTitle,
-      displaySubtitle: displaySubtitle,
-      children: children,
-    );
-  }
-}
-
-/// @nodoc
-const $FlexCard = _$FlexCardTearOff();
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
 /// @nodoc
 mixin _$FlexCard {
@@ -174,9 +137,10 @@ class _$FlexCardCopyWithImpl<$Res> implements $FlexCardCopyWith<$Res> {
 }
 
 /// @nodoc
-abstract class _$FlexCardCopyWith<$Res> implements $FlexCardCopyWith<$Res> {
-  factory _$FlexCardCopyWith(_FlexCard value, $Res Function(_FlexCard) then) =
-      __$FlexCardCopyWithImpl<$Res>;
+abstract class _$$_FlexCardCopyWith<$Res> implements $FlexCardCopyWith<$Res> {
+  factory _$$_FlexCardCopyWith(
+          _$_FlexCard value, $Res Function(_$_FlexCard) then) =
+      __$$_FlexCardCopyWithImpl<$Res>;
   @override
   $Res call(
       {int id,
@@ -195,13 +159,14 @@ abstract class _$FlexCardCopyWith<$Res> implements $FlexCardCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$FlexCardCopyWithImpl<$Res> extends _$FlexCardCopyWithImpl<$Res>
-    implements _$FlexCardCopyWith<$Res> {
-  __$FlexCardCopyWithImpl(_FlexCard _value, $Res Function(_FlexCard) _then)
-      : super(_value, (v) => _then(v as _FlexCard));
+class __$$_FlexCardCopyWithImpl<$Res> extends _$FlexCardCopyWithImpl<$Res>
+    implements _$$_FlexCardCopyWith<$Res> {
+  __$$_FlexCardCopyWithImpl(
+      _$_FlexCard _value, $Res Function(_$_FlexCard) _then)
+      : super(_value, (v) => _then(v as _$_FlexCard));
 
   @override
-  _FlexCard get _value => super._value as _FlexCard;
+  _$_FlexCard get _value => super._value as _$_FlexCard;
 
   @override
   $Res call({
@@ -219,7 +184,7 @@ class __$FlexCardCopyWithImpl<$Res> extends _$FlexCardCopyWithImpl<$Res>
     Object? displaySubtitle = freezed,
     Object? children = freezed,
   }) {
-    return _then(_FlexCard(
+    return _then(_$_FlexCard(
       id: id == freezed
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -269,7 +234,7 @@ class __$FlexCardCopyWithImpl<$Res> extends _$FlexCardCopyWithImpl<$Res>
           : displaySubtitle // ignore: cast_nullable_to_non_nullable
               as bool,
       children: children == freezed
-          ? _value.children
+          ? _value._children
           : children // ignore: cast_nullable_to_non_nullable
               as List<FlexCard>?,
     ));
@@ -292,15 +257,16 @@ class _$_FlexCard extends _FlexCard {
       this.displayTrailing = true,
       this.displayTitle = true,
       this.displaySubtitle = true,
-      this.children})
-      : super._();
+      final List<FlexCard>? children})
+      : _children = children,
+        super._();
 
   @override
   final int id;
   @override
   final int tabId;
-  @JsonKey(defaultValue: 'deft')
   @override
+  @JsonKey()
   final String type;
   @override
   final int? stateId;
@@ -308,136 +274,126 @@ class _$_FlexCard extends _FlexCard {
   final int? parentId;
   @override
   final int position;
-  @JsonKey(defaultValue: 1)
   @override
+  @JsonKey()
   final int horizontalFlex;
-  @JsonKey(defaultValue: 56)
   @override
+  @JsonKey()
   final int height;
-  @JsonKey(defaultValue: true)
   @override
+  @JsonKey()
   final bool displayLeading;
-  @JsonKey(defaultValue: true)
   @override
+  @JsonKey()
   final bool displayTrailing;
-  @JsonKey(defaultValue: true)
   @override
+  @JsonKey()
   final bool displayTitle;
-  @JsonKey(defaultValue: true)
   @override
+  @JsonKey()
   final bool displaySubtitle;
+  final List<FlexCard>? _children;
   @override
-  final List<FlexCard>? children;
+  List<FlexCard>? get children {
+    final value = _children;
+    if (value == null) return null;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other is _FlexCard &&
-            (identical(other.id, id) ||
-                const DeepCollectionEquality().equals(other.id, id)) &&
-            (identical(other.tabId, tabId) ||
-                const DeepCollectionEquality().equals(other.tabId, tabId)) &&
-            (identical(other.type, type) ||
-                const DeepCollectionEquality().equals(other.type, type)) &&
-            (identical(other.stateId, stateId) ||
-                const DeepCollectionEquality()
-                    .equals(other.stateId, stateId)) &&
-            (identical(other.parentId, parentId) ||
-                const DeepCollectionEquality()
-                    .equals(other.parentId, parentId)) &&
-            (identical(other.position, position) ||
-                const DeepCollectionEquality()
-                    .equals(other.position, position)) &&
-            (identical(other.horizontalFlex, horizontalFlex) ||
-                const DeepCollectionEquality()
-                    .equals(other.horizontalFlex, horizontalFlex)) &&
-            (identical(other.height, height) ||
-                const DeepCollectionEquality().equals(other.height, height)) &&
-            (identical(other.displayLeading, displayLeading) ||
-                const DeepCollectionEquality()
-                    .equals(other.displayLeading, displayLeading)) &&
-            (identical(other.displayTrailing, displayTrailing) ||
-                const DeepCollectionEquality()
-                    .equals(other.displayTrailing, displayTrailing)) &&
-            (identical(other.displayTitle, displayTitle) ||
-                const DeepCollectionEquality()
-                    .equals(other.displayTitle, displayTitle)) &&
-            (identical(other.displaySubtitle, displaySubtitle) ||
-                const DeepCollectionEquality()
-                    .equals(other.displaySubtitle, displaySubtitle)) &&
-            (identical(other.children, children) ||
-                const DeepCollectionEquality()
-                    .equals(other.children, children)));
+        (other.runtimeType == runtimeType &&
+            other is _$_FlexCard &&
+            const DeepCollectionEquality().equals(other.id, id) &&
+            const DeepCollectionEquality().equals(other.tabId, tabId) &&
+            const DeepCollectionEquality().equals(other.type, type) &&
+            const DeepCollectionEquality().equals(other.stateId, stateId) &&
+            const DeepCollectionEquality().equals(other.parentId, parentId) &&
+            const DeepCollectionEquality().equals(other.position, position) &&
+            const DeepCollectionEquality()
+                .equals(other.horizontalFlex, horizontalFlex) &&
+            const DeepCollectionEquality().equals(other.height, height) &&
+            const DeepCollectionEquality()
+                .equals(other.displayLeading, displayLeading) &&
+            const DeepCollectionEquality()
+                .equals(other.displayTrailing, displayTrailing) &&
+            const DeepCollectionEquality()
+                .equals(other.displayTitle, displayTitle) &&
+            const DeepCollectionEquality()
+                .equals(other.displaySubtitle, displaySubtitle) &&
+            const DeepCollectionEquality().equals(other._children, _children));
   }
 
   @override
-  int get hashCode =>
-      runtimeType.hashCode ^
-      const DeepCollectionEquality().hash(id) ^
-      const DeepCollectionEquality().hash(tabId) ^
-      const DeepCollectionEquality().hash(type) ^
-      const DeepCollectionEquality().hash(stateId) ^
-      const DeepCollectionEquality().hash(parentId) ^
-      const DeepCollectionEquality().hash(position) ^
-      const DeepCollectionEquality().hash(horizontalFlex) ^
-      const DeepCollectionEquality().hash(height) ^
-      const DeepCollectionEquality().hash(displayLeading) ^
-      const DeepCollectionEquality().hash(displayTrailing) ^
-      const DeepCollectionEquality().hash(displayTitle) ^
-      const DeepCollectionEquality().hash(displaySubtitle) ^
-      const DeepCollectionEquality().hash(children);
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(id),
+      const DeepCollectionEquality().hash(tabId),
+      const DeepCollectionEquality().hash(type),
+      const DeepCollectionEquality().hash(stateId),
+      const DeepCollectionEquality().hash(parentId),
+      const DeepCollectionEquality().hash(position),
+      const DeepCollectionEquality().hash(horizontalFlex),
+      const DeepCollectionEquality().hash(height),
+      const DeepCollectionEquality().hash(displayLeading),
+      const DeepCollectionEquality().hash(displayTrailing),
+      const DeepCollectionEquality().hash(displayTitle),
+      const DeepCollectionEquality().hash(displaySubtitle),
+      const DeepCollectionEquality().hash(_children));
 
   @JsonKey(ignore: true)
   @override
-  _$FlexCardCopyWith<_FlexCard> get copyWith =>
-      __$FlexCardCopyWithImpl<_FlexCard>(this, _$identity);
+  _$$_FlexCardCopyWith<_$_FlexCard> get copyWith =>
+      __$$_FlexCardCopyWithImpl<_$_FlexCard>(this, _$identity);
 }
 
 abstract class _FlexCard extends FlexCard {
   const factory _FlexCard(
-      {required int id,
-      required int tabId,
-      String type,
-      int? stateId,
-      int? parentId,
-      required int position,
-      int horizontalFlex,
-      int height,
-      bool displayLeading,
-      bool displayTrailing,
-      bool displayTitle,
-      bool displaySubtitle,
-      List<FlexCard>? children}) = _$_FlexCard;
+      {required final int id,
+      required final int tabId,
+      final String type,
+      final int? stateId,
+      final int? parentId,
+      required final int position,
+      final int horizontalFlex,
+      final int height,
+      final bool displayLeading,
+      final bool displayTrailing,
+      final bool displayTitle,
+      final bool displaySubtitle,
+      final List<FlexCard>? children}) = _$_FlexCard;
   const _FlexCard._() : super._();
 
   @override
-  int get id => throw _privateConstructorUsedError;
+  int get id;
   @override
-  int get tabId => throw _privateConstructorUsedError;
+  int get tabId;
   @override
-  String get type => throw _privateConstructorUsedError;
+  String get type;
   @override
-  int? get stateId => throw _privateConstructorUsedError;
+  int? get stateId;
   @override
-  int? get parentId => throw _privateConstructorUsedError;
+  int? get parentId;
   @override
-  int get position => throw _privateConstructorUsedError;
+  int get position;
   @override
-  int get horizontalFlex => throw _privateConstructorUsedError;
+  int get horizontalFlex;
   @override
-  int get height => throw _privateConstructorUsedError;
+  int get height;
   @override
-  bool get displayLeading => throw _privateConstructorUsedError;
+  bool get displayLeading;
   @override
-  bool get displayTrailing => throw _privateConstructorUsedError;
+  bool get displayTrailing;
   @override
-  bool get displayTitle => throw _privateConstructorUsedError;
+  bool get displayTitle;
   @override
-  bool get displaySubtitle => throw _privateConstructorUsedError;
+  bool get displaySubtitle;
   @override
-  List<FlexCard>? get children => throw _privateConstructorUsedError;
+  List<FlexCard>? get children;
   @override
   @JsonKey(ignore: true)
-  _$FlexCardCopyWith<_FlexCard> get copyWith =>
+  _$$_FlexCardCopyWith<_$_FlexCard> get copyWith =>
       throw _privateConstructorUsedError;
 }

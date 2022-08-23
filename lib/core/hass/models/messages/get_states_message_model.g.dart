@@ -17,7 +17,7 @@ Map<String, dynamic> _$GetStatesMessageModelToJson(
   }
 
   writeNotNull('id', instance.id);
-  val['type'] = _$MessageTypeEnumMap[instance.type];
+  val['type'] = _$MessageTypeEnumMap[instance.type]!;
   return val;
 }
 

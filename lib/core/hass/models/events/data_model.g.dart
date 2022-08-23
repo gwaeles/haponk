@@ -6,17 +6,15 @@ part of 'data_model.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-DataModel _$DataModelFromJson(Map<String, dynamic> json) {
-  return DataModel(
-    entityId: json['entity_id'] as String?,
-    oldState: json['old_state'] == null
-        ? null
-        : StateModel.fromJson(json['old_state'] as Map<String, dynamic>),
-    newState: json['new_state'] == null
-        ? null
-        : StateModel.fromJson(json['new_state'] as Map<String, dynamic>),
-  );
-}
+DataModel _$DataModelFromJson(Map<String, dynamic> json) => DataModel(
+      entityId: json['entity_id'] as String?,
+      oldState: json['old_state'] == null
+          ? null
+          : StateModel.fromJson(json['old_state'] as Map<String, dynamic>),
+      newState: json['new_state'] == null
+          ? null
+          : StateModel.fromJson(json['new_state'] as Map<String, dynamic>),
+    );
 
 Map<String, dynamic> _$DataModelToJson(DataModel instance) {
   final val = <String, dynamic>{

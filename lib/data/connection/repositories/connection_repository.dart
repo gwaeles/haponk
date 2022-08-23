@@ -16,7 +16,7 @@ import 'package:haponk/data/config/entities/config.dart';
 import 'package:haponk/data/connection/datasources/web_socket_service.dart';
 
 import 'package:haponk/data/connection/entities/message.dart';
-import 'package:moor/moor.dart';
+import 'package:drift/drift.dart';
 
 class ConnectionRepository {
   final Database db;
@@ -27,9 +27,9 @@ class ConnectionRepository {
 
   StreamController<Message>? _controller;
   String? _accessToken;
-  String? _configUuid;
   WebSocketService? localWebSocket;
   WebSocketService? distantWebSocket;
+  Config? _currentConfig;
 
   ConnectionType _connectionType = ConnectionType.IDLE;
   StreamController<ConnectionType>? _controllerConnectionType;
@@ -78,9 +78,9 @@ class ConnectionRepository {
       return false;
     }
 
+    _currentConfig = config;
     _controller?.sink.add(Message("Connecting"));
     _accessToken = config.accessToken;
-    _configUuid = config.uuid;
 
     localWebSocket = WebSocketService(
       accessToken: _accessToken!,
@@ -131,19 +131,17 @@ class ConnectionRepository {
   void _onAuthOk(ConnectionType connectionType) {
     print("$connectionType: _onAuthOk");
     if (_connectionType == ConnectionType.IDLE) {
-      if (_configUuid != null) {
-        _connectionType = connectionType;
+      _connectionType = connectionType;
 
-        db.updateConfigDate(_configUuid!);
+      db.updateConfigDate();
 
-        _controllerConnectionType?.sink.add(_connectionType);
+      _controllerConnectionType?.sink.add(_connectionType);
 
-        subscribe();
+      subscribe();
 
-        getStates();
+      getStates();
 
-        getServices();
-      }
+      getServices();
     } else {
       // Already connected
       if (connectionType == ConnectionType.DISTANT) {
@@ -204,25 +202,25 @@ class ConnectionRepository {
       } else if (stateDao.state != state.state) {
         // Update state
         final StateDBO updatedState = stateDao.copyWith(
-          state: state.state,
-          lastChanged: state.lastChanged,
-          lastUpdated: state.lastUpdated,
-          friendlyName: state.attributes?.friendlyName,
-          supportedFeatures: state.attributes?.supportedFeatures,
-          currentPosition: state.attributes?.currentPosition,
-          lastTriggered: state.attributes?.lastTriggered,
-          mode: state.attributes?.mode,
-          temperature: state.attributes?.temperature,
-          humidity: state.attributes?.humidity,
-          pressure: state.attributes?.pressure,
-          windBearing: state.attributes?.windBearing,
-          windSpeed: state.attributes?.windSpeed,
-          attribution: state.attributes?.attribution,
-          isOn: state.attributes?.isOn,
-          deviceClass: state.attributes?.deviceClass,
-          unitOfMeasurement: state.attributes?.unitOfMeasurement,
-          current: state.attributes?.current,
-          voltage: state.attributes?.voltage,
+          state: Value(state.state),
+          lastChanged: Value(state.lastChanged),
+          lastUpdated: Value(state.lastUpdated),
+          friendlyName: Value(state.attributes?.friendlyName),
+          supportedFeatures: Value(state.attributes?.supportedFeatures),
+          currentPosition: Value(state.attributes?.currentPosition),
+          lastTriggered: Value(state.attributes?.lastTriggered),
+          mode: Value(state.attributes?.mode),
+          temperature: Value(state.attributes?.temperature),
+          humidity: Value(state.attributes?.humidity),
+          pressure: Value(state.attributes?.pressure),
+          windBearing: Value(state.attributes?.windBearing),
+          windSpeed: Value(state.attributes?.windSpeed),
+          attribution: Value(state.attributes?.attribution),
+          isOn: Value(state.attributes?.isOn),
+          deviceClass: Value(state.attributes?.deviceClass),
+          unitOfMeasurement: Value(state.attributes?.unitOfMeasurement),
+          current: Value(state.attributes?.current),
+          voltage: Value(state.attributes?.voltage),
         );
 
         await db.updateState(updatedState);
@@ -241,6 +239,7 @@ class ConnectionRepository {
     print("$connectionType: _onDone");
     if (connectionType == _connectionType) {
       _controller?.sink.add(Message("on Done"));
+      disconnect();
     }
   }
 
@@ -269,6 +268,9 @@ class ConnectionRepository {
   }
 
   void callService(String domain, String service, String entityId) {
+    if (_connectionType == ConnectionType.IDLE && _currentConfig != null) {
+      connect(_currentConfig!);
+    }
     _send(CallServiceMessageModel(
       id: _getNextCommandId(),
       domain: domain,

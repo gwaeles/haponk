@@ -18,7 +18,7 @@ class ValidButton extends StatelessWidget {
             child: Text("Go home"))
         : ElevatedButton(
             onPressed: () =>
-                context.read<ConfigNotifier>().tryConnect().then((_) {
+                context.read<ConfigNotifier>().tryConnect().then((succeed) {
               if (context.read<ConfigNotifier>().connectionSucceed == true) {
                 context.read<ConnectionNotifier>().connect(
                       context.read<ConfigNotifier>().currentConfig!,

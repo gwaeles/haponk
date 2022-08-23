@@ -6,13 +6,11 @@ part of 'context_model.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-ContextModel _$ContextModelFromJson(Map<String, dynamic> json) {
-  return ContextModel(
-    id: json['id'] as String,
-    parentId: json['parent_id'] as String?,
-    userId: json['user_id'] as String?,
-  );
-}
+ContextModel _$ContextModelFromJson(Map<String, dynamic> json) => ContextModel(
+      id: json['id'] as String,
+      parentId: json['parent_id'] as String?,
+      userId: json['user_id'] as String?,
+    );
 
 Map<String, dynamic> _$ContextModelToJson(ContextModel instance) =>
     <String, dynamic>{

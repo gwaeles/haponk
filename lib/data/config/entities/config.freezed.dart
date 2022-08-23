@@ -1,5 +1,7 @@
+// coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
-// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides
+// ignore_for_file: type=lint
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
 
 part of 'config.dart';
 
@@ -10,50 +12,13 @@ part of 'config.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more informations: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
-
-/// @nodoc
-class _$ConfigTearOff {
-  const _$ConfigTearOff();
-
-  _Config call(
-      {String? uuid,
-      String? baseUrl,
-      String? externalUrl,
-      String? internalUrl,
-      String? locationName,
-      String? installationType,
-      bool? requiresApiPassword,
-      String? version,
-      DateTime? lastConnection,
-      String? accessToken}) {
-    return _Config(
-      uuid: uuid,
-      baseUrl: baseUrl,
-      externalUrl: externalUrl,
-      internalUrl: internalUrl,
-      locationName: locationName,
-      installationType: installationType,
-      requiresApiPassword: requiresApiPassword,
-      version: version,
-      lastConnection: lastConnection,
-      accessToken: accessToken,
-    );
-  }
-}
-
-/// @nodoc
-const $Config = _$ConfigTearOff();
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
 /// @nodoc
 mixin _$Config {
-  String? get uuid => throw _privateConstructorUsedError;
-  String? get baseUrl => throw _privateConstructorUsedError;
   String? get externalUrl => throw _privateConstructorUsedError;
   String? get internalUrl => throw _privateConstructorUsedError;
   String? get locationName => throw _privateConstructorUsedError;
-  String? get installationType => throw _privateConstructorUsedError;
-  bool? get requiresApiPassword => throw _privateConstructorUsedError;
   String? get version => throw _privateConstructorUsedError;
   DateTime? get lastConnection => throw _privateConstructorUsedError;
   String? get accessToken => throw _privateConstructorUsedError;
@@ -67,13 +32,9 @@ abstract class $ConfigCopyWith<$Res> {
   factory $ConfigCopyWith(Config value, $Res Function(Config) then) =
       _$ConfigCopyWithImpl<$Res>;
   $Res call(
-      {String? uuid,
-      String? baseUrl,
-      String? externalUrl,
+      {String? externalUrl,
       String? internalUrl,
       String? locationName,
-      String? installationType,
-      bool? requiresApiPassword,
       String? version,
       DateTime? lastConnection,
       String? accessToken});
@@ -89,26 +50,14 @@ class _$ConfigCopyWithImpl<$Res> implements $ConfigCopyWith<$Res> {
 
   @override
   $Res call({
-    Object? uuid = freezed,
-    Object? baseUrl = freezed,
     Object? externalUrl = freezed,
     Object? internalUrl = freezed,
     Object? locationName = freezed,
-    Object? installationType = freezed,
-    Object? requiresApiPassword = freezed,
     Object? version = freezed,
     Object? lastConnection = freezed,
     Object? accessToken = freezed,
   }) {
     return _then(_value.copyWith(
-      uuid: uuid == freezed
-          ? _value.uuid
-          : uuid // ignore: cast_nullable_to_non_nullable
-              as String?,
-      baseUrl: baseUrl == freezed
-          ? _value.baseUrl
-          : baseUrl // ignore: cast_nullable_to_non_nullable
-              as String?,
       externalUrl: externalUrl == freezed
           ? _value.externalUrl
           : externalUrl // ignore: cast_nullable_to_non_nullable
@@ -121,14 +70,6 @@ class _$ConfigCopyWithImpl<$Res> implements $ConfigCopyWith<$Res> {
           ? _value.locationName
           : locationName // ignore: cast_nullable_to_non_nullable
               as String?,
-      installationType: installationType == freezed
-          ? _value.installationType
-          : installationType // ignore: cast_nullable_to_non_nullable
-              as String?,
-      requiresApiPassword: requiresApiPassword == freezed
-          ? _value.requiresApiPassword
-          : requiresApiPassword // ignore: cast_nullable_to_non_nullable
-              as bool?,
       version: version == freezed
           ? _value.version
           : version // ignore: cast_nullable_to_non_nullable
@@ -146,54 +87,38 @@ class _$ConfigCopyWithImpl<$Res> implements $ConfigCopyWith<$Res> {
 }
 
 /// @nodoc
-abstract class _$ConfigCopyWith<$Res> implements $ConfigCopyWith<$Res> {
-  factory _$ConfigCopyWith(_Config value, $Res Function(_Config) then) =
-      __$ConfigCopyWithImpl<$Res>;
+abstract class _$$_ConfigCopyWith<$Res> implements $ConfigCopyWith<$Res> {
+  factory _$$_ConfigCopyWith(_$_Config value, $Res Function(_$_Config) then) =
+      __$$_ConfigCopyWithImpl<$Res>;
   @override
   $Res call(
-      {String? uuid,
-      String? baseUrl,
-      String? externalUrl,
+      {String? externalUrl,
       String? internalUrl,
       String? locationName,
-      String? installationType,
-      bool? requiresApiPassword,
       String? version,
       DateTime? lastConnection,
       String? accessToken});
 }
 
 /// @nodoc
-class __$ConfigCopyWithImpl<$Res> extends _$ConfigCopyWithImpl<$Res>
-    implements _$ConfigCopyWith<$Res> {
-  __$ConfigCopyWithImpl(_Config _value, $Res Function(_Config) _then)
-      : super(_value, (v) => _then(v as _Config));
+class __$$_ConfigCopyWithImpl<$Res> extends _$ConfigCopyWithImpl<$Res>
+    implements _$$_ConfigCopyWith<$Res> {
+  __$$_ConfigCopyWithImpl(_$_Config _value, $Res Function(_$_Config) _then)
+      : super(_value, (v) => _then(v as _$_Config));
 
   @override
-  _Config get _value => super._value as _Config;
+  _$_Config get _value => super._value as _$_Config;
 
   @override
   $Res call({
-    Object? uuid = freezed,
-    Object? baseUrl = freezed,
     Object? externalUrl = freezed,
     Object? internalUrl = freezed,
     Object? locationName = freezed,
-    Object? installationType = freezed,
-    Object? requiresApiPassword = freezed,
     Object? version = freezed,
     Object? lastConnection = freezed,
     Object? accessToken = freezed,
   }) {
-    return _then(_Config(
-      uuid: uuid == freezed
-          ? _value.uuid
-          : uuid // ignore: cast_nullable_to_non_nullable
-              as String?,
-      baseUrl: baseUrl == freezed
-          ? _value.baseUrl
-          : baseUrl // ignore: cast_nullable_to_non_nullable
-              as String?,
+    return _then(_$_Config(
       externalUrl: externalUrl == freezed
           ? _value.externalUrl
           : externalUrl // ignore: cast_nullable_to_non_nullable
@@ -206,14 +131,6 @@ class __$ConfigCopyWithImpl<$Res> extends _$ConfigCopyWithImpl<$Res>
           ? _value.locationName
           : locationName // ignore: cast_nullable_to_non_nullable
               as String?,
-      installationType: installationType == freezed
-          ? _value.installationType
-          : installationType // ignore: cast_nullable_to_non_nullable
-              as String?,
-      requiresApiPassword: requiresApiPassword == freezed
-          ? _value.requiresApiPassword
-          : requiresApiPassword // ignore: cast_nullable_to_non_nullable
-              as bool?,
       version: version == freezed
           ? _value.version
           : version // ignore: cast_nullable_to_non_nullable
@@ -234,32 +151,20 @@ class __$ConfigCopyWithImpl<$Res> extends _$ConfigCopyWithImpl<$Res>
 
 class _$_Config extends _Config {
   const _$_Config(
-      {this.uuid,
-      this.baseUrl,
-      this.externalUrl,
+      {this.externalUrl,
       this.internalUrl,
       this.locationName,
-      this.installationType,
-      this.requiresApiPassword,
       this.version,
       this.lastConnection,
       this.accessToken})
       : super._();
 
   @override
-  final String? uuid;
-  @override
-  final String? baseUrl;
-  @override
   final String? externalUrl;
   @override
   final String? internalUrl;
   @override
   final String? locationName;
-  @override
-  final String? installationType;
-  @override
-  final bool? requiresApiPassword;
   @override
   final String? version;
   @override
@@ -269,141 +174,76 @@ class _$_Config extends _Config {
 
   @override
   String toString() {
-    return 'Config(uuid: $uuid, baseUrl: $baseUrl, externalUrl: $externalUrl, internalUrl: $internalUrl, locationName: $locationName, installationType: $installationType, requiresApiPassword: $requiresApiPassword, version: $version, lastConnection: $lastConnection, accessToken: $accessToken)';
+    return 'Config(externalUrl: $externalUrl, internalUrl: $internalUrl, locationName: $locationName, version: $version, lastConnection: $lastConnection, accessToken: $accessToken)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other is _Config &&
-            (identical(other.uuid, uuid) ||
-                const DeepCollectionEquality().equals(other.uuid, uuid)) &&
-            (identical(other.baseUrl, baseUrl) ||
-                const DeepCollectionEquality()
-                    .equals(other.baseUrl, baseUrl)) &&
-            (identical(other.externalUrl, externalUrl) ||
-                const DeepCollectionEquality()
-                    .equals(other.externalUrl, externalUrl)) &&
-            (identical(other.internalUrl, internalUrl) ||
-                const DeepCollectionEquality()
-                    .equals(other.internalUrl, internalUrl)) &&
-            (identical(other.locationName, locationName) ||
-                const DeepCollectionEquality()
-                    .equals(other.locationName, locationName)) &&
-            (identical(other.installationType, installationType) ||
-                const DeepCollectionEquality()
-                    .equals(other.installationType, installationType)) &&
-            (identical(other.requiresApiPassword, requiresApiPassword) ||
-                const DeepCollectionEquality()
-                    .equals(other.requiresApiPassword, requiresApiPassword)) &&
-            (identical(other.version, version) ||
-                const DeepCollectionEquality()
-                    .equals(other.version, version)) &&
-            (identical(other.lastConnection, lastConnection) ||
-                const DeepCollectionEquality()
-                    .equals(other.lastConnection, lastConnection)) &&
-            (identical(other.accessToken, accessToken) ||
-                const DeepCollectionEquality()
-                    .equals(other.accessToken, accessToken)));
+        (other.runtimeType == runtimeType &&
+            other is _$_Config &&
+            const DeepCollectionEquality()
+                .equals(other.externalUrl, externalUrl) &&
+            const DeepCollectionEquality()
+                .equals(other.internalUrl, internalUrl) &&
+            const DeepCollectionEquality()
+                .equals(other.locationName, locationName) &&
+            const DeepCollectionEquality().equals(other.version, version) &&
+            const DeepCollectionEquality()
+                .equals(other.lastConnection, lastConnection) &&
+            const DeepCollectionEquality()
+                .equals(other.accessToken, accessToken));
   }
 
   @override
-  int get hashCode =>
-      runtimeType.hashCode ^
-      const DeepCollectionEquality().hash(uuid) ^
-      const DeepCollectionEquality().hash(baseUrl) ^
-      const DeepCollectionEquality().hash(externalUrl) ^
-      const DeepCollectionEquality().hash(internalUrl) ^
-      const DeepCollectionEquality().hash(locationName) ^
-      const DeepCollectionEquality().hash(installationType) ^
-      const DeepCollectionEquality().hash(requiresApiPassword) ^
-      const DeepCollectionEquality().hash(version) ^
-      const DeepCollectionEquality().hash(lastConnection) ^
-      const DeepCollectionEquality().hash(accessToken);
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(externalUrl),
+      const DeepCollectionEquality().hash(internalUrl),
+      const DeepCollectionEquality().hash(locationName),
+      const DeepCollectionEquality().hash(version),
+      const DeepCollectionEquality().hash(lastConnection),
+      const DeepCollectionEquality().hash(accessToken));
 
   @JsonKey(ignore: true)
   @override
-  _$ConfigCopyWith<_Config> get copyWith =>
-      __$ConfigCopyWithImpl<_Config>(this, _$identity);
+  _$$_ConfigCopyWith<_$_Config> get copyWith =>
+      __$$_ConfigCopyWithImpl<_$_Config>(this, _$identity);
 }
 
 abstract class _Config extends Config {
   const factory _Config(
-      {String? uuid,
-      String? baseUrl,
-      String? externalUrl,
-      String? internalUrl,
-      String? locationName,
-      String? installationType,
-      bool? requiresApiPassword,
-      String? version,
-      DateTime? lastConnection,
-      String? accessToken}) = _$_Config;
+      {final String? externalUrl,
+      final String? internalUrl,
+      final String? locationName,
+      final String? version,
+      final DateTime? lastConnection,
+      final String? accessToken}) = _$_Config;
   const _Config._() : super._();
 
   @override
-  String? get uuid => throw _privateConstructorUsedError;
+  String? get externalUrl;
   @override
-  String? get baseUrl => throw _privateConstructorUsedError;
+  String? get internalUrl;
   @override
-  String? get externalUrl => throw _privateConstructorUsedError;
+  String? get locationName;
   @override
-  String? get internalUrl => throw _privateConstructorUsedError;
+  String? get version;
   @override
-  String? get locationName => throw _privateConstructorUsedError;
+  DateTime? get lastConnection;
   @override
-  String? get installationType => throw _privateConstructorUsedError;
-  @override
-  bool? get requiresApiPassword => throw _privateConstructorUsedError;
-  @override
-  String? get version => throw _privateConstructorUsedError;
-  @override
-  DateTime? get lastConnection => throw _privateConstructorUsedError;
-  @override
-  String? get accessToken => throw _privateConstructorUsedError;
+  String? get accessToken;
   @override
   @JsonKey(ignore: true)
-  _$ConfigCopyWith<_Config> get copyWith => throw _privateConstructorUsedError;
+  _$$_ConfigCopyWith<_$_Config> get copyWith =>
+      throw _privateConstructorUsedError;
 }
-
-/// @nodoc
-class _$ComparableConfigTearOff {
-  const _$ComparableConfigTearOff();
-
-  _ComparableConfig call(
-      {String? uuid,
-      String? baseUrl,
-      String? externalUrl,
-      String? internalUrl,
-      String? locationName,
-      String? installationType,
-      bool? requiresApiPassword,
-      String? version}) {
-    return _ComparableConfig(
-      uuid: uuid,
-      baseUrl: baseUrl,
-      externalUrl: externalUrl,
-      internalUrl: internalUrl,
-      locationName: locationName,
-      installationType: installationType,
-      requiresApiPassword: requiresApiPassword,
-      version: version,
-    );
-  }
-}
-
-/// @nodoc
-const $ComparableConfig = _$ComparableConfigTearOff();
 
 /// @nodoc
 mixin _$ComparableConfig {
-  String? get uuid => throw _privateConstructorUsedError;
-  String? get baseUrl => throw _privateConstructorUsedError;
   String? get externalUrl => throw _privateConstructorUsedError;
   String? get internalUrl => throw _privateConstructorUsedError;
   String? get locationName => throw _privateConstructorUsedError;
-  String? get installationType => throw _privateConstructorUsedError;
-  bool? get requiresApiPassword => throw _privateConstructorUsedError;
   String? get version => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -417,13 +257,9 @@ abstract class $ComparableConfigCopyWith<$Res> {
           ComparableConfig value, $Res Function(ComparableConfig) then) =
       _$ComparableConfigCopyWithImpl<$Res>;
   $Res call(
-      {String? uuid,
-      String? baseUrl,
-      String? externalUrl,
+      {String? externalUrl,
       String? internalUrl,
       String? locationName,
-      String? installationType,
-      bool? requiresApiPassword,
       String? version});
 }
 
@@ -438,24 +274,12 @@ class _$ComparableConfigCopyWithImpl<$Res>
 
   @override
   $Res call({
-    Object? uuid = freezed,
-    Object? baseUrl = freezed,
     Object? externalUrl = freezed,
     Object? internalUrl = freezed,
     Object? locationName = freezed,
-    Object? installationType = freezed,
-    Object? requiresApiPassword = freezed,
     Object? version = freezed,
   }) {
     return _then(_value.copyWith(
-      uuid: uuid == freezed
-          ? _value.uuid
-          : uuid // ignore: cast_nullable_to_non_nullable
-              as String?,
-      baseUrl: baseUrl == freezed
-          ? _value.baseUrl
-          : baseUrl // ignore: cast_nullable_to_non_nullable
-              as String?,
       externalUrl: externalUrl == freezed
           ? _value.externalUrl
           : externalUrl // ignore: cast_nullable_to_non_nullable
@@ -468,14 +292,6 @@ class _$ComparableConfigCopyWithImpl<$Res>
           ? _value.locationName
           : locationName // ignore: cast_nullable_to_non_nullable
               as String?,
-      installationType: installationType == freezed
-          ? _value.installationType
-          : installationType // ignore: cast_nullable_to_non_nullable
-              as String?,
-      requiresApiPassword: requiresApiPassword == freezed
-          ? _value.requiresApiPassword
-          : requiresApiPassword // ignore: cast_nullable_to_non_nullable
-              as bool?,
       version: version == freezed
           ? _value.version
           : version // ignore: cast_nullable_to_non_nullable
@@ -485,54 +301,38 @@ class _$ComparableConfigCopyWithImpl<$Res>
 }
 
 /// @nodoc
-abstract class _$ComparableConfigCopyWith<$Res>
+abstract class _$$_ComparableConfigCopyWith<$Res>
     implements $ComparableConfigCopyWith<$Res> {
-  factory _$ComparableConfigCopyWith(
-          _ComparableConfig value, $Res Function(_ComparableConfig) then) =
-      __$ComparableConfigCopyWithImpl<$Res>;
+  factory _$$_ComparableConfigCopyWith(
+          _$_ComparableConfig value, $Res Function(_$_ComparableConfig) then) =
+      __$$_ComparableConfigCopyWithImpl<$Res>;
   @override
   $Res call(
-      {String? uuid,
-      String? baseUrl,
-      String? externalUrl,
+      {String? externalUrl,
       String? internalUrl,
       String? locationName,
-      String? installationType,
-      bool? requiresApiPassword,
       String? version});
 }
 
 /// @nodoc
-class __$ComparableConfigCopyWithImpl<$Res>
+class __$$_ComparableConfigCopyWithImpl<$Res>
     extends _$ComparableConfigCopyWithImpl<$Res>
-    implements _$ComparableConfigCopyWith<$Res> {
-  __$ComparableConfigCopyWithImpl(
-      _ComparableConfig _value, $Res Function(_ComparableConfig) _then)
-      : super(_value, (v) => _then(v as _ComparableConfig));
+    implements _$$_ComparableConfigCopyWith<$Res> {
+  __$$_ComparableConfigCopyWithImpl(
+      _$_ComparableConfig _value, $Res Function(_$_ComparableConfig) _then)
+      : super(_value, (v) => _then(v as _$_ComparableConfig));
 
   @override
-  _ComparableConfig get _value => super._value as _ComparableConfig;
+  _$_ComparableConfig get _value => super._value as _$_ComparableConfig;
 
   @override
   $Res call({
-    Object? uuid = freezed,
-    Object? baseUrl = freezed,
     Object? externalUrl = freezed,
     Object? internalUrl = freezed,
     Object? locationName = freezed,
-    Object? installationType = freezed,
-    Object? requiresApiPassword = freezed,
     Object? version = freezed,
   }) {
-    return _then(_ComparableConfig(
-      uuid: uuid == freezed
-          ? _value.uuid
-          : uuid // ignore: cast_nullable_to_non_nullable
-              as String?,
-      baseUrl: baseUrl == freezed
-          ? _value.baseUrl
-          : baseUrl // ignore: cast_nullable_to_non_nullable
-              as String?,
+    return _then(_$_ComparableConfig(
       externalUrl: externalUrl == freezed
           ? _value.externalUrl
           : externalUrl // ignore: cast_nullable_to_non_nullable
@@ -545,14 +345,6 @@ class __$ComparableConfigCopyWithImpl<$Res>
           ? _value.locationName
           : locationName // ignore: cast_nullable_to_non_nullable
               as String?,
-      installationType: installationType == freezed
-          ? _value.installationType
-          : installationType // ignore: cast_nullable_to_non_nullable
-              as String?,
-      requiresApiPassword: requiresApiPassword == freezed
-          ? _value.requiresApiPassword
-          : requiresApiPassword // ignore: cast_nullable_to_non_nullable
-              as bool?,
       version: version == freezed
           ? _value.version
           : version // ignore: cast_nullable_to_non_nullable
@@ -565,19 +357,8 @@ class __$ComparableConfigCopyWithImpl<$Res>
 
 class _$_ComparableConfig implements _ComparableConfig {
   const _$_ComparableConfig(
-      {this.uuid,
-      this.baseUrl,
-      this.externalUrl,
-      this.internalUrl,
-      this.locationName,
-      this.installationType,
-      this.requiresApiPassword,
-      this.version});
+      {this.externalUrl, this.internalUrl, this.locationName, this.version});
 
-  @override
-  final String? uuid;
-  @override
-  final String? baseUrl;
   @override
   final String? externalUrl;
   @override
@@ -585,92 +366,58 @@ class _$_ComparableConfig implements _ComparableConfig {
   @override
   final String? locationName;
   @override
-  final String? installationType;
-  @override
-  final bool? requiresApiPassword;
-  @override
   final String? version;
 
   @override
   String toString() {
-    return 'ComparableConfig(uuid: $uuid, baseUrl: $baseUrl, externalUrl: $externalUrl, internalUrl: $internalUrl, locationName: $locationName, installationType: $installationType, requiresApiPassword: $requiresApiPassword, version: $version)';
+    return 'ComparableConfig(externalUrl: $externalUrl, internalUrl: $internalUrl, locationName: $locationName, version: $version)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other is _ComparableConfig &&
-            (identical(other.uuid, uuid) ||
-                const DeepCollectionEquality().equals(other.uuid, uuid)) &&
-            (identical(other.baseUrl, baseUrl) ||
-                const DeepCollectionEquality()
-                    .equals(other.baseUrl, baseUrl)) &&
-            (identical(other.externalUrl, externalUrl) ||
-                const DeepCollectionEquality()
-                    .equals(other.externalUrl, externalUrl)) &&
-            (identical(other.internalUrl, internalUrl) ||
-                const DeepCollectionEquality()
-                    .equals(other.internalUrl, internalUrl)) &&
-            (identical(other.locationName, locationName) ||
-                const DeepCollectionEquality()
-                    .equals(other.locationName, locationName)) &&
-            (identical(other.installationType, installationType) ||
-                const DeepCollectionEquality()
-                    .equals(other.installationType, installationType)) &&
-            (identical(other.requiresApiPassword, requiresApiPassword) ||
-                const DeepCollectionEquality()
-                    .equals(other.requiresApiPassword, requiresApiPassword)) &&
-            (identical(other.version, version) ||
-                const DeepCollectionEquality().equals(other.version, version)));
+        (other.runtimeType == runtimeType &&
+            other is _$_ComparableConfig &&
+            const DeepCollectionEquality()
+                .equals(other.externalUrl, externalUrl) &&
+            const DeepCollectionEquality()
+                .equals(other.internalUrl, internalUrl) &&
+            const DeepCollectionEquality()
+                .equals(other.locationName, locationName) &&
+            const DeepCollectionEquality().equals(other.version, version));
   }
 
   @override
-  int get hashCode =>
-      runtimeType.hashCode ^
-      const DeepCollectionEquality().hash(uuid) ^
-      const DeepCollectionEquality().hash(baseUrl) ^
-      const DeepCollectionEquality().hash(externalUrl) ^
-      const DeepCollectionEquality().hash(internalUrl) ^
-      const DeepCollectionEquality().hash(locationName) ^
-      const DeepCollectionEquality().hash(installationType) ^
-      const DeepCollectionEquality().hash(requiresApiPassword) ^
-      const DeepCollectionEquality().hash(version);
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(externalUrl),
+      const DeepCollectionEquality().hash(internalUrl),
+      const DeepCollectionEquality().hash(locationName),
+      const DeepCollectionEquality().hash(version));
 
   @JsonKey(ignore: true)
   @override
-  _$ComparableConfigCopyWith<_ComparableConfig> get copyWith =>
-      __$ComparableConfigCopyWithImpl<_ComparableConfig>(this, _$identity);
+  _$$_ComparableConfigCopyWith<_$_ComparableConfig> get copyWith =>
+      __$$_ComparableConfigCopyWithImpl<_$_ComparableConfig>(this, _$identity);
 }
 
 abstract class _ComparableConfig implements ComparableConfig {
   const factory _ComparableConfig(
-      {String? uuid,
-      String? baseUrl,
-      String? externalUrl,
-      String? internalUrl,
-      String? locationName,
-      String? installationType,
-      bool? requiresApiPassword,
-      String? version}) = _$_ComparableConfig;
+      {final String? externalUrl,
+      final String? internalUrl,
+      final String? locationName,
+      final String? version}) = _$_ComparableConfig;
 
   @override
-  String? get uuid => throw _privateConstructorUsedError;
+  String? get externalUrl;
   @override
-  String? get baseUrl => throw _privateConstructorUsedError;
+  String? get internalUrl;
   @override
-  String? get externalUrl => throw _privateConstructorUsedError;
+  String? get locationName;
   @override
-  String? get internalUrl => throw _privateConstructorUsedError;
-  @override
-  String? get locationName => throw _privateConstructorUsedError;
-  @override
-  String? get installationType => throw _privateConstructorUsedError;
-  @override
-  bool? get requiresApiPassword => throw _privateConstructorUsedError;
-  @override
-  String? get version => throw _privateConstructorUsedError;
+  String? get version;
   @override
   @JsonKey(ignore: true)
-  _$ComparableConfigCopyWith<_ComparableConfig> get copyWith =>
+  _$$_ComparableConfigCopyWith<_$_ComparableConfig> get copyWith =>
       throw _privateConstructorUsedError;
 }

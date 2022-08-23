@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:drift/native.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:haponk/core/db/database.dart';
@@ -5,7 +8,9 @@ import 'package:haponk/core/network/client.dart' as client;
 import 'package:haponk/data/config/repositories/config_repository.dart';
 import 'package:haponk/data/connection/providers/connection_notifier.dart';
 import 'package:haponk/data/connection/repositories/connection_repository.dart';
-import 'package:moor_flutter/moor_flutter.dart';
+import 'package:drift/drift.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:path/path.dart' as p;
 import 'package:provider/provider.dart';
 
 class MainProviders extends StatelessWidget {
@@ -27,13 +32,7 @@ class MainProviders extends StatelessWidget {
           create: (context) => FlutterSecureStorage(),
         ),
         Provider(
-          create: (context) => Database(
-            (FlutterQueryExecutor.inDatabaseFolder(
-              path: 'db.sqlite',
-              // Good for debugging - prints SQL in the console
-              logStatements: true,
-            )),
-          ),
+          create: (context) => Database(_openConnection()),
         ),
 
         ///
@@ -66,5 +65,16 @@ class MainProviders extends StatelessWidget {
       ],
       child: child,
     );
+  }
+
+  LazyDatabase _openConnection() {
+    // the LazyDatabase util lets us find the right location for the file async.
+    return LazyDatabase(() async {
+      // put the database file, called db.sqlite here, into the documents folder
+      // for your app.
+      final dbFolder = await getApplicationDocumentsDirectory();
+      final file = File(p.join(dbFolder.path, 'db.sqlite'));
+      return NativeDatabase(file);
+    });
   }
 }

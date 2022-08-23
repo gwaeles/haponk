@@ -11,7 +11,6 @@ class TabsAppBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SliverAppBar(
-      backwardsCompatibility: false,
       systemOverlayStyle:
           SystemUiOverlayStyle(statusBarColor: Colors.transparent),
       title: _buildTitleRow(context),

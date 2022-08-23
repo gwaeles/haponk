@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:haponk/core/hass/models/events/discovery_info_model.dart';
 import 'package:haponk/core/network/api_status.dart';
@@ -10,7 +11,6 @@ import 'package:haponk/core/db/database.dart';
 import 'package:haponk/core/db/database_extension.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
-import 'package:moor/ffi.dart';
 import 'package:dio/dio.dart';
 
 import 'config_repository_test.mocks.dart';
@@ -32,7 +32,7 @@ void main() {
 
   setUp(() async {
     // Mocks
-    db = Database(VmDatabase.memory());
+    db = Database(NativeDatabase.memory());
     storage = MockFlutterSecureStorage();
     dio = MockDio();
     responseMock = MockResponse();
@@ -52,13 +52,9 @@ void main() {
 
   ConfigDBO aConfigDBO() => ConfigDBO(
         id: 1,
-        uuid: "1",
-        baseUrl: "https://localhost:8123",
         externalUrl: "https://myhost.net:38123",
         internalUrl: "https://localhost:8123",
         locationName: "City",
-        installationType: "A",
-        requiresApiPassword: true,
         version: "1",
         lastConnection: DateTime.now(),
       );
@@ -104,13 +100,9 @@ void main() {
     test("Try a connection with a right url", () async {
       //GIVEN
       final model = DiscoveryInfoModel(
-          uuid: "uid",
-          baseUrl: "baseUrl",
           externalUrl: "extUrl",
           internalUrl: "internUrl",
           locationName: "location",
-          installationType: "good",
-          requiresApiPassword: true,
           version: "1");
       final url = "http://localhost:8123";
 
@@ -135,20 +127,15 @@ void main() {
       final config = await db.select(db.configs).get();
       expect(config, isNotEmpty);
       expect(config.first.id, 1);
-      expect(config.first.uuid, model.uuid);
       expect(config.first.internalUrl, model.internalUrl);
     });
 
     test("Try a connection with a wrong url", () async {
       //GIVEN
       final model = DiscoveryInfoModel(
-          uuid: "uid",
-          baseUrl: "baseUrl",
           externalUrl: "extUrl",
           internalUrl: "internUrl",
           locationName: "location",
-          installationType: "good",
-          requiresApiPassword: true,
           version: "1");
       final url = "http://localhost:8123";
 

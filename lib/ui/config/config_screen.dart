@@ -14,14 +14,19 @@ class ConfigScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Text("Welcome", style: Theme.of(context).textTheme.headline3),
+            Text(
+              "Welcome",
+              style: Theme.of(context).textTheme.headline3,
+            ),
             Column(
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Text("Type your Home Assistant Server url",
-                    style: Theme.of(context).textTheme.subtitle1),
+                Text(
+                  "Type your Home Assistant Server url",
+                  style: Theme.of(context).textTheme.subtitle1,
+                ),
                 Padding(
                   padding: const EdgeInsets.fromLTRB(24, 12, 24, 12),
                   child: UrlTextField(),

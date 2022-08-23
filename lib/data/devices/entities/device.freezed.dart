@@ -1,5 +1,7 @@
+// coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
-// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides
+// ignore_for_file: type=lint
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
 
 part of 'device.dart';
 
@@ -10,64 +12,7 @@ part of 'device.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more informations: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
-
-/// @nodoc
-class _$DeviceTearOff {
-  const _$DeviceTearOff();
-
-  _Device call(
-      {int? id,
-      String? entityId,
-      DeviceType deviceType = DeviceType.LIGHT,
-      String? state,
-      DateTime? lastChanged,
-      DateTime? lastUpdated,
-      String? friendlyName,
-      int? supportedFeatures,
-      int? currentPosition,
-      DateTime? lastTriggered,
-      String? mode,
-      double? temperature,
-      int? humidity,
-      double? pressure,
-      double? windBearing,
-      double? windSpeed,
-      String? attribution,
-      bool? isOn,
-      String? deviceClass,
-      String? unitOfMeasurement,
-      int? current,
-      int? voltage}) {
-    return _Device(
-      id: id,
-      entityId: entityId,
-      deviceType: deviceType,
-      state: state,
-      lastChanged: lastChanged,
-      lastUpdated: lastUpdated,
-      friendlyName: friendlyName,
-      supportedFeatures: supportedFeatures,
-      currentPosition: currentPosition,
-      lastTriggered: lastTriggered,
-      mode: mode,
-      temperature: temperature,
-      humidity: humidity,
-      pressure: pressure,
-      windBearing: windBearing,
-      windSpeed: windSpeed,
-      attribution: attribution,
-      isOn: isOn,
-      deviceClass: deviceClass,
-      unitOfMeasurement: unitOfMeasurement,
-      current: current,
-      voltage: voltage,
-    );
-  }
-}
-
-/// @nodoc
-const $Device = _$DeviceTearOff();
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
 /// @nodoc
 mixin _$Device {
@@ -254,9 +199,9 @@ class _$DeviceCopyWithImpl<$Res> implements $DeviceCopyWith<$Res> {
 }
 
 /// @nodoc
-abstract class _$DeviceCopyWith<$Res> implements $DeviceCopyWith<$Res> {
-  factory _$DeviceCopyWith(_Device value, $Res Function(_Device) then) =
-      __$DeviceCopyWithImpl<$Res>;
+abstract class _$$_DeviceCopyWith<$Res> implements $DeviceCopyWith<$Res> {
+  factory _$$_DeviceCopyWith(_$_Device value, $Res Function(_$_Device) then) =
+      __$$_DeviceCopyWithImpl<$Res>;
   @override
   $Res call(
       {int? id,
@@ -284,13 +229,13 @@ abstract class _$DeviceCopyWith<$Res> implements $DeviceCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$DeviceCopyWithImpl<$Res> extends _$DeviceCopyWithImpl<$Res>
-    implements _$DeviceCopyWith<$Res> {
-  __$DeviceCopyWithImpl(_Device _value, $Res Function(_Device) _then)
-      : super(_value, (v) => _then(v as _Device));
+class __$$_DeviceCopyWithImpl<$Res> extends _$DeviceCopyWithImpl<$Res>
+    implements _$$_DeviceCopyWith<$Res> {
+  __$$_DeviceCopyWithImpl(_$_Device _value, $Res Function(_$_Device) _then)
+      : super(_value, (v) => _then(v as _$_Device));
 
   @override
-  _Device get _value => super._value as _Device;
+  _$_Device get _value => super._value as _$_Device;
 
   @override
   $Res call({
@@ -317,7 +262,7 @@ class __$DeviceCopyWithImpl<$Res> extends _$DeviceCopyWithImpl<$Res>
     Object? current = freezed,
     Object? voltage = freezed,
   }) {
-    return _then(_Device(
+    return _then(_$_Device(
       id: id == freezed
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -441,8 +386,8 @@ class _$_Device implements _Device {
   final int? id;
   @override
   final String? entityId;
-  @JsonKey(defaultValue: DeviceType.LIGHT)
   @override
+  @JsonKey()
   final DeviceType deviceType;
   @override
   final String? state;
@@ -491,172 +436,148 @@ class _$_Device implements _Device {
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other is _Device &&
-            (identical(other.id, id) ||
-                const DeepCollectionEquality().equals(other.id, id)) &&
-            (identical(other.entityId, entityId) ||
-                const DeepCollectionEquality()
-                    .equals(other.entityId, entityId)) &&
-            (identical(other.deviceType, deviceType) ||
-                const DeepCollectionEquality()
-                    .equals(other.deviceType, deviceType)) &&
-            (identical(other.state, state) ||
-                const DeepCollectionEquality().equals(other.state, state)) &&
-            (identical(other.lastChanged, lastChanged) ||
-                const DeepCollectionEquality()
-                    .equals(other.lastChanged, lastChanged)) &&
-            (identical(other.lastUpdated, lastUpdated) ||
-                const DeepCollectionEquality()
-                    .equals(other.lastUpdated, lastUpdated)) &&
-            (identical(other.friendlyName, friendlyName) ||
-                const DeepCollectionEquality()
-                    .equals(other.friendlyName, friendlyName)) &&
-            (identical(other.supportedFeatures, supportedFeatures) ||
-                const DeepCollectionEquality()
-                    .equals(other.supportedFeatures, supportedFeatures)) &&
-            (identical(other.currentPosition, currentPosition) ||
-                const DeepCollectionEquality()
-                    .equals(other.currentPosition, currentPosition)) &&
-            (identical(other.lastTriggered, lastTriggered) ||
-                const DeepCollectionEquality()
-                    .equals(other.lastTriggered, lastTriggered)) &&
-            (identical(other.mode, mode) ||
-                const DeepCollectionEquality().equals(other.mode, mode)) &&
-            (identical(other.temperature, temperature) ||
-                const DeepCollectionEquality()
-                    .equals(other.temperature, temperature)) &&
-            (identical(other.humidity, humidity) ||
-                const DeepCollectionEquality()
-                    .equals(other.humidity, humidity)) &&
-            (identical(other.pressure, pressure) ||
-                const DeepCollectionEquality()
-                    .equals(other.pressure, pressure)) &&
-            (identical(other.windBearing, windBearing) ||
-                const DeepCollectionEquality()
-                    .equals(other.windBearing, windBearing)) &&
-            (identical(other.windSpeed, windSpeed) ||
-                const DeepCollectionEquality()
-                    .equals(other.windSpeed, windSpeed)) &&
-            (identical(other.attribution, attribution) ||
-                const DeepCollectionEquality()
-                    .equals(other.attribution, attribution)) &&
-            (identical(other.isOn, isOn) ||
-                const DeepCollectionEquality().equals(other.isOn, isOn)) &&
-            (identical(other.deviceClass, deviceClass) ||
-                const DeepCollectionEquality()
-                    .equals(other.deviceClass, deviceClass)) &&
-            (identical(other.unitOfMeasurement, unitOfMeasurement) ||
-                const DeepCollectionEquality()
-                    .equals(other.unitOfMeasurement, unitOfMeasurement)) &&
-            (identical(other.current, current) ||
-                const DeepCollectionEquality()
-                    .equals(other.current, current)) &&
-            (identical(other.voltage, voltage) ||
-                const DeepCollectionEquality().equals(other.voltage, voltage)));
+        (other.runtimeType == runtimeType &&
+            other is _$_Device &&
+            const DeepCollectionEquality().equals(other.id, id) &&
+            const DeepCollectionEquality().equals(other.entityId, entityId) &&
+            const DeepCollectionEquality()
+                .equals(other.deviceType, deviceType) &&
+            const DeepCollectionEquality().equals(other.state, state) &&
+            const DeepCollectionEquality()
+                .equals(other.lastChanged, lastChanged) &&
+            const DeepCollectionEquality()
+                .equals(other.lastUpdated, lastUpdated) &&
+            const DeepCollectionEquality()
+                .equals(other.friendlyName, friendlyName) &&
+            const DeepCollectionEquality()
+                .equals(other.supportedFeatures, supportedFeatures) &&
+            const DeepCollectionEquality()
+                .equals(other.currentPosition, currentPosition) &&
+            const DeepCollectionEquality()
+                .equals(other.lastTriggered, lastTriggered) &&
+            const DeepCollectionEquality().equals(other.mode, mode) &&
+            const DeepCollectionEquality()
+                .equals(other.temperature, temperature) &&
+            const DeepCollectionEquality().equals(other.humidity, humidity) &&
+            const DeepCollectionEquality().equals(other.pressure, pressure) &&
+            const DeepCollectionEquality()
+                .equals(other.windBearing, windBearing) &&
+            const DeepCollectionEquality().equals(other.windSpeed, windSpeed) &&
+            const DeepCollectionEquality()
+                .equals(other.attribution, attribution) &&
+            const DeepCollectionEquality().equals(other.isOn, isOn) &&
+            const DeepCollectionEquality()
+                .equals(other.deviceClass, deviceClass) &&
+            const DeepCollectionEquality()
+                .equals(other.unitOfMeasurement, unitOfMeasurement) &&
+            const DeepCollectionEquality().equals(other.current, current) &&
+            const DeepCollectionEquality().equals(other.voltage, voltage));
   }
 
   @override
-  int get hashCode =>
-      runtimeType.hashCode ^
-      const DeepCollectionEquality().hash(id) ^
-      const DeepCollectionEquality().hash(entityId) ^
-      const DeepCollectionEquality().hash(deviceType) ^
-      const DeepCollectionEquality().hash(state) ^
-      const DeepCollectionEquality().hash(lastChanged) ^
-      const DeepCollectionEquality().hash(lastUpdated) ^
-      const DeepCollectionEquality().hash(friendlyName) ^
-      const DeepCollectionEquality().hash(supportedFeatures) ^
-      const DeepCollectionEquality().hash(currentPosition) ^
-      const DeepCollectionEquality().hash(lastTriggered) ^
-      const DeepCollectionEquality().hash(mode) ^
-      const DeepCollectionEquality().hash(temperature) ^
-      const DeepCollectionEquality().hash(humidity) ^
-      const DeepCollectionEquality().hash(pressure) ^
-      const DeepCollectionEquality().hash(windBearing) ^
-      const DeepCollectionEquality().hash(windSpeed) ^
-      const DeepCollectionEquality().hash(attribution) ^
-      const DeepCollectionEquality().hash(isOn) ^
-      const DeepCollectionEquality().hash(deviceClass) ^
-      const DeepCollectionEquality().hash(unitOfMeasurement) ^
-      const DeepCollectionEquality().hash(current) ^
-      const DeepCollectionEquality().hash(voltage);
+  int get hashCode => Object.hashAll([
+        runtimeType,
+        const DeepCollectionEquality().hash(id),
+        const DeepCollectionEquality().hash(entityId),
+        const DeepCollectionEquality().hash(deviceType),
+        const DeepCollectionEquality().hash(state),
+        const DeepCollectionEquality().hash(lastChanged),
+        const DeepCollectionEquality().hash(lastUpdated),
+        const DeepCollectionEquality().hash(friendlyName),
+        const DeepCollectionEquality().hash(supportedFeatures),
+        const DeepCollectionEquality().hash(currentPosition),
+        const DeepCollectionEquality().hash(lastTriggered),
+        const DeepCollectionEquality().hash(mode),
+        const DeepCollectionEquality().hash(temperature),
+        const DeepCollectionEquality().hash(humidity),
+        const DeepCollectionEquality().hash(pressure),
+        const DeepCollectionEquality().hash(windBearing),
+        const DeepCollectionEquality().hash(windSpeed),
+        const DeepCollectionEquality().hash(attribution),
+        const DeepCollectionEquality().hash(isOn),
+        const DeepCollectionEquality().hash(deviceClass),
+        const DeepCollectionEquality().hash(unitOfMeasurement),
+        const DeepCollectionEquality().hash(current),
+        const DeepCollectionEquality().hash(voltage)
+      ]);
 
   @JsonKey(ignore: true)
   @override
-  _$DeviceCopyWith<_Device> get copyWith =>
-      __$DeviceCopyWithImpl<_Device>(this, _$identity);
+  _$$_DeviceCopyWith<_$_Device> get copyWith =>
+      __$$_DeviceCopyWithImpl<_$_Device>(this, _$identity);
 }
 
 abstract class _Device implements Device {
   const factory _Device(
-      {int? id,
-      String? entityId,
-      DeviceType deviceType,
-      String? state,
-      DateTime? lastChanged,
-      DateTime? lastUpdated,
-      String? friendlyName,
-      int? supportedFeatures,
-      int? currentPosition,
-      DateTime? lastTriggered,
-      String? mode,
-      double? temperature,
-      int? humidity,
-      double? pressure,
-      double? windBearing,
-      double? windSpeed,
-      String? attribution,
-      bool? isOn,
-      String? deviceClass,
-      String? unitOfMeasurement,
-      int? current,
-      int? voltage}) = _$_Device;
+      {final int? id,
+      final String? entityId,
+      final DeviceType deviceType,
+      final String? state,
+      final DateTime? lastChanged,
+      final DateTime? lastUpdated,
+      final String? friendlyName,
+      final int? supportedFeatures,
+      final int? currentPosition,
+      final DateTime? lastTriggered,
+      final String? mode,
+      final double? temperature,
+      final int? humidity,
+      final double? pressure,
+      final double? windBearing,
+      final double? windSpeed,
+      final String? attribution,
+      final bool? isOn,
+      final String? deviceClass,
+      final String? unitOfMeasurement,
+      final int? current,
+      final int? voltage}) = _$_Device;
 
   @override
-  int? get id => throw _privateConstructorUsedError;
+  int? get id;
   @override
-  String? get entityId => throw _privateConstructorUsedError;
+  String? get entityId;
   @override
-  DeviceType get deviceType => throw _privateConstructorUsedError;
+  DeviceType get deviceType;
   @override
-  String? get state => throw _privateConstructorUsedError;
+  String? get state;
   @override
-  DateTime? get lastChanged => throw _privateConstructorUsedError;
+  DateTime? get lastChanged;
   @override
-  DateTime? get lastUpdated => throw _privateConstructorUsedError;
+  DateTime? get lastUpdated;
   @override
-  String? get friendlyName => throw _privateConstructorUsedError;
+  String? get friendlyName;
   @override
-  int? get supportedFeatures => throw _privateConstructorUsedError;
+  int? get supportedFeatures;
   @override
-  int? get currentPosition => throw _privateConstructorUsedError;
+  int? get currentPosition;
   @override
-  DateTime? get lastTriggered => throw _privateConstructorUsedError;
+  DateTime? get lastTriggered;
   @override
-  String? get mode => throw _privateConstructorUsedError;
+  String? get mode;
   @override
-  double? get temperature => throw _privateConstructorUsedError;
+  double? get temperature;
   @override
-  int? get humidity => throw _privateConstructorUsedError;
+  int? get humidity;
   @override
-  double? get pressure => throw _privateConstructorUsedError;
+  double? get pressure;
   @override
-  double? get windBearing => throw _privateConstructorUsedError;
+  double? get windBearing;
   @override
-  double? get windSpeed => throw _privateConstructorUsedError;
+  double? get windSpeed;
   @override
-  String? get attribution => throw _privateConstructorUsedError;
+  String? get attribution;
   @override
-  bool? get isOn => throw _privateConstructorUsedError;
+  bool? get isOn;
   @override
-  String? get deviceClass => throw _privateConstructorUsedError;
+  String? get deviceClass;
   @override
-  String? get unitOfMeasurement => throw _privateConstructorUsedError;
+  String? get unitOfMeasurement;
   @override
-  int? get current => throw _privateConstructorUsedError;
+  int? get current;
   @override
-  int? get voltage => throw _privateConstructorUsedError;
+  int? get voltage;
   @override
   @JsonKey(ignore: true)
-  _$DeviceCopyWith<_Device> get copyWith => throw _privateConstructorUsedError;
+  _$$_DeviceCopyWith<_$_Device> get copyWith =>
+      throw _privateConstructorUsedError;
 }

@@ -16,7 +16,7 @@ Map<String, dynamic> _$EventMessageModelToJson(EventMessageModel instance) {
   }
 
   writeNotNull('id', instance.id);
-  val['type'] = _$MessageTypeEnumMap[instance.type];
+  val['type'] = _$MessageTypeEnumMap[instance.type]!;
   val['event'] = instance.event;
   return val;
 }

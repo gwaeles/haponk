@@ -38,8 +38,9 @@ class _BottomBarPageState extends State<BottomNavigationBarPage>
     _opacity = 0;
     _matrix = Matrix4.identity();
 
-    WidgetsBinding.instance
-        ?.addPostFrameCallback((timeStamp) => _onPageIndexChange());
+    WidgetsBinding.instance.addPostFrameCallback(
+      (timeStamp) => _onPageIndexChange(),
+    );
   }
 
   @override

@@ -17,7 +17,7 @@ Map<String, dynamic> _$AuthInvalidMessageModelToJson(
   }
 
   writeNotNull('id', instance.id);
-  val['type'] = _$MessageTypeEnumMap[instance.type];
+  val['type'] = _$MessageTypeEnumMap[instance.type]!;
   val['message'] = instance.message;
   return val;
 }

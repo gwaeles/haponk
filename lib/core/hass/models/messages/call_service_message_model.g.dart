@@ -17,7 +17,7 @@ Map<String, dynamic> _$CallServiceMessageModelToJson(
   }
 
   writeNotNull('id', instance.id);
-  val['type'] = _$MessageTypeEnumMap[instance.type];
+  val['type'] = _$MessageTypeEnumMap[instance.type]!;
   val['domain'] = instance.domain;
   val['service'] = instance.service;
   val['service_data'] = instance.serviceData;

@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:haponk/core/db/database.dart';
 import 'package:haponk/data/tabs/entities/flex_card.dart';
-import 'package:moor_flutter/moor_flutter.dart';
+import 'package:drift/drift.dart';
 
 class CardsRepository {
   final Database db;

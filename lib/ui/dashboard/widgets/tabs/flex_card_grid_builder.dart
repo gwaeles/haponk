@@ -167,9 +167,9 @@ class FlexCardGridBuilder extends StatelessWidget {
                                 rowIndex: dragTarget.rowIndex,
                                 itemIndex: dragTarget.itemIndex,
                               )));
-                  if (accepted && value?.card != null) {
+                  if (accepted) {
                     dragTargetsNotifier.activeDragTarget = FakeFlexCard(
-                      card: value!.card,
+                      card: value.card,
                       rowIndex: dragTarget.rowIndex,
                       itemIndex: dragTarget.itemIndex,
                     );

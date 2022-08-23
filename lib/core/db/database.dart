@@ -1,9 +1,9 @@
 import 'dart:convert';
 
-import 'package:flutter/material.dart';
+import 'package:drift/drift.dart';
+import 'package:flutter/material.dart' as flt;
 import 'package:flutter/services.dart';
 import 'package:haponk/data/tabs/entities/flex_card.dart';
-import 'package:moor_flutter/moor_flutter.dart';
 
 import 'tables/flex_cards.dart';
 import 'tables/configs.dart';
@@ -12,7 +12,7 @@ import 'tables/flex_tabs.dart';
 
 part 'database.g.dart';
 
-@UseMoor(
+@DriftDatabase(
   tables: [
     Configs,
     States,
@@ -30,11 +30,11 @@ class Database extends _$Database {
   MigrationStrategy get migration {
     return MigrationStrategy(
       onCreate: (Migrator m) {
-        debugPrint("[MOOR] onCreate");
+        flt.debugPrint("[DRIFT] onCreate");
         return m.createAll();
       },
       onUpgrade: (Migrator m, int from, int to) async {
-        debugPrint("[MOOR] onUpgrade from: $from, to: $to");
+        flt.debugPrint("[DRIFT] onUpgrade from: $from, to: $to");
         if (from == 1) {
           await m.addColumn(states, states.displayLabel);
           await m.addColumn(states, states.displayType);
@@ -51,7 +51,7 @@ class Database extends _$Database {
                 ? defaultConfig["internalUrl"]
                 : null;
           } catch (e) {
-            debugPrint("[MOOR] No config file");
+            flt.debugPrint("[DRIFT] No config file");
           }
           if (internalUrl != null) {
             ConfigDBO? config = await getConfig();
@@ -59,12 +59,11 @@ class Database extends _$Database {
               final ConfigDBO newConfig = ConfigDBO(
                 id: 1,
                 internalUrl: internalUrl,
-                requiresApiPassword: false,
               );
               await insertConfig(newConfig);
             } else {
               final ConfigDBO updatedConfig = config.copyWith(
-                internalUrl: internalUrl,
+                internalUrl: Value(internalUrl),
               );
               await updateConfig(updatedConfig);
             }
@@ -89,12 +88,11 @@ class Database extends _$Database {
                 ? defaultConfig["internalUrl"]
                 : null;
           } catch (e) {
-            debugPrint("[MOOR] No config file");
+            flt.debugPrint("[DRIFT] No config file");
           }
           final ConfigDBO newConfig = ConfigDBO(
             id: 1,
             internalUrl: internalUrl,
-            requiresApiPassword: false,
           );
           await insertConfig(newConfig);
         }
@@ -119,9 +117,9 @@ class Database extends _$Database {
         mode: InsertMode.insertOrReplace,
       );
   Future updateConfig(ConfigDBO config) => update(configs).replace(config);
-  Future updateConfigDate(String uuid) => (update(configs)
+  Future updateConfigDate() => (update(configs)
             ..where(
-              (item) => item.uuid.equals(uuid),
+              (item) => item.id.equals(1),
             ))
           .write(ConfigsCompanion(
         lastConnection: Value(DateTime.now()),

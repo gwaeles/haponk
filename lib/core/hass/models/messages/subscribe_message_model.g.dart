@@ -17,7 +17,7 @@ Map<String, dynamic> _$SubscribeMessageModelToJson(
   }
 
   writeNotNull('id', instance.id);
-  val['type'] = _$MessageTypeEnumMap[instance.type];
+  val['type'] = _$MessageTypeEnumMap[instance.type]!;
   val['event_type'] = instance.eventType;
   return val;
 }

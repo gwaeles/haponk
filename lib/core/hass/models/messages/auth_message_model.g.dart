@@ -16,7 +16,7 @@ Map<String, dynamic> _$AuthMessageModelToJson(AuthMessageModel instance) {
   }
 
   writeNotNull('id', instance.id);
-  val['type'] = _$MessageTypeEnumMap[instance.type];
+  val['type'] = _$MessageTypeEnumMap[instance.type]!;
   val['access_token'] = instance.accessToken;
   return val;
 }

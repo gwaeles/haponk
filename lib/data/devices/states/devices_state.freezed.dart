@@ -1,5 +1,7 @@
+// coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
-// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides
+// ignore_for_file: type=lint
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
 
 part of 'devices_state.dart';
 
@@ -10,25 +12,7 @@ part of 'devices_state.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more informations: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
-
-/// @nodoc
-class _$DevicesStateTearOff {
-  const _$DevicesStateTearOff();
-
-  DevicesIdle idle() {
-    return DevicesIdle();
-  }
-
-  DevicesLoaded loaded({required List<Device> devices}) {
-    return DevicesLoaded(
-      devices: devices,
-    );
-  }
-}
-
-/// @nodoc
-const $DevicesState = _$DevicesStateTearOff();
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
 /// @nodoc
 mixin _$DevicesState {
@@ -36,6 +20,12 @@ mixin _$DevicesState {
   TResult when<TResult extends Object?>({
     required TResult Function() idle,
     required TResult Function(List<Device> devices) loaded,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult Function()? idle,
+    TResult Function(List<Device> devices)? loaded,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -49,6 +39,12 @@ mixin _$DevicesState {
   TResult map<TResult extends Object?>({
     required TResult Function(DevicesIdle value) idle,
     required TResult Function(DevicesLoaded value) loaded,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(DevicesIdle value)? idle,
+    TResult Function(DevicesLoaded value)? loaded,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -77,21 +73,21 @@ class _$DevicesStateCopyWithImpl<$Res> implements $DevicesStateCopyWith<$Res> {
 }
 
 /// @nodoc
-abstract class $DevicesIdleCopyWith<$Res> {
-  factory $DevicesIdleCopyWith(
-          DevicesIdle value, $Res Function(DevicesIdle) then) =
-      _$DevicesIdleCopyWithImpl<$Res>;
+abstract class _$$DevicesIdleCopyWith<$Res> {
+  factory _$$DevicesIdleCopyWith(
+          _$DevicesIdle value, $Res Function(_$DevicesIdle) then) =
+      __$$DevicesIdleCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class _$DevicesIdleCopyWithImpl<$Res> extends _$DevicesStateCopyWithImpl<$Res>
-    implements $DevicesIdleCopyWith<$Res> {
-  _$DevicesIdleCopyWithImpl(
-      DevicesIdle _value, $Res Function(DevicesIdle) _then)
-      : super(_value, (v) => _then(v as DevicesIdle));
+class __$$DevicesIdleCopyWithImpl<$Res> extends _$DevicesStateCopyWithImpl<$Res>
+    implements _$$DevicesIdleCopyWith<$Res> {
+  __$$DevicesIdleCopyWithImpl(
+      _$DevicesIdle _value, $Res Function(_$DevicesIdle) _then)
+      : super(_value, (v) => _then(v as _$DevicesIdle));
 
   @override
-  DevicesIdle get _value => super._value as DevicesIdle;
+  _$DevicesIdle get _value => super._value as _$DevicesIdle;
 }
 
 /// @nodoc
@@ -106,7 +102,8 @@ class _$DevicesIdle implements DevicesIdle {
 
   @override
   bool operator ==(dynamic other) {
-    return identical(this, other) || (other is DevicesIdle);
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is _$DevicesIdle);
   }
 
   @override
@@ -119,6 +116,15 @@ class _$DevicesIdle implements DevicesIdle {
     required TResult Function(List<Device> devices) loaded,
   }) {
     return idle();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult Function()? idle,
+    TResult Function(List<Device> devices)? loaded,
+  }) {
+    return idle?.call();
   }
 
   @override
@@ -145,6 +151,15 @@ class _$DevicesIdle implements DevicesIdle {
 
   @override
   @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(DevicesIdle value)? idle,
+    TResult Function(DevicesLoaded value)? loaded,
+  }) {
+    return idle?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(DevicesIdle value)? idle,
     TResult Function(DevicesLoaded value)? loaded,
@@ -162,30 +177,31 @@ abstract class DevicesIdle implements DevicesState {
 }
 
 /// @nodoc
-abstract class $DevicesLoadedCopyWith<$Res> {
-  factory $DevicesLoadedCopyWith(
-          DevicesLoaded value, $Res Function(DevicesLoaded) then) =
-      _$DevicesLoadedCopyWithImpl<$Res>;
+abstract class _$$DevicesLoadedCopyWith<$Res> {
+  factory _$$DevicesLoadedCopyWith(
+          _$DevicesLoaded value, $Res Function(_$DevicesLoaded) then) =
+      __$$DevicesLoadedCopyWithImpl<$Res>;
   $Res call({List<Device> devices});
 }
 
 /// @nodoc
-class _$DevicesLoadedCopyWithImpl<$Res> extends _$DevicesStateCopyWithImpl<$Res>
-    implements $DevicesLoadedCopyWith<$Res> {
-  _$DevicesLoadedCopyWithImpl(
-      DevicesLoaded _value, $Res Function(DevicesLoaded) _then)
-      : super(_value, (v) => _then(v as DevicesLoaded));
+class __$$DevicesLoadedCopyWithImpl<$Res>
+    extends _$DevicesStateCopyWithImpl<$Res>
+    implements _$$DevicesLoadedCopyWith<$Res> {
+  __$$DevicesLoadedCopyWithImpl(
+      _$DevicesLoaded _value, $Res Function(_$DevicesLoaded) _then)
+      : super(_value, (v) => _then(v as _$DevicesLoaded));
 
   @override
-  DevicesLoaded get _value => super._value as DevicesLoaded;
+  _$DevicesLoaded get _value => super._value as _$DevicesLoaded;
 
   @override
   $Res call({
     Object? devices = freezed,
   }) {
-    return _then(DevicesLoaded(
+    return _then(_$DevicesLoaded(
       devices: devices == freezed
-          ? _value.devices
+          ? _value._devices
           : devices // ignore: cast_nullable_to_non_nullable
               as List<Device>,
     ));
@@ -195,10 +211,14 @@ class _$DevicesLoadedCopyWithImpl<$Res> extends _$DevicesStateCopyWithImpl<$Res>
 /// @nodoc
 
 class _$DevicesLoaded implements DevicesLoaded {
-  _$DevicesLoaded({required this.devices});
+  _$DevicesLoaded({required final List<Device> devices}) : _devices = devices;
 
+  final List<Device> _devices;
   @override
-  final List<Device> devices;
+  List<Device> get devices {
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_devices);
+  }
 
   @override
   String toString() {
@@ -208,19 +228,19 @@ class _$DevicesLoaded implements DevicesLoaded {
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other is DevicesLoaded &&
-            (identical(other.devices, devices) ||
-                const DeepCollectionEquality().equals(other.devices, devices)));
+        (other.runtimeType == runtimeType &&
+            other is _$DevicesLoaded &&
+            const DeepCollectionEquality().equals(other._devices, _devices));
   }
 
   @override
   int get hashCode =>
-      runtimeType.hashCode ^ const DeepCollectionEquality().hash(devices);
+      Object.hash(runtimeType, const DeepCollectionEquality().hash(_devices));
 
   @JsonKey(ignore: true)
   @override
-  $DevicesLoadedCopyWith<DevicesLoaded> get copyWith =>
-      _$DevicesLoadedCopyWithImpl<DevicesLoaded>(this, _$identity);
+  _$$DevicesLoadedCopyWith<_$DevicesLoaded> get copyWith =>
+      __$$DevicesLoadedCopyWithImpl<_$DevicesLoaded>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -229,6 +249,15 @@ class _$DevicesLoaded implements DevicesLoaded {
     required TResult Function(List<Device> devices) loaded,
   }) {
     return loaded(devices);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult Function()? idle,
+    TResult Function(List<Device> devices)? loaded,
+  }) {
+    return loaded?.call(devices);
   }
 
   @override
@@ -255,6 +284,15 @@ class _$DevicesLoaded implements DevicesLoaded {
 
   @override
   @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(DevicesIdle value)? idle,
+    TResult Function(DevicesLoaded value)? loaded,
+  }) {
+    return loaded?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(DevicesIdle value)? idle,
     TResult Function(DevicesLoaded value)? loaded,
@@ -268,10 +306,11 @@ class _$DevicesLoaded implements DevicesLoaded {
 }
 
 abstract class DevicesLoaded implements DevicesState {
-  factory DevicesLoaded({required List<Device> devices}) = _$DevicesLoaded;
+  factory DevicesLoaded({required final List<Device> devices}) =
+      _$DevicesLoaded;
 
-  List<Device> get devices => throw _privateConstructorUsedError;
+  List<Device> get devices;
   @JsonKey(ignore: true)
-  $DevicesLoadedCopyWith<DevicesLoaded> get copyWith =>
+  _$$DevicesLoadedCopyWith<_$DevicesLoaded> get copyWith =>
       throw _privateConstructorUsedError;
 }

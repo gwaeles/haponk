@@ -47,7 +47,10 @@ class ConfigNotifier with ChangeNotifier implements ListenerRequestState {
     if (typedToken != null) {
       await repository.setAccessToken(typedToken!);
     }
-    _connectionSucceed = await repository.tryConnect(typedUrl ?? '');
+    _connectionSucceed = await repository.tryConnect(
+      typedUrl ?? '',
+      typedToken,
+    );
     setState(
       _connectionSucceed == true ? RequestState.LOADED : RequestState.ERROR,
     );

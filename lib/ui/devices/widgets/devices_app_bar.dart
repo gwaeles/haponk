@@ -16,7 +16,6 @@ class DevicesAppBar extends StatelessWidget {
     final textColor = AppTheme.of(context).inputTextColor;
 
     return SliverAppBar(
-      backwardsCompatibility: false,
       systemOverlayStyle:
           SystemUiOverlayStyle(statusBarColor: Colors.transparent),
       title: TextField(

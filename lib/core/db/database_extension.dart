@@ -1,7 +1,7 @@
 import 'package:haponk/core/hass/models/constants.dart';
 import 'package:haponk/core/hass/models/device_type_converter.dart';
 import 'package:haponk/data/config/entities/config.dart';
-import 'package:moor_flutter/moor_flutter.dart';
+import 'package:drift/drift.dart';
 
 import 'database.dart';
 
@@ -38,13 +38,9 @@ extension BoolValueExtension on bool {
 extension ConfigExtension on ConfigDBO {
   Config toEntity() {
     return Config(
-        uuid: this.uuid,
-        baseUrl: this.baseUrl,
         externalUrl: this.externalUrl,
         internalUrl: this.internalUrl,
         locationName: this.locationName,
-        installationType: this.installationType,
-        requiresApiPassword: this.requiresApiPassword,
         version: this.version,
         lastConnection: this.lastConnection);
   }

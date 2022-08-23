@@ -1,4 +1,5 @@
 import 'package:bloc_test/bloc_test.dart';
+import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:haponk/core/db/database.dart';
 import 'package:haponk/core/hass/models/constants.dart';
@@ -6,8 +7,7 @@ import 'package:haponk/data/devices/blocs/device_bloc.dart';
 import 'package:haponk/data/devices/entities/device.dart';
 import 'package:haponk/data/devices/repositories/devices_repository.dart';
 import 'package:haponk/data/devices/states/device_state.dart';
-import 'package:moor/ffi.dart';
-import 'package:moor_flutter/moor_flutter.dart';
+import 'package:drift/drift.dart';
 
 void main() {
   late DevicesRepository devicesRepository;
@@ -18,7 +18,7 @@ void main() {
 
   setUp(() async {
     // Mocks
-    db = Database(VmDatabase.memory());
+    db = Database(NativeDatabase.memory());
     devicesRepository = DevicesRepository(
       db: db,
     );

@@ -6,7 +6,6 @@ import 'package:haponk/data/devices/states/device_state.dart';
 import 'package:haponk/data/tabs/entities/positioned_flex_card.dart';
 import 'package:haponk/ui/dashboard/providers/drag_targets_notifier.dart';
 import 'package:haponk/ui/dashboard/providers/editor_controller.dart';
-import 'package:provider/provider.dart';
 
 import '../cards/device_card_item.dart';
 

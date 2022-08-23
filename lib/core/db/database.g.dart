@@ -3,86 +3,42 @@
 part of 'database.dart';
 
 // **************************************************************************
-// MoorGenerator
+// DriftDatabaseGenerator
 // **************************************************************************
 
-// ignore_for_file: unnecessary_brace_in_string_interps, unnecessary_this
+// ignore_for_file: type=lint
 class ConfigDBO extends DataClass implements Insertable<ConfigDBO> {
   final int id;
-  final String? uuid;
-  final String? baseUrl;
   final String? externalUrl;
   final String? internalUrl;
   final String? locationName;
-  final String? installationType;
-  final bool requiresApiPassword;
   final String? version;
   final DateTime? lastConnection;
-  ConfigDBO(
+  const ConfigDBO(
       {required this.id,
-      this.uuid,
-      this.baseUrl,
       this.externalUrl,
       this.internalUrl,
       this.locationName,
-      this.installationType,
-      required this.requiresApiPassword,
       this.version,
       this.lastConnection});
-  factory ConfigDBO.fromData(Map<String, dynamic> data, GeneratedDatabase db,
-      {String? prefix}) {
-    final effectivePrefix = prefix ?? '';
-    return ConfigDBO(
-      id: const IntType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}id'])!,
-      uuid: const StringType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}uuid']),
-      baseUrl: const StringType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}base_url']),
-      externalUrl: const StringType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}external_url']),
-      internalUrl: const StringType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}internal_url']),
-      locationName: const StringType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}location_name']),
-      installationType: const StringType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}installation_type']),
-      requiresApiPassword: const BoolType().mapFromDatabaseResponse(
-          data['${effectivePrefix}requires_api_password'])!,
-      version: const StringType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}version']),
-      lastConnection: const DateTimeType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}last_connection']),
-    );
-  }
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['id'] = Variable<int>(id);
-    if (!nullToAbsent || uuid != null) {
-      map['uuid'] = Variable<String?>(uuid);
-    }
-    if (!nullToAbsent || baseUrl != null) {
-      map['base_url'] = Variable<String?>(baseUrl);
-    }
     if (!nullToAbsent || externalUrl != null) {
-      map['external_url'] = Variable<String?>(externalUrl);
+      map['external_url'] = Variable<String>(externalUrl);
     }
     if (!nullToAbsent || internalUrl != null) {
-      map['internal_url'] = Variable<String?>(internalUrl);
+      map['internal_url'] = Variable<String>(internalUrl);
     }
     if (!nullToAbsent || locationName != null) {
-      map['location_name'] = Variable<String?>(locationName);
+      map['location_name'] = Variable<String>(locationName);
     }
-    if (!nullToAbsent || installationType != null) {
-      map['installation_type'] = Variable<String?>(installationType);
-    }
-    map['requires_api_password'] = Variable<bool>(requiresApiPassword);
     if (!nullToAbsent || version != null) {
-      map['version'] = Variable<String?>(version);
+      map['version'] = Variable<String>(version);
     }
     if (!nullToAbsent || lastConnection != null) {
-      map['last_connection'] = Variable<DateTime?>(lastConnection);
+      map['last_connection'] = Variable<DateTime>(lastConnection);
     }
     return map;
   }
@@ -90,10 +46,6 @@ class ConfigDBO extends DataClass implements Insertable<ConfigDBO> {
   ConfigsCompanion toCompanion(bool nullToAbsent) {
     return ConfigsCompanion(
       id: Value(id),
-      uuid: uuid == null && nullToAbsent ? const Value.absent() : Value(uuid),
-      baseUrl: baseUrl == null && nullToAbsent
-          ? const Value.absent()
-          : Value(baseUrl),
       externalUrl: externalUrl == null && nullToAbsent
           ? const Value.absent()
           : Value(externalUrl),
@@ -103,10 +55,6 @@ class ConfigDBO extends DataClass implements Insertable<ConfigDBO> {
       locationName: locationName == null && nullToAbsent
           ? const Value.absent()
           : Value(locationName),
-      installationType: installationType == null && nullToAbsent
-          ? const Value.absent()
-          : Value(installationType),
-      requiresApiPassword: Value(requiresApiPassword),
       version: version == null && nullToAbsent
           ? const Value.absent()
           : Value(version),
@@ -118,33 +66,24 @@ class ConfigDBO extends DataClass implements Insertable<ConfigDBO> {
 
   factory ConfigDBO.fromJson(Map<String, dynamic> json,
       {ValueSerializer? serializer}) {
-    serializer ??= moorRuntimeOptions.defaultSerializer;
+    serializer ??= driftRuntimeOptions.defaultSerializer;
     return ConfigDBO(
       id: serializer.fromJson<int>(json['id']),
-      uuid: serializer.fromJson<String?>(json['uuid']),
-      baseUrl: serializer.fromJson<String?>(json['baseUrl']),
       externalUrl: serializer.fromJson<String?>(json['externalUrl']),
       internalUrl: serializer.fromJson<String?>(json['internalUrl']),
       locationName: serializer.fromJson<String?>(json['locationName']),
-      installationType: serializer.fromJson<String?>(json['installationType']),
-      requiresApiPassword:
-          serializer.fromJson<bool>(json['requiresApiPassword']),
       version: serializer.fromJson<String?>(json['version']),
       lastConnection: serializer.fromJson<DateTime?>(json['lastConnection']),
     );
   }
   @override
   Map<String, dynamic> toJson({ValueSerializer? serializer}) {
-    serializer ??= moorRuntimeOptions.defaultSerializer;
+    serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
-      'uuid': serializer.toJson<String?>(uuid),
-      'baseUrl': serializer.toJson<String?>(baseUrl),
       'externalUrl': serializer.toJson<String?>(externalUrl),
       'internalUrl': serializer.toJson<String?>(internalUrl),
       'locationName': serializer.toJson<String?>(locationName),
-      'installationType': serializer.toJson<String?>(installationType),
-      'requiresApiPassword': serializer.toJson<bool>(requiresApiPassword),
       'version': serializer.toJson<String?>(version),
       'lastConnection': serializer.toJson<DateTime?>(lastConnection),
     };
@@ -152,38 +91,28 @@ class ConfigDBO extends DataClass implements Insertable<ConfigDBO> {
 
   ConfigDBO copyWith(
           {int? id,
-          String? uuid,
-          String? baseUrl,
-          String? externalUrl,
-          String? internalUrl,
-          String? locationName,
-          String? installationType,
-          bool? requiresApiPassword,
-          String? version,
-          DateTime? lastConnection}) =>
+          Value<String?> externalUrl = const Value.absent(),
+          Value<String?> internalUrl = const Value.absent(),
+          Value<String?> locationName = const Value.absent(),
+          Value<String?> version = const Value.absent(),
+          Value<DateTime?> lastConnection = const Value.absent()}) =>
       ConfigDBO(
         id: id ?? this.id,
-        uuid: uuid ?? this.uuid,
-        baseUrl: baseUrl ?? this.baseUrl,
-        externalUrl: externalUrl ?? this.externalUrl,
-        internalUrl: internalUrl ?? this.internalUrl,
-        locationName: locationName ?? this.locationName,
-        installationType: installationType ?? this.installationType,
-        requiresApiPassword: requiresApiPassword ?? this.requiresApiPassword,
-        version: version ?? this.version,
-        lastConnection: lastConnection ?? this.lastConnection,
+        externalUrl: externalUrl.present ? externalUrl.value : this.externalUrl,
+        internalUrl: internalUrl.present ? internalUrl.value : this.internalUrl,
+        locationName:
+            locationName.present ? locationName.value : this.locationName,
+        version: version.present ? version.value : this.version,
+        lastConnection:
+            lastConnection.present ? lastConnection.value : this.lastConnection,
       );
   @override
   String toString() {
     return (StringBuffer('ConfigDBO(')
           ..write('id: $id, ')
-          ..write('uuid: $uuid, ')
-          ..write('baseUrl: $baseUrl, ')
           ..write('externalUrl: $externalUrl, ')
           ..write('internalUrl: $internalUrl, ')
           ..write('locationName: $locationName, ')
-          ..write('installationType: $installationType, ')
-          ..write('requiresApiPassword: $requiresApiPassword, ')
           ..write('version: $version, ')
           ..write('lastConnection: $lastConnection')
           ..write(')'))
@@ -191,97 +120,56 @@ class ConfigDBO extends DataClass implements Insertable<ConfigDBO> {
   }
 
   @override
-  int get hashCode => $mrjf($mrjc(
-      id.hashCode,
-      $mrjc(
-          uuid.hashCode,
-          $mrjc(
-              baseUrl.hashCode,
-              $mrjc(
-                  externalUrl.hashCode,
-                  $mrjc(
-                      internalUrl.hashCode,
-                      $mrjc(
-                          locationName.hashCode,
-                          $mrjc(
-                              installationType.hashCode,
-                              $mrjc(
-                                  requiresApiPassword.hashCode,
-                                  $mrjc(version.hashCode,
-                                      lastConnection.hashCode))))))))));
+  int get hashCode => Object.hash(
+      id, externalUrl, internalUrl, locationName, version, lastConnection);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is ConfigDBO &&
           other.id == this.id &&
-          other.uuid == this.uuid &&
-          other.baseUrl == this.baseUrl &&
           other.externalUrl == this.externalUrl &&
           other.internalUrl == this.internalUrl &&
           other.locationName == this.locationName &&
-          other.installationType == this.installationType &&
-          other.requiresApiPassword == this.requiresApiPassword &&
           other.version == this.version &&
           other.lastConnection == this.lastConnection);
 }
 
 class ConfigsCompanion extends UpdateCompanion<ConfigDBO> {
   final Value<int> id;
-  final Value<String?> uuid;
-  final Value<String?> baseUrl;
   final Value<String?> externalUrl;
   final Value<String?> internalUrl;
   final Value<String?> locationName;
-  final Value<String?> installationType;
-  final Value<bool> requiresApiPassword;
   final Value<String?> version;
   final Value<DateTime?> lastConnection;
   const ConfigsCompanion({
     this.id = const Value.absent(),
-    this.uuid = const Value.absent(),
-    this.baseUrl = const Value.absent(),
     this.externalUrl = const Value.absent(),
     this.internalUrl = const Value.absent(),
     this.locationName = const Value.absent(),
-    this.installationType = const Value.absent(),
-    this.requiresApiPassword = const Value.absent(),
     this.version = const Value.absent(),
     this.lastConnection = const Value.absent(),
   });
   ConfigsCompanion.insert({
     this.id = const Value.absent(),
-    this.uuid = const Value.absent(),
-    this.baseUrl = const Value.absent(),
     this.externalUrl = const Value.absent(),
     this.internalUrl = const Value.absent(),
     this.locationName = const Value.absent(),
-    this.installationType = const Value.absent(),
-    this.requiresApiPassword = const Value.absent(),
     this.version = const Value.absent(),
     this.lastConnection = const Value.absent(),
   });
   static Insertable<ConfigDBO> custom({
     Expression<int>? id,
-    Expression<String?>? uuid,
-    Expression<String?>? baseUrl,
-    Expression<String?>? externalUrl,
-    Expression<String?>? internalUrl,
-    Expression<String?>? locationName,
-    Expression<String?>? installationType,
-    Expression<bool>? requiresApiPassword,
-    Expression<String?>? version,
-    Expression<DateTime?>? lastConnection,
+    Expression<String>? externalUrl,
+    Expression<String>? internalUrl,
+    Expression<String>? locationName,
+    Expression<String>? version,
+    Expression<DateTime>? lastConnection,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
-      if (uuid != null) 'uuid': uuid,
-      if (baseUrl != null) 'base_url': baseUrl,
       if (externalUrl != null) 'external_url': externalUrl,
       if (internalUrl != null) 'internal_url': internalUrl,
       if (locationName != null) 'location_name': locationName,
-      if (installationType != null) 'installation_type': installationType,
-      if (requiresApiPassword != null)
-        'requires_api_password': requiresApiPassword,
       if (version != null) 'version': version,
       if (lastConnection != null) 'last_connection': lastConnection,
     });
@@ -289,24 +177,16 @@ class ConfigsCompanion extends UpdateCompanion<ConfigDBO> {
 
   ConfigsCompanion copyWith(
       {Value<int>? id,
-      Value<String?>? uuid,
-      Value<String?>? baseUrl,
       Value<String?>? externalUrl,
       Value<String?>? internalUrl,
       Value<String?>? locationName,
-      Value<String?>? installationType,
-      Value<bool>? requiresApiPassword,
       Value<String?>? version,
       Value<DateTime?>? lastConnection}) {
     return ConfigsCompanion(
       id: id ?? this.id,
-      uuid: uuid ?? this.uuid,
-      baseUrl: baseUrl ?? this.baseUrl,
       externalUrl: externalUrl ?? this.externalUrl,
       internalUrl: internalUrl ?? this.internalUrl,
       locationName: locationName ?? this.locationName,
-      installationType: installationType ?? this.installationType,
-      requiresApiPassword: requiresApiPassword ?? this.requiresApiPassword,
       version: version ?? this.version,
       lastConnection: lastConnection ?? this.lastConnection,
     );
@@ -318,32 +198,20 @@ class ConfigsCompanion extends UpdateCompanion<ConfigDBO> {
     if (id.present) {
       map['id'] = Variable<int>(id.value);
     }
-    if (uuid.present) {
-      map['uuid'] = Variable<String?>(uuid.value);
-    }
-    if (baseUrl.present) {
-      map['base_url'] = Variable<String?>(baseUrl.value);
-    }
     if (externalUrl.present) {
-      map['external_url'] = Variable<String?>(externalUrl.value);
+      map['external_url'] = Variable<String>(externalUrl.value);
     }
     if (internalUrl.present) {
-      map['internal_url'] = Variable<String?>(internalUrl.value);
+      map['internal_url'] = Variable<String>(internalUrl.value);
     }
     if (locationName.present) {
-      map['location_name'] = Variable<String?>(locationName.value);
-    }
-    if (installationType.present) {
-      map['installation_type'] = Variable<String?>(installationType.value);
-    }
-    if (requiresApiPassword.present) {
-      map['requires_api_password'] = Variable<bool>(requiresApiPassword.value);
+      map['location_name'] = Variable<String>(locationName.value);
     }
     if (version.present) {
-      map['version'] = Variable<String?>(version.value);
+      map['version'] = Variable<String>(version.value);
     }
     if (lastConnection.present) {
-      map['last_connection'] = Variable<DateTime?>(lastConnection.value);
+      map['last_connection'] = Variable<DateTime>(lastConnection.value);
     }
     return map;
   }
@@ -352,13 +220,9 @@ class ConfigsCompanion extends UpdateCompanion<ConfigDBO> {
   String toString() {
     return (StringBuffer('ConfigsCompanion(')
           ..write('id: $id, ')
-          ..write('uuid: $uuid, ')
-          ..write('baseUrl: $baseUrl, ')
           ..write('externalUrl: $externalUrl, ')
           ..write('internalUrl: $internalUrl, ')
           ..write('locationName: $locationName, ')
-          ..write('installationType: $installationType, ')
-          ..write('requiresApiPassword: $requiresApiPassword, ')
           ..write('version: $version, ')
           ..write('lastConnection: $lastConnection')
           ..write(')'))
@@ -367,71 +231,47 @@ class ConfigsCompanion extends UpdateCompanion<ConfigDBO> {
 }
 
 class $ConfigsTable extends Configs with TableInfo<$ConfigsTable, ConfigDBO> {
-  final GeneratedDatabase _db;
+  @override
+  final GeneratedDatabase attachedDatabase;
   final String? _alias;
-  $ConfigsTable(this._db, [this._alias]);
+  $ConfigsTable(this.attachedDatabase, [this._alias]);
   final VerificationMeta _idMeta = const VerificationMeta('id');
-  late final GeneratedColumn<int?> id = GeneratedColumn<int?>(
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
       'id', aliasedName, false,
-      typeName: 'INTEGER', requiredDuringInsert: false);
-  final VerificationMeta _uuidMeta = const VerificationMeta('uuid');
-  late final GeneratedColumn<String?> uuid = GeneratedColumn<String?>(
-      'uuid', aliasedName, true,
-      typeName: 'TEXT', requiredDuringInsert: false);
-  final VerificationMeta _baseUrlMeta = const VerificationMeta('baseUrl');
-  late final GeneratedColumn<String?> baseUrl = GeneratedColumn<String?>(
-      'base_url', aliasedName, true,
-      typeName: 'TEXT', requiredDuringInsert: false);
+      type: DriftSqlType.int, requiredDuringInsert: false);
   final VerificationMeta _externalUrlMeta =
       const VerificationMeta('externalUrl');
-  late final GeneratedColumn<String?> externalUrl = GeneratedColumn<String?>(
+  @override
+  late final GeneratedColumn<String> externalUrl = GeneratedColumn<String>(
       'external_url', aliasedName, true,
-      typeName: 'TEXT', requiredDuringInsert: false);
+      type: DriftSqlType.string, requiredDuringInsert: false);
   final VerificationMeta _internalUrlMeta =
       const VerificationMeta('internalUrl');
-  late final GeneratedColumn<String?> internalUrl = GeneratedColumn<String?>(
+  @override
+  late final GeneratedColumn<String> internalUrl = GeneratedColumn<String>(
       'internal_url', aliasedName, true,
-      typeName: 'TEXT', requiredDuringInsert: false);
+      type: DriftSqlType.string, requiredDuringInsert: false);
   final VerificationMeta _locationNameMeta =
       const VerificationMeta('locationName');
-  late final GeneratedColumn<String?> locationName = GeneratedColumn<String?>(
+  @override
+  late final GeneratedColumn<String> locationName = GeneratedColumn<String>(
       'location_name', aliasedName, true,
-      typeName: 'TEXT', requiredDuringInsert: false);
-  final VerificationMeta _installationTypeMeta =
-      const VerificationMeta('installationType');
-  late final GeneratedColumn<String?> installationType =
-      GeneratedColumn<String?>('installation_type', aliasedName, true,
-          typeName: 'TEXT', requiredDuringInsert: false);
-  final VerificationMeta _requiresApiPasswordMeta =
-      const VerificationMeta('requiresApiPassword');
-  late final GeneratedColumn<bool?> requiresApiPassword =
-      GeneratedColumn<bool?>('requires_api_password', aliasedName, false,
-          typeName: 'INTEGER',
-          requiredDuringInsert: false,
-          defaultConstraints: 'CHECK (requires_api_password IN (0, 1))',
-          defaultValue: const Constant(false));
+      type: DriftSqlType.string, requiredDuringInsert: false);
   final VerificationMeta _versionMeta = const VerificationMeta('version');
-  late final GeneratedColumn<String?> version = GeneratedColumn<String?>(
+  @override
+  late final GeneratedColumn<String> version = GeneratedColumn<String>(
       'version', aliasedName, true,
-      typeName: 'TEXT', requiredDuringInsert: false);
+      type: DriftSqlType.string, requiredDuringInsert: false);
   final VerificationMeta _lastConnectionMeta =
       const VerificationMeta('lastConnection');
-  late final GeneratedColumn<DateTime?> lastConnection =
-      GeneratedColumn<DateTime?>('last_connection', aliasedName, true,
-          typeName: 'INTEGER', requiredDuringInsert: false);
   @override
-  List<GeneratedColumn> get $columns => [
-        id,
-        uuid,
-        baseUrl,
-        externalUrl,
-        internalUrl,
-        locationName,
-        installationType,
-        requiresApiPassword,
-        version,
-        lastConnection
-      ];
+  late final GeneratedColumn<DateTime> lastConnection =
+      GeneratedColumn<DateTime>('last_connection', aliasedName, true,
+          type: DriftSqlType.dateTime, requiredDuringInsert: false);
+  @override
+  List<GeneratedColumn> get $columns =>
+      [id, externalUrl, internalUrl, locationName, version, lastConnection];
   @override
   String get aliasedName => _alias ?? 'configs';
   @override
@@ -443,14 +283,6 @@ class $ConfigsTable extends Configs with TableInfo<$ConfigsTable, ConfigDBO> {
     final data = instance.toColumns(true);
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
-    }
-    if (data.containsKey('uuid')) {
-      context.handle(
-          _uuidMeta, uuid.isAcceptableOrUnknown(data['uuid']!, _uuidMeta));
-    }
-    if (data.containsKey('base_url')) {
-      context.handle(_baseUrlMeta,
-          baseUrl.isAcceptableOrUnknown(data['base_url']!, _baseUrlMeta));
     }
     if (data.containsKey('external_url')) {
       context.handle(
@@ -470,18 +302,6 @@ class $ConfigsTable extends Configs with TableInfo<$ConfigsTable, ConfigDBO> {
           locationName.isAcceptableOrUnknown(
               data['location_name']!, _locationNameMeta));
     }
-    if (data.containsKey('installation_type')) {
-      context.handle(
-          _installationTypeMeta,
-          installationType.isAcceptableOrUnknown(
-              data['installation_type']!, _installationTypeMeta));
-    }
-    if (data.containsKey('requires_api_password')) {
-      context.handle(
-          _requiresApiPasswordMeta,
-          requiresApiPassword.isAcceptableOrUnknown(
-              data['requires_api_password']!, _requiresApiPasswordMeta));
-    }
     if (data.containsKey('version')) {
       context.handle(_versionMeta,
           version.isAcceptableOrUnknown(data['version']!, _versionMeta));
@@ -499,13 +319,26 @@ class $ConfigsTable extends Configs with TableInfo<$ConfigsTable, ConfigDBO> {
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
   ConfigDBO map(Map<String, dynamic> data, {String? tablePrefix}) {
-    return ConfigDBO.fromData(data, _db,
-        prefix: tablePrefix != null ? '$tablePrefix.' : null);
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return ConfigDBO(
+      id: attachedDatabase.options.types
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      externalUrl: attachedDatabase.options.types
+          .read(DriftSqlType.string, data['${effectivePrefix}external_url']),
+      internalUrl: attachedDatabase.options.types
+          .read(DriftSqlType.string, data['${effectivePrefix}internal_url']),
+      locationName: attachedDatabase.options.types
+          .read(DriftSqlType.string, data['${effectivePrefix}location_name']),
+      version: attachedDatabase.options.types
+          .read(DriftSqlType.string, data['${effectivePrefix}version']),
+      lastConnection: attachedDatabase.options.types.read(
+          DriftSqlType.dateTime, data['${effectivePrefix}last_connection']),
+    );
   }
 
   @override
   $ConfigsTable createAlias(String alias) {
-    return $ConfigsTable(_db, alias);
+    return $ConfigsTable(attachedDatabase, alias);
   }
 }
 
@@ -533,7 +366,7 @@ class StateDBO extends DataClass implements Insertable<StateDBO> {
   final String? unitOfMeasurement;
   final int? current;
   final int? voltage;
-  StateDBO(
+  const StateDBO(
       {required this.id,
       this.entityId,
       this.state,
@@ -557,127 +390,75 @@ class StateDBO extends DataClass implements Insertable<StateDBO> {
       this.unitOfMeasurement,
       this.current,
       this.voltage});
-  factory StateDBO.fromData(Map<String, dynamic> data, GeneratedDatabase db,
-      {String? prefix}) {
-    final effectivePrefix = prefix ?? '';
-    return StateDBO(
-      id: const IntType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}id'])!,
-      entityId: const StringType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}entity_id']),
-      state: const StringType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}state']),
-      lastChanged: const DateTimeType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}last_changed']),
-      lastUpdated: const DateTimeType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}last_updated']),
-      displayLabel: const StringType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}display_label']),
-      displayType: const StringType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}display_type']),
-      friendlyName: const StringType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}friendly_name']),
-      supportedFeatures: const IntType().mapFromDatabaseResponse(
-          data['${effectivePrefix}supported_features']),
-      currentPosition: const IntType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}current_position']),
-      lastTriggered: const DateTimeType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}last_triggered']),
-      mode: const StringType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}mode']),
-      temperature: const RealType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}temperature']),
-      humidity: const IntType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}humidity']),
-      pressure: const RealType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}pressure']),
-      windBearing: const RealType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}wind_bearing']),
-      windSpeed: const RealType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}wind_speed']),
-      attribution: const StringType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}attribution']),
-      isOn: const BoolType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}is_on']),
-      deviceClass: const StringType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}device_class']),
-      unitOfMeasurement: const StringType().mapFromDatabaseResponse(
-          data['${effectivePrefix}unit_of_measurement']),
-      current: const IntType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}current']),
-      voltage: const IntType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}voltage']),
-    );
-  }
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['id'] = Variable<int>(id);
     if (!nullToAbsent || entityId != null) {
-      map['entity_id'] = Variable<String?>(entityId);
+      map['entity_id'] = Variable<String>(entityId);
     }
     if (!nullToAbsent || state != null) {
-      map['state'] = Variable<String?>(state);
+      map['state'] = Variable<String>(state);
     }
     if (!nullToAbsent || lastChanged != null) {
-      map['last_changed'] = Variable<DateTime?>(lastChanged);
+      map['last_changed'] = Variable<DateTime>(lastChanged);
     }
     if (!nullToAbsent || lastUpdated != null) {
-      map['last_updated'] = Variable<DateTime?>(lastUpdated);
+      map['last_updated'] = Variable<DateTime>(lastUpdated);
     }
     if (!nullToAbsent || displayLabel != null) {
-      map['display_label'] = Variable<String?>(displayLabel);
+      map['display_label'] = Variable<String>(displayLabel);
     }
     if (!nullToAbsent || displayType != null) {
-      map['display_type'] = Variable<String?>(displayType);
+      map['display_type'] = Variable<String>(displayType);
     }
     if (!nullToAbsent || friendlyName != null) {
-      map['friendly_name'] = Variable<String?>(friendlyName);
+      map['friendly_name'] = Variable<String>(friendlyName);
     }
     if (!nullToAbsent || supportedFeatures != null) {
-      map['supported_features'] = Variable<int?>(supportedFeatures);
+      map['supported_features'] = Variable<int>(supportedFeatures);
     }
     if (!nullToAbsent || currentPosition != null) {
-      map['current_position'] = Variable<int?>(currentPosition);
+      map['current_position'] = Variable<int>(currentPosition);
     }
     if (!nullToAbsent || lastTriggered != null) {
-      map['last_triggered'] = Variable<DateTime?>(lastTriggered);
+      map['last_triggered'] = Variable<DateTime>(lastTriggered);
     }
     if (!nullToAbsent || mode != null) {
-      map['mode'] = Variable<String?>(mode);
+      map['mode'] = Variable<String>(mode);
     }
     if (!nullToAbsent || temperature != null) {
-      map['temperature'] = Variable<double?>(temperature);
+      map['temperature'] = Variable<double>(temperature);
     }
     if (!nullToAbsent || humidity != null) {
-      map['humidity'] = Variable<int?>(humidity);
+      map['humidity'] = Variable<int>(humidity);
     }
     if (!nullToAbsent || pressure != null) {
-      map['pressure'] = Variable<double?>(pressure);
+      map['pressure'] = Variable<double>(pressure);
     }
     if (!nullToAbsent || windBearing != null) {
-      map['wind_bearing'] = Variable<double?>(windBearing);
+      map['wind_bearing'] = Variable<double>(windBearing);
     }
     if (!nullToAbsent || windSpeed != null) {
-      map['wind_speed'] = Variable<double?>(windSpeed);
+      map['wind_speed'] = Variable<double>(windSpeed);
     }
     if (!nullToAbsent || attribution != null) {
-      map['attribution'] = Variable<String?>(attribution);
+      map['attribution'] = Variable<String>(attribution);
     }
     if (!nullToAbsent || isOn != null) {
-      map['is_on'] = Variable<bool?>(isOn);
+      map['is_on'] = Variable<bool>(isOn);
     }
     if (!nullToAbsent || deviceClass != null) {
-      map['device_class'] = Variable<String?>(deviceClass);
+      map['device_class'] = Variable<String>(deviceClass);
     }
     if (!nullToAbsent || unitOfMeasurement != null) {
-      map['unit_of_measurement'] = Variable<String?>(unitOfMeasurement);
+      map['unit_of_measurement'] = Variable<String>(unitOfMeasurement);
     }
     if (!nullToAbsent || current != null) {
-      map['current'] = Variable<int?>(current);
+      map['current'] = Variable<int>(current);
     }
     if (!nullToAbsent || voltage != null) {
-      map['voltage'] = Variable<int?>(voltage);
+      map['voltage'] = Variable<int>(voltage);
     }
     return map;
   }
@@ -751,7 +532,7 @@ class StateDBO extends DataClass implements Insertable<StateDBO> {
 
   factory StateDBO.fromJson(Map<String, dynamic> json,
       {ValueSerializer? serializer}) {
-    serializer ??= moorRuntimeOptions.defaultSerializer;
+    serializer ??= driftRuntimeOptions.defaultSerializer;
     return StateDBO(
       id: serializer.fromJson<int>(json['id']),
       entityId: serializer.fromJson<String?>(json['entityId']),
@@ -781,7 +562,7 @@ class StateDBO extends DataClass implements Insertable<StateDBO> {
   }
   @override
   Map<String, dynamic> toJson({ValueSerializer? serializer}) {
-    serializer ??= moorRuntimeOptions.defaultSerializer;
+    serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
       'entityId': serializer.toJson<String?>(entityId),
@@ -811,52 +592,61 @@ class StateDBO extends DataClass implements Insertable<StateDBO> {
 
   StateDBO copyWith(
           {int? id,
-          String? entityId,
-          String? state,
-          DateTime? lastChanged,
-          DateTime? lastUpdated,
-          String? displayLabel,
-          String? displayType,
-          String? friendlyName,
-          int? supportedFeatures,
-          int? currentPosition,
-          DateTime? lastTriggered,
-          String? mode,
-          double? temperature,
-          int? humidity,
-          double? pressure,
-          double? windBearing,
-          double? windSpeed,
-          String? attribution,
-          bool? isOn,
-          String? deviceClass,
-          String? unitOfMeasurement,
-          int? current,
-          int? voltage}) =>
+          Value<String?> entityId = const Value.absent(),
+          Value<String?> state = const Value.absent(),
+          Value<DateTime?> lastChanged = const Value.absent(),
+          Value<DateTime?> lastUpdated = const Value.absent(),
+          Value<String?> displayLabel = const Value.absent(),
+          Value<String?> displayType = const Value.absent(),
+          Value<String?> friendlyName = const Value.absent(),
+          Value<int?> supportedFeatures = const Value.absent(),
+          Value<int?> currentPosition = const Value.absent(),
+          Value<DateTime?> lastTriggered = const Value.absent(),
+          Value<String?> mode = const Value.absent(),
+          Value<double?> temperature = const Value.absent(),
+          Value<int?> humidity = const Value.absent(),
+          Value<double?> pressure = const Value.absent(),
+          Value<double?> windBearing = const Value.absent(),
+          Value<double?> windSpeed = const Value.absent(),
+          Value<String?> attribution = const Value.absent(),
+          Value<bool?> isOn = const Value.absent(),
+          Value<String?> deviceClass = const Value.absent(),
+          Value<String?> unitOfMeasurement = const Value.absent(),
+          Value<int?> current = const Value.absent(),
+          Value<int?> voltage = const Value.absent()}) =>
       StateDBO(
         id: id ?? this.id,
-        entityId: entityId ?? this.entityId,
-        state: state ?? this.state,
-        lastChanged: lastChanged ?? this.lastChanged,
-        lastUpdated: lastUpdated ?? this.lastUpdated,
-        displayLabel: displayLabel ?? this.displayLabel,
-        displayType: displayType ?? this.displayType,
-        friendlyName: friendlyName ?? this.friendlyName,
-        supportedFeatures: supportedFeatures ?? this.supportedFeatures,
-        currentPosition: currentPosition ?? this.currentPosition,
-        lastTriggered: lastTriggered ?? this.lastTriggered,
-        mode: mode ?? this.mode,
-        temperature: temperature ?? this.temperature,
-        humidity: humidity ?? this.humidity,
-        pressure: pressure ?? this.pressure,
-        windBearing: windBearing ?? this.windBearing,
-        windSpeed: windSpeed ?? this.windSpeed,
-        attribution: attribution ?? this.attribution,
-        isOn: isOn ?? this.isOn,
-        deviceClass: deviceClass ?? this.deviceClass,
-        unitOfMeasurement: unitOfMeasurement ?? this.unitOfMeasurement,
-        current: current ?? this.current,
-        voltage: voltage ?? this.voltage,
+        entityId: entityId.present ? entityId.value : this.entityId,
+        state: state.present ? state.value : this.state,
+        lastChanged: lastChanged.present ? lastChanged.value : this.lastChanged,
+        lastUpdated: lastUpdated.present ? lastUpdated.value : this.lastUpdated,
+        displayLabel:
+            displayLabel.present ? displayLabel.value : this.displayLabel,
+        displayType: displayType.present ? displayType.value : this.displayType,
+        friendlyName:
+            friendlyName.present ? friendlyName.value : this.friendlyName,
+        supportedFeatures: supportedFeatures.present
+            ? supportedFeatures.value
+            : this.supportedFeatures,
+        currentPosition: currentPosition.present
+            ? currentPosition.value
+            : this.currentPosition,
+        lastTriggered:
+            lastTriggered.present ? lastTriggered.value : this.lastTriggered,
+        mode: mode.present ? mode.value : this.mode,
+        temperature: temperature.present ? temperature.value : this.temperature,
+        humidity: humidity.present ? humidity.value : this.humidity,
+        pressure: pressure.present ? pressure.value : this.pressure,
+        windBearing: windBearing.present ? windBearing.value : this.windBearing,
+        windSpeed: windSpeed.present ? windSpeed.value : this.windSpeed,
+        attribution: attribution.present ? attribution.value : this.attribution,
+        isOn: isOn.present ? isOn.value : this.isOn,
+        deviceClass: deviceClass.present ? deviceClass.value : this.deviceClass,
+        unitOfMeasurement: unitOfMeasurement.present
+            ? unitOfMeasurement.value
+            : this.unitOfMeasurement,
+        current: current.present ? current.value : this.current,
+        voltage: voltage.present ? voltage.value : this.voltage,
       );
   @override
   String toString() {
@@ -889,48 +679,31 @@ class StateDBO extends DataClass implements Insertable<StateDBO> {
   }
 
   @override
-  int get hashCode => $mrjf($mrjc(
-      id.hashCode,
-      $mrjc(
-          entityId.hashCode,
-          $mrjc(
-              state.hashCode,
-              $mrjc(
-                  lastChanged.hashCode,
-                  $mrjc(
-                      lastUpdated.hashCode,
-                      $mrjc(
-                          displayLabel.hashCode,
-                          $mrjc(
-                              displayType.hashCode,
-                              $mrjc(
-                                  friendlyName.hashCode,
-                                  $mrjc(
-                                      supportedFeatures.hashCode,
-                                      $mrjc(
-                                          currentPosition.hashCode,
-                                          $mrjc(
-                                              lastTriggered.hashCode,
-                                              $mrjc(
-                                                  mode.hashCode,
-                                                  $mrjc(
-                                                      temperature.hashCode,
-                                                      $mrjc(
-                                                          humidity.hashCode,
-                                                          $mrjc(
-                                                              pressure.hashCode,
-                                                              $mrjc(
-                                                                  windBearing
-                                                                      .hashCode,
-                                                                  $mrjc(
-                                                                      windSpeed
-                                                                          .hashCode,
-                                                                      $mrjc(
-                                                                          attribution
-                                                                              .hashCode,
-                                                                          $mrjc(
-                                                                              isOn.hashCode,
-                                                                              $mrjc(deviceClass.hashCode, $mrjc(unitOfMeasurement.hashCode, $mrjc(current.hashCode, voltage.hashCode)))))))))))))))))))))));
+  int get hashCode => Object.hashAll([
+        id,
+        entityId,
+        state,
+        lastChanged,
+        lastUpdated,
+        displayLabel,
+        displayType,
+        friendlyName,
+        supportedFeatures,
+        currentPosition,
+        lastTriggered,
+        mode,
+        temperature,
+        humidity,
+        pressure,
+        windBearing,
+        windSpeed,
+        attribution,
+        isOn,
+        deviceClass,
+        unitOfMeasurement,
+        current,
+        voltage
+      ]);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -1036,28 +809,28 @@ class StatesCompanion extends UpdateCompanion<StateDBO> {
   });
   static Insertable<StateDBO> custom({
     Expression<int>? id,
-    Expression<String?>? entityId,
-    Expression<String?>? state,
-    Expression<DateTime?>? lastChanged,
-    Expression<DateTime?>? lastUpdated,
-    Expression<String?>? displayLabel,
-    Expression<String?>? displayType,
-    Expression<String?>? friendlyName,
-    Expression<int?>? supportedFeatures,
-    Expression<int?>? currentPosition,
-    Expression<DateTime?>? lastTriggered,
-    Expression<String?>? mode,
-    Expression<double?>? temperature,
-    Expression<int?>? humidity,
-    Expression<double?>? pressure,
-    Expression<double?>? windBearing,
-    Expression<double?>? windSpeed,
-    Expression<String?>? attribution,
-    Expression<bool?>? isOn,
-    Expression<String?>? deviceClass,
-    Expression<String?>? unitOfMeasurement,
-    Expression<int?>? current,
-    Expression<int?>? voltage,
+    Expression<String>? entityId,
+    Expression<String>? state,
+    Expression<DateTime>? lastChanged,
+    Expression<DateTime>? lastUpdated,
+    Expression<String>? displayLabel,
+    Expression<String>? displayType,
+    Expression<String>? friendlyName,
+    Expression<int>? supportedFeatures,
+    Expression<int>? currentPosition,
+    Expression<DateTime>? lastTriggered,
+    Expression<String>? mode,
+    Expression<double>? temperature,
+    Expression<int>? humidity,
+    Expression<double>? pressure,
+    Expression<double>? windBearing,
+    Expression<double>? windSpeed,
+    Expression<String>? attribution,
+    Expression<bool>? isOn,
+    Expression<String>? deviceClass,
+    Expression<String>? unitOfMeasurement,
+    Expression<int>? current,
+    Expression<int>? voltage,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -1144,70 +917,70 @@ class StatesCompanion extends UpdateCompanion<StateDBO> {
       map['id'] = Variable<int>(id.value);
     }
     if (entityId.present) {
-      map['entity_id'] = Variable<String?>(entityId.value);
+      map['entity_id'] = Variable<String>(entityId.value);
     }
     if (state.present) {
-      map['state'] = Variable<String?>(state.value);
+      map['state'] = Variable<String>(state.value);
     }
     if (lastChanged.present) {
-      map['last_changed'] = Variable<DateTime?>(lastChanged.value);
+      map['last_changed'] = Variable<DateTime>(lastChanged.value);
     }
     if (lastUpdated.present) {
-      map['last_updated'] = Variable<DateTime?>(lastUpdated.value);
+      map['last_updated'] = Variable<DateTime>(lastUpdated.value);
     }
     if (displayLabel.present) {
-      map['display_label'] = Variable<String?>(displayLabel.value);
+      map['display_label'] = Variable<String>(displayLabel.value);
     }
     if (displayType.present) {
-      map['display_type'] = Variable<String?>(displayType.value);
+      map['display_type'] = Variable<String>(displayType.value);
     }
     if (friendlyName.present) {
-      map['friendly_name'] = Variable<String?>(friendlyName.value);
+      map['friendly_name'] = Variable<String>(friendlyName.value);
     }
     if (supportedFeatures.present) {
-      map['supported_features'] = Variable<int?>(supportedFeatures.value);
+      map['supported_features'] = Variable<int>(supportedFeatures.value);
     }
     if (currentPosition.present) {
-      map['current_position'] = Variable<int?>(currentPosition.value);
+      map['current_position'] = Variable<int>(currentPosition.value);
     }
     if (lastTriggered.present) {
-      map['last_triggered'] = Variable<DateTime?>(lastTriggered.value);
+      map['last_triggered'] = Variable<DateTime>(lastTriggered.value);
     }
     if (mode.present) {
-      map['mode'] = Variable<String?>(mode.value);
+      map['mode'] = Variable<String>(mode.value);
     }
     if (temperature.present) {
-      map['temperature'] = Variable<double?>(temperature.value);
+      map['temperature'] = Variable<double>(temperature.value);
     }
     if (humidity.present) {
-      map['humidity'] = Variable<int?>(humidity.value);
+      map['humidity'] = Variable<int>(humidity.value);
     }
     if (pressure.present) {
-      map['pressure'] = Variable<double?>(pressure.value);
+      map['pressure'] = Variable<double>(pressure.value);
     }
     if (windBearing.present) {
-      map['wind_bearing'] = Variable<double?>(windBearing.value);
+      map['wind_bearing'] = Variable<double>(windBearing.value);
     }
     if (windSpeed.present) {
-      map['wind_speed'] = Variable<double?>(windSpeed.value);
+      map['wind_speed'] = Variable<double>(windSpeed.value);
     }
     if (attribution.present) {
-      map['attribution'] = Variable<String?>(attribution.value);
+      map['attribution'] = Variable<String>(attribution.value);
     }
     if (isOn.present) {
-      map['is_on'] = Variable<bool?>(isOn.value);
+      map['is_on'] = Variable<bool>(isOn.value);
     }
     if (deviceClass.present) {
-      map['device_class'] = Variable<String?>(deviceClass.value);
+      map['device_class'] = Variable<String>(deviceClass.value);
     }
     if (unitOfMeasurement.present) {
-      map['unit_of_measurement'] = Variable<String?>(unitOfMeasurement.value);
+      map['unit_of_measurement'] = Variable<String>(unitOfMeasurement.value);
     }
     if (current.present) {
-      map['current'] = Variable<int?>(current.value);
+      map['current'] = Variable<int>(current.value);
     }
     if (voltage.present) {
-      map['voltage'] = Variable<int?>(voltage.value);
+      map['voltage'] = Variable<int>(voltage.value);
     }
     return map;
   }
@@ -1244,118 +1017,142 @@ class StatesCompanion extends UpdateCompanion<StateDBO> {
 }
 
 class $StatesTable extends States with TableInfo<$StatesTable, StateDBO> {
-  final GeneratedDatabase _db;
+  @override
+  final GeneratedDatabase attachedDatabase;
   final String? _alias;
-  $StatesTable(this._db, [this._alias]);
+  $StatesTable(this.attachedDatabase, [this._alias]);
   final VerificationMeta _idMeta = const VerificationMeta('id');
-  late final GeneratedColumn<int?> id = GeneratedColumn<int?>(
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
       'id', aliasedName, false,
-      typeName: 'INTEGER',
+      type: DriftSqlType.int,
       requiredDuringInsert: false,
       defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
   final VerificationMeta _entityIdMeta = const VerificationMeta('entityId');
-  late final GeneratedColumn<String?> entityId = GeneratedColumn<String?>(
+  @override
+  late final GeneratedColumn<String> entityId = GeneratedColumn<String>(
       'entity_id', aliasedName, true,
-      typeName: 'TEXT', requiredDuringInsert: false);
+      type: DriftSqlType.string, requiredDuringInsert: false);
   final VerificationMeta _stateMeta = const VerificationMeta('state');
-  late final GeneratedColumn<String?> state = GeneratedColumn<String?>(
+  @override
+  late final GeneratedColumn<String> state = GeneratedColumn<String>(
       'state', aliasedName, true,
-      typeName: 'TEXT', requiredDuringInsert: false);
+      type: DriftSqlType.string, requiredDuringInsert: false);
   final VerificationMeta _lastChangedMeta =
       const VerificationMeta('lastChanged');
-  late final GeneratedColumn<DateTime?> lastChanged =
-      GeneratedColumn<DateTime?>('last_changed', aliasedName, true,
-          typeName: 'INTEGER', requiredDuringInsert: false);
+  @override
+  late final GeneratedColumn<DateTime> lastChanged = GeneratedColumn<DateTime>(
+      'last_changed', aliasedName, true,
+      type: DriftSqlType.dateTime, requiredDuringInsert: false);
   final VerificationMeta _lastUpdatedMeta =
       const VerificationMeta('lastUpdated');
-  late final GeneratedColumn<DateTime?> lastUpdated =
-      GeneratedColumn<DateTime?>('last_updated', aliasedName, true,
-          typeName: 'INTEGER', requiredDuringInsert: false);
+  @override
+  late final GeneratedColumn<DateTime> lastUpdated = GeneratedColumn<DateTime>(
+      'last_updated', aliasedName, true,
+      type: DriftSqlType.dateTime, requiredDuringInsert: false);
   final VerificationMeta _displayLabelMeta =
       const VerificationMeta('displayLabel');
-  late final GeneratedColumn<String?> displayLabel = GeneratedColumn<String?>(
+  @override
+  late final GeneratedColumn<String> displayLabel = GeneratedColumn<String>(
       'display_label', aliasedName, true,
-      typeName: 'TEXT', requiredDuringInsert: false);
+      type: DriftSqlType.string, requiredDuringInsert: false);
   final VerificationMeta _displayTypeMeta =
       const VerificationMeta('displayType');
-  late final GeneratedColumn<String?> displayType = GeneratedColumn<String?>(
+  @override
+  late final GeneratedColumn<String> displayType = GeneratedColumn<String>(
       'display_type', aliasedName, true,
-      typeName: 'TEXT', requiredDuringInsert: false);
+      type: DriftSqlType.string, requiredDuringInsert: false);
   final VerificationMeta _friendlyNameMeta =
       const VerificationMeta('friendlyName');
-  late final GeneratedColumn<String?> friendlyName = GeneratedColumn<String?>(
+  @override
+  late final GeneratedColumn<String> friendlyName = GeneratedColumn<String>(
       'friendly_name', aliasedName, true,
-      typeName: 'TEXT', requiredDuringInsert: false);
+      type: DriftSqlType.string, requiredDuringInsert: false);
   final VerificationMeta _supportedFeaturesMeta =
       const VerificationMeta('supportedFeatures');
-  late final GeneratedColumn<int?> supportedFeatures = GeneratedColumn<int?>(
+  @override
+  late final GeneratedColumn<int> supportedFeatures = GeneratedColumn<int>(
       'supported_features', aliasedName, true,
-      typeName: 'INTEGER', requiredDuringInsert: false);
+      type: DriftSqlType.int, requiredDuringInsert: false);
   final VerificationMeta _currentPositionMeta =
       const VerificationMeta('currentPosition');
-  late final GeneratedColumn<int?> currentPosition = GeneratedColumn<int?>(
+  @override
+  late final GeneratedColumn<int> currentPosition = GeneratedColumn<int>(
       'current_position', aliasedName, true,
-      typeName: 'INTEGER', requiredDuringInsert: false);
+      type: DriftSqlType.int, requiredDuringInsert: false);
   final VerificationMeta _lastTriggeredMeta =
       const VerificationMeta('lastTriggered');
-  late final GeneratedColumn<DateTime?> lastTriggered =
-      GeneratedColumn<DateTime?>('last_triggered', aliasedName, true,
-          typeName: 'INTEGER', requiredDuringInsert: false);
+  @override
+  late final GeneratedColumn<DateTime> lastTriggered =
+      GeneratedColumn<DateTime>('last_triggered', aliasedName, true,
+          type: DriftSqlType.dateTime, requiredDuringInsert: false);
   final VerificationMeta _modeMeta = const VerificationMeta('mode');
-  late final GeneratedColumn<String?> mode = GeneratedColumn<String?>(
+  @override
+  late final GeneratedColumn<String> mode = GeneratedColumn<String>(
       'mode', aliasedName, true,
-      typeName: 'TEXT', requiredDuringInsert: false);
+      type: DriftSqlType.string, requiredDuringInsert: false);
   final VerificationMeta _temperatureMeta =
       const VerificationMeta('temperature');
-  late final GeneratedColumn<double?> temperature = GeneratedColumn<double?>(
+  @override
+  late final GeneratedColumn<double> temperature = GeneratedColumn<double>(
       'temperature', aliasedName, true,
-      typeName: 'REAL', requiredDuringInsert: false);
+      type: DriftSqlType.double, requiredDuringInsert: false);
   final VerificationMeta _humidityMeta = const VerificationMeta('humidity');
-  late final GeneratedColumn<int?> humidity = GeneratedColumn<int?>(
+  @override
+  late final GeneratedColumn<int> humidity = GeneratedColumn<int>(
       'humidity', aliasedName, true,
-      typeName: 'INTEGER', requiredDuringInsert: false);
+      type: DriftSqlType.int, requiredDuringInsert: false);
   final VerificationMeta _pressureMeta = const VerificationMeta('pressure');
-  late final GeneratedColumn<double?> pressure = GeneratedColumn<double?>(
+  @override
+  late final GeneratedColumn<double> pressure = GeneratedColumn<double>(
       'pressure', aliasedName, true,
-      typeName: 'REAL', requiredDuringInsert: false);
+      type: DriftSqlType.double, requiredDuringInsert: false);
   final VerificationMeta _windBearingMeta =
       const VerificationMeta('windBearing');
-  late final GeneratedColumn<double?> windBearing = GeneratedColumn<double?>(
+  @override
+  late final GeneratedColumn<double> windBearing = GeneratedColumn<double>(
       'wind_bearing', aliasedName, true,
-      typeName: 'REAL', requiredDuringInsert: false);
+      type: DriftSqlType.double, requiredDuringInsert: false);
   final VerificationMeta _windSpeedMeta = const VerificationMeta('windSpeed');
-  late final GeneratedColumn<double?> windSpeed = GeneratedColumn<double?>(
+  @override
+  late final GeneratedColumn<double> windSpeed = GeneratedColumn<double>(
       'wind_speed', aliasedName, true,
-      typeName: 'REAL', requiredDuringInsert: false);
+      type: DriftSqlType.double, requiredDuringInsert: false);
   final VerificationMeta _attributionMeta =
       const VerificationMeta('attribution');
-  late final GeneratedColumn<String?> attribution = GeneratedColumn<String?>(
+  @override
+  late final GeneratedColumn<String> attribution = GeneratedColumn<String>(
       'attribution', aliasedName, true,
-      typeName: 'TEXT', requiredDuringInsert: false);
+      type: DriftSqlType.string, requiredDuringInsert: false);
   final VerificationMeta _isOnMeta = const VerificationMeta('isOn');
-  late final GeneratedColumn<bool?> isOn = GeneratedColumn<bool?>(
+  @override
+  late final GeneratedColumn<bool> isOn = GeneratedColumn<bool>(
       'is_on', aliasedName, true,
-      typeName: 'INTEGER',
+      type: DriftSqlType.bool,
       requiredDuringInsert: false,
       defaultConstraints: 'CHECK (is_on IN (0, 1))');
   final VerificationMeta _deviceClassMeta =
       const VerificationMeta('deviceClass');
-  late final GeneratedColumn<String?> deviceClass = GeneratedColumn<String?>(
+  @override
+  late final GeneratedColumn<String> deviceClass = GeneratedColumn<String>(
       'device_class', aliasedName, true,
-      typeName: 'TEXT', requiredDuringInsert: false);
+      type: DriftSqlType.string, requiredDuringInsert: false);
   final VerificationMeta _unitOfMeasurementMeta =
       const VerificationMeta('unitOfMeasurement');
-  late final GeneratedColumn<String?> unitOfMeasurement =
-      GeneratedColumn<String?>('unit_of_measurement', aliasedName, true,
-          typeName: 'TEXT', requiredDuringInsert: false);
+  @override
+  late final GeneratedColumn<String> unitOfMeasurement =
+      GeneratedColumn<String>('unit_of_measurement', aliasedName, true,
+          type: DriftSqlType.string, requiredDuringInsert: false);
   final VerificationMeta _currentMeta = const VerificationMeta('current');
-  late final GeneratedColumn<int?> current = GeneratedColumn<int?>(
+  @override
+  late final GeneratedColumn<int> current = GeneratedColumn<int>(
       'current', aliasedName, true,
-      typeName: 'INTEGER', requiredDuringInsert: false);
+      type: DriftSqlType.int, requiredDuringInsert: false);
   final VerificationMeta _voltageMeta = const VerificationMeta('voltage');
-  late final GeneratedColumn<int?> voltage = GeneratedColumn<int?>(
+  @override
+  late final GeneratedColumn<int> voltage = GeneratedColumn<int>(
       'voltage', aliasedName, true,
-      typeName: 'INTEGER', requiredDuringInsert: false);
+      type: DriftSqlType.int, requiredDuringInsert: false);
   @override
   List<GeneratedColumn> get $columns => [
         id,
@@ -1515,13 +1312,60 @@ class $StatesTable extends States with TableInfo<$StatesTable, StateDBO> {
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
   StateDBO map(Map<String, dynamic> data, {String? tablePrefix}) {
-    return StateDBO.fromData(data, _db,
-        prefix: tablePrefix != null ? '$tablePrefix.' : null);
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return StateDBO(
+      id: attachedDatabase.options.types
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      entityId: attachedDatabase.options.types
+          .read(DriftSqlType.string, data['${effectivePrefix}entity_id']),
+      state: attachedDatabase.options.types
+          .read(DriftSqlType.string, data['${effectivePrefix}state']),
+      lastChanged: attachedDatabase.options.types
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}last_changed']),
+      lastUpdated: attachedDatabase.options.types
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}last_updated']),
+      displayLabel: attachedDatabase.options.types
+          .read(DriftSqlType.string, data['${effectivePrefix}display_label']),
+      displayType: attachedDatabase.options.types
+          .read(DriftSqlType.string, data['${effectivePrefix}display_type']),
+      friendlyName: attachedDatabase.options.types
+          .read(DriftSqlType.string, data['${effectivePrefix}friendly_name']),
+      supportedFeatures: attachedDatabase.options.types
+          .read(DriftSqlType.int, data['${effectivePrefix}supported_features']),
+      currentPosition: attachedDatabase.options.types
+          .read(DriftSqlType.int, data['${effectivePrefix}current_position']),
+      lastTriggered: attachedDatabase.options.types.read(
+          DriftSqlType.dateTime, data['${effectivePrefix}last_triggered']),
+      mode: attachedDatabase.options.types
+          .read(DriftSqlType.string, data['${effectivePrefix}mode']),
+      temperature: attachedDatabase.options.types
+          .read(DriftSqlType.double, data['${effectivePrefix}temperature']),
+      humidity: attachedDatabase.options.types
+          .read(DriftSqlType.int, data['${effectivePrefix}humidity']),
+      pressure: attachedDatabase.options.types
+          .read(DriftSqlType.double, data['${effectivePrefix}pressure']),
+      windBearing: attachedDatabase.options.types
+          .read(DriftSqlType.double, data['${effectivePrefix}wind_bearing']),
+      windSpeed: attachedDatabase.options.types
+          .read(DriftSqlType.double, data['${effectivePrefix}wind_speed']),
+      attribution: attachedDatabase.options.types
+          .read(DriftSqlType.string, data['${effectivePrefix}attribution']),
+      isOn: attachedDatabase.options.types
+          .read(DriftSqlType.bool, data['${effectivePrefix}is_on']),
+      deviceClass: attachedDatabase.options.types
+          .read(DriftSqlType.string, data['${effectivePrefix}device_class']),
+      unitOfMeasurement: attachedDatabase.options.types.read(
+          DriftSqlType.string, data['${effectivePrefix}unit_of_measurement']),
+      current: attachedDatabase.options.types
+          .read(DriftSqlType.int, data['${effectivePrefix}current']),
+      voltage: attachedDatabase.options.types
+          .read(DriftSqlType.int, data['${effectivePrefix}voltage']),
+    );
   }
 
   @override
   $StatesTable createAlias(String alias) {
-    return $StatesTable(_db, alias);
+    return $StatesTable(attachedDatabase, alias);
   }
 }
 
@@ -1529,19 +1373,8 @@ class FlexTabDBO extends DataClass implements Insertable<FlexTabDBO> {
   final int id;
   final String label;
   final int order;
-  FlexTabDBO({required this.id, required this.label, required this.order});
-  factory FlexTabDBO.fromData(Map<String, dynamic> data, GeneratedDatabase db,
-      {String? prefix}) {
-    final effectivePrefix = prefix ?? '';
-    return FlexTabDBO(
-      id: const IntType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}id'])!,
-      label: const StringType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}label'])!,
-      order: const IntType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}order'])!,
-    );
-  }
+  const FlexTabDBO(
+      {required this.id, required this.label, required this.order});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -1561,7 +1394,7 @@ class FlexTabDBO extends DataClass implements Insertable<FlexTabDBO> {
 
   factory FlexTabDBO.fromJson(Map<String, dynamic> json,
       {ValueSerializer? serializer}) {
-    serializer ??= moorRuntimeOptions.defaultSerializer;
+    serializer ??= driftRuntimeOptions.defaultSerializer;
     return FlexTabDBO(
       id: serializer.fromJson<int>(json['id']),
       label: serializer.fromJson<String>(json['label']),
@@ -1570,7 +1403,7 @@ class FlexTabDBO extends DataClass implements Insertable<FlexTabDBO> {
   }
   @override
   Map<String, dynamic> toJson({ValueSerializer? serializer}) {
-    serializer ??= moorRuntimeOptions.defaultSerializer;
+    serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
       'label': serializer.toJson<String>(label),
@@ -1594,8 +1427,7 @@ class FlexTabDBO extends DataClass implements Insertable<FlexTabDBO> {
   }
 
   @override
-  int get hashCode =>
-      $mrjf($mrjc(id.hashCode, $mrjc(label.hashCode, order.hashCode)));
+  int get hashCode => Object.hash(id, label, order);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -1669,23 +1501,27 @@ class FlexTabsCompanion extends UpdateCompanion<FlexTabDBO> {
 
 class $FlexTabsTable extends FlexTabs
     with TableInfo<$FlexTabsTable, FlexTabDBO> {
-  final GeneratedDatabase _db;
+  @override
+  final GeneratedDatabase attachedDatabase;
   final String? _alias;
-  $FlexTabsTable(this._db, [this._alias]);
+  $FlexTabsTable(this.attachedDatabase, [this._alias]);
   final VerificationMeta _idMeta = const VerificationMeta('id');
-  late final GeneratedColumn<int?> id = GeneratedColumn<int?>(
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
       'id', aliasedName, false,
-      typeName: 'INTEGER',
+      type: DriftSqlType.int,
       requiredDuringInsert: false,
       defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
   final VerificationMeta _labelMeta = const VerificationMeta('label');
-  late final GeneratedColumn<String?> label = GeneratedColumn<String?>(
+  @override
+  late final GeneratedColumn<String> label = GeneratedColumn<String>(
       'label', aliasedName, false,
-      typeName: 'TEXT', requiredDuringInsert: true);
+      type: DriftSqlType.string, requiredDuringInsert: true);
   final VerificationMeta _orderMeta = const VerificationMeta('order');
-  late final GeneratedColumn<int?> order = GeneratedColumn<int?>(
+  @override
+  late final GeneratedColumn<int> order = GeneratedColumn<int>(
       'order', aliasedName, false,
-      typeName: 'INTEGER', requiredDuringInsert: true);
+      type: DriftSqlType.int, requiredDuringInsert: true);
   @override
   List<GeneratedColumn> get $columns => [id, label, order];
   @override
@@ -1719,13 +1555,20 @@ class $FlexTabsTable extends FlexTabs
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
   FlexTabDBO map(Map<String, dynamic> data, {String? tablePrefix}) {
-    return FlexTabDBO.fromData(data, _db,
-        prefix: tablePrefix != null ? '$tablePrefix.' : null);
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return FlexTabDBO(
+      id: attachedDatabase.options.types
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      label: attachedDatabase.options.types
+          .read(DriftSqlType.string, data['${effectivePrefix}label'])!,
+      order: attachedDatabase.options.types
+          .read(DriftSqlType.int, data['${effectivePrefix}order'])!,
+    );
   }
 
   @override
   $FlexTabsTable createAlias(String alias) {
-    return $FlexTabsTable(_db, alias);
+    return $FlexTabsTable(attachedDatabase, alias);
   }
 }
 
@@ -1742,7 +1585,7 @@ class FlexCardDBO extends DataClass implements Insertable<FlexCardDBO> {
   final int displayTrailing;
   final int displayTitle;
   final int displaySubtitle;
-  FlexCardDBO(
+  const FlexCardDBO(
       {required this.id,
       required this.tabId,
       required this.type,
@@ -1755,36 +1598,6 @@ class FlexCardDBO extends DataClass implements Insertable<FlexCardDBO> {
       required this.displayTrailing,
       required this.displayTitle,
       required this.displaySubtitle});
-  factory FlexCardDBO.fromData(Map<String, dynamic> data, GeneratedDatabase db,
-      {String? prefix}) {
-    final effectivePrefix = prefix ?? '';
-    return FlexCardDBO(
-      id: const IntType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}id'])!,
-      tabId: const IntType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}tab_id'])!,
-      type: const StringType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}type'])!,
-      stateId: const IntType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}state_id']),
-      parentId: const IntType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}parent_id']),
-      position: const IntType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}position'])!,
-      horizontalFlex: const IntType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}horizontal_flex'])!,
-      height: const IntType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}height'])!,
-      displayLeading: const IntType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}display_leading'])!,
-      displayTrailing: const IntType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}display_trailing'])!,
-      displayTitle: const IntType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}display_title'])!,
-      displaySubtitle: const IntType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}display_subtitle'])!,
-    );
-  }
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -1792,10 +1605,10 @@ class FlexCardDBO extends DataClass implements Insertable<FlexCardDBO> {
     map['tab_id'] = Variable<int>(tabId);
     map['type'] = Variable<String>(type);
     if (!nullToAbsent || stateId != null) {
-      map['state_id'] = Variable<int?>(stateId);
+      map['state_id'] = Variable<int>(stateId);
     }
     if (!nullToAbsent || parentId != null) {
-      map['parent_id'] = Variable<int?>(parentId);
+      map['parent_id'] = Variable<int>(parentId);
     }
     map['position'] = Variable<int>(position);
     map['horizontal_flex'] = Variable<int>(horizontalFlex);
@@ -1830,7 +1643,7 @@ class FlexCardDBO extends DataClass implements Insertable<FlexCardDBO> {
 
   factory FlexCardDBO.fromJson(Map<String, dynamic> json,
       {ValueSerializer? serializer}) {
-    serializer ??= moorRuntimeOptions.defaultSerializer;
+    serializer ??= driftRuntimeOptions.defaultSerializer;
     return FlexCardDBO(
       id: serializer.fromJson<int>(json['id']),
       tabId: serializer.fromJson<int>(json['tabId']),
@@ -1848,7 +1661,7 @@ class FlexCardDBO extends DataClass implements Insertable<FlexCardDBO> {
   }
   @override
   Map<String, dynamic> toJson({ValueSerializer? serializer}) {
-    serializer ??= moorRuntimeOptions.defaultSerializer;
+    serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
       'tabId': serializer.toJson<int>(tabId),
@@ -1869,8 +1682,8 @@ class FlexCardDBO extends DataClass implements Insertable<FlexCardDBO> {
           {int? id,
           int? tabId,
           String? type,
-          int? stateId,
-          int? parentId,
+          Value<int?> stateId = const Value.absent(),
+          Value<int?> parentId = const Value.absent(),
           int? position,
           int? horizontalFlex,
           int? height,
@@ -1882,8 +1695,8 @@ class FlexCardDBO extends DataClass implements Insertable<FlexCardDBO> {
         id: id ?? this.id,
         tabId: tabId ?? this.tabId,
         type: type ?? this.type,
-        stateId: stateId ?? this.stateId,
-        parentId: parentId ?? this.parentId,
+        stateId: stateId.present ? stateId.value : this.stateId,
+        parentId: parentId.present ? parentId.value : this.parentId,
         position: position ?? this.position,
         horizontalFlex: horizontalFlex ?? this.horizontalFlex,
         height: height ?? this.height,
@@ -1912,30 +1725,19 @@ class FlexCardDBO extends DataClass implements Insertable<FlexCardDBO> {
   }
 
   @override
-  int get hashCode => $mrjf($mrjc(
-      id.hashCode,
-      $mrjc(
-          tabId.hashCode,
-          $mrjc(
-              type.hashCode,
-              $mrjc(
-                  stateId.hashCode,
-                  $mrjc(
-                      parentId.hashCode,
-                      $mrjc(
-                          position.hashCode,
-                          $mrjc(
-                              horizontalFlex.hashCode,
-                              $mrjc(
-                                  height.hashCode,
-                                  $mrjc(
-                                      displayLeading.hashCode,
-                                      $mrjc(
-                                          displayTrailing.hashCode,
-                                          $mrjc(
-                                              displayTitle.hashCode,
-                                              displaySubtitle
-                                                  .hashCode))))))))))));
+  int get hashCode => Object.hash(
+      id,
+      tabId,
+      type,
+      stateId,
+      parentId,
+      position,
+      horizontalFlex,
+      height,
+      displayLeading,
+      displayTrailing,
+      displayTitle,
+      displaySubtitle);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -2007,8 +1809,8 @@ class FlexCardsCompanion extends UpdateCompanion<FlexCardDBO> {
     Expression<int>? id,
     Expression<int>? tabId,
     Expression<String>? type,
-    Expression<int?>? stateId,
-    Expression<int?>? parentId,
+    Expression<int>? stateId,
+    Expression<int>? parentId,
     Expression<int>? position,
     Expression<int>? horizontalFlex,
     Expression<int>? height,
@@ -2075,10 +1877,10 @@ class FlexCardsCompanion extends UpdateCompanion<FlexCardDBO> {
       map['type'] = Variable<String>(type.value);
     }
     if (stateId.present) {
-      map['state_id'] = Variable<int?>(stateId.value);
+      map['state_id'] = Variable<int>(stateId.value);
     }
     if (parentId.present) {
-      map['parent_id'] = Variable<int?>(parentId.value);
+      map['parent_id'] = Variable<int>(parentId.value);
     }
     if (position.present) {
       map['position'] = Variable<int>(position.value);
@@ -2126,64 +1928,77 @@ class FlexCardsCompanion extends UpdateCompanion<FlexCardDBO> {
 
 class $FlexCardsTable extends FlexCards
     with TableInfo<$FlexCardsTable, FlexCardDBO> {
-  final GeneratedDatabase _db;
+  @override
+  final GeneratedDatabase attachedDatabase;
   final String? _alias;
-  $FlexCardsTable(this._db, [this._alias]);
+  $FlexCardsTable(this.attachedDatabase, [this._alias]);
   final VerificationMeta _idMeta = const VerificationMeta('id');
-  late final GeneratedColumn<int?> id = GeneratedColumn<int?>(
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
       'id', aliasedName, false,
-      typeName: 'INTEGER',
+      type: DriftSqlType.int,
       requiredDuringInsert: false,
       defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
   final VerificationMeta _tabIdMeta = const VerificationMeta('tabId');
-  late final GeneratedColumn<int?> tabId = GeneratedColumn<int?>(
+  @override
+  late final GeneratedColumn<int> tabId = GeneratedColumn<int>(
       'tab_id', aliasedName, false,
-      typeName: 'INTEGER', requiredDuringInsert: true);
+      type: DriftSqlType.int, requiredDuringInsert: true);
   final VerificationMeta _typeMeta = const VerificationMeta('type');
-  late final GeneratedColumn<String?> type = GeneratedColumn<String?>(
+  @override
+  late final GeneratedColumn<String> type = GeneratedColumn<String>(
       'type', aliasedName, false,
-      typeName: 'TEXT', requiredDuringInsert: true);
+      type: DriftSqlType.string, requiredDuringInsert: true);
   final VerificationMeta _stateIdMeta = const VerificationMeta('stateId');
-  late final GeneratedColumn<int?> stateId = GeneratedColumn<int?>(
+  @override
+  late final GeneratedColumn<int> stateId = GeneratedColumn<int>(
       'state_id', aliasedName, true,
-      typeName: 'INTEGER', requiredDuringInsert: false);
+      type: DriftSqlType.int, requiredDuringInsert: false);
   final VerificationMeta _parentIdMeta = const VerificationMeta('parentId');
-  late final GeneratedColumn<int?> parentId = GeneratedColumn<int?>(
+  @override
+  late final GeneratedColumn<int> parentId = GeneratedColumn<int>(
       'parent_id', aliasedName, true,
-      typeName: 'INTEGER', requiredDuringInsert: false);
+      type: DriftSqlType.int, requiredDuringInsert: false);
   final VerificationMeta _positionMeta = const VerificationMeta('position');
-  late final GeneratedColumn<int?> position = GeneratedColumn<int?>(
+  @override
+  late final GeneratedColumn<int> position = GeneratedColumn<int>(
       'position', aliasedName, false,
-      typeName: 'INTEGER', requiredDuringInsert: true);
+      type: DriftSqlType.int, requiredDuringInsert: true);
   final VerificationMeta _horizontalFlexMeta =
       const VerificationMeta('horizontalFlex');
-  late final GeneratedColumn<int?> horizontalFlex = GeneratedColumn<int?>(
+  @override
+  late final GeneratedColumn<int> horizontalFlex = GeneratedColumn<int>(
       'horizontal_flex', aliasedName, false,
-      typeName: 'INTEGER', requiredDuringInsert: true);
+      type: DriftSqlType.int, requiredDuringInsert: true);
   final VerificationMeta _heightMeta = const VerificationMeta('height');
-  late final GeneratedColumn<int?> height = GeneratedColumn<int?>(
+  @override
+  late final GeneratedColumn<int> height = GeneratedColumn<int>(
       'height', aliasedName, false,
-      typeName: 'INTEGER', requiredDuringInsert: true);
+      type: DriftSqlType.int, requiredDuringInsert: true);
   final VerificationMeta _displayLeadingMeta =
       const VerificationMeta('displayLeading');
-  late final GeneratedColumn<int?> displayLeading = GeneratedColumn<int?>(
+  @override
+  late final GeneratedColumn<int> displayLeading = GeneratedColumn<int>(
       'display_leading', aliasedName, false,
-      typeName: 'INTEGER', requiredDuringInsert: true);
+      type: DriftSqlType.int, requiredDuringInsert: true);
   final VerificationMeta _displayTrailingMeta =
       const VerificationMeta('displayTrailing');
-  late final GeneratedColumn<int?> displayTrailing = GeneratedColumn<int?>(
+  @override
+  late final GeneratedColumn<int> displayTrailing = GeneratedColumn<int>(
       'display_trailing', aliasedName, false,
-      typeName: 'INTEGER', requiredDuringInsert: true);
+      type: DriftSqlType.int, requiredDuringInsert: true);
   final VerificationMeta _displayTitleMeta =
       const VerificationMeta('displayTitle');
-  late final GeneratedColumn<int?> displayTitle = GeneratedColumn<int?>(
+  @override
+  late final GeneratedColumn<int> displayTitle = GeneratedColumn<int>(
       'display_title', aliasedName, false,
-      typeName: 'INTEGER', requiredDuringInsert: true);
+      type: DriftSqlType.int, requiredDuringInsert: true);
   final VerificationMeta _displaySubtitleMeta =
       const VerificationMeta('displaySubtitle');
-  late final GeneratedColumn<int?> displaySubtitle = GeneratedColumn<int?>(
+  @override
+  late final GeneratedColumn<int> displaySubtitle = GeneratedColumn<int>(
       'display_subtitle', aliasedName, false,
-      typeName: 'INTEGER', requiredDuringInsert: true);
+      type: DriftSqlType.int, requiredDuringInsert: true);
   @override
   List<GeneratedColumn> get $columns => [
         id,
@@ -2290,24 +2105,50 @@ class $FlexCardsTable extends FlexCards
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
   FlexCardDBO map(Map<String, dynamic> data, {String? tablePrefix}) {
-    return FlexCardDBO.fromData(data, _db,
-        prefix: tablePrefix != null ? '$tablePrefix.' : null);
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return FlexCardDBO(
+      id: attachedDatabase.options.types
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      tabId: attachedDatabase.options.types
+          .read(DriftSqlType.int, data['${effectivePrefix}tab_id'])!,
+      type: attachedDatabase.options.types
+          .read(DriftSqlType.string, data['${effectivePrefix}type'])!,
+      stateId: attachedDatabase.options.types
+          .read(DriftSqlType.int, data['${effectivePrefix}state_id']),
+      parentId: attachedDatabase.options.types
+          .read(DriftSqlType.int, data['${effectivePrefix}parent_id']),
+      position: attachedDatabase.options.types
+          .read(DriftSqlType.int, data['${effectivePrefix}position'])!,
+      horizontalFlex: attachedDatabase.options.types
+          .read(DriftSqlType.int, data['${effectivePrefix}horizontal_flex'])!,
+      height: attachedDatabase.options.types
+          .read(DriftSqlType.int, data['${effectivePrefix}height'])!,
+      displayLeading: attachedDatabase.options.types
+          .read(DriftSqlType.int, data['${effectivePrefix}display_leading'])!,
+      displayTrailing: attachedDatabase.options.types
+          .read(DriftSqlType.int, data['${effectivePrefix}display_trailing'])!,
+      displayTitle: attachedDatabase.options.types
+          .read(DriftSqlType.int, data['${effectivePrefix}display_title'])!,
+      displaySubtitle: attachedDatabase.options.types
+          .read(DriftSqlType.int, data['${effectivePrefix}display_subtitle'])!,
+    );
   }
 
   @override
   $FlexCardsTable createAlias(String alias) {
-    return $FlexCardsTable(_db, alias);
+    return $FlexCardsTable(attachedDatabase, alias);
   }
 }
 
 abstract class _$Database extends GeneratedDatabase {
-  _$Database(QueryExecutor e) : super(SqlTypeSystem.defaultInstance, e);
+  _$Database(QueryExecutor e) : super(e);
   late final $ConfigsTable configs = $ConfigsTable(this);
   late final $StatesTable states = $StatesTable(this);
   late final $FlexTabsTable flexTabs = $FlexTabsTable(this);
   late final $FlexCardsTable flexCards = $FlexCardsTable(this);
   @override
-  Iterable<TableInfo> get allTables => allSchemaEntities.whereType<TableInfo>();
+  Iterable<TableInfo<Table, dynamic>> get allTables =>
+      allSchemaEntities.whereType<TableInfo<Table, Object?>>();
   @override
   List<DatabaseSchemaEntity> get allSchemaEntities =>
       [configs, states, flexTabs, flexCards];

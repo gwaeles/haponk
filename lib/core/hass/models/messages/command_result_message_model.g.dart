@@ -17,7 +17,7 @@ Map<String, dynamic> _$CommandResultMessageModelToJson(
   }
 
   writeNotNull('id', instance.id);
-  val['type'] = _$MessageTypeEnumMap[instance.type];
+  val['type'] = _$MessageTypeEnumMap[instance.type]!;
   val['success'] = instance.success;
   val['result'] = instance.result;
   return val;

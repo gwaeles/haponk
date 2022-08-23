@@ -6,6 +6,8 @@ part of 'hass_api.dart';
 // RetrofitGenerator
 // **************************************************************************
 
+// ignore_for_file: unnecessary_brace_in_string_interps,no_leading_underscores_for_local_identifiers
+
 class _HassApi implements HassApi {
   _HassApi(this._dio, {this.baseUrl});
 
@@ -14,12 +16,15 @@ class _HassApi implements HassApi {
   String? baseUrl;
 
   @override
-  Future<HttpResponse<dynamic>> checkHealth() async {
+  Future<HttpResponse<dynamic>> checkHealth({authorization}) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
+    queryParameters.removeWhere((k, v) => v == null);
+    final _headers = <String, dynamic>{r'Authorization': authorization};
+    _headers.removeWhere((k, v) => v == null);
     final _data = <String, dynamic>{};
     final _result = await _dio.fetch(_setStreamType<HttpResponse<dynamic>>(
-        Options(method: 'GET', headers: <String, dynamic>{}, extra: _extra)
+        Options(method: 'GET', headers: _headers, extra: _extra)
             .compose(_dio.options, '/',
                 queryParameters: queryParameters, data: _data)
             .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
@@ -29,13 +34,16 @@ class _HassApi implements HassApi {
   }
 
   @override
-  Future<HttpResponse<dynamic>> discoveryInfo() async {
+  Future<HttpResponse<dynamic>> config({authorization}) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
+    queryParameters.removeWhere((k, v) => v == null);
+    final _headers = <String, dynamic>{r'Authorization': authorization};
+    _headers.removeWhere((k, v) => v == null);
     final _data = <String, dynamic>{};
     final _result = await _dio.fetch(_setStreamType<HttpResponse<dynamic>>(
-        Options(method: 'GET', headers: <String, dynamic>{}, extra: _extra)
-            .compose(_dio.options, '/discovery_info',
+        Options(method: 'GET', headers: _headers, extra: _extra)
+            .compose(_dio.options, '/config',
                 queryParameters: queryParameters, data: _data)
             .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
     final value = _result.data;
