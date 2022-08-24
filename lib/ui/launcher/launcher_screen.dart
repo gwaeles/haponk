@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:haponk/data/config/providers/config_notifier.dart';
-import 'package:haponk/data/connection/providers/connection_notifier.dart';
+import 'package:haponk/data/connection/notifiers/connection_notifier.dart';
 import 'package:provider/provider.dart';
 
 class LauncherScreen extends StatefulWidget {
@@ -55,8 +55,11 @@ class LauncherScreenState extends State<LauncherScreen> {
       ),
       child: Scaffold(
         body: Center(
-            child:
-                Image.asset("assets/images/ha_splash_logo.png", height: 152)),
+          child: Image.asset(
+            "assets/images/ha_splash_logo.png",
+            height: 152,
+          ),
+        ),
       ),
     );
   }

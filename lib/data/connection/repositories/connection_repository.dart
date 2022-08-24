@@ -17,6 +17,7 @@ import 'package:haponk/data/connection/datasources/web_socket_service.dart';
 
 import 'package:haponk/data/connection/entities/message.dart';
 import 'package:drift/drift.dart';
+import 'package:rxdart/rxdart.dart';
 
 class ConnectionRepository {
   final Database db;
@@ -32,7 +33,7 @@ class ConnectionRepository {
   Config? _currentConfig;
 
   ConnectionType _connectionType = ConnectionType.IDLE;
-  StreamController<ConnectionType>? _controllerConnectionType;
+  BehaviorSubject<ConnectionType>? _controllerConnectionType;
 
   WebSocketService? get currentWebSocket {
     if (_connectionType == ConnectionType.LOCAL) {
@@ -46,28 +47,39 @@ class ConnectionRepository {
 
   ConnectionType get currentConnectionType => _connectionType;
 
-  Stream<Message> listen() {
-    _controller?.close();
-    _controller = null;
-    _controller = StreamController();
+  Stream<Message> messageStream() {
+    if (_controller == null) {
+      _controller = StreamController.broadcast(
+        onCancel: () => _onCancel(),
+      );
+    }
+
     return _controller!.stream;
   }
 
-  void dispose() {
-    _controller?.close();
-    _controller = null;
-    _controllerConnectionType?.close();
-    _controllerConnectionType = null;
+  void _onCancel() {
+    if (_controller?.hasListener == false) {
+      _controller?.close();
+      _controller = null;
+    }
+    if (_controllerConnectionType?.hasListener == false) {
+      _controllerConnectionType?.close();
+      _controllerConnectionType = null;
+    }
   }
 
   ///
   /// --- CONNECTION --- ///
   ///
 
-  Stream<ConnectionType> listenConnectionType() {
-    _controllerConnectionType?.close();
-    _controllerConnectionType = null;
-    _controllerConnectionType = StreamController();
+  Stream<ConnectionType> connectionTypeStream() {
+    if (_controllerConnectionType == null) {
+      _controllerConnectionType = BehaviorSubject(
+        onCancel: () => _onCancel(),
+      );
+      _controllerConnectionType?.sink.add(_connectionType);
+    }
+
     return _controllerConnectionType!.stream;
   }
 

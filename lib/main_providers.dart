@@ -6,7 +6,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:haponk/core/db/database.dart';
 import 'package:haponk/core/network/client.dart' as client;
 import 'package:haponk/data/config/repositories/config_repository.dart';
-import 'package:haponk/data/connection/providers/connection_notifier.dart';
+import 'package:haponk/data/connection/notifiers/connection_notifier.dart';
 import 'package:haponk/data/connection/repositories/connection_repository.dart';
 import 'package:drift/drift.dart';
 import 'package:path_provider/path_provider.dart';

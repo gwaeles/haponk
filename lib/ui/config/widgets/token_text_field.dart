@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:haponk/core/hass/models/constants.dart';
 import 'package:haponk/core/states/request_state.dart';
 import 'package:haponk/data/config/entities/config.dart';
 import 'package:haponk/data/config/providers/config_notifier.dart';
+import 'package:haponk/data/connection/notifiers/connection_notifier.dart';
 import 'package:provider/provider.dart';
 
 class TokenTextField extends StatelessWidget {
@@ -12,12 +12,12 @@ class TokenTextField extends StatelessWidget {
   Widget build(BuildContext context) {
     final configNotifier = context.watch<ConfigNotifier>();
     final config = context.watch<Config?>();
-    final connectionType = context.watch<ConnectionType>();
+    final connectionNotifier = context.watch<ConnectionNotifier>();
 
     final checked = configNotifier.state == RequestState.LOADED &&
-        connectionType != ConnectionType.IDLE;
+        connectionNotifier.isConnected;
     final error = configNotifier.state == RequestState.LOADED &&
-        connectionType == ConnectionType.IDLE;
+        connectionNotifier.isNotConnected;
     final Widget? suffixIcon = checked
         ? Icon(
             Icons.check_circle,

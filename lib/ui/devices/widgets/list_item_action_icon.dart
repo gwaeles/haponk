@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:haponk/data/connection/providers/connection_notifier.dart';
+import 'package:haponk/data/connection/notifiers/connection_notifier.dart';
 import 'package:provider/provider.dart';
 
 typedef GestureTapCallback = void Function(ConnectionNotifier provider);

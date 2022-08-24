@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:haponk/core/hass/models/constants.dart';
 import 'package:haponk/data/config/providers/config_notifier.dart';
-import 'package:haponk/data/connection/providers/connection_notifier.dart';
+import 'package:haponk/data/connection/notifiers/connection_notifier.dart';
 import 'package:provider/provider.dart';
 
 class ValidButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final connectionType = context.watch<ConnectionType>();
+    final connectionNotifier = context.watch<ConnectionNotifier>();
 
-    return connectionType != ConnectionType.IDLE
+    return connectionNotifier.isConnected
         ? ElevatedButton(
             onPressed: () => Navigator.of(context).pushReplacementNamed(
                   "/supervisor",

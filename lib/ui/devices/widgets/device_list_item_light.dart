@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:haponk/core/themes/app_theme.dart';
-import 'package:haponk/data/connection/providers/connection_notifier.dart';
+import 'package:haponk/data/connection/notifiers/connection_notifier.dart';
 import 'package:haponk/data/devices/entities/device.dart';
 import 'package:provider/provider.dart';
 

@@ -1,32 +1,38 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import 'package:haponk/core/hass/models/constants.dart';
 import 'package:haponk/data/config/entities/config.dart';
-import 'package:haponk/data/connection/entities/message.dart';
 import 'package:haponk/data/connection/repositories/connection_repository.dart';
 
-class ConnectionNotifier with ChangeNotifier {
-  ConnectionRepository connectionRepository;
-
+class ConnectionNotifier extends ValueNotifier<ConnectionType> {
   ConnectionNotifier({
     required this.connectionRepository,
-  });
+  }) : super(ConnectionType.IDLE) {
+    _init();
+  }
 
-  ConnectionType get currentConnectionType =>
-      connectionRepository.currentConnectionType;
-
-  Stream<ConnectionType> get connectionStream =>
-      connectionRepository.listenConnectionType();
+  ConnectionRepository connectionRepository;
+  StreamSubscription? _subscription;
 
   ///
   /// --- Messaging --- ///
   ///
 
-  Stream<Message> get messageStream => connectionRepository.listen();
+  void _init() {
+    _subscription = connectionRepository.connectionTypeStream().listen(_onData);
+  }
+
+  void _onData(ConnectionType event) {
+    value = event;
+  }
+
+  //{Function? onError, void onDone()?, bool? cancelOnError}
 
   @override
   void dispose() {
-    connectionRepository.dispose();
+    _subscription?.cancel();
     super.dispose();
   }
 
@@ -34,8 +40,8 @@ class ConnectionNotifier with ChangeNotifier {
   /// --- Request --- ///
   ///
 
-  bool get isConnected => currentConnectionType != ConnectionType.IDLE;
-  bool get isNotConnected => currentConnectionType == ConnectionType.IDLE;
+  bool get isConnected => value != ConnectionType.IDLE;
+  bool get isNotConnected => value == ConnectionType.IDLE;
 
   void connect(Config config) {
     connectionRepository.connect(config);

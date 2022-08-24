@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:haponk/data/connection/notifiers/connection_notifier.dart';
 import 'package:haponk/data/devices/repositories/devices_repository.dart';
 import 'package:haponk/ui/app_navigation/providers/bottom_navigation_bar_controller.dart';
 import 'package:haponk/ui/app_navigation/widgets/bottom_navigation_bar_page.dart';
@@ -55,6 +56,15 @@ class AppNavigationScreen extends StatelessWidget {
                     ),
                   ],
                 ),
+              ),
+              Consumer<ConnectionNotifier>(
+                builder: (context, notifier, _) {
+                  return Container(
+                    height: 2,
+                    color:
+                        notifier.isConnected ? Colors.lightGreen : Colors.red,
+                  );
+                },
               ),
               BottomNavigationBar(
                 backgroundColor: Colors.red,

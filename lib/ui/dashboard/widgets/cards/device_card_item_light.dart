@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:haponk/core/themes/app_theme.dart';
-import 'package:haponk/data/connection/providers/connection_notifier.dart';
+import 'package:haponk/data/connection/notifiers/connection_notifier.dart';
 import 'package:haponk/data/devices/entities/device.dart';
 import 'package:haponk/data/tabs/entities/flex_card.dart';
 import 'package:haponk/ui/devices/widgets/list_item_action_icon.dart';
