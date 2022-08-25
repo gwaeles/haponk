@@ -36,13 +36,17 @@ extension BoolValueExtension on bool {
 }
 
 extension ConfigExtension on ConfigDBO {
-  Config toEntity() {
+  Config toEntity({
+    String? accessToken,
+  }) {
     return Config(
-        externalUrl: this.externalUrl,
-        internalUrl: this.internalUrl,
-        locationName: this.locationName,
-        version: this.version,
-        lastConnection: this.lastConnection);
+      externalUrl: this.externalUrl,
+      internalUrl: this.internalUrl,
+      locationName: this.locationName,
+      version: this.version,
+      lastConnection: this.lastConnection,
+      accessToken: accessToken,
+    );
   }
 }
 

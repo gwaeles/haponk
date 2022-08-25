@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-
 import 'package:haponk/core/hass/models/constants.dart';
 import 'package:haponk/data/config/entities/config.dart';
 import 'package:haponk/data/connection/repositories/connection_repository.dart';
@@ -27,8 +26,6 @@ class ConnectionNotifier extends ValueNotifier<ConnectionType> {
   void _onData(ConnectionType event) {
     value = event;
   }
-
-  //{Function? onError, void onDone()?, bool? cancelOnError}
 
   @override
   void dispose() {

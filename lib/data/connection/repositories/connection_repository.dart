@@ -211,7 +211,7 @@ class ConnectionRepository {
         );
 
         await db.insertState(newState);
-      } else if (stateDao.state != state.state) {
+      } else {
         // Update state
         final StateDBO updatedState = stateDao.copyWith(
           state: Value(state.state),

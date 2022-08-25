@@ -85,7 +85,7 @@ void main() {
       });
 
       //WHEN: add a listener on config stream
-      var stream = configRepository.addListener();
+      var stream = configRepository.configStream();
 
       //THEN: The config entity is emitted
       subscription = stream.listen((event) {

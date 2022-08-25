@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:haponk/data/config/blocs/config_bloc.dart';
 import 'package:haponk/data/devices/blocs/devices_bloc.dart';
 import 'package:provider/provider.dart';
 
@@ -20,6 +21,12 @@ class DevicesPage extends StatelessWidget {
         providers: [
           BlocProvider(
             create: (context) => DevicesBloc(
+              repository: context.read(),
+            ),
+          ),
+          BlocProvider<ConfigBloc>(
+            lazy: false,
+            create: (context) => ConfigBloc(
               repository: context.read(),
             ),
           ),

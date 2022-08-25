@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:haponk/data/config/entities/config.dart';
-import 'package:haponk/data/config/providers/config_notifier.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:haponk/data/config/blocs/config_bloc.dart';
 import 'package:provider/provider.dart';
 
 class ConfigProviders extends StatelessWidget {
@@ -15,14 +15,10 @@ class ConfigProviders extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(
-          create: (context) => ConfigNotifier(
+        BlocProvider(
+          create: (context) => ConfigBloc(
             repository: context.read(),
           ),
-        ),
-        StreamProvider<Config?>(
-          initialData: null,
-          create: (context) => context.read<ConfigNotifier>().messageStream,
         ),
       ],
       child: child,

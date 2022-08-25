@@ -13,6 +13,7 @@ import 'package:haponk/core/hass/models/events/discovery_info_model.dart';
 import 'package:haponk/core/network/api_status.dart';
 import 'package:haponk/data/config/entities/config.dart';
 import 'package:haponk/core/db/database_extension.dart';
+import 'package:rxdart/rxdart.dart';
 
 const String PREF_LONG_LIVED_ACCESS_TOKEN = "PREF_LONG_LIVED_ACCESS_TOKEN";
 
@@ -27,45 +28,39 @@ class ConfigRepository {
     required this.dio,
   });
 
-  List<StreamController<Config>?> _controllers = [];
+  BehaviorSubject<Config>? _controller;
   StreamSubscription? _dbSubscription;
-  Config? _currentConfig;
 
   ///
   /// --- CONFIG STREAM --- ///
   ///
 
-  Stream<Config> addListener() {
-    final _controller = StreamController<Config>();
-    _controller.onCancel = () => _onControllerCancelled(_controller);
-    _controllers.add(_controller);
+  Stream<Config> configStream() {
+    if (_controller == null) {
+      _controller = BehaviorSubject(
+        onCancel: () => _onCancel(),
+      );
+    }
 
     // DB subscription
     _dbSubscription?.cancel();
     _dbSubscription = db.watchConfig().listen(_onConfigData);
 
-    return _controller.stream;
+    return _controller!.stream;
   }
 
-  Config? get currentConfig => _currentConfig;
+  void _onCancel() {
+    if (_controller?.hasListener == false) {
+      _controller?.close();
+      _controller = null;
+    }
+  }
 
   void dispose() {
-    for (var _controller in _controllers) {
-      _controller?.close();
-    }
-    _controllers.clear();
-
+    _controller?.close();
+    _controller = null;
     _dbSubscription?.cancel();
     _dbSubscription = null;
-  }
-
-  void _onControllerCancelled(StreamController<Config> controller) {
-    _controllers.remove(controller);
-
-    // Cancel DB subscription on last listener cancel
-    if (_controllers.length == 0) {
-      dispose();
-    }
   }
 
   Future<void> _onConfigData(ConfigDBO? event) async {
@@ -93,22 +88,12 @@ class ConfigRepository {
       }
     }
 
-    final entity = event?.toEntity();
+    final entity = event?.toEntity(
+      accessToken: accessToken,
+    );
 
     if (entity != null) {
-      _currentConfig = entity.copyWith(
-        accessToken: accessToken,
-      );
-    } else if (_currentConfig != null) {
-      _currentConfig = _currentConfig!.copyWith(
-        accessToken: accessToken,
-      );
-    }
-
-    if (_currentConfig != null) {
-      for (var _controller in _controllers) {
-        _controller?.sink.add(_currentConfig!);
-      }
+      _controller?.sink.add(entity);
     }
   }
 
@@ -116,12 +101,12 @@ class ConfigRepository {
   /// --- TRY CONNECTION --- ///
   ///
 
-  Future<bool> tryConnect(
+  Future<Config?> tryConnect(
     String? url, [
     String? accessToken,
   ]) async {
     if (url == null) {
-      return false;
+      return null;
     }
 
     Uri uri = Uri.parse(url);
@@ -167,20 +152,22 @@ class ConfigRepository {
 
           await db.updateConfig(updatedConfig);
 
-          return true;
+          return updatedConfig.toEntity(
+            accessToken: accessToken,
+          );
         }
       }
     } on DioError catch (e) {
       print(e.message);
       if (e.response?.statusCode == 401) {
-        print("401 ok");
+        print("401");
       }
-      return true;
+      return null;
     } catch (e) {
-      return false;
+      return null;
     }
 
-    return false;
+    return null;
   }
 
   Future<void> setAccessToken(String value) async {

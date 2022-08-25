@@ -41,34 +41,6 @@ class Database extends _$Database {
           await m.createTable(flexTabs);
           await m.createTable(flexCards);
 
-          // Update config
-          String? internalUrl;
-          try {
-            final String json =
-                await rootBundle.loadString("assets/config/config.json");
-            final defaultConfig = jsonDecode(json) as Map<String, dynamic>;
-            internalUrl = defaultConfig.containsKey("internalUrl")
-                ? defaultConfig["internalUrl"]
-                : null;
-          } catch (e) {
-            flt.debugPrint("[DRIFT] No config file");
-          }
-          if (internalUrl != null) {
-            ConfigDBO? config = await getConfig();
-            if (config == null) {
-              final ConfigDBO newConfig = ConfigDBO(
-                id: 1,
-                internalUrl: internalUrl,
-              );
-              await insertConfig(newConfig);
-            } else {
-              final ConfigDBO updatedConfig = config.copyWith(
-                internalUrl: Value(internalUrl),
-              );
-              await updateConfig(updatedConfig);
-            }
-          }
-
           // Tabs data
           await insertFlexTab(FlexTabsCompanion.insert(
             label: "Flex Tab",
@@ -80,12 +52,16 @@ class Database extends _$Database {
         if (details.wasCreated) {
           // Initiale config
           String? internalUrl;
+          String? externalUrl;
           try {
             final String json =
                 await rootBundle.loadString("assets/config/config.json");
             final defaultConfig = jsonDecode(json) as Map<String, dynamic>;
-            internalUrl = defaultConfig.containsKey("internalUrl")
-                ? defaultConfig["internalUrl"]
+            internalUrl = defaultConfig.containsKey('internalUrl')
+                ? defaultConfig['internalUrl']
+                : null;
+            externalUrl = defaultConfig.containsKey('externalUrl')
+                ? defaultConfig['externalUrl']
                 : null;
           } catch (e) {
             flt.debugPrint("[DRIFT] No config file");
@@ -93,6 +69,7 @@ class Database extends _$Database {
           final ConfigDBO newConfig = ConfigDBO(
             id: 1,
             internalUrl: internalUrl,
+            externalUrl: externalUrl,
           );
           await insertConfig(newConfig);
         }

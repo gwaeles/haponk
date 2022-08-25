@@ -4,11 +4,14 @@ import 'package:flutter/foundation.dart';
 import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
 
-import 'api_interceptor.dart';
-
 Dio configureDio() {
   final Dio dio = Dio();
-  dio.interceptors.add(ApiInterceptor(dio));
+  dio.interceptors.add(
+    LogInterceptor(
+      requestBody: true,
+      responseBody: true,
+    ),
+  );
 
   if (!kIsWeb) {
     (dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
