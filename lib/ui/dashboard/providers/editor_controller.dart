@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-enum EditorMode { IDLE, CUSTOM, REMOVE }
+enum EditorMode { OFF, IDLE, CUSTOM, REMOVE }
 
 class EditorController extends ChangeNotifier {
   ///
@@ -21,16 +21,18 @@ class EditorController extends ChangeNotifier {
   /// --- Editor functions --- ///
   ///
 
-  EditorMode _editorMode = EditorMode.IDLE;
+  EditorMode _editorMode = EditorMode.OFF;
 
   EditorMode get editorMode => _editorMode;
 
-  void toggleEditorMode(EditorMode mode) {
+  bool get isOn => _editorMode != EditorMode.OFF;
+
+  void toggle() {
     _selectedItemId = 0;
-    if (_editorMode == mode) {
+    if (_editorMode == EditorMode.OFF) {
       _editorMode = EditorMode.IDLE;
     } else {
-      _editorMode = mode;
+      _editorMode = EditorMode.OFF;
     }
     notifyListeners();
   }

@@ -196,7 +196,7 @@ class DragTargetsNotifier extends ChangeNotifier {
 
     // Add 49px for the add button item
     // min = 106 for the add button and the notice
-    _maxGridHeight = max(106, _maxGridHeight + 49);
+    _maxGridHeight = max(57 + (3 * 49), _maxGridHeight + (3 * 49));
 
     _positionedFlexCards = result;
   }

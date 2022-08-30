@@ -130,6 +130,13 @@ class Database extends _$Database {
           (item) => item.id.equals(tabId),
         ))
       .go();
+  Future updateFlexTabLabel(int tabId, String label) => (update(flexTabs)
+            ..where(
+              (item) => item.id.equals(tabId),
+            ))
+          .write(FlexTabsCompanion(
+        label: Value(label),
+      ));
 
   Stream<List<FlexCardDBO>> watchCards(int tabId) => (select(flexCards)
         ..where((item) => item.tabId.equals(tabId))

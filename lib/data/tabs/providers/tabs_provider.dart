@@ -65,4 +65,18 @@ class TabsProvider {
       repository.delete(id: tabId);
     }
   }
+
+  void updateItemByIndex({
+    required String label,
+    required int index,
+  }) {
+    if (_data != null && index >= 0 && index < _data!.length) {
+      int tabId = _data!.elementAt(index).id ?? 0;
+
+      repository.update(
+        id: tabId,
+        label: label,
+      );
+    }
+  }
 }

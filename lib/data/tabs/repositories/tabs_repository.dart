@@ -43,6 +43,13 @@ class TabsRepository {
     return await db.deleteFlexTab(id);
   }
 
+  Future<int> update({
+    required int id,
+    required String label,
+  }) async {
+    return await db.updateFlexTabLabel(id, label);
+  }
+
   void dispose() {
     debugPrint("[TABS] dispose");
     for (var _controller in _controllers) {

@@ -3,26 +3,31 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:haponk/data/devices/blocs/device_bloc.dart';
 import 'package:haponk/data/devices/entities/device.dart';
 import 'package:haponk/data/devices/states/device_state.dart';
+import 'package:haponk/data/tabs/entities/flex_card.dart';
 import 'package:haponk/data/tabs/entities/positioned_flex_card.dart';
-import 'package:haponk/ui/dashboard/providers/drag_targets_notifier.dart';
-import 'package:haponk/ui/dashboard/providers/editor_controller.dart';
 
 import '../cards/device_card_item.dart';
 
 class FlexCardWidget extends StatelessWidget {
   final PositionedFlexCard item;
   final isSelected;
+  final isDraggable;
+  final VoidCallback? onPressed;
+  final VoidCallback? onDragStarted;
+  final VoidCallback? onDragEnd;
 
   const FlexCardWidget({
     Key? key,
     required this.item,
     this.isSelected = false,
+    this.isDraggable = false,
+    this.onPressed,
+    this.onDragStarted,
+    this.onDragEnd,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final dragTargetsNotifier = context.read<DragTargetsNotifier>();
-    final editorController = context.read<EditorController>();
     final isFake = item.card.id == 0;
 
     return BlocProvider(
@@ -47,11 +52,10 @@ class FlexCardWidget extends StatelessWidget {
                     )
                   : null,
             ),
-            child: InkWell(
-              onTap: () => editorController.selectedItemId = item.card.id,
-              child: isFake
-                  ? null
-                  : LongPressDraggable(
+            child: isDraggable
+                ? InkWell(
+                    onTap: onPressed,
+                    child: LongPressDraggable(
                       data: item,
                       feedback: Material(
                         color: Colors.transparent,
@@ -66,27 +70,46 @@ class FlexCardWidget extends StatelessWidget {
                           ),
                         ),
                       ),
-                      onDragStarted: () => dragTargetsNotifier.dragging = true,
-                      onDragEnd: (details) =>
-                          dragTargetsNotifier.dragging = false,
+                      onDragStarted: onDragStarted,
+                      onDragEnd: (details) => onDragEnd?.call(),
                       onDraggableCanceled: (velocity, offset) =>
-                          dragTargetsNotifier.dragging = false,
-                      child: device == null
-                          ? Container(
-                              color: Colors.transparent,
-                              child: Center(
-                                child: Text(item.card.toString()),
-                              ),
-                            )
-                          : DeviceCardItem.fromDevice(
-                              device: device,
-                              card: item.card,
-                            ),
+                          onDragEnd?.call(),
+                      child: _ItemContent(
+                        card: item.card,
+                        device: isFake ? null : device,
+                      ),
                     ),
-            ),
+                  )
+                : _ItemContent(
+                    card: item.card,
+                    device: isFake ? null : device,
+                  ),
           );
         },
       ),
     );
+  }
+}
+
+class _ItemContent extends StatelessWidget {
+  final Device? device;
+  final FlexCard card;
+
+  const _ItemContent({
+    Key? key,
+    this.device,
+    required this.card,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return device == null
+        ? Center(
+            child: Text(card.toString()),
+          )
+        : DeviceCardItem.fromDevice(
+            device: device!,
+            card: card,
+          );
   }
 }

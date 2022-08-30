@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:haponk/data/tabs/entities/flex_tab.dart';
 import 'package:haponk/data/tabs/entities/positioned_flex_card.dart';
 import 'package:haponk/data/tabs/providers/cards_provider.dart';
+import 'package:haponk/data/tabs/providers/tabs_provider.dart';
 import 'package:haponk/ui/dashboard/providers/auto_scroll_timer.dart';
 import 'package:haponk/ui/dashboard/providers/drag_targets_notifier.dart';
 import 'package:haponk/ui/dashboard/providers/editor_controller.dart';
@@ -80,10 +81,73 @@ class TabContainer extends StatelessWidget {
                 padding: const EdgeInsets.only(top: 8.0, bottom: 16),
                 sliver: SliverToBoxAdapter(
                   child: FlexCardGridBuilder(
-                    builder: (context, children) {
-                      return Stack(
-                        fit: StackFit.loose,
-                        children: children,
+                    onEditTab: () {
+                      final tabsProvider = context.read<TabsProvider>();
+                      final currentIndex =
+                          (DefaultTabController.of(context) as TabController)
+                              .index;
+                      final TextEditingController textController =
+                          TextEditingController(
+                        text: flexTabItem.label,
+                      );
+
+                      showDialog(
+                        context: context,
+                        builder: (context) => AlertDialog(
+                          title: Text('Update labe'),
+                          content: TextField(
+                            decoration: InputDecoration(),
+                            controller: textController,
+                          ),
+                          actions: [
+                            TextButton(
+                              onPressed: () => Navigator.of(context).pop(),
+                              child: Text('No'),
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                if (textController.text.trim().isNotEmpty) {
+                                  tabsProvider.updateItemByIndex(
+                                    label: textController.text.trim(),
+                                    index: currentIndex,
+                                  );
+                                }
+                                Navigator.of(context).pop();
+                              },
+                              child: Text('Yes'),
+                            )
+                          ],
+                        ),
+                      );
+                    },
+                    onDeleteTab: () {
+                      final tabsProvider = context.read<TabsProvider>();
+                      final currentIndex =
+                          (DefaultTabController.of(context) as TabController)
+                              .index;
+
+                      showDialog(
+                        context: context,
+                        builder: (context) => AlertDialog(
+                          title: Text('Confirmation'),
+                          content: Text(
+                              'Confirm deletion of tab : ${flexTabItem.label} ?'),
+                          actions: [
+                            TextButton(
+                              onPressed: () => Navigator.of(context).pop(),
+                              child: Text('No'),
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                tabsProvider.deleteItemByIndex(
+                                  currentIndex,
+                                );
+                                Navigator.of(context).pop();
+                              },
+                              child: Text('Yes'),
+                            )
+                          ],
+                        ),
                       );
                     },
                   ),

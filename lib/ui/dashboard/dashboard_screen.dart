@@ -61,6 +61,8 @@ class TabsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final editorController = context.watch<EditorController>();
+
     return Material(
       color: Colors.transparent,
       child: DefaultTabController(
@@ -77,9 +79,11 @@ class TabsWidget extends StatelessWidget {
                   context,
                 ),
                 sliver: SliverAppBar(
-                  title: TabsAppBarTitle(),
+                  title: TabsAppBarTitle(
+                    onPressed: () => editorController.toggle(),
+                  ),
                   floating: true,
-                  toolbarHeight: 90,
+                  toolbarHeight: 56,
                   // expandedHeight: 150.0,
                   forceElevated: innerBoxIsScrolled,
                   backgroundColor: AppTheme.of(context).inputBackgroungColor,
@@ -89,37 +93,33 @@ class TabsWidget extends StatelessWidget {
                   bottom: PreferredSize(
                     preferredSize: Size(
                       double.infinity,
-                      32,
+                      48,
                     ),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: TabBar(
-                            isScrollable: true,
-                            controller: DefaultTabController.of(context)
-                                as TabController,
-                            indicatorColor: Colors.transparent,
-                            automaticIndicatorColorAdjustment: false,
-                            indicatorWeight: 1.0,
-                            labelPadding: EdgeInsets.zero,
-                            tabs: tabs,
+                    child: SizedBox(
+                      height: 48,
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Expanded(
+                            child: TabBar(
+                              isScrollable: true,
+                              controller: DefaultTabController.of(context)
+                                  as TabController,
+                              indicatorColor: Colors.transparent,
+                              automaticIndicatorColorAdjustment: false,
+                              indicatorWeight: 1.0,
+                              labelPadding: EdgeInsets.only(top: 8, bottom: 8),
+                              tabs: tabs,
+                            ),
                           ),
-                        ),
-                        IconButton(
-                          icon: Icon(Icons.add),
-                          onPressed: () =>
-                              context.read<TabsProvider>().createItem(),
-                        ),
-                        IconButton(
-                          icon: Icon(Icons.remove),
-                          onPressed: () =>
-                              context.read<TabsProvider>().deleteItemByIndex(
-                                    (DefaultTabController.of(context)
-                                            as TabController)
-                                        .index,
-                                  ),
-                        ),
-                      ],
+                          if (editorController.isOn)
+                            IconButton(
+                              icon: Icon(Icons.add),
+                              onPressed: () =>
+                                  context.read<TabsProvider>().createItem(),
+                            ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -189,46 +189,6 @@ class TabWidget extends StatelessWidget {
             ),
           );
         },
-      ),
-    );
-  }
-}
-
-class BottomBarItem extends StatelessWidget {
-  final EditorController controller;
-  final EditorMode mode;
-  final IconData icon;
-  final String title;
-
-  const BottomBarItem({
-    Key? key,
-    required this.controller,
-    required this.mode,
-    required this.icon,
-    required this.title,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    final color =
-        controller.editorMode == mode ? Colors.amber.shade800 : Colors.white;
-    return InkWell(
-      onTap: () => controller.toggleEditorMode(mode),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(
-            icon,
-            color: color,
-          ),
-          Text(
-            title,
-            style: TextStyle(
-              fontSize: 12,
-              color: color,
-            ),
-          )
-        ],
       ),
     );
   }

@@ -50,12 +50,12 @@ class AppNavigationScreen extends StatelessWidget {
                       children: [
                         BottomNavigationBarPage(
                           pageIndex: 0,
-                          child: DevicesPage(),
+                          child: DashboardScreen(),
                           pageIndexController: navController,
                         ),
                         BottomNavigationBarPage(
                           pageIndex: 1,
-                          child: DashboardScreen(),
+                          child: DevicesPage(),
                           pageIndexController: navController,
                         ),
                         BottomNavigationBarPage(
@@ -87,12 +87,12 @@ class AppNavigationScreen extends StatelessWidget {
                     showUnselectedLabels: true,
                     items: const <BottomNavigationBarItem>[
                       BottomNavigationBarItem(
-                        icon: Icon(Icons.home),
-                        label: 'Home',
-                      ),
-                      BottomNavigationBarItem(
                         icon: Icon(Icons.dashboard),
                         label: 'Board',
+                      ),
+                      BottomNavigationBarItem(
+                        icon: Icon(Icons.search),
+                        label: 'Devices',
                       ),
                       BottomNavigationBarItem(
                         icon: Icon(Icons.list_alt),
