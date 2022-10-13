@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" height="144px" preserveAspectRatio="none" style="width:854px;height:144px;background:#FFFFFF;" version="1.1" viewBox="0 0 854 144" width="854px" zoomAndPan="magnify"><defs/><g><!--MD5=[be25d3dd214c8dacd7244d40401a17ba]
+class DataModel--><g id="elem_DataModel"><rect codeLine="2" fill="#F1F1F1" height="97.4648" id="DataModel" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="160" x="220" y="24"/><ellipse cx="259.75" cy="40" fill="#ADD1B2" rx="11" ry="11" style="stroke:#181818;stroke-width:1.0;"/><path d="M262.2231,46.1431 Q261.6421,46.4419 261.0029,46.5913 Q260.3638,46.7407 259.6582,46.7407 Q257.1514,46.7407 255.8315,45.0889 Q254.5117,43.437 254.5117,40.3159 Q254.5117,37.1865 255.8315,35.5347 Q257.1514,33.8828 259.6582,33.8828 Q260.3638,33.8828 261.0112,34.0322 Q261.6587,34.1816 262.2231,34.4805 L262.2231,37.2031 Q261.5923,36.6221 260.9988,36.3523 Q260.4053,36.0825 259.7744,36.0825 Q258.4297,36.0825 257.7449,37.1492 Q257.0601,38.2158 257.0601,40.3159 Q257.0601,42.4077 257.7449,43.4744 Q258.4297,44.541 259.7744,44.541 Q260.4053,44.541 260.9988,44.2712 Q261.5923,44.0015 262.2231,43.4204 Z " fill="#000000"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="73" x="279.25" y="45.291">DataModel</text><line style="stroke:#181818;stroke-width:0.5;" x1="221" x2="379" y1="56" y2="56"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="102" x="226" y="73.5352">String? entityId</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="142" x="226" y="90.0234">StateModel? oldState</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="148" x="226" y="106.5117">StateModel? newState</text><line style="stroke:#181818;stroke-width:0.5;" x1="221" x2="379" y1="113.4648" y2="113.4648"/></g><!--MD5=[02ea59ee6019589703583c150fb9c687]
+class EventModel--><g id="elem_EventModel"><rect codeLine="8" fill="#F1F1F1" height="113.9531" id="EventModel" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="162" x="7" y="16"/><ellipse cx="44.95" cy="32" fill="#ADD1B2" rx="11" ry="11" style="stroke:#181818;stroke-width:1.0;"/><path d="M47.4231,38.1431 Q46.8421,38.4419 46.2029,38.5913 Q45.5638,38.7407 44.8582,38.7407 Q42.3514,38.7407 41.0315,37.0889 Q39.7117,35.437 39.7117,32.3159 Q39.7117,29.1865 41.0315,27.5347 Q42.3514,25.8828 44.8582,25.8828 Q45.5638,25.8828 46.2112,26.0322 Q46.8587,26.1816 47.4231,26.4805 L47.4231,29.2031 Q46.7923,28.6221 46.1988,28.3523 Q45.6053,28.0825 44.9744,28.0825 Q43.6297,28.0825 42.9449,29.1492 Q42.2601,30.2158 42.2601,32.3159 Q42.2601,34.4077 42.9449,35.4744 Q43.6297,36.541 44.9744,36.541 Q45.6053,36.541 46.1988,36.2712 Q46.7923,36.0015 47.4231,35.4204 Z " fill="#000000"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="79" x="64.05" y="37.291">EventModel</text><line style="stroke:#181818;stroke-width:0.5;" x1="8" x2="168" y1="48" y2="48"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="150" x="13" y="65.5352">EventType? eventType</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="113" x="13" y="82.0234">DataModel? data</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="92" x="13" y="98.5117">String? origin</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="140" x="13" y="115">DateTime? timeFired</text><line style="stroke:#181818;stroke-width:0.5;" x1="8" x2="168" y1="121.9531" y2="121.9531"/></g><!--MD5=[c420e492392c99d3e88ee165ba7e1bad]
+class StateModel--><g id="elem_StateModel"><rect codeLine="15" fill="#F1F1F1" height="130.4414" id="StateModel" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="198" x="423" y="7"/><ellipse cx="479.75" cy="23" fill="#ADD1B2" rx="11" ry="11" style="stroke:#181818;stroke-width:1.0;"/><path d="M482.2231,29.1431 Q481.6421,29.4419 481.0029,29.5913 Q480.3638,29.7407 479.6582,29.7407 Q477.1514,29.7407 475.8315,28.0889 Q474.5117,26.437 474.5117,23.3159 Q474.5117,20.1865 475.8315,18.5347 Q477.1514,16.8828 479.6582,16.8828 Q480.3638,16.8828 481.0112,17.0322 Q481.6587,17.1816 482.2231,17.4805 L482.2231,20.2031 Q481.5923,19.6221 480.9988,19.3523 Q480.4053,19.0825 479.7744,19.0825 Q478.4297,19.0825 477.7449,20.1492 Q477.0601,21.2158 477.0601,23.3159 Q477.0601,25.4077 477.7449,26.4744 Q478.4297,27.541 479.7744,27.541 Q480.4053,27.541 480.9988,27.2712 Q481.5923,27.0015 482.2231,26.4204 Z " fill="#000000"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="76" x="500.25" y="28.291">StateModel</text><line style="stroke:#181818;stroke-width:0.5;" x1="424" x2="620" y1="39" y2="39"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="102" x="429" y="56.5352">String? entityId</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="84" x="429" y="73.0234">String? state</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="186" x="429" y="89.5117">AttributesModel? attributes</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="161" x="429" y="106">DateTime? lastChanged</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="157" x="429" y="122.4883">DateTime? lastUpdated</text><line style="stroke:#181818;stroke-width:0.5;" x1="424" x2="620" y1="129.4414" y2="129.4414"/></g><path d="M656.5,54.5 L656.5,63.1553 L615,84.2207 L656.5,71.1553 L656.5,79.8105 A0,0 0 0 0 656.5,79.8105 L847.5,79.8105 A0,0 0 0 0 847.5,79.8105 L847.5,64.5 L837.5,54.5 L656.5,54.5 A0,0 0 0 0 656.5,54.5 " fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/><path d="M837.5,54.5 L837.5,64.5 L847.5,64.5 L837.5,54.5 " fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="170" x="662.5" y="72.0684">Details in features::devices</text><!--MD5=[1db5769adcaa6fae06618e39edcc2a21]
+reverse link EventModel to DataModel--><g id="link_EventModel_DataModel"><path codeLine="23" d="M170,76 C183.56,80.02 197.91,82.86 211.93,84.64 " fill="none" id="EventModel-backto-DataModel" style="stroke:#181818;stroke-width:1.0;"/><polygon fill="#181818" points="170,76,174.6156,81.5404,181.5051,79.4108,176.8895,73.8704,170,76" style="stroke:#181818;stroke-width:1.0;"/></g><!--MD5=[109abad36d1808fcb260645c22a5dca9]
+reverse link DataModel to StateModel--><g id="link_DataModel_StateModel"><path codeLine="24" d="M381,84 C394.54,87.69 408.79,90.01 422.8,91.21 " fill="none" id="DataModel-backto-StateModel" style="stroke:#181818;stroke-width:1.0;"/><polygon fill="#181818" points="381,84,385.7371,89.4369,392.5778,87.1552,387.8406,81.7184,381,84" style="stroke:#181818;stroke-width:1.0;"/></g><!--MD5=[109abad36d1808fcb260645c22a5dca9]
+reverse link DataModel to StateModel--><g id="link_DataModel_StateModel"><path codeLine="25" d="M381,100 C394.63,100 408.87,98.71 422.82,96.68 " fill="none" id="DataModel-backto-StateModel-1" style="stroke:#181818;stroke-width:1.0;"/><polygon fill="#181818" points="381,100,387,104,393,100,387,96,381,100" style="stroke:#181818;stroke-width:1.0;"/></g><!--MD5=[8e723fef442b77158c8ef497d69264c7]
+@startuml state-changed-models
+
+class DataModel {
+  String? entityId
+  StateModel? oldState
+  StateModel? newState
+}
+
+class EventModel {
+  EventType? eventType
+  DataModel? data
+  String? origin
+  DateTime? timeFired
+}
+
+class StateModel {
+  String? entityId
+  String? state
+  AttributesModel? attributes
+  DateTime? lastChanged
+  DateTime? lastUpdated
+}
+
+EventModel::data *-right- DataModel
+DataModel::oldState *-right- StateModel
+DataModel::newState *-right- StateModel
+note right of StateModel::attributes
+   Details in features::devices
+end note
+
+@enduml
+
+PlantUML version 1.2022.7(Mon Aug 22 19:01:30 CEST 2022)
+(GPL source distribution)
+Java Runtime: Java(TM) SE Runtime Environment
+JVM: Java HotSpot(TM) 64-Bit Server VM
+Default Encoding: UTF-8
+Language: fr
+Country: FR
+--></g></svg>

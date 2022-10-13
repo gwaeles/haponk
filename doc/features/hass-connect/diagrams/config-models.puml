@@ -1,0 +1,25 @@
+@startuml config-models
+
+class Configs {
+  Int id
+  Text? externalUrl
+  Text? internalUrl
+  Text? locationName
+  Text? version
+  DateTime? lastConnection
+}
+
+package "Hass models" as hassPackage #DDDDDD {
+  class DiscoveryInfoModel {
+    String? externalUrl;
+    String? internalUrl;
+    String? locationName;
+    String? version;
+    String? state;
+    bool? safeMode;
+  }
+}
+
+hassPackage -left-> Configs
+
+@enduml

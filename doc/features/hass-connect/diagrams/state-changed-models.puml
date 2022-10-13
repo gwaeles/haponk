@@ -1,0 +1,31 @@
+@startuml state-changed-models
+
+class DataModel {
+  String? entityId
+  StateModel? oldState
+  StateModel? newState
+}
+
+class EventModel {
+  EventType? eventType
+  DataModel? data
+  String? origin
+  DateTime? timeFired
+}
+
+class StateModel {
+  String? entityId
+  String? state
+  AttributesModel? attributes
+  DateTime? lastChanged
+  DateTime? lastUpdated
+}
+
+EventModel::data *-right- DataModel
+DataModel::oldState *-right- StateModel
+DataModel::newState *-right- StateModel
+note right of StateModel::attributes
+   Details in features::devices
+end note
+
+@enduml

@@ -1,0 +1,26 @@
+@startuml message-models
+
+enum MessageType {
+  auth_required
+  auth
+  auth_ok
+  auth_invalid
+  result
+  subscribe_events
+  unsubscribe_events
+  event
+  call_service
+  get_states
+  get_config
+  get_services
+  -get_panels
+  -media_player_thumbnail
+  -ping
+  -pong
+}
+
+enum EventType {
+  stateChanged
+}
+
+@enduml

@@ -1,0 +1,123 @@
+@startuml states-models
+
+class States {
+  Int id
+  Text? entityId
+  DateTime? lastChanged
+  DateTime? lastUpdated
+  .. Customization ..
+  Text? displayLabel
+  Text? displayType
+  .. Attributes ..
+  Text? friendlyName
+  Int? supportedFeatures
+
+  __ State Values __
+  Text? state
+
+  .. Cover ..
+  Int? currentPosition
+
+  .. Automation ..
+  DateTime? lastTriggered
+  Text? mode
+
+  .. Weather / Sensor ..
+  Real? temperature
+  Int? humidity
+  Real? pressure
+  Real? windBearing
+  Real? windSpeed
+  Text? attribution
+
+  .. Sensor / Binary sensor ..
+  Bool? isOn
+  Text? deviceClass
+  Text? unitOfMeasurement
+  Int? current
+  Int? voltage
+}
+
+package "Hass models" as hassPackage #DDDDDD {
+
+  class StateModel {
+    String? entityId
+    String? state
+    AttributesModel? attributes
+    DateTime? lastChanged
+    DateTime? lastUpdated
+  }
+
+  class AttributesModel {
+    String? friendlyName
+    int? supportedFeatures
+
+    .. Cover ..
+    int? currentPosition
+
+    .. Automation ..
+    DateTime? lastTriggered
+    String? mode
+
+    .. Weather / Sensor ..
+    double? temperature
+    int? humidity
+    double? pressure
+    double? windBearing
+    double? windSpeed
+    String? attribution
+    List<ForecastModel> forecast
+
+    .. Sensor / Binary sensor ..
+    bool? isOn
+    String? deviceClass
+    String? unitOfMeasurement
+    int? current
+    int? voltage
+  }
+
+  class ForecastModel {
+    String? condition
+    double? precipitation
+    double? temperature
+    double? templow
+    double? windBearing
+    double? windSpeed
+    DateTime? datetime
+  }
+
+  enum DeviceType #text:888888 ##888888 {
+    automation
+    light
+    cover
+    weathe
+    binarySensor
+    sensor
+    switch
+    mediaPlayer
+  }
+
+  enum SensorDeviceType #FFEBEE;text:888888 ##[dashed]F25D50 {
+    opening
+    plug
+    motion
+    smoke
+    battery
+    illuminance
+    temperature
+    humidity
+    pressure
+    power
+    timestamp
+  }
+
+  StateModel::attributes *-right- AttributesModel
+  AttributesModel::forecast *-right- ForecastModel
+  StateModel *-down- DeviceType
+  StateModel *-down- SensorDeviceType
+
+}
+
+hassPackage -left-> States
+
+@enduml

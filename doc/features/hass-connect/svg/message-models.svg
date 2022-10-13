@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" height="325px" preserveAspectRatio="none" style="width:350px;height:325px;background:#FFFFFF;" version="1.1" viewBox="0 0 350 325" width="350px" zoomAndPan="magnify"><defs/><g><!--MD5=[3f1455d39c1553e9a1d8b93de3131e53]
+class MessageType--><g id="elem_MessageType"><rect codeLine="2" fill="#F1F1F1" height="311.8125" id="MessageType" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="194" x="7" y="7"/><ellipse cx="53.75" cy="23" fill="#EB937F" rx="11" ry="11" style="stroke:#181818;stroke-width:1.0;"/><path d="M57.3643,29.5 L49.6445,29.5 L49.6445,17.1069 L57.3643,17.1069 L57.3643,19.2651 L52.0933,19.2651 L52.0933,21.938 L56.8662,21.938 L56.8662,24.0962 L52.0933,24.0962 L52.0933,27.3418 L57.3643,27.3418 Z " fill="#000000"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="92" x="74.25" y="28.291">MessageType</text><line style="stroke:#181818;stroke-width:0.5;" x1="8" x2="200" y1="39" y2="39"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="97" x="27" y="56.5352">auth_required</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="31" x="27" y="73.0234">auth</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="55" x="27" y="89.5117">auth_ok</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="83" x="27" y="106">auth_invalid</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="39" x="27" y="122.4883">result</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="117" x="27" y="138.9766">subscribe_events</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="135" x="27" y="155.4648">unsubscribe_events</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="37" x="27" y="171.9531">event</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="77" x="27" y="188.4414">call_service</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="69" x="27" y="204.9297">get_states</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="72" x="27" y="221.418">get_config</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="83" x="27" y="237.9063">get_services</text><rect fill="none" height="6" style="stroke:#C82930;stroke-width:1.0;" width="6" x="15" y="247.6035"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="74" x="27" y="254.3945">get_panels</text><rect fill="none" height="6" style="stroke:#C82930;stroke-width:1.0;" width="6" x="15" y="264.0918"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="168" x="27" y="270.8828">media_player_thumbnail</text><rect fill="none" height="6" style="stroke:#C82930;stroke-width:1.0;" width="6" x="15" y="280.5801"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="31" x="27" y="287.3711">ping</text><rect fill="none" height="6" style="stroke:#C82930;stroke-width:1.0;" width="6" x="15" y="297.0684"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="36" x="27" y="303.8594">pong</text><line style="stroke:#181818;stroke-width:0.5;" x1="8" x2="200" y1="310.8125" y2="310.8125"/></g><!--MD5=[51255159981deef4d2967e1585ccf960]
+class EventType--><g id="elem_EventType"><rect codeLine="21" fill="#F1F1F1" height="64.4883" id="EventType" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="107" x="236.5" y="131"/><ellipse cx="253.75" cy="147" fill="#EB937F" rx="11" ry="11" style="stroke:#181818;stroke-width:1.0;"/><path d="M257.3643,153.5 L249.6445,153.5 L249.6445,141.1069 L257.3643,141.1069 L257.3643,143.2651 L252.0933,143.2651 L252.0933,145.938 L256.8662,145.938 L256.8662,148.0962 L252.0933,148.0962 L252.0933,151.3418 L257.3643,151.3418 Z " fill="#000000"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="70" x="268.25" y="152.291">EventType</text><line style="stroke:#181818;stroke-width:0.5;" x1="237.5" x2="342.5" y1="163" y2="163"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="95" x="242.5" y="180.5352">stateChanged</text><line style="stroke:#181818;stroke-width:0.5;" x1="237.5" x2="342.5" y1="187.4883" y2="187.4883"/></g><!--MD5=[18c02c5e4a2c3681c9763cc6842a7e93]
+@startuml message-models
+
+enum MessageType {
+  auth_required
+  auth
+  auth_ok
+  auth_invalid
+  result
+  subscribe_events
+  unsubscribe_events
+  event
+  call_service
+  get_states
+  get_config
+  get_services
+  -get_panels
+  -media_player_thumbnail
+  -ping
+  -pong
+}
+
+enum EventType {
+  stateChanged
+}
+
+@enduml
+
+PlantUML version 1.2022.7(Mon Aug 22 19:01:30 CEST 2022)
+(GPL source distribution)
+Java Runtime: Java(TM) SE Runtime Environment
+JVM: Java HotSpot(TM) 64-Bit Server VM
+Default Encoding: UTF-8
+Language: fr
+Country: FR
+--></g></svg>

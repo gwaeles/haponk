@@ -1,0 +1,37 @@
+@startuml state-changed.sequence
+
+box "Presentation" #90CAF9
+participant App
+end box
+
+box "Domain layer" #BBDEFB
+participant DeviceBloc
+participant ConnectionNotifier
+end box
+
+box "Data layer" #E3F2FD
+participant DevicesRepository
+participant ConnectionRepository
+database "Local Storage" as LocalStorage
+participant ConnectionRepository
+participant Websocket
+end box
+
+== On app launch ==
+App --> ConnectionNotifier : watch()
+ConnectionNotifier --> ConnectionRepository : listen()
+ConnectionRepository --> Websocket : connect()
+App --> DeviceBloc : watch()
+DeviceBloc --> DevicesRepository : watchDevices()
+DevicesRepository --> LocalStorage : watchDevices()
+== State changed flow ==
+Websocket -> ConnectionRepository : StateMessage
+ConnectionRepository -> LocalStorage : updateState()
+LocalStorage -> DevicesRepository : onData()
+DevicesRepository -> DevicesRepository : sink.add()
+DevicesRepository -> DeviceBloc : onData()
+DeviceBloc -> DeviceBloc : emit()
+DeviceBloc -> App : build()
+
+
+@enduml

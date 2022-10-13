@@ -1,0 +1,47 @@
+@startuml layout-models
+
+class FlexTabs {
+  Int id
+  Text label
+  Int order
+}
+
+class FlexCards {
+  Int id
+  Int tabId
+  Text type
+  Int? stateId
+  Int? parentId
+  Int position
+  Int horizontalFlex
+  
+  .. Customization ..
+  Int height
+  Int displayLeading
+  Int displayTrailing
+  Int displayTitle
+  Int displaySubtitle
+}
+
+class States {
+  Int id
+  Text? entityId
+  DateTime? lastChanged
+  DateTime? lastUpdated
+
+  .. Customization ..
+  Text? displayLabel
+  Text? displayType
+
+  .. Attributes ..
+  Text? friendlyName
+  Int? supportedFeatures
+
+  __ State Values __
+  ...
+}
+
+FlexCards::tabId *-left- FlexTabs::id
+FlexCards::stateId *-right- States::id
+
+@enduml
