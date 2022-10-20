@@ -11,7 +11,14 @@ import 'package:haponk/ui/dashboard/dashboard_screen.dart';
 import 'package:haponk/ui/devices/devices_page.dart';
 import 'package:provider/provider.dart';
 
-class AppNavigationScreen extends StatelessWidget {
+class AppNavigationPage extends StatelessWidget {
+  final int configId;
+
+  const AppNavigationPage({
+    super.key,
+    required this.configId,
+  });
+
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
@@ -24,7 +31,7 @@ class AppNavigationScreen extends StatelessWidget {
           BlocProvider<ConfigBloc>(
             create: (context) => ConfigBloc(
               repository: context.read(),
-            ),
+            )..add(ConfigWatch(key: configId)),
           ),
           ChangeNotifierProvider(
             create: (context) => BottomNavigationBarController(0),
@@ -32,8 +39,8 @@ class AppNavigationScreen extends StatelessWidget {
         ],
         child: BlocListener<ConfigBloc, ConfigState>(
           listener: (context, state) {
-            if (state.config != null) {
-              context.read<ConnectionNotifier>().connect(state.config!);
+            if (state.data != null) {
+              context.read<ConnectionNotifier>().connect(state.data!);
             }
           },
           child: Scaffold(
@@ -75,9 +82,7 @@ class AppNavigationScreen extends StatelessWidget {
                     builder: (context, notifier, _) {
                       return Container(
                         height: 2,
-                        color: notifier.isConnected
-                            ? Colors.lightGreen
-                            : Colors.red,
+                        color: notifier.isConnected ? Colors.lightGreen : Colors.red,
                       );
                     },
                   ),

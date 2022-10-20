@@ -3,21 +3,28 @@ import 'package:haponk/data/config/entities/config.dart';
 
 part 'config_state.freezed.dart';
 
+enum Status {
+  initial,
+  loading,
+  loaded,
+  subscribing,
+  listening,
+  failure,
+}
+
+enum ConnexionStatus {
+  initial,
+  connecting,
+  success,
+  failure,
+}
+
 @freezed
 class ConfigState with _$ConfigState {
-  factory ConfigState.idle({
-    Config? config,
-  }) = ConfigStateIdle;
-
-  factory ConfigState.requesting({
-    Config? config,
-  }) = ConfigStateRequesting;
-
-  factory ConfigState.validated({
-    Config? config,
-  }) = ConfigStateValidated;
-
-  factory ConfigState.error({
-    Config? config,
-  }) = ConfigStateError;
+  factory ConfigState({
+    @Default(Status.initial) Status status,
+    @Default(ConnexionStatus.initial) ConnexionStatus connexionStatus,
+    Config? data,
+    Exception? failure,
+  }) = _ConfigState;
 }

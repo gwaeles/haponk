@@ -1,6 +1,5 @@
 import 'package:haponk/core/hass/models/constants.dart';
 import 'package:haponk/core/hass/models/device_type_converter.dart';
-import 'package:haponk/data/config/entities/config.dart';
 import 'package:drift/drift.dart';
 
 import 'database.dart';
@@ -32,21 +31,6 @@ extension DateTimeValueExtension on DateTime {
 extension BoolValueExtension on bool {
   Value<bool> toValue() {
     return Value<bool>(this);
-  }
-}
-
-extension ConfigExtension on ConfigDBO {
-  Config toEntity({
-    String? accessToken,
-  }) {
-    return Config(
-      externalUrl: this.externalUrl,
-      internalUrl: this.internalUrl,
-      locationName: this.locationName,
-      version: this.version,
-      lastConnection: this.lastConnection,
-      accessToken: accessToken,
-    );
   }
 }
 

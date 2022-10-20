@@ -1,0 +1,53 @@
+@startuml connexion.sequence
+
+box "Presentation" #90CAF9
+participant Application as App
+end box
+
+box "Domain layer" #BBDEFB
+participant ConfigBloc
+participant ConnexionBloc
+end box
+
+box "Data layer" #E3F2FD
+participant ConfigsRepository
+participant ConnexionRepository
+database "Local Storage" as LocalStorage
+participant HassWebSocket
+end box
+
+== On app launch ==
+note over App : LauncherPage
+note over ConfigBloc #gold: S1
+App --> ConfigBloc
+note over ConfigBloc #LightGreen: E1
+note over ConfigBloc #gold: S2
+ConfigBloc --> ConfigsRepository ++ : getLastConfig()
+ConfigsRepository --> LocalStorage ++ : box.get()
+return Config
+return Config
+note over ConfigBloc #gold: S3
+ConfigBloc -> App
+App -> App
+== Verified config ==
+note over App : DashboardPage
+note over ConnexionBloc #gold: S1
+App --> ConnexionBloc
+note over ConnexionBloc #LightGreen: E1
+note over ConnexionBloc #gold: S2
+ConnexionBloc --> ConnexionRepository : watch()
+ConnexionRepository --> HassWebSocket : watch()
+ConnexionRepository -> ConnexionBloc : connected
+note over ConnexionBloc #gold: S3
+ConnexionRepository -> ConnexionBloc : disconnected
+note over ConnexionBloc #FFAAAA: S4
+
+HassWebSocket -> ConnexionRepository : onData()
+ConnexionRepository --> LocalStorage : box.put()
+App --> ConnexionBloc : callService()
+note over ConnexionBloc #LightGreen: E2
+ConnexionBloc --> ConnexionRepository : callService()
+ConnexionRepository --> HassWebSocket : callService()
+
+
+@enduml

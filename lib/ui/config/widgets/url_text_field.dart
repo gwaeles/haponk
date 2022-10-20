@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class UrlTextField extends StatelessWidget {
+class UrlTextField extends StatefulWidget {
   UrlTextField({
     super.key,
     required this.label,
@@ -8,53 +8,61 @@ class UrlTextField extends StatelessWidget {
     this.onChanged,
     this.checked = false,
     this.error = false,
-    String? value,
-  }) {
-    textController = TextEditingController.fromValue(
-      TextEditingValue(text: value ?? ''),
-    );
-  }
+    this.value,
+  });
 
   final String label;
+  final String? value;
   final bool obscureText;
   final ValueChanged<String>? onChanged;
   final bool checked;
   final bool error;
-  late final textController;
+
+  @override
+  State<UrlTextField> createState() => _UrlTextFieldState();
+}
+
+class _UrlTextFieldState extends State<UrlTextField> {
+  late final TextEditingController textController;
+  String? initialeValue;
+
+  @override
+  void initState() {
+    super.initState();
+
+    initialeValue = widget.value;
+    textController = TextEditingController.fromValue(
+      TextEditingValue(text: initialeValue ?? ''),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
-    // final configNotifier = context.watch<ConfigNotifier>();
-    // final config = configNotifier.currentConfig;
-
-    // final checked = configNotifier.state == RequestState.LOADED;
-    // final error = configNotifier.state == RequestState.ERROR;
-    final Widget? suffixIcon = checked
+    final Widget? suffixIcon = widget.checked
         ? Icon(
             Icons.check_circle,
             color: Colors.green,
           )
-        : (error
+        : (widget.error
             ? Icon(
                 Icons.error,
                 color: Colors.red,
               )
             : null);
 
-    // if (textController.text.isEmpty) {
-    //   // Init values
-    //   configNotifier.typedUrl = config?.internalUrl;
-    //   textController.text = config?.internalUrl ?? '';
-    // }
+    if (initialeValue == null && widget.value != null) {
+      initialeValue = widget.value;
+      textController.text = widget.value!;
+    }
 
     return TextField(
       decoration: InputDecoration(
-        labelText: label,
+        labelText: widget.label,
         suffixIcon: suffixIcon,
       ),
-      obscureText: obscureText,
+      obscureText: widget.obscureText,
       controller: textController,
-      onChanged: onChanged, //(value) => configNotifier.typedUrl = value,
+      onChanged: widget.onChanged,
     );
   }
 }

@@ -4,10 +4,12 @@ import 'package:haponk/data/config/blocs/config_bloc.dart';
 import 'package:provider/provider.dart';
 
 class ConfigProviders extends StatelessWidget {
+  final int configId;
   final Widget? child;
 
   const ConfigProviders({
     Key? key,
+    required this.configId,
     this.child,
   }) : super(key: key);
 
@@ -18,7 +20,7 @@ class ConfigProviders extends StatelessWidget {
         BlocProvider(
           create: (context) => ConfigBloc(
             repository: context.read(),
-          ),
+          )..add(ConfigWatch(key: configId)),
         ),
       ],
       child: child,

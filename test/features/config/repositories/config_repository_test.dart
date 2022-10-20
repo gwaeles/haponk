@@ -68,20 +68,20 @@ void main() {
       ];
       StreamSubscription<Config>? subscription;
 
-      when(storage.read(key: PREF_LONG_LIVED_ACCESS_TOKEN)).thenAnswer(
+      when(storage.read(key: prefLongLivedAccessToken)).thenAnswer(
         (_) => Future.value("token"),
       );
 
       await db.insertConfig(value);
 
       final expectFunc = expectAsync0(() async {
-        verify(storage.read(key: PREF_LONG_LIVED_ACCESS_TOKEN));
+        verify(storage.read(key: prefLongLivedAccessToken));
 
         await subscription?.cancel();
         // After subscription cancel, no more entity should be emitted
         await db.updateConfig(value);
 
-        verifyNever(storage.read(key: PREF_LONG_LIVED_ACCESS_TOKEN));
+        verifyNever(storage.read(key: prefLongLivedAccessToken));
       });
 
       //WHEN: add a listener on config stream

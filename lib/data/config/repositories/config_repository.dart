@@ -2,51 +2,92 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
-import 'package:drift/drift.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:haponk/core/db/database.dart';
 
 import 'package:haponk/core/hass/datasources/hass_api.dart';
 import 'package:haponk/core/hass/models/events/discovery_info_model.dart';
+import 'package:haponk/core/hive/datasources/boxes_provider.dart';
 import 'package:haponk/core/network/api_status.dart';
 import 'package:haponk/data/config/entities/config.dart';
-import 'package:haponk/core/db/database_extension.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:rxdart/rxdart.dart';
 
-const String PREF_LONG_LIVED_ACCESS_TOKEN = "PREF_LONG_LIVED_ACCESS_TOKEN";
+const String prefLongLivedAccessToken = "PREF_LONG_LIVED_ACCESS_TOKEN";
+const String configsHiveKey = "configs";
 
 class ConfigRepository {
-  final Database db;
+  final ConfigBoxCallback configBox;
   final FlutterSecureStorage storage;
   final Dio dio;
 
   ConfigRepository({
-    required this.db,
+    required this.configBox,
     required this.storage,
     required this.dio,
   });
 
   BehaviorSubject<Config>? _controller;
-  StreamSubscription? _dbSubscription;
+  StreamSubscription? _hiveSubscription;
 
   ///
   /// --- CONFIG STREAM --- ///
   ///
 
-  Stream<Config> configStream() {
+  Stream<Config> configStream({required int key}) {
     if (_controller == null) {
       _controller = BehaviorSubject(
         onCancel: () => _onCancel(),
       );
     }
 
-    // DB subscription
-    _dbSubscription?.cancel();
-    _dbSubscription = db.watchConfig().listen(_onConfigData);
-
+    // Hive subscription
+    if (_hiveSubscription == null) {
+      configBox().then(
+        (box) {
+          _hiveSubscription?.cancel();
+          _hiveSubscription = box.watch(key: key).listen(_onBoxEvent);
+          if (_controller?.hasValue != true && box.containsKey(key)) {
+            // Push current value on stream
+            _onBoxEvent(
+              BoxEvent(
+                key,
+                box.get(key),
+                false,
+              ),
+            );
+          }
+        },
+      );
+    }
     return _controller!.stream;
+  }
+
+  Future<Config> getLastConfig() async {
+    final Box<Config> box = await configBox();
+
+    Config? result;
+    for (int i = 0; i < box.length; i++) {
+      final config = box.getAt(i);
+      if (result == null ||
+          (result.lastConnection == null && config?.lastConnection != null) ||
+          (result.lastConnection != null &&
+              config?.lastConnection != null &&
+              config!.lastConnection!.compareTo(result.lastConnection!) > 0)) {
+        result = config;
+      }
+    }
+
+    if (result == null) {
+      // Create empty config
+      result = Config(
+        id: 0,
+      );
+      await box.put(result.id, result);
+    }
+
+    return result;
   }
 
   void _onCancel() {
@@ -59,27 +100,37 @@ class ConfigRepository {
   void dispose() {
     _controller?.close();
     _controller = null;
-    _dbSubscription?.cancel();
-    _dbSubscription = null;
+    _hiveSubscription?.cancel();
+    _hiveSubscription = null;
   }
 
-  Future<void> _onConfigData(ConfigDBO? event) async {
+  Future<void> _onBoxEvent(BoxEvent event) async {
+    debugPrint("[CONFIG] _onConfigDataHive, key: ${event.key} ");
+    if (event.value is Config) {
+      _onConfigData(event.key, event.value);
+    }
+  }
+
+  Future<void> _onConfigData(dynamic key, Config config) async {
+    String? internalUrl = null;
+    String? externalUrl = null;
     String? accessToken = await storage.read(
-      key: PREF_LONG_LIVED_ACCESS_TOKEN,
+      key: prefLongLivedAccessToken,
     );
 
     if (accessToken == null) {
       // Initiale config
       try {
-        final String json =
-            await rootBundle.loadString("assets/config/config.json");
+        final String json = await rootBundle.loadString("assets/config/config.json");
         final defaultConfig = jsonDecode(json) as Map<String, dynamic>;
-        accessToken = defaultConfig.containsKey("longLivedToken")
-            ? defaultConfig["longLivedToken"]
-            : null;
+        accessToken = defaultConfig.containsKey("longLivedToken") ? defaultConfig["longLivedToken"] : null;
+        if (config.internalUrl == null) {
+          internalUrl = defaultConfig.containsKey("internalUrl") ? defaultConfig["internalUrl"] : null;
+          externalUrl = defaultConfig.containsKey("externalUrl") ? defaultConfig["externalUrl"] : null;
+        }
         if (accessToken != null && accessToken.isNotEmpty) {
           await storage.write(
-            key: PREF_LONG_LIVED_ACCESS_TOKEN,
+            key: prefLongLivedAccessToken,
             value: accessToken,
           );
         }
@@ -88,28 +139,57 @@ class ConfigRepository {
       }
     }
 
-    final entity = event?.toEntity(
+    final entity = config.copyWith(
       accessToken: accessToken,
+      internalUrl: internalUrl ?? config.internalUrl,
+      externalUrl: externalUrl ?? config.externalUrl,
     );
 
-    if (entity != null) {
-      _controller?.sink.add(entity);
+    _controller?.sink.add(entity);
+  }
+
+  ///
+  /// --- Update --- ///
+  ///
+
+  Future<bool> update(Config config) async {
+    // Update access token
+    if (config.accessToken?.isNotEmpty == true) {
+      await storage.write(key: prefLongLivedAccessToken, value: config.accessToken!);
+    } else {
+      await storage.delete(key: prefLongLivedAccessToken);
     }
+
+    try {
+      // update config
+      final Box<Config> box = await configBox();
+      final updatedConfigHive = config.copyWith(
+        accessToken: null,
+      );
+
+      await box.put(
+        updatedConfigHive.id,
+        updatedConfigHive,
+      );
+    } catch (e) {
+      return false;
+    }
+
+    return true;
   }
 
   ///
   /// --- TRY CONNECTION --- ///
   ///
 
-  Future<Config?> tryConnect(
-    String? url, [
-    String? accessToken,
-  ]) async {
-    if (url == null) {
+  /// Return null if connexion fail
+  /// Return config updated if succeed
+  Future<Config?> tryConnect(Config config) async {
+    if (config.internalUrl == null) {
       return null;
     }
 
-    Uri uri = Uri.parse(url);
+    Uri uri = Uri.parse(config.internalUrl!);
     List<String> pathSegments = []
       ..addAll(uri.pathSegments)
       ..add("api");
@@ -121,46 +201,30 @@ class ConfigRepository {
     );
 
     try {
-      ConfigDBO? config = await db.getConfig();
-
-      if (config == null) {
-        // Create config
-        final newConfig = ConfigDBO(
-          id: 1,
-          internalUrl: url,
-        );
-
-        await db.insertConfig(newConfig);
-        config = await db.getConfig();
-      }
-
       final response = await _hassApi.config(
-        authorization: 'Bearer $accessToken',
+        authorization: 'Bearer ${config.accessToken}',
       );
-      if (response.response.statusCode == ApiStatus.OK) {
+      if (response.response.statusCode == ApiStatus.ok) {
         if (response.data != null) {
-          final DiscoveryInfoModel discoveryInfo = DiscoveryInfoModel.fromJson(
-              response.data as Map<String, dynamic>);
+          final DiscoveryInfoModel discoveryInfo = DiscoveryInfoModel.fromJson(response.data as Map<String, dynamic>);
 
           // Update config
-          final updatedConfig = config!.copyWith(
-            externalUrl: Value(discoveryInfo.externalUrl),
-            internalUrl: Value(discoveryInfo.internalUrl),
-            locationName: Value(discoveryInfo.locationName),
-            version: Value(discoveryInfo.version),
+          final updatedConfigHive = config.copyWith(
+            externalUrl: discoveryInfo.externalUrl,
+            internalUrl: discoveryInfo.internalUrl,
+            locationName: discoveryInfo.locationName,
+            version: discoveryInfo.version,
+            lastConnection: DateTime.now(),
           );
 
-          await db.updateConfig(updatedConfig);
-
-          return updatedConfig.toEntity(
-            accessToken: accessToken,
-          );
+          return updatedConfigHive;
         }
       }
     } on DioError catch (e) {
       print(e.message);
       if (e.response?.statusCode == 401) {
         print("401");
+        return config;
       }
       return null;
     } catch (e) {
@@ -168,14 +232,5 @@ class ConfigRepository {
     }
 
     return null;
-  }
-
-  Future<void> setAccessToken(String value) async {
-    if (value.isNotEmpty) {
-      await storage.write(key: PREF_LONG_LIVED_ACCESS_TOKEN, value: value);
-      _onConfigData(null);
-    } else {
-      await storage.delete(key: PREF_LONG_LIVED_ACCESS_TOKEN);
-    }
   }
 }

@@ -145,7 +145,7 @@ class ConnectionRepository {
     if (_connectionType == ConnectionType.IDLE) {
       _connectionType = connectionType;
 
-      db.updateConfigDate();
+      //db.updateConfigDate();
 
       _controllerConnectionType?.sink.add(_connectionType);
 

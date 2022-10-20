@@ -14,8 +14,13 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
+Config _$ConfigFromJson(Map<String, dynamic> json) {
+  return _Config.fromJson(json);
+}
+
 /// @nodoc
 mixin _$Config {
+  int get id => throw _privateConstructorUsedError;
   String? get externalUrl => throw _privateConstructorUsedError;
   String? get internalUrl => throw _privateConstructorUsedError;
   String? get locationName => throw _privateConstructorUsedError;
@@ -23,6 +28,7 @@ mixin _$Config {
   DateTime? get lastConnection => throw _privateConstructorUsedError;
   String? get accessToken => throw _privateConstructorUsedError;
 
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
   $ConfigCopyWith<Config> get copyWith => throw _privateConstructorUsedError;
 }
@@ -32,7 +38,8 @@ abstract class $ConfigCopyWith<$Res> {
   factory $ConfigCopyWith(Config value, $Res Function(Config) then) =
       _$ConfigCopyWithImpl<$Res>;
   $Res call(
-      {String? externalUrl,
+      {int id,
+      String? externalUrl,
       String? internalUrl,
       String? locationName,
       String? version,
@@ -50,6 +57,7 @@ class _$ConfigCopyWithImpl<$Res> implements $ConfigCopyWith<$Res> {
 
   @override
   $Res call({
+    Object? id = freezed,
     Object? externalUrl = freezed,
     Object? internalUrl = freezed,
     Object? locationName = freezed,
@@ -58,6 +66,10 @@ class _$ConfigCopyWithImpl<$Res> implements $ConfigCopyWith<$Res> {
     Object? accessToken = freezed,
   }) {
     return _then(_value.copyWith(
+      id: id == freezed
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as int,
       externalUrl: externalUrl == freezed
           ? _value.externalUrl
           : externalUrl // ignore: cast_nullable_to_non_nullable
@@ -92,7 +104,8 @@ abstract class _$$_ConfigCopyWith<$Res> implements $ConfigCopyWith<$Res> {
       __$$_ConfigCopyWithImpl<$Res>;
   @override
   $Res call(
-      {String? externalUrl,
+      {int id,
+      String? externalUrl,
       String? internalUrl,
       String? locationName,
       String? version,
@@ -111,6 +124,7 @@ class __$$_ConfigCopyWithImpl<$Res> extends _$ConfigCopyWithImpl<$Res>
 
   @override
   $Res call({
+    Object? id = freezed,
     Object? externalUrl = freezed,
     Object? internalUrl = freezed,
     Object? locationName = freezed,
@@ -119,6 +133,10 @@ class __$$_ConfigCopyWithImpl<$Res> extends _$ConfigCopyWithImpl<$Res>
     Object? accessToken = freezed,
   }) {
     return _then(_$_Config(
+      id: id == freezed
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as int,
       externalUrl: externalUrl == freezed
           ? _value.externalUrl
           : externalUrl // ignore: cast_nullable_to_non_nullable
@@ -148,10 +166,11 @@ class __$$_ConfigCopyWithImpl<$Res> extends _$ConfigCopyWithImpl<$Res>
 }
 
 /// @nodoc
-
+@JsonSerializable()
 class _$_Config extends _Config {
   const _$_Config(
-      {this.externalUrl,
+      {required this.id,
+      this.externalUrl,
       this.internalUrl,
       this.locationName,
       this.version,
@@ -159,6 +178,11 @@ class _$_Config extends _Config {
       this.accessToken})
       : super._();
 
+  factory _$_Config.fromJson(Map<String, dynamic> json) =>
+      _$$_ConfigFromJson(json);
+
+  @override
+  final int id;
   @override
   final String? externalUrl;
   @override
@@ -174,7 +198,7 @@ class _$_Config extends _Config {
 
   @override
   String toString() {
-    return 'Config(externalUrl: $externalUrl, internalUrl: $internalUrl, locationName: $locationName, version: $version, lastConnection: $lastConnection, accessToken: $accessToken)';
+    return 'Config(id: $id, externalUrl: $externalUrl, internalUrl: $internalUrl, locationName: $locationName, version: $version, lastConnection: $lastConnection, accessToken: $accessToken)';
   }
 
   @override
@@ -182,6 +206,7 @@ class _$_Config extends _Config {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_Config &&
+            const DeepCollectionEquality().equals(other.id, id) &&
             const DeepCollectionEquality()
                 .equals(other.externalUrl, externalUrl) &&
             const DeepCollectionEquality()
@@ -195,9 +220,11 @@ class _$_Config extends _Config {
                 .equals(other.accessToken, accessToken));
   }
 
+  @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(
       runtimeType,
+      const DeepCollectionEquality().hash(id),
       const DeepCollectionEquality().hash(externalUrl),
       const DeepCollectionEquality().hash(internalUrl),
       const DeepCollectionEquality().hash(locationName),
@@ -209,11 +236,19 @@ class _$_Config extends _Config {
   @override
   _$$_ConfigCopyWith<_$_Config> get copyWith =>
       __$$_ConfigCopyWithImpl<_$_Config>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$_ConfigToJson(
+      this,
+    );
+  }
 }
 
 abstract class _Config extends Config {
   const factory _Config(
-      {final String? externalUrl,
+      {required final int id,
+      final String? externalUrl,
       final String? internalUrl,
       final String? locationName,
       final String? version,
@@ -221,6 +256,10 @@ abstract class _Config extends Config {
       final String? accessToken}) = _$_Config;
   const _Config._() : super._();
 
+  factory _Config.fromJson(Map<String, dynamic> json) = _$_Config.fromJson;
+
+  @override
+  int get id;
   @override
   String? get externalUrl;
   @override
@@ -241,6 +280,7 @@ abstract class _Config extends Config {
 
 /// @nodoc
 mixin _$ComparableConfig {
+  int get id => throw _privateConstructorUsedError;
   String? get externalUrl => throw _privateConstructorUsedError;
   String? get internalUrl => throw _privateConstructorUsedError;
   String? get locationName => throw _privateConstructorUsedError;
@@ -257,7 +297,8 @@ abstract class $ComparableConfigCopyWith<$Res> {
           ComparableConfig value, $Res Function(ComparableConfig) then) =
       _$ComparableConfigCopyWithImpl<$Res>;
   $Res call(
-      {String? externalUrl,
+      {int id,
+      String? externalUrl,
       String? internalUrl,
       String? locationName,
       String? version});
@@ -274,12 +315,17 @@ class _$ComparableConfigCopyWithImpl<$Res>
 
   @override
   $Res call({
+    Object? id = freezed,
     Object? externalUrl = freezed,
     Object? internalUrl = freezed,
     Object? locationName = freezed,
     Object? version = freezed,
   }) {
     return _then(_value.copyWith(
+      id: id == freezed
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as int,
       externalUrl: externalUrl == freezed
           ? _value.externalUrl
           : externalUrl // ignore: cast_nullable_to_non_nullable
@@ -308,7 +354,8 @@ abstract class _$$_ComparableConfigCopyWith<$Res>
       __$$_ComparableConfigCopyWithImpl<$Res>;
   @override
   $Res call(
-      {String? externalUrl,
+      {int id,
+      String? externalUrl,
       String? internalUrl,
       String? locationName,
       String? version});
@@ -327,12 +374,17 @@ class __$$_ComparableConfigCopyWithImpl<$Res>
 
   @override
   $Res call({
+    Object? id = freezed,
     Object? externalUrl = freezed,
     Object? internalUrl = freezed,
     Object? locationName = freezed,
     Object? version = freezed,
   }) {
     return _then(_$_ComparableConfig(
+      id: id == freezed
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as int,
       externalUrl: externalUrl == freezed
           ? _value.externalUrl
           : externalUrl // ignore: cast_nullable_to_non_nullable
@@ -357,8 +409,14 @@ class __$$_ComparableConfigCopyWithImpl<$Res>
 
 class _$_ComparableConfig implements _ComparableConfig {
   const _$_ComparableConfig(
-      {this.externalUrl, this.internalUrl, this.locationName, this.version});
+      {required this.id,
+      this.externalUrl,
+      this.internalUrl,
+      this.locationName,
+      this.version});
 
+  @override
+  final int id;
   @override
   final String? externalUrl;
   @override
@@ -370,7 +428,7 @@ class _$_ComparableConfig implements _ComparableConfig {
 
   @override
   String toString() {
-    return 'ComparableConfig(externalUrl: $externalUrl, internalUrl: $internalUrl, locationName: $locationName, version: $version)';
+    return 'ComparableConfig(id: $id, externalUrl: $externalUrl, internalUrl: $internalUrl, locationName: $locationName, version: $version)';
   }
 
   @override
@@ -378,6 +436,7 @@ class _$_ComparableConfig implements _ComparableConfig {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_ComparableConfig &&
+            const DeepCollectionEquality().equals(other.id, id) &&
             const DeepCollectionEquality()
                 .equals(other.externalUrl, externalUrl) &&
             const DeepCollectionEquality()
@@ -390,6 +449,7 @@ class _$_ComparableConfig implements _ComparableConfig {
   @override
   int get hashCode => Object.hash(
       runtimeType,
+      const DeepCollectionEquality().hash(id),
       const DeepCollectionEquality().hash(externalUrl),
       const DeepCollectionEquality().hash(internalUrl),
       const DeepCollectionEquality().hash(locationName),
@@ -403,11 +463,14 @@ class _$_ComparableConfig implements _ComparableConfig {
 
 abstract class _ComparableConfig implements ComparableConfig {
   const factory _ComparableConfig(
-      {final String? externalUrl,
+      {required final int id,
+      final String? externalUrl,
       final String? internalUrl,
       final String? locationName,
       final String? version}) = _$_ComparableConfig;
 
+  @override
+  int get id;
   @override
   String? get externalUrl;
   @override

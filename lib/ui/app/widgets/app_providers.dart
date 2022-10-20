@@ -4,6 +4,7 @@ import 'package:drift/native.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:haponk/core/db/database.dart';
+import 'package:haponk/core/hive/datasources/boxes_provider.dart';
 import 'package:haponk/core/network/client.dart' as client;
 import 'package:haponk/data/config/repositories/config_repository.dart';
 import 'package:haponk/data/connection/notifiers/connection_notifier.dart';
@@ -13,10 +14,10 @@ import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
 import 'package:provider/provider.dart';
 
-class MainProviders extends StatelessWidget {
+class AppProviders extends StatelessWidget {
   final Widget? child;
 
-  const MainProviders({
+  const AppProviders({
     Key? key,
     this.child,
   }) : super(key: key);
@@ -47,7 +48,7 @@ class MainProviders extends StatelessWidget {
         ///
         Provider(
           create: (context) => ConfigRepository(
-            db: context.read(),
+            configBox: openConfigBox,
             storage: context.read(),
             dio: context.read(),
           ),

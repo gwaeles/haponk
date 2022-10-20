@@ -21,7 +21,7 @@ environment:
   sdk: ">=2.17.0 <3.0.0"
 
 dependencies:
-  device_info_plus: ^4.1.2
+  device_info_plus: ^6.0.0
   dio: ^4.0.6
   easy_localization: ^3.0.1
   flutter_bloc: ^8.1.1
@@ -30,6 +30,7 @@ dependencies:
     sdk: flutter
   freezed: ^2.1.0+1
   freezed_annotation: ^2.1.0
+  hive_flutter: ^1.1.0
   web_socket_channel: ^2.2.0
   drift: ^2.0.2
   flutter_secure_storage: ^6.0.0
@@ -39,10 +40,7 @@ dependencies:
   retrofit: ^3.0.1+1
   rxdart: ^0.27.5
   sqlite3_flutter_libs: ^0.5.0
-
-dependency_overrides:
-  # follow : https://github.com/dart-lang/mockito/issues/552
-  code_builder: ^4.2.0
+  auto_route: ^5.0.2
 
 dev_dependencies:
   flutter_test:
@@ -51,10 +49,11 @@ dev_dependencies:
   drift_dev: ^2.0.1
   json_serializable: ^6.3.1
   lint: ^1.10.0
-  mockito: ^5.3.0
+  mockito: ^5.3.1
   retrofit_generator: ^4.0.3+1
   test: any
   bloc_test: ^9.1.0
+  auto_route_generator: ^5.0.2
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

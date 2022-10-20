@@ -1,0 +1,62 @@
+@startuml configs.sequence
+
+box "Presentation" #90CAF9
+participant Application as App
+end box
+
+box "Domain layer" #BBDEFB
+participant ConfigBloc
+end box
+
+box "Data layer" #E3F2FD
+participant ConfigsRepository
+database "Local Storage" as LocalStorage
+participant HassApi
+end box
+
+== On app launch ==
+note over App : LauncherPage
+note over ConfigBloc #gold: S1
+App --> ConfigBloc
+note over ConfigBloc #LightGreen: E1
+note over ConfigBloc #gold: S2
+ConfigBloc --> ConfigsRepository ++ : getLastConfig()
+ConfigsRepository --> LocalStorage ++ : box.get()
+return Config
+return Config
+note over ConfigBloc #gold: S3
+ConfigsRepository -> ConfigBloc : onError()
+note over ConfigBloc #FFAAAA: S6
+ConfigBloc --> App
+App -> App
+== New or never connected config ==
+note over App : FormPage
+note over ConfigBloc #gold: S1
+App --> ConfigBloc : watch()
+note over ConfigBloc #LightGreen: E2
+note over ConfigBloc #gold: S4
+ConfigBloc --> ConfigsRepository : watchConfig()
+ConfigsRepository --> LocalStorage : watchConfig()
+LocalStorage -> LocalStorage
+LocalStorage -> ConfigsRepository : onData()
+ConfigsRepository -> ConfigsRepository : sink.add()
+ConfigsRepository -> ConfigBloc : onData()
+note over ConfigBloc #gold: S5
+ConfigsRepository -> ConfigBloc : onError()
+note over ConfigBloc #FFAAAA: S6
+ConfigBloc -> App
+App --> ConfigBloc : edit()
+note over ConfigBloc #LightGreen: E3
+ConfigBloc --> ConfigsRepository : edit()
+ConfigsRepository --> LocalStorage : edit()
+LocalStorage -> LocalStorage
+App --> ConfigBloc : tryConnect()
+note over ConfigBloc #LightGreen: E4
+ConfigBloc --> ConfigsRepository : tryConnect()
+ConfigsRepository --> HassApi ++ : GET /config
+return
+ConfigsRepository --> LocalStorage : edit()
+LocalStorage -> LocalStorage
+
+
+@enduml

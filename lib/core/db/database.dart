@@ -1,12 +1,8 @@
-import 'dart:convert';
-
 import 'package:drift/drift.dart';
 import 'package:flutter/material.dart' as flt;
-import 'package:flutter/services.dart';
 import 'package:haponk/data/tabs/entities/flex_card.dart';
 
 import 'tables/flex_cards.dart';
-import 'tables/configs.dart';
 import 'tables/states.dart';
 import 'tables/flex_tabs.dart';
 
@@ -14,7 +10,6 @@ part 'database.g.dart';
 
 @DriftDatabase(
   tables: [
-    Configs,
     States,
     FlexTabs,
     FlexCards,
@@ -33,75 +28,8 @@ class Database extends _$Database {
         flt.debugPrint("[DRIFT] onCreate");
         return m.createAll();
       },
-      onUpgrade: (Migrator m, int from, int to) async {
-        flt.debugPrint("[DRIFT] onUpgrade from: $from, to: $to");
-        if (from == 1) {
-          await m.addColumn(states, states.displayLabel);
-          await m.addColumn(states, states.displayType);
-          await m.createTable(flexTabs);
-          await m.createTable(flexCards);
-
-          // Tabs data
-          await insertFlexTab(FlexTabsCompanion.insert(
-            label: "Flex Tab",
-            order: 1,
-          ));
-        }
-      },
-      beforeOpen: (details) async {
-        if (details.wasCreated) {
-          // Initiale config
-          String? internalUrl;
-          String? externalUrl;
-          try {
-            final String json =
-                await rootBundle.loadString("assets/config/config.json");
-            final defaultConfig = jsonDecode(json) as Map<String, dynamic>;
-            internalUrl = defaultConfig.containsKey('internalUrl')
-                ? defaultConfig['internalUrl']
-                : null;
-            externalUrl = defaultConfig.containsKey('externalUrl')
-                ? defaultConfig['externalUrl']
-                : null;
-          } catch (e) {
-            flt.debugPrint("[DRIFT] No config file");
-          }
-          final ConfigDBO newConfig = ConfigDBO(
-            id: 1,
-            internalUrl: internalUrl,
-            externalUrl: externalUrl,
-          );
-          await insertConfig(newConfig);
-        }
-      },
     );
   }
-
-  // CONFIG
-  Future<ConfigDBO?> getConfig() => (select(configs)
-        ..where(
-          (item) => item.id.equals(1),
-        ))
-      .getSingleOrNull();
-  Stream<ConfigDBO> watchConfig() => (select(configs)
-        ..where(
-          (item) => item.id.equals(1),
-        ))
-      .watchSingle();
-
-  Future insertConfig(ConfigDBO config) => into(configs).insert(
-        config,
-        mode: InsertMode.insertOrReplace,
-      );
-  Future updateConfig(ConfigDBO config) => update(configs).replace(config);
-  Future updateConfigDate() => (update(configs)
-            ..where(
-              (item) => item.id.equals(1),
-            ))
-          .write(ConfigsCompanion(
-        lastConnection: Value(DateTime.now()),
-      ));
-  Future deleteConfig(ConfigDBO config) => delete(configs).delete(config);
 
   // STATES
   Future<StateDBO?> getState(String entityId) => (select(states)

@@ -5,7 +5,12 @@ import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
 
 Dio configureDio() {
-  final Dio dio = Dio();
+  BaseOptions options = BaseOptions(
+      receiveDataWhenStatusError: true,
+      connectTimeout: 15 * 1000, // 15 seconds
+      receiveTimeout: 15 * 1000 // 15 seconds
+      );
+  final Dio dio = Dio(options);
   dio.interceptors.add(
     LogInterceptor(
       requestBody: true,
@@ -14,10 +19,8 @@ Dio configureDio() {
   );
 
   if (!kIsWeb) {
-    (dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
-        (HttpClient client) {
-      client.badCertificateCallback =
-          (X509Certificate cert, String host, int port) => true;
+    (dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate = (HttpClient client) {
+      client.badCertificateCallback = (X509Certificate cert, String host, int port) => true;
       return client;
     };
   }
