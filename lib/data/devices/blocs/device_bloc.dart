@@ -7,7 +7,7 @@ import 'package:haponk/data/devices/states/device_state.dart';
 
 class DeviceBloc extends Cubit<DeviceState> {
   final DevicesRepository repository;
-  final int deviceId;
+  final String deviceId;
 
   DeviceBloc({
     required this.repository,
@@ -23,9 +23,7 @@ class DeviceBloc extends Cubit<DeviceState> {
   void init() {
     // Repo stream subscription
     _repoSubscription?.cancel();
-    if (deviceId > 0) {
-      _repoSubscription = repository.watchDevices().listen(_onData);
-    }
+    _repoSubscription = repository.watchDevice(deviceId).listen(_onData);
   }
 
   @override
@@ -35,13 +33,12 @@ class DeviceBloc extends Cubit<DeviceState> {
     return super.close();
   }
 
-  void _onData(List<Device> _data) {
-    final result = _data.where((element) => element.id == deviceId).toList();
+  void _onData(Device? _data) {
 
-    if (result.isNotEmpty) {
+    if (_data != null) {
       emit(
         DeviceState.loaded(
-          device: result.first,
+          device: _data,
         ),
       );
     }

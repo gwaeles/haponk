@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:haponk/core/hive/datasources/boxes_provider.dart';
 import 'package:haponk/data/config/blocs/config_bloc.dart';
 import 'package:haponk/data/config/states/config_state.dart';
 import 'package:haponk/data/connection/notifiers/connection_notifier.dart';
@@ -25,7 +26,8 @@ class AppNavigationPage extends StatelessWidget {
         providers: [
           Provider(
             create: (context) => DevicesRepository(
-              db: context.read(),
+              deviceListBox: openDeviceListBox,
+              deviceBox: openDeviceBox,
             ),
           ),
           BlocProvider<ConfigBloc>(

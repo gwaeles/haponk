@@ -31,7 +31,7 @@ class DeviceListItemAutomation extends DeviceListItem {
             onTap: (provider) => provider.callService(
               domain: "automation",
               service: "trigger",
-              entityId: device.entityId ?? '',
+              entityId: device.id,
             ),
           ),
         ],

@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:haponk/core/hass/models/constants.dart';
+import 'package:haponk/data/devices/entities/device.dart';
 import 'package:haponk/data/devices/repositories/devices_repository.dart';
 import 'package:haponk/data/devices/states/device_types_state.dart';
 
@@ -23,7 +23,7 @@ class DeviceTypesBloc extends Cubit<DeviceTypesState> {
   void _init() {
     // Repo stream subscription
     _repoSubscription?.cancel();
-    _repoSubscription = repository.watchDeviceTypes().listen(_onData);
+    _repoSubscription = repository.watchDevices().listen(_onData);
   }
 
   @override
@@ -33,10 +33,10 @@ class DeviceTypesBloc extends Cubit<DeviceTypesState> {
     return super.close();
   }
 
-  void _onData(List<DeviceType> data) {
+  void _onData(List<ComparableDevice> data) {
     emit(
       DeviceTypesState.loaded(
-        types: data,
+        types: data.map((e) => e.deviceType).toList(),
       ),
     );
   }

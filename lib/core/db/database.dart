@@ -3,14 +3,12 @@ import 'package:flutter/material.dart' as flt;
 import 'package:haponk/data/tabs/entities/flex_card.dart';
 
 import 'tables/flex_cards.dart';
-import 'tables/states.dart';
 import 'tables/flex_tabs.dart';
 
 part 'database.g.dart';
 
 @DriftDatabase(
   tables: [
-    States,
     FlexTabs,
     FlexCards,
   ],
@@ -30,20 +28,6 @@ class Database extends _$Database {
       },
     );
   }
-
-  // STATES
-  Future<StateDBO?> getState(String entityId) => (select(states)
-        ..where(
-          (item) => item.entityId.equals(entityId),
-        ))
-      .getSingleOrNull();
-  Future insertState(StatesCompanion state) => into(states).insert(
-        state,
-        mode: InsertMode.insertOrReplace,
-      );
-  Future updateState(StateDBO state) => update(states).replace(state);
-
-  Stream<List<StateDBO>> watchStates() => select(states).watch();
 
   Stream<List<FlexTabDBO>> watchTabs() => select(flexTabs).watch();
   Future insertFlexTab(FlexTabsCompanion flexTab) =>

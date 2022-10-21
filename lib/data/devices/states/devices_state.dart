@@ -8,6 +8,6 @@ class DevicesState with _$DevicesState {
   factory DevicesState.idle() = DevicesIdle;
 
   factory DevicesState.loaded({
-    required List<Device> devices,
+    required List<ComparableDevice> devices,
   }) = DevicesLoaded;
 }

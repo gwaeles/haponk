@@ -20,7 +20,7 @@ class DevicesBloc extends Cubit<DevicesState> {
     _init();
   }
 
-  List<Device> _data = [];
+  List<ComparableDevice> _data = [];
   StreamSubscription? _repoSubscription;
   String? _searchText;
   DeviceType? _selectedType;
@@ -52,7 +52,7 @@ class DevicesBloc extends Cubit<DevicesState> {
     return super.close();
   }
 
-  void _onData(List<Device> data) {
+  void _onData(List<ComparableDevice> data) {
     debugPrint('[GARY] DevicesBloc _onData');
     _data = data;
     _onFilterData();

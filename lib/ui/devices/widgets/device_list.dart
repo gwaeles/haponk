@@ -10,7 +10,7 @@ class DeviceList extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<DevicesBloc, DevicesState>(
       builder: (context, state) {
-        final List<Device> devices =
+        final List<ComparableDevice> devices =
             state is DevicesLoaded ? state.devices : [];
 
         return SliverList(
@@ -24,7 +24,7 @@ class DeviceList extends StatelessWidget {
                       height: 1,
                       color: Colors.grey,
                     ),
-                  DeviceListItem.fromDevice(devices[index]),
+                  //DeviceListItem.fromDevice(devices[index]),
                   if (index == (devices.length - 1)) SizedBox(height: 16),
                 ],
               );

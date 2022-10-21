@@ -33,13 +33,3 @@ extension BoolValueExtension on bool {
     return Value<bool>(this);
   }
 }
-
-extension StateTypeExtension on StateDBO {
-  DeviceType? deviceType() {
-    final converter = CustomDeviceTypeConverter();
-
-    String? type = entityId?.substring(0, entityId?.indexOf('.'));
-
-    return converter.fromJson(type);
-  }
-}

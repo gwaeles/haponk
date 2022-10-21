@@ -2,12 +2,12 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:haponk/core/hass/models/constants.dart';
 
 part 'device.freezed.dart';
+part 'device.g.dart';
 
 @freezed
 class Device with _$Device {
   const factory Device({
-    int? id,
-    String? entityId,
+    required String id,
     @Default(DeviceType.LIGHT) DeviceType deviceType,
     String? state,
     DateTime? lastChanged,
@@ -29,4 +29,24 @@ class Device with _$Device {
     int? current,
     int? voltage,
   }) = _Device;
+  const Device._();
+
+  ComparableDevice toComparable() => ComparableDevice(
+        id: id,
+        deviceType: deviceType,
+        friendlyName: friendlyName,
+      );
+
+  factory Device.fromJson(Map<String, dynamic> json) => _$DeviceFromJson(json);
+}
+
+@freezed
+class ComparableDevice with _$ComparableDevice {
+  const factory ComparableDevice({
+    required String id,
+    @Default(DeviceType.LIGHT) DeviceType deviceType,
+    String? friendlyName,
+  }) = _ComparableDevice;
+
+  factory ComparableDevice.fromJson(Map<String, dynamic> json) => _$ComparableDeviceFromJson(json);
 }

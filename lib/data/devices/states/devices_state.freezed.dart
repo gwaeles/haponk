@@ -19,19 +19,19 @@ mixin _$DevicesState {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() idle,
-    required TResult Function(List<Device> devices) loaded,
+    required TResult Function(List<ComparableDevice> devices) loaded,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? idle,
-    TResult Function(List<Device> devices)? loaded,
+    TResult Function(List<ComparableDevice> devices)? loaded,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? idle,
-    TResult Function(List<Device> devices)? loaded,
+    TResult Function(List<ComparableDevice> devices)? loaded,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -113,7 +113,7 @@ class _$DevicesIdle implements DevicesIdle {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() idle,
-    required TResult Function(List<Device> devices) loaded,
+    required TResult Function(List<ComparableDevice> devices) loaded,
   }) {
     return idle();
   }
@@ -122,7 +122,7 @@ class _$DevicesIdle implements DevicesIdle {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? idle,
-    TResult Function(List<Device> devices)? loaded,
+    TResult Function(List<ComparableDevice> devices)? loaded,
   }) {
     return idle?.call();
   }
@@ -131,7 +131,7 @@ class _$DevicesIdle implements DevicesIdle {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? idle,
-    TResult Function(List<Device> devices)? loaded,
+    TResult Function(List<ComparableDevice> devices)? loaded,
     required TResult orElse(),
   }) {
     if (idle != null) {
@@ -181,7 +181,7 @@ abstract class _$$DevicesLoadedCopyWith<$Res> {
   factory _$$DevicesLoadedCopyWith(
           _$DevicesLoaded value, $Res Function(_$DevicesLoaded) then) =
       __$$DevicesLoadedCopyWithImpl<$Res>;
-  $Res call({List<Device> devices});
+  $Res call({List<ComparableDevice> devices});
 }
 
 /// @nodoc
@@ -203,7 +203,7 @@ class __$$DevicesLoadedCopyWithImpl<$Res>
       devices: devices == freezed
           ? _value._devices
           : devices // ignore: cast_nullable_to_non_nullable
-              as List<Device>,
+              as List<ComparableDevice>,
     ));
   }
 }
@@ -211,11 +211,12 @@ class __$$DevicesLoadedCopyWithImpl<$Res>
 /// @nodoc
 
 class _$DevicesLoaded implements DevicesLoaded {
-  _$DevicesLoaded({required final List<Device> devices}) : _devices = devices;
+  _$DevicesLoaded({required final List<ComparableDevice> devices})
+      : _devices = devices;
 
-  final List<Device> _devices;
+  final List<ComparableDevice> _devices;
   @override
-  List<Device> get devices {
+  List<ComparableDevice> get devices {
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_devices);
   }
@@ -246,7 +247,7 @@ class _$DevicesLoaded implements DevicesLoaded {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() idle,
-    required TResult Function(List<Device> devices) loaded,
+    required TResult Function(List<ComparableDevice> devices) loaded,
   }) {
     return loaded(devices);
   }
@@ -255,7 +256,7 @@ class _$DevicesLoaded implements DevicesLoaded {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? idle,
-    TResult Function(List<Device> devices)? loaded,
+    TResult Function(List<ComparableDevice> devices)? loaded,
   }) {
     return loaded?.call(devices);
   }
@@ -264,7 +265,7 @@ class _$DevicesLoaded implements DevicesLoaded {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? idle,
-    TResult Function(List<Device> devices)? loaded,
+    TResult Function(List<ComparableDevice> devices)? loaded,
     required TResult orElse(),
   }) {
     if (loaded != null) {
@@ -306,10 +307,10 @@ class _$DevicesLoaded implements DevicesLoaded {
 }
 
 abstract class DevicesLoaded implements DevicesState {
-  factory DevicesLoaded({required final List<Device> devices}) =
+  factory DevicesLoaded({required final List<ComparableDevice> devices}) =
       _$DevicesLoaded;
 
-  List<Device> get devices;
+  List<ComparableDevice> get devices;
   @JsonKey(ignore: true)
   _$$DevicesLoadedCopyWith<_$DevicesLoaded> get copyWith =>
       throw _privateConstructorUsedError;

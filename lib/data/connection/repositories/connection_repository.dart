@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:haponk/core/db/database.dart';
-import 'package:haponk/core/db/database_extension.dart';
 import 'package:haponk/core/hass/models/constants.dart';
 import 'package:haponk/core/hass/models/events/data_model.dart';
 import 'package:haponk/core/hass/models/events/state_model.dart';
@@ -16,7 +15,6 @@ import 'package:haponk/data/config/entities/config.dart';
 import 'package:haponk/data/connection/datasources/web_socket_service.dart';
 
 import 'package:haponk/data/connection/entities/message.dart';
-import 'package:drift/drift.dart';
 import 'package:rxdart/rxdart.dart';
 
 class ConnectionRepository {
@@ -174,69 +172,69 @@ class ConnectionRepository {
 
   void _onState(ConnectionType connectionType, StateModel state) async {
     if (connectionType == _connectionType && state.entityId != null) {
-      final stateDao = await db.getState(state.entityId!);
+      // final stateDao = await db.getState(state.entityId!);
 
-      if (stateDao == null) {
-        // Create state
-        final StatesCompanion newState = StatesCompanion(
-          entityId: state.entityId!.toValue(),
-          state: state.state?.toValue() ?? Value.absent(),
-          lastChanged: state.lastChanged?.toValue() ?? Value.absent(),
-          lastUpdated: state.lastUpdated?.toValue() ?? Value.absent(),
-          friendlyName:
-              state.attributes?.friendlyName?.toValue() ?? Value.absent(),
-          supportedFeatures:
-              state.attributes?.supportedFeatures?.toValue() ?? Value.absent(),
-          currentPosition:
-              state.attributes?.currentPosition?.toValue() ?? Value.absent(),
-          lastTriggered:
-              state.attributes?.lastTriggered?.toValue() ?? Value.absent(),
-          mode: state.attributes?.mode?.toValue() ?? Value.absent(),
-          temperature:
-              state.attributes?.temperature?.toValue() ?? Value.absent(),
-          humidity: state.attributes?.humidity?.toValue() ?? Value.absent(),
-          pressure: state.attributes?.pressure?.toValue() ?? Value.absent(),
-          windBearing:
-              state.attributes?.windBearing?.toValue() ?? Value.absent(),
-          windSpeed: state.attributes?.windSpeed?.toValue() ?? Value.absent(),
-          attribution:
-              state.attributes?.attribution?.toValue() ?? Value.absent(),
-          isOn: state.attributes?.isOn?.toValue() ?? Value.absent(),
-          deviceClass:
-              state.attributes?.deviceClass?.toValue() ?? Value.absent(),
-          unitOfMeasurement:
-              state.attributes?.unitOfMeasurement?.toValue() ?? Value.absent(),
-          current: state.attributes?.current?.toValue() ?? Value.absent(),
-          voltage: state.attributes?.voltage?.toValue() ?? Value.absent(),
-        );
+      // if (stateDao == null) {
+      //   // Create state
+      //   final StatesCompanion newState = StatesCompanion(
+      //     entityId: state.entityId!.toValue(),
+      //     state: state.state?.toValue() ?? Value.absent(),
+      //     lastChanged: state.lastChanged?.toValue() ?? Value.absent(),
+      //     lastUpdated: state.lastUpdated?.toValue() ?? Value.absent(),
+      //     friendlyName:
+      //         state.attributes?.friendlyName?.toValue() ?? Value.absent(),
+      //     supportedFeatures:
+      //         state.attributes?.supportedFeatures?.toValue() ?? Value.absent(),
+      //     currentPosition:
+      //         state.attributes?.currentPosition?.toValue() ?? Value.absent(),
+      //     lastTriggered:
+      //         state.attributes?.lastTriggered?.toValue() ?? Value.absent(),
+      //     mode: state.attributes?.mode?.toValue() ?? Value.absent(),
+      //     temperature:
+      //         state.attributes?.temperature?.toValue() ?? Value.absent(),
+      //     humidity: state.attributes?.humidity?.toValue() ?? Value.absent(),
+      //     pressure: state.attributes?.pressure?.toValue() ?? Value.absent(),
+      //     windBearing:
+      //         state.attributes?.windBearing?.toValue() ?? Value.absent(),
+      //     windSpeed: state.attributes?.windSpeed?.toValue() ?? Value.absent(),
+      //     attribution:
+      //         state.attributes?.attribution?.toValue() ?? Value.absent(),
+      //     isOn: state.attributes?.isOn?.toValue() ?? Value.absent(),
+      //     deviceClass:
+      //         state.attributes?.deviceClass?.toValue() ?? Value.absent(),
+      //     unitOfMeasurement:
+      //         state.attributes?.unitOfMeasurement?.toValue() ?? Value.absent(),
+      //     current: state.attributes?.current?.toValue() ?? Value.absent(),
+      //     voltage: state.attributes?.voltage?.toValue() ?? Value.absent(),
+      //   );
 
-        await db.insertState(newState);
-      } else {
-        // Update state
-        final StateDBO updatedState = stateDao.copyWith(
-          state: Value(state.state),
-          lastChanged: Value(state.lastChanged),
-          lastUpdated: Value(state.lastUpdated),
-          friendlyName: Value(state.attributes?.friendlyName),
-          supportedFeatures: Value(state.attributes?.supportedFeatures),
-          currentPosition: Value(state.attributes?.currentPosition),
-          lastTriggered: Value(state.attributes?.lastTriggered),
-          mode: Value(state.attributes?.mode),
-          temperature: Value(state.attributes?.temperature),
-          humidity: Value(state.attributes?.humidity),
-          pressure: Value(state.attributes?.pressure),
-          windBearing: Value(state.attributes?.windBearing),
-          windSpeed: Value(state.attributes?.windSpeed),
-          attribution: Value(state.attributes?.attribution),
-          isOn: Value(state.attributes?.isOn),
-          deviceClass: Value(state.attributes?.deviceClass),
-          unitOfMeasurement: Value(state.attributes?.unitOfMeasurement),
-          current: Value(state.attributes?.current),
-          voltage: Value(state.attributes?.voltage),
-        );
+      //   await db.insertState(newState);
+      // } else {
+      //   // Update state
+      //   final StateDBO updatedState = stateDao.copyWith(
+      //     state: Value(state.state),
+      //     lastChanged: Value(state.lastChanged),
+      //     lastUpdated: Value(state.lastUpdated),
+      //     friendlyName: Value(state.attributes?.friendlyName),
+      //     supportedFeatures: Value(state.attributes?.supportedFeatures),
+      //     currentPosition: Value(state.attributes?.currentPosition),
+      //     lastTriggered: Value(state.attributes?.lastTriggered),
+      //     mode: Value(state.attributes?.mode),
+      //     temperature: Value(state.attributes?.temperature),
+      //     humidity: Value(state.attributes?.humidity),
+      //     pressure: Value(state.attributes?.pressure),
+      //     windBearing: Value(state.attributes?.windBearing),
+      //     windSpeed: Value(state.attributes?.windSpeed),
+      //     attribution: Value(state.attributes?.attribution),
+      //     isOn: Value(state.attributes?.isOn),
+      //     deviceClass: Value(state.attributes?.deviceClass),
+      //     unitOfMeasurement: Value(state.attributes?.unitOfMeasurement),
+      //     current: Value(state.attributes?.current),
+      //     voltage: Value(state.attributes?.voltage),
+      //   );
 
-        await db.updateState(updatedState);
-      }
+      //   await db.updateState(updatedState);
+      // }
     }
   }
 

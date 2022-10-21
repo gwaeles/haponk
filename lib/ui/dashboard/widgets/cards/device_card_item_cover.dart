@@ -57,7 +57,7 @@ class DeviceCardItemCover extends DeviceCardItem {
               : (provider) => provider.callService(
                     domain: "cover",
                     service: "open_cover",
-                    entityId: device.entityId ?? '',
+                    entityId: device.id,
                   ),
         ),
         SizedBox(width: 4),
@@ -66,7 +66,7 @@ class DeviceCardItemCover extends DeviceCardItem {
           onTap: (provider) => provider.callService(
             domain: "cover",
             service: "stop_cover",
-            entityId: device.entityId ?? '',
+            entityId: device.id,
           ),
         ),
         SizedBox(width: 4),
@@ -77,7 +77,7 @@ class DeviceCardItemCover extends DeviceCardItem {
               : (provider) => provider.callService(
                     domain: "cover",
                     service: "close_cover",
-                    entityId: device.entityId ?? '',
+                    entityId: device.id,
                   ),
         ),
       ],

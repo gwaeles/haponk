@@ -14,10 +14,13 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
+Device _$DeviceFromJson(Map<String, dynamic> json) {
+  return _Device.fromJson(json);
+}
+
 /// @nodoc
 mixin _$Device {
-  int? get id => throw _privateConstructorUsedError;
-  String? get entityId => throw _privateConstructorUsedError;
+  String get id => throw _privateConstructorUsedError;
   DeviceType get deviceType => throw _privateConstructorUsedError;
   String? get state => throw _privateConstructorUsedError;
   DateTime? get lastChanged => throw _privateConstructorUsedError;
@@ -39,6 +42,7 @@ mixin _$Device {
   int? get current => throw _privateConstructorUsedError;
   int? get voltage => throw _privateConstructorUsedError;
 
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
   $DeviceCopyWith<Device> get copyWith => throw _privateConstructorUsedError;
 }
@@ -48,8 +52,7 @@ abstract class $DeviceCopyWith<$Res> {
   factory $DeviceCopyWith(Device value, $Res Function(Device) then) =
       _$DeviceCopyWithImpl<$Res>;
   $Res call(
-      {int? id,
-      String? entityId,
+      {String id,
       DeviceType deviceType,
       String? state,
       DateTime? lastChanged,
@@ -83,7 +86,6 @@ class _$DeviceCopyWithImpl<$Res> implements $DeviceCopyWith<$Res> {
   @override
   $Res call({
     Object? id = freezed,
-    Object? entityId = freezed,
     Object? deviceType = freezed,
     Object? state = freezed,
     Object? lastChanged = freezed,
@@ -109,11 +111,7 @@ class _$DeviceCopyWithImpl<$Res> implements $DeviceCopyWith<$Res> {
       id: id == freezed
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-              as int?,
-      entityId: entityId == freezed
-          ? _value.entityId
-          : entityId // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as String,
       deviceType: deviceType == freezed
           ? _value.deviceType
           : deviceType // ignore: cast_nullable_to_non_nullable
@@ -204,8 +202,7 @@ abstract class _$$_DeviceCopyWith<$Res> implements $DeviceCopyWith<$Res> {
       __$$_DeviceCopyWithImpl<$Res>;
   @override
   $Res call(
-      {int? id,
-      String? entityId,
+      {String id,
       DeviceType deviceType,
       String? state,
       DateTime? lastChanged,
@@ -240,7 +237,6 @@ class __$$_DeviceCopyWithImpl<$Res> extends _$DeviceCopyWithImpl<$Res>
   @override
   $Res call({
     Object? id = freezed,
-    Object? entityId = freezed,
     Object? deviceType = freezed,
     Object? state = freezed,
     Object? lastChanged = freezed,
@@ -266,11 +262,7 @@ class __$$_DeviceCopyWithImpl<$Res> extends _$DeviceCopyWithImpl<$Res>
       id: id == freezed
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-              as int?,
-      entityId: entityId == freezed
-          ? _value.entityId
-          : entityId // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as String,
       deviceType: deviceType == freezed
           ? _value.deviceType
           : deviceType // ignore: cast_nullable_to_non_nullable
@@ -356,11 +348,10 @@ class __$$_DeviceCopyWithImpl<$Res> extends _$DeviceCopyWithImpl<$Res>
 }
 
 /// @nodoc
-
-class _$_Device implements _Device {
+@JsonSerializable()
+class _$_Device extends _Device {
   const _$_Device(
-      {this.id,
-      this.entityId,
+      {required this.id,
       this.deviceType = DeviceType.LIGHT,
       this.state,
       this.lastChanged,
@@ -380,12 +371,14 @@ class _$_Device implements _Device {
       this.deviceClass,
       this.unitOfMeasurement,
       this.current,
-      this.voltage});
+      this.voltage})
+      : super._();
+
+  factory _$_Device.fromJson(Map<String, dynamic> json) =>
+      _$$_DeviceFromJson(json);
 
   @override
-  final int? id;
-  @override
-  final String? entityId;
+  final String id;
   @override
   @JsonKey()
   final DeviceType deviceType;
@@ -430,7 +423,7 @@ class _$_Device implements _Device {
 
   @override
   String toString() {
-    return 'Device(id: $id, entityId: $entityId, deviceType: $deviceType, state: $state, lastChanged: $lastChanged, lastUpdated: $lastUpdated, friendlyName: $friendlyName, supportedFeatures: $supportedFeatures, currentPosition: $currentPosition, lastTriggered: $lastTriggered, mode: $mode, temperature: $temperature, humidity: $humidity, pressure: $pressure, windBearing: $windBearing, windSpeed: $windSpeed, attribution: $attribution, isOn: $isOn, deviceClass: $deviceClass, unitOfMeasurement: $unitOfMeasurement, current: $current, voltage: $voltage)';
+    return 'Device(id: $id, deviceType: $deviceType, state: $state, lastChanged: $lastChanged, lastUpdated: $lastUpdated, friendlyName: $friendlyName, supportedFeatures: $supportedFeatures, currentPosition: $currentPosition, lastTriggered: $lastTriggered, mode: $mode, temperature: $temperature, humidity: $humidity, pressure: $pressure, windBearing: $windBearing, windSpeed: $windSpeed, attribution: $attribution, isOn: $isOn, deviceClass: $deviceClass, unitOfMeasurement: $unitOfMeasurement, current: $current, voltage: $voltage)';
   }
 
   @override
@@ -439,7 +432,6 @@ class _$_Device implements _Device {
         (other.runtimeType == runtimeType &&
             other is _$_Device &&
             const DeepCollectionEquality().equals(other.id, id) &&
-            const DeepCollectionEquality().equals(other.entityId, entityId) &&
             const DeepCollectionEquality()
                 .equals(other.deviceType, deviceType) &&
             const DeepCollectionEquality().equals(other.state, state) &&
@@ -474,11 +466,11 @@ class _$_Device implements _Device {
             const DeepCollectionEquality().equals(other.voltage, voltage));
   }
 
+  @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hashAll([
         runtimeType,
         const DeepCollectionEquality().hash(id),
-        const DeepCollectionEquality().hash(entityId),
         const DeepCollectionEquality().hash(deviceType),
         const DeepCollectionEquality().hash(state),
         const DeepCollectionEquality().hash(lastChanged),
@@ -505,12 +497,18 @@ class _$_Device implements _Device {
   @override
   _$$_DeviceCopyWith<_$_Device> get copyWith =>
       __$$_DeviceCopyWithImpl<_$_Device>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$_DeviceToJson(
+      this,
+    );
+  }
 }
 
-abstract class _Device implements Device {
+abstract class _Device extends Device {
   const factory _Device(
-      {final int? id,
-      final String? entityId,
+      {required final String id,
       final DeviceType deviceType,
       final String? state,
       final DateTime? lastChanged,
@@ -531,11 +529,12 @@ abstract class _Device implements Device {
       final String? unitOfMeasurement,
       final int? current,
       final int? voltage}) = _$_Device;
+  const _Device._() : super._();
+
+  factory _Device.fromJson(Map<String, dynamic> json) = _$_Device.fromJson;
 
   @override
-  int? get id;
-  @override
-  String? get entityId;
+  String get id;
   @override
   DeviceType get deviceType;
   @override
@@ -579,5 +578,183 @@ abstract class _Device implements Device {
   @override
   @JsonKey(ignore: true)
   _$$_DeviceCopyWith<_$_Device> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+ComparableDevice _$ComparableDeviceFromJson(Map<String, dynamic> json) {
+  return _ComparableDevice.fromJson(json);
+}
+
+/// @nodoc
+mixin _$ComparableDevice {
+  String get id => throw _privateConstructorUsedError;
+  DeviceType get deviceType => throw _privateConstructorUsedError;
+  String? get friendlyName => throw _privateConstructorUsedError;
+
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  @JsonKey(ignore: true)
+  $ComparableDeviceCopyWith<ComparableDevice> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $ComparableDeviceCopyWith<$Res> {
+  factory $ComparableDeviceCopyWith(
+          ComparableDevice value, $Res Function(ComparableDevice) then) =
+      _$ComparableDeviceCopyWithImpl<$Res>;
+  $Res call({String id, DeviceType deviceType, String? friendlyName});
+}
+
+/// @nodoc
+class _$ComparableDeviceCopyWithImpl<$Res>
+    implements $ComparableDeviceCopyWith<$Res> {
+  _$ComparableDeviceCopyWithImpl(this._value, this._then);
+
+  final ComparableDevice _value;
+  // ignore: unused_field
+  final $Res Function(ComparableDevice) _then;
+
+  @override
+  $Res call({
+    Object? id = freezed,
+    Object? deviceType = freezed,
+    Object? friendlyName = freezed,
+  }) {
+    return _then(_value.copyWith(
+      id: id == freezed
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String,
+      deviceType: deviceType == freezed
+          ? _value.deviceType
+          : deviceType // ignore: cast_nullable_to_non_nullable
+              as DeviceType,
+      friendlyName: friendlyName == freezed
+          ? _value.friendlyName
+          : friendlyName // ignore: cast_nullable_to_non_nullable
+              as String?,
+    ));
+  }
+}
+
+/// @nodoc
+abstract class _$$_ComparableDeviceCopyWith<$Res>
+    implements $ComparableDeviceCopyWith<$Res> {
+  factory _$$_ComparableDeviceCopyWith(
+          _$_ComparableDevice value, $Res Function(_$_ComparableDevice) then) =
+      __$$_ComparableDeviceCopyWithImpl<$Res>;
+  @override
+  $Res call({String id, DeviceType deviceType, String? friendlyName});
+}
+
+/// @nodoc
+class __$$_ComparableDeviceCopyWithImpl<$Res>
+    extends _$ComparableDeviceCopyWithImpl<$Res>
+    implements _$$_ComparableDeviceCopyWith<$Res> {
+  __$$_ComparableDeviceCopyWithImpl(
+      _$_ComparableDevice _value, $Res Function(_$_ComparableDevice) _then)
+      : super(_value, (v) => _then(v as _$_ComparableDevice));
+
+  @override
+  _$_ComparableDevice get _value => super._value as _$_ComparableDevice;
+
+  @override
+  $Res call({
+    Object? id = freezed,
+    Object? deviceType = freezed,
+    Object? friendlyName = freezed,
+  }) {
+    return _then(_$_ComparableDevice(
+      id: id == freezed
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String,
+      deviceType: deviceType == freezed
+          ? _value.deviceType
+          : deviceType // ignore: cast_nullable_to_non_nullable
+              as DeviceType,
+      friendlyName: friendlyName == freezed
+          ? _value.friendlyName
+          : friendlyName // ignore: cast_nullable_to_non_nullable
+              as String?,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$_ComparableDevice implements _ComparableDevice {
+  const _$_ComparableDevice(
+      {required this.id,
+      this.deviceType = DeviceType.LIGHT,
+      this.friendlyName});
+
+  factory _$_ComparableDevice.fromJson(Map<String, dynamic> json) =>
+      _$$_ComparableDeviceFromJson(json);
+
+  @override
+  final String id;
+  @override
+  @JsonKey()
+  final DeviceType deviceType;
+  @override
+  final String? friendlyName;
+
+  @override
+  String toString() {
+    return 'ComparableDevice(id: $id, deviceType: $deviceType, friendlyName: $friendlyName)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$_ComparableDevice &&
+            const DeepCollectionEquality().equals(other.id, id) &&
+            const DeepCollectionEquality()
+                .equals(other.deviceType, deviceType) &&
+            const DeepCollectionEquality()
+                .equals(other.friendlyName, friendlyName));
+  }
+
+  @JsonKey(ignore: true)
+  @override
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(id),
+      const DeepCollectionEquality().hash(deviceType),
+      const DeepCollectionEquality().hash(friendlyName));
+
+  @JsonKey(ignore: true)
+  @override
+  _$$_ComparableDeviceCopyWith<_$_ComparableDevice> get copyWith =>
+      __$$_ComparableDeviceCopyWithImpl<_$_ComparableDevice>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$_ComparableDeviceToJson(
+      this,
+    );
+  }
+}
+
+abstract class _ComparableDevice implements ComparableDevice {
+  const factory _ComparableDevice(
+      {required final String id,
+      final DeviceType deviceType,
+      final String? friendlyName}) = _$_ComparableDevice;
+
+  factory _ComparableDevice.fromJson(Map<String, dynamic> json) =
+      _$_ComparableDevice.fromJson;
+
+  @override
+  String get id;
+  @override
+  DeviceType get deviceType;
+  @override
+  String? get friendlyName;
+  @override
+  @JsonKey(ignore: true)
+  _$$_ComparableDeviceCopyWith<_$_ComparableDevice> get copyWith =>
       throw _privateConstructorUsedError;
 }

@@ -64,6 +64,34 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "9.1.0"
+  bonsoir:
+    dependency: "direct main"
+    description:
+      name: bonsoir
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.0"
+  bonsoir_android:
+    dependency: transitive
+    description:
+      name: bonsoir_android
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.0+1"
+  bonsoir_darwin:
+    dependency: transitive
+    description:
+      name: bonsoir_darwin
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.0+3"
+  bonsoir_platform_interface:
+    dependency: transitive
+    description:
+      name: bonsoir_platform_interface
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.0+1"
   boolean_selector:
     dependency: transitive
     description:

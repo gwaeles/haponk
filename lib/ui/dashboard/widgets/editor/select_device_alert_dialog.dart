@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:haponk/core/hass/models/constants.dart';
+import 'package:haponk/core/hive/datasources/boxes_provider.dart';
 import 'package:haponk/core/themes/app_theme.dart';
 import 'package:haponk/data/devices/blocs/device_types_bloc.dart';
 import 'package:haponk/data/devices/blocs/devices_bloc.dart';
@@ -24,7 +25,8 @@ class SelectDeviceAlertDialog extends StatelessWidget {
       providers: [
         Provider(
           create: (context) => DevicesRepository(
-            db: context.read(),
+            deviceListBox: openDeviceListBox,
+            deviceBox: openDeviceBox,
           ),
         ),
         ChangeNotifierProvider(
@@ -155,14 +157,14 @@ class _DeviceListView extends StatelessWidget {
       child: SingleChildScrollView(
         child: BlocBuilder<DevicesBloc, DevicesState>(
           builder: (context, state) {
-            final List<Device> devices =
+            final List<ComparableDevice> devices =
                 state is DevicesLoaded ? state.devices : [];
             final children = <Widget>[];
 
             if (devices.length == 0) {
               children.add(CircularProgressIndicator());
             } else {
-              for (Device device in devices) {
+              for (ComparableDevice device in devices) {
                 children.add(
                   Container(
                     color: Colors.white12,

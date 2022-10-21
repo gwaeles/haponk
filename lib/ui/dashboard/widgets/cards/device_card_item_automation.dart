@@ -37,7 +37,7 @@ class DeviceCardItemAutomation extends DeviceCardItem {
             onTap: (provider) => provider.callService(
               domain: "automation",
               service: "trigger",
-              entityId: device.entityId ?? '',
+              entityId: device.id,
             ),
           ),
         ],

@@ -51,7 +51,7 @@ class DeviceListItemCover extends DeviceListItem {
               : (provider) => provider.callService(
                     domain: "cover",
                     service: "open_cover",
-                    entityId: device.entityId ?? '',
+                    entityId: device.id,
                   ),
         ),
         SizedBox(width: 4),
@@ -60,7 +60,7 @@ class DeviceListItemCover extends DeviceListItem {
           onTap: (provider) => provider.callService(
             domain: "cover",
             service: "stop_cover",
-            entityId: device.entityId ?? '',
+            entityId: device.id,
           ),
         ),
         SizedBox(width: 4),
@@ -71,7 +71,7 @@ class DeviceListItemCover extends DeviceListItem {
               : (provider) => provider.callService(
                     domain: "cover",
                     service: "close_cover",
-                    entityId: device.entityId ?? '',
+                    entityId: device.id,
                   ),
         ),
       ],

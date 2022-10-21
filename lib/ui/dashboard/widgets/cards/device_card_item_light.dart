@@ -32,7 +32,7 @@ class DeviceCardItemLight extends DeviceCardItem {
           onTap: () => provider.callService(
             domain: "light",
             service: "toggle",
-            entityId: device.entityId ?? '',
+            entityId: device.id,
           ),
         );
       },
@@ -52,7 +52,7 @@ class DeviceCardItemLight extends DeviceCardItem {
             onTap: (provider) => provider.callService(
               domain: "light",
               service: "turn_on",
-              entityId: device.entityId ?? '',
+              entityId: device.id,
             ),
           ),
           SizedBox(width: 4),
@@ -61,7 +61,7 @@ class DeviceCardItemLight extends DeviceCardItem {
             onTap: (provider) => provider.callService(
               domain: "light",
               service: "turn_off",
-              entityId: device.entityId ?? '',
+              entityId: device.id,
             ),
           ),
         ],

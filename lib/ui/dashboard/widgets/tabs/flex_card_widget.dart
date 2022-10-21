@@ -33,7 +33,7 @@ class FlexCardWidget extends StatelessWidget {
     return BlocProvider(
       create: (context) => DeviceBloc(
         repository: context.read(),
-        deviceId: item.card.stateId ?? 0,
+        deviceId: '${item.card.stateId ?? 0}',
       )..init(),
       child: BlocBuilder<DeviceBloc, DeviceState>(
         builder: (context, state) {
@@ -42,9 +42,7 @@ class FlexCardWidget extends StatelessWidget {
             width: item.width,
             height: item.height,
             decoration: BoxDecoration(
-              color: isFake
-                  ? Colors.green
-                  : (device == null ? Colors.pink : Colors.white10),
+              color: isFake ? Colors.green : (device == null ? Colors.pink : Colors.white10),
               border: isSelected
                   ? Border.all(
                       color: Colors.lightBlue.shade200,
@@ -72,8 +70,7 @@ class FlexCardWidget extends StatelessWidget {
                       ),
                       onDragStarted: onDragStarted,
                       onDragEnd: (details) => onDragEnd?.call(),
-                      onDraggableCanceled: (velocity, offset) =>
-                          onDragEnd?.call(),
+                      onDraggableCanceled: (velocity, offset) => onDragEnd?.call(),
                       child: _ItemContent(
                         card: item.card,
                         device: isFake ? null : device,

@@ -1,103 +1,131 @@
 import 'dart:async';
 
-import 'package:haponk/core/db/database.dart';
-import 'package:haponk/core/hass/models/constants.dart';
+import 'package:flutter/material.dart';
+import 'package:haponk/core/hive/datasources/boxes_provider.dart';
 import 'package:haponk/data/devices/entities/device.dart';
-import 'package:haponk/core/db/database_extension.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:rxdart/rxdart.dart';
 
 class DevicesRepository {
-  final Database db;
+  final DeviceListBoxCallback deviceListBox;
+  final DeviceBoxCallback deviceBox;
 
   DevicesRepository({
-    required this.db,
+    required this.deviceListBox,
+    required this.deviceBox,
   });
 
-  BehaviorSubject<List<DeviceType>>? _deviceTypecontroller;
-  BehaviorSubject<List<Device>>? _deviceController;
-  StreamSubscription? _dbSubscription;
+  BehaviorSubject<List<ComparableDevice>>? _deviceListcontroller;
+  final Map<String, BehaviorSubject<Device>> _deviceControllerMap = {};
+  StreamSubscription? _hiveSubscription;
+  final Map<String, StreamSubscription> _hiveSubscriptionMap = {};
 
-  Stream<List<Device>> watchDevices() {
-    print("[GWA] DevicesRepository watch Devices");
+  Stream<List<ComparableDevice>> watchDevices() {
+    print("[GWA] DevicesRepository watch ComparableDevice List");
 
-    if (_deviceController == null) {
-      _deviceController = BehaviorSubject<List<Device>>();
-      _deviceController!.onCancel = () => _onControllerCancelled();
-
-      // DB subscription
-      _dbSubscription?.cancel();
-      _dbSubscription = db.watchStates().listen(_onData);
+    if (_deviceListcontroller == null) {
+      _deviceListcontroller = BehaviorSubject<List<ComparableDevice>>();
+      _deviceListcontroller!.onCancel = () => _onDeviceListControllerCancelled();
     }
 
-    return _deviceController!.stream;
+    if (_hiveSubscription == null) {
+      deviceListBox().then(
+        (box) {
+          _hiveSubscription?.cancel();
+          _hiveSubscription = box.watch(key: deviceListHiveKey).listen(
+                _onDeviceListBoxEvent,
+              );
+          if (_deviceListcontroller?.hasValue != true && box.containsKey(deviceListHiveKey)) {
+            // Push current value on stream
+            _onDeviceListBoxEvent(
+              BoxEvent(
+                deviceListHiveKey,
+                box.get(deviceListHiveKey),
+                false,
+              ),
+            );
+          }
+        },
+      );
+    }
+
+    return _deviceListcontroller!.stream;
   }
 
-  Stream<List<DeviceType>> watchDeviceTypes() {
-    print("[GWA] DevicesRepository watch Device Types");
+  Stream<Device> watchDevice(String deviceId) {
+    print("[GWA] DevicesRepository watch Device deviceId:$deviceId");
 
-    if (_deviceTypecontroller == null) {
-      _deviceTypecontroller = BehaviorSubject<List<DeviceType>>();
-      _deviceTypecontroller!.onCancel = () => _onControllerCancelled();
-
-      // DB subscription
-      _dbSubscription?.cancel();
-      _dbSubscription = db.watchStates().listen(_onData);
+    final controller = _deviceControllerMap[deviceId] ?? BehaviorSubject<Device>();
+    if (!_deviceControllerMap.containsKey(deviceId)) {
+      controller.onCancel = () => _onDeviceControllerCancelled(deviceId);
+      _deviceControllerMap[deviceId] = controller;
     }
 
-    return _deviceTypecontroller!.stream;
+    if (!_hiveSubscriptionMap.containsKey(deviceId)) {
+      deviceListBox().then(
+        (box) {
+          final hiveSubscription = box.watch(key: deviceId).listen(_onDeviceBoxEvent);
+          _hiveSubscriptionMap[deviceId] = hiveSubscription;
+          if (controller.hasValue != true && box.containsKey(deviceId)) {
+            // Push current value on stream
+            _onDeviceBoxEvent(
+              BoxEvent(
+                deviceId,
+                box.get(deviceId),
+                false,
+              ),
+            );
+          }
+        },
+      );
+    }
+
+    return controller.stream;
   }
 
   void dispose() {
     print("[GWA] DevicesRepository dispose");
-    _dbSubscription?.cancel();
-    _dbSubscription = null;
+    _deviceListcontroller?.close();
+    _deviceListcontroller = null;
+    _hiveSubscription?.cancel();
+    _hiveSubscription = null;
   }
 
-  void _onControllerCancelled() {
+  void _onDeviceListControllerCancelled() {
     print(
-        "[GWA] _controller.onCancel, hasListener: ${_deviceTypecontroller?.hasListener} - ${_deviceController?.hasListener}");
-    // Cancel DB subscription on last listener cancel
-    if (_deviceTypecontroller?.hasListener != true &&
-        _deviceController?.hasListener != true) {
-      _deviceTypecontroller?.close();
-      _deviceController?.close();
+        "[GWA] _deviceListcontroller.onCancel, hasListener: ${_deviceListcontroller?.hasListener} - ${_deviceListcontroller?.hasListener}");
+    // Cancel Hive subscription on last listener cancel
+    if (_deviceListcontroller?.hasListener != true) {
       dispose();
     }
   }
 
-  Future<void> _onData(List<StateDBO> data) async {
-    final devices = data
-        .where((element) => element.deviceType() != null)
-        .map(
-          (state) => Device(
-            id: state.id,
-            entityId: state.entityId,
-            deviceType: state.deviceType()!,
-            state: state.state,
-            lastChanged: state.lastChanged,
-            lastUpdated: state.lastUpdated,
-            friendlyName: state.friendlyName,
-            supportedFeatures: state.supportedFeatures,
-            currentPosition: state.currentPosition,
-            lastTriggered: state.lastTriggered,
-            mode: state.mode,
-            temperature: state.temperature,
-            humidity: state.humidity,
-            pressure: state.pressure,
-            windBearing: state.windBearing,
-            windSpeed: state.windSpeed,
-            attribution: state.attribution,
-            isOn: state.isOn,
-            deviceClass: state.deviceClass,
-            unitOfMeasurement: state.unitOfMeasurement,
-            current: state.current,
-            voltage: state.voltage,
-          ),
-        )
-        .toList();
-    final types = devices.map((element) => element.deviceType).toSet().toList();
+  void _onDeviceControllerCancelled(String deviceId) {
+    print(
+        "[GWA] _onDeviceControllerCancelled.onCancel, hasListener: ${_deviceListcontroller?.hasListener} - ${_deviceListcontroller?.hasListener}");
+    final controller = _deviceControllerMap[deviceId];
+    final subscription = _hiveSubscriptionMap[deviceId];
+    // Cancel DB subscription on last listener cancel
+    if (controller?.hasListener != true) {
+      controller?.close();
+      subscription?.cancel();
+      _deviceControllerMap.remove(deviceId);
+      _hiveSubscriptionMap.remove(deviceId);
+    }
+  }
 
-    _deviceTypecontroller?.sink.add(types);
-    _deviceController?.sink.add(devices);
+  Future<void> _onDeviceListBoxEvent(BoxEvent event) async {
+    debugPrint("[DEVICES] _onDeviceListBoxEvent, key: ${event.key} ");
+    if (event.value is List<ComparableDevice>) {
+      _deviceListcontroller?.sink.add(event.value);
+    }
+  }
+
+  Future<void> _onDeviceBoxEvent(BoxEvent event) async {
+    debugPrint("[DEVICE] _onDeviceListBoxEvent, key: ${event.key} ");
+    if (event.value is Device) {
+      final deviceId = (event.value as Device).id;
+      _deviceControllerMap[deviceId]?.sink.add(event.value);
+    }
   }
 }
