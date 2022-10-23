@@ -71,6 +71,7 @@ const _$DeviceTypeEnumMap = {
   DeviceType.SENSOR: 'SENSOR',
   DeviceType.SWITCH: 'SWITCH',
   DeviceType.MEDIA_PLAYER: 'MEDIA_PLAYER',
+  DeviceType.UNKNOWN: 'UNKNOWN',
 };
 
 _$_ComparableDevice _$$_ComparableDeviceFromJson(Map<String, dynamic> json) =>

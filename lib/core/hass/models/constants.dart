@@ -52,6 +52,7 @@ enum DeviceType {
   SENSOR,
   SWITCH,
   MEDIA_PLAYER,
+  UNKNOWN,
 }
 
 extension DeviceTypeToString on DeviceType {
@@ -77,6 +78,8 @@ extension DeviceTypeToString on DeviceType {
         return 'device_type_label_switch'.tr();
       case DeviceType.MEDIA_PLAYER:
         return 'device_type_label_media_player'.tr();
+      case DeviceType.UNKNOWN:
+        return 'device_type_label_binary_sensor'.tr();
     }
   }
 }

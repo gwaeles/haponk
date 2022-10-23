@@ -55,7 +55,8 @@ class AppProviders extends StatelessWidget {
         ),
         Provider(
           create: (context) => ConnectionRepository(
-            db: context.read(),
+            deviceListBox: openDeviceListBox,
+            deviceBox: openDeviceBox,
           ),
         ),
         ChangeNotifierProvider(

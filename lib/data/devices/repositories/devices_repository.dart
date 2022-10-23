@@ -62,7 +62,7 @@ class DevicesRepository {
     }
 
     if (!_hiveSubscriptionMap.containsKey(deviceId)) {
-      deviceListBox().then(
+      deviceBox().then(
         (box) {
           final hiveSubscription = box.watch(key: deviceId).listen(_onDeviceBoxEvent);
           _hiveSubscriptionMap[deviceId] = hiveSubscription;

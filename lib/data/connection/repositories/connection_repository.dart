@@ -1,7 +1,7 @@
 import 'dart:async';
 
-import 'package:haponk/core/db/database.dart';
 import 'package:haponk/core/hass/models/constants.dart';
+import 'package:haponk/core/hass/models/device_type_converter.dart';
 import 'package:haponk/core/hass/models/events/data_model.dart';
 import 'package:haponk/core/hass/models/events/state_model.dart';
 import 'package:haponk/core/hass/models/messages/call_service_message_model.dart';
@@ -11,17 +11,22 @@ import 'package:haponk/core/hass/models/messages/get_states_message_model.dart';
 import 'package:haponk/core/hass/models/messages/send_message_model.dart';
 import 'package:haponk/core/hass/models/messages/subscribe_message_model.dart';
 import 'package:haponk/core/hass/models/messages/unsubscribe_message_model.dart';
+import 'package:haponk/core/hive/datasources/boxes_provider.dart';
 import 'package:haponk/data/config/entities/config.dart';
 import 'package:haponk/data/connection/datasources/web_socket_service.dart';
 
 import 'package:haponk/data/connection/entities/message.dart';
+import 'package:haponk/data/devices/entities/device.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:rxdart/rxdart.dart';
 
 class ConnectionRepository {
-  final Database db;
+  final DeviceListBoxCallback deviceListBox;
+  final DeviceBoxCallback deviceBox;
 
   ConnectionRepository({
-    required this.db,
+    required this.deviceListBox,
+    required this.deviceBox,
   });
 
   StreamController<Message>? _controller;
@@ -82,9 +87,7 @@ class ConnectionRepository {
   }
 
   Future<bool> connect(Config config) async {
-    if (_connectionType != ConnectionType.IDLE ||
-        config.accessToken == null ||
-        config.internalUrl == null) {
+    if (_connectionType != ConnectionType.IDLE || config.accessToken == null || config.internalUrl == null) {
       return false;
     }
 
@@ -97,6 +100,7 @@ class ConnectionRepository {
       url: config.internalUrl!,
       connectionType: ConnectionType.LOCAL,
       onAuthOk: _onAuthOk,
+      onStates: _onStates,
       onState: _onState,
       onInfo: _onInfo,
       onError: _onError,
@@ -109,6 +113,7 @@ class ConnectionRepository {
         url: config.externalUrl!,
         connectionType: ConnectionType.DISTANT,
         onAuthOk: _onAuthOk,
+        onStates: _onStates,
         onState: _onState,
         onInfo: _onInfo,
         onError: _onError,
@@ -170,71 +175,79 @@ class ConnectionRepository {
     }
   }
 
+  void _onStates(ConnectionType connectionType, List<StateModel> states) async {
+    if (connectionType == _connectionType) {
+      // Synchro de tous les states
+      final Box<List<ComparableDevice>> devicesBox = await deviceListBox();
+      final list = states
+          .where(
+            (state) => state.entityId != null,
+          )
+          .map(
+            (state) => ComparableDevice(
+              id: state.entityId!,
+              deviceType: state.deviceType(),
+              friendlyName: state.attributes?.friendlyName,
+            ),
+          )
+          .where(
+            (device) => device.deviceType != DeviceType.UNKNOWN,
+          )
+          .toList();
+
+      devicesBox.put(
+        deviceListHiveKey,
+        list,
+      );
+
+      states.forEach(
+        (state) => _onState(
+          connectionType,
+          state,
+        ),
+      );
+    }
+  }
+
   void _onState(ConnectionType connectionType, StateModel state) async {
-    if (connectionType == _connectionType && state.entityId != null) {
-      // final stateDao = await db.getState(state.entityId!);
+    final DeviceType deviceType = state.deviceType();
+    if (connectionType == _connectionType && state.entityId != null && deviceType != DeviceType.UNKNOWN) {
+      // Synchro d'un state
+      final Box<Device> box = await deviceBox();
 
-      // if (stateDao == null) {
-      //   // Create state
-      //   final StatesCompanion newState = StatesCompanion(
-      //     entityId: state.entityId!.toValue(),
-      //     state: state.state?.toValue() ?? Value.absent(),
-      //     lastChanged: state.lastChanged?.toValue() ?? Value.absent(),
-      //     lastUpdated: state.lastUpdated?.toValue() ?? Value.absent(),
-      //     friendlyName:
-      //         state.attributes?.friendlyName?.toValue() ?? Value.absent(),
-      //     supportedFeatures:
-      //         state.attributes?.supportedFeatures?.toValue() ?? Value.absent(),
-      //     currentPosition:
-      //         state.attributes?.currentPosition?.toValue() ?? Value.absent(),
-      //     lastTriggered:
-      //         state.attributes?.lastTriggered?.toValue() ?? Value.absent(),
-      //     mode: state.attributes?.mode?.toValue() ?? Value.absent(),
-      //     temperature:
-      //         state.attributes?.temperature?.toValue() ?? Value.absent(),
-      //     humidity: state.attributes?.humidity?.toValue() ?? Value.absent(),
-      //     pressure: state.attributes?.pressure?.toValue() ?? Value.absent(),
-      //     windBearing:
-      //         state.attributes?.windBearing?.toValue() ?? Value.absent(),
-      //     windSpeed: state.attributes?.windSpeed?.toValue() ?? Value.absent(),
-      //     attribution:
-      //         state.attributes?.attribution?.toValue() ?? Value.absent(),
-      //     isOn: state.attributes?.isOn?.toValue() ?? Value.absent(),
-      //     deviceClass:
-      //         state.attributes?.deviceClass?.toValue() ?? Value.absent(),
-      //     unitOfMeasurement:
-      //         state.attributes?.unitOfMeasurement?.toValue() ?? Value.absent(),
-      //     current: state.attributes?.current?.toValue() ?? Value.absent(),
-      //     voltage: state.attributes?.voltage?.toValue() ?? Value.absent(),
-      //   );
+      if (state.entityId?.startsWith('light.salle') == true) {
+        print('ok');
+      }
 
-      //   await db.insertState(newState);
-      // } else {
-      //   // Update state
-      //   final StateDBO updatedState = stateDao.copyWith(
-      //     state: Value(state.state),
-      //     lastChanged: Value(state.lastChanged),
-      //     lastUpdated: Value(state.lastUpdated),
-      //     friendlyName: Value(state.attributes?.friendlyName),
-      //     supportedFeatures: Value(state.attributes?.supportedFeatures),
-      //     currentPosition: Value(state.attributes?.currentPosition),
-      //     lastTriggered: Value(state.attributes?.lastTriggered),
-      //     mode: Value(state.attributes?.mode),
-      //     temperature: Value(state.attributes?.temperature),
-      //     humidity: Value(state.attributes?.humidity),
-      //     pressure: Value(state.attributes?.pressure),
-      //     windBearing: Value(state.attributes?.windBearing),
-      //     windSpeed: Value(state.attributes?.windSpeed),
-      //     attribution: Value(state.attributes?.attribution),
-      //     isOn: Value(state.attributes?.isOn),
-      //     deviceClass: Value(state.attributes?.deviceClass),
-      //     unitOfMeasurement: Value(state.attributes?.unitOfMeasurement),
-      //     current: Value(state.attributes?.current),
-      //     voltage: Value(state.attributes?.voltage),
-      //   );
+      final Device storedDevice = await box.get(state.entityId!) ?? Device(id: state.entityId!);
 
-      //   await db.updateState(updatedState);
-      // }
+      final Device updatedDevice = storedDevice.copyWith(
+        deviceType: deviceType,
+        state: state.state,
+        lastChanged: state.lastChanged,
+        lastUpdated: state.lastUpdated,
+        friendlyName: state.attributes?.friendlyName,
+        supportedFeatures: state.attributes?.supportedFeatures,
+        currentPosition: state.attributes?.currentPosition,
+        lastTriggered: state.attributes?.lastTriggered,
+        mode: state.attributes?.mode,
+        temperature: state.attributes?.temperature,
+        humidity: state.attributes?.humidity,
+        pressure: state.attributes?.pressure,
+        windBearing: state.attributes?.windBearing,
+        windSpeed: state.attributes?.windSpeed,
+        attribution: state.attributes?.attribution,
+        isOn: state.attributes?.isOn,
+        deviceClass: state.attributes?.deviceClass,
+        unitOfMeasurement: state.attributes?.unitOfMeasurement,
+        current: state.attributes?.current,
+        voltage: state.attributes?.voltage,
+      );
+
+      box.put(
+        updatedDevice.id,
+        updatedDevice,
+      );
     }
   }
 

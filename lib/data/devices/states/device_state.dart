@@ -5,9 +5,11 @@ part 'device_state.freezed.dart';
 
 @freezed
 class DeviceState with _$DeviceState {
-  factory DeviceState.idle() = DeviceIdle;
+  factory DeviceState.idle([
+    Device? device,
+  ]) = DeviceIdle;
 
   factory DeviceState.loaded({
-    required Device device,
+    Device? device,
   }) = DeviceLoaded;
 }

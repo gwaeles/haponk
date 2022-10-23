@@ -24,7 +24,7 @@ class DeviceList extends StatelessWidget {
                       height: 1,
                       color: Colors.grey,
                     ),
-                  //DeviceListItem.fromDevice(devices[index]),
+                  DeviceListItem.fromDevice(devices[index]),
                   if (index == (devices.length - 1)) SizedBox(height: 16),
                 ],
               );

@@ -22,6 +22,7 @@ class WebSocketService {
   final ConnectionType connectionType;
 
   final Function(ConnectionType connectionType) onAuthOk;
+  final Function(ConnectionType connectionType, List<StateModel> states) onStates;
   final Function(ConnectionType connectionType, StateModel state) onState;
   final Function(ConnectionType connectionType, String message) onInfo;
   final Function(ConnectionType connectionType, Object error) onError;
@@ -37,6 +38,7 @@ class WebSocketService {
     required this.accessToken,
     required this.url,
     required this.onAuthOk,
+    required this.onStates,
     required this.onState,
     required this.onError,
     required this.onDone,
@@ -114,16 +116,16 @@ class WebSocketService {
     } else if (model is AuthInvalidMessageModel) {
       onInfo.call(connectionType, "Invalid Auth");
     } else if (model is CommandResultMessageModel) {
-      onInfo.call(
-          connectionType, "Result id:${model.id}, success:${model.success}");
+      onInfo.call(connectionType, "Result id:${model.id}, success:${model.success}");
 
       if (model.id == _statesId && model.result != null) {
         final result = model.result as List<dynamic>;
         final stateList = result
-            .map((item) => StateModel.fromJson(item as Map<String, dynamic>));
-        for (var state in stateList) {
-          onState.call(connectionType, state);
-        }
+            .map(
+              (item) => StateModel.fromJson(item as Map<String, dynamic>),
+            )
+            .toList();
+        onStates.call(connectionType, stateList);
       }
     } else if (model is EventMessageModel) {
       final entityId = model.event.data?.entityId;

@@ -64,6 +64,11 @@ abstract class DeviceCardItem extends StatelessWidget {
           device: device,
           card: card,
         );
+      case DeviceType.UNKNOWN:
+        return DeviceCardItemSensor(
+          device: device,
+          card: card,
+        );
     }
   }
 

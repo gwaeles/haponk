@@ -9,18 +9,18 @@ import 'list_item_action_icon.dart';
 class DeviceListItemCover extends DeviceListItem {
   const DeviceListItemCover({
     Key? key,
-    required Device device,
-  }) : super(key: key, device: device);
+    required ComparableDevice device,
+  }) : super(key: key, item: device);
 
   @override
-  Widget buildLeading(BuildContext context) {
+  Widget buildLeading(BuildContext context, Device? device) {
     final path = AppTheme.of(context).isDark ? "dark/" : "";
-    final isOpened = device.currentPosition == null
-        ? device.state == "open"
-        : device.currentPosition == 100;
-    final isClosed = device.currentPosition == null
-        ? device.state == "closed"
-        : device.currentPosition == 0;
+    final isOpened = device?.currentPosition == null
+        ? device?.state == "open"
+        : device?.currentPosition == 100;
+    final isClosed = device?.currentPosition == null
+        ? device?.state == "closed"
+        : device?.currentPosition == 0;
 
     return SvgPicture.asset(
       isOpened
@@ -34,13 +34,13 @@ class DeviceListItemCover extends DeviceListItem {
   }
 
   @override
-  Widget get trailing {
-    final isOpened = device.currentPosition == null
-        ? device.state == "open"
-        : device.currentPosition == 100;
-    final isClosed = device.currentPosition == null
-        ? device.state == "closed"
-        : device.currentPosition == 0;
+  Widget? buildTrailing(BuildContext context, Device? device) {
+    final isOpened = device?.currentPosition == null
+        ? device?.state == "open"
+        : device?.currentPosition == 100;
+    final isClosed = device?.currentPosition == null
+        ? device?.state == "closed"
+        : device?.currentPosition == 0;
 
     return Row(
       children: [
@@ -51,7 +51,7 @@ class DeviceListItemCover extends DeviceListItem {
               : (provider) => provider.callService(
                     domain: "cover",
                     service: "open_cover",
-                    entityId: device.id,
+                    entityId: item.id,
                   ),
         ),
         SizedBox(width: 4),
@@ -60,7 +60,7 @@ class DeviceListItemCover extends DeviceListItem {
           onTap: (provider) => provider.callService(
             domain: "cover",
             service: "stop_cover",
-            entityId: device.id,
+            entityId: item.id,
           ),
         ),
         SizedBox(width: 4),
@@ -71,7 +71,7 @@ class DeviceListItemCover extends DeviceListItem {
               : (provider) => provider.callService(
                     domain: "cover",
                     service: "close_cover",
-                    entityId: device.id,
+                    entityId: item.id,
                   ),
         ),
       ],

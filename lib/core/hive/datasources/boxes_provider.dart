@@ -46,7 +46,7 @@ Future<Box<List<ComparableDevice>>> openDeviceListBox() async {
 }
 
 Future<Box<Device>> openDeviceBox() async {
-  if (Hive.isBoxOpen(configBoxName)) {
+  if (Hive.isBoxOpen(deviceBoxName)) {
     return Hive.box(deviceBoxName);
   }
 

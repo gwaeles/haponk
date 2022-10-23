@@ -94,6 +94,8 @@ class AppTheme {
         return assetProcessor;
       case DeviceType.MEDIA_PLAYER:
         return assetProcessor;
+      case DeviceType.UNKNOWN:
+        return assetProcessor;
     }
   }
 }

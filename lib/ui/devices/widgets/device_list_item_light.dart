@@ -11,11 +11,11 @@ import 'list_item_action_icon.dart';
 class DeviceListItemLight extends DeviceListItem {
   const DeviceListItemLight({
     Key? key,
-    required Device device,
-  }) : super(key: key, device: device);
+    required ComparableDevice device,
+  }) : super(key: key, item: device);
 
   @override
-  Widget buildLeading(BuildContext context) {
+  Widget buildLeading(BuildContext context, Device? device) {
     final path = AppTheme.of(context).isDark ? "dark/" : "";
 
     return Consumer<ConnectionNotifier>(
@@ -26,12 +26,12 @@ class DeviceListItemLight extends DeviceListItem {
           onTap: () => provider.callService(
             domain: "light",
             service: "toggle",
-            entityId: device.id,
+            entityId: item.id,
           ),
         );
       },
       child: SvgPicture.asset(
-        device.state == "on"
+        device?.state == "on"
             ? 'assets/images/${path}light_on.svg'
             : 'assets/images/${path}light_off.svg',
         width: 48,
@@ -48,7 +48,7 @@ class DeviceListItemLight extends DeviceListItem {
             onTap: (provider) => provider.callService(
               domain: "light",
               service: "turn_on",
-              entityId: device.id,
+              entityId: item.id,
             ),
           ),
           SizedBox(width: 4),
@@ -57,7 +57,7 @@ class DeviceListItemLight extends DeviceListItem {
             onTap: (provider) => provider.callService(
               domain: "light",
               service: "turn_off",
-              entityId: device.id,
+              entityId: item.id,
             ),
           ),
         ],

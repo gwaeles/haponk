@@ -9,11 +9,11 @@ import 'list_item_action_icon.dart';
 class DeviceListItemAutomation extends DeviceListItem {
   const DeviceListItemAutomation({
     Key? key,
-    required Device device,
-  }) : super(key: key, device: device);
+    required ComparableDevice device,
+  }) : super(key: key, item: device);
 
   @override
-  Widget buildLeading(BuildContext context) {
+  Widget buildLeading(BuildContext context, Device? device) {
     final path = AppTheme.of(context).isDark ? "dark/" : "";
 
     return SvgPicture.asset(
@@ -31,7 +31,7 @@ class DeviceListItemAutomation extends DeviceListItem {
             onTap: (provider) => provider.callService(
               domain: "automation",
               service: "trigger",
-              entityId: device.id,
+              entityId: item.id,
             ),
           ),
         ],

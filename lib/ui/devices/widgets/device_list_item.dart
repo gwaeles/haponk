@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:haponk/core/hass/models/constants.dart';
 import 'package:haponk/core/themes/app_theme.dart';
+import 'package:haponk/data/devices/blocs/device_bloc.dart';
 import 'package:haponk/data/devices/entities/device.dart';
+import 'package:haponk/data/devices/states/device_state.dart';
 
 import 'device_list_item_automation.dart';
 import 'device_list_item_cover.dart';
@@ -9,14 +12,14 @@ import 'device_list_item_light.dart';
 import 'device_list_item_sensor.dart';
 
 abstract class DeviceListItem extends StatelessWidget {
-  final Device device;
+  final ComparableDevice item;
 
   const DeviceListItem({
     Key? key,
-    required this.device,
+    required this.item,
   }) : super(key: key);
 
-  factory DeviceListItem.fromDevice(Device device) {
+  factory DeviceListItem.fromDevice(ComparableDevice device) {
     switch (device.deviceType) {
       case DeviceType.AUTOMATION:
         return DeviceListItemAutomation(device: device);
@@ -34,17 +37,29 @@ abstract class DeviceListItem extends StatelessWidget {
         return DeviceListItemSensor(device: device);
       case DeviceType.MEDIA_PLAYER:
         return DeviceListItemSensor(device: device);
+      case DeviceType.UNKNOWN:
+        return DeviceListItemSensor(device: device);
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return buildChild(context);
+    return BlocProvider(
+      create: (context) => DeviceBloc(
+        repository: context.read(),
+        deviceId: item.id,
+      )..init(),
+      child: BlocBuilder<DeviceBloc, DeviceState>(
+        builder: (context, state) {
+          return buildChild(context, state.device);
+        },
+      ),
+    );
   }
 
-  Widget buildChild(BuildContext context) {
-    final _leading = leading ?? buildLeading(context);
-    final _trailing = trailing ?? buildTrailing(context);
+  Widget buildChild(BuildContext context, Device? device) {
+    final _leading = leading ?? buildLeading(context, device);
+    final _trailing = trailing ?? buildTrailing(context, device);
 
     return InkWell(
       //onTap: () => Navigator.of(context).pushReplacementNamed("/supervisor"),
@@ -64,12 +79,12 @@ abstract class DeviceListItem extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    device.friendlyName ?? '',
+                    device?.friendlyName ?? (item.friendlyName ?? ''),
                     style: AppTheme.of(context).listItemTitleTextStyle,
                   ),
                   SizedBox(height: 2),
                   Text(
-                    "${device.state} ${device.unitOfMeasurement ?? ''}",
+                    "${device?.state ?? ''} ${device?.unitOfMeasurement ?? ''}",
                     style: AppTheme.of(context).listItemSubtitleTextStyle,
                   ),
                 ],
@@ -92,6 +107,6 @@ abstract class DeviceListItem extends StatelessWidget {
   Widget? get leading => null;
   Widget? get trailing => null;
 
-  Widget? buildLeading(BuildContext context) => null;
-  Widget? buildTrailing(BuildContext context) => null;
+  Widget? buildLeading(BuildContext context, Device? device) => null;
+  Widget? buildTrailing(BuildContext context, Device? device) => null;
 }

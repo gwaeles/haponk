@@ -1,14 +1,27 @@
+import 'package:haponk/core/hass/models/events/state_model.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 import 'constants.dart';
+
+
+
+extension StateTypeExtension on StateModel {
+  DeviceType deviceType() {
+    final converter = CustomDeviceTypeConverter();
+
+    String? type = entityId?.substring(0, entityId?.indexOf('.'));
+
+    return converter.fromJson(type);
+  }
+}
 
 class CustomDeviceTypeConverter implements JsonConverter<DeviceType?, String?> {
   const CustomDeviceTypeConverter();
 
   @override
-  DeviceType? fromJson(String? json) {
+  DeviceType fromJson(String? json) {
     if (json == null) {
-      return null;
+      return DeviceType.UNKNOWN;
     }
     switch (json) {
       case 'automation':
@@ -29,7 +42,7 @@ class CustomDeviceTypeConverter implements JsonConverter<DeviceType?, String?> {
         return DeviceType.MEDIA_PLAYER;
     }
 
-    return null;
+    return DeviceType.UNKNOWN;
   }
 
   @override
@@ -54,6 +67,8 @@ class CustomDeviceTypeConverter implements JsonConverter<DeviceType?, String?> {
         return 'switch';
       case DeviceType.MEDIA_PLAYER:
         return 'media_player';
+      case DeviceType.UNKNOWN:
+        return 'unknown';
     }
   }
 }
