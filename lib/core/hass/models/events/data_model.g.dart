@@ -8,6 +8,7 @@ part of 'data_model.dart';
 
 DataModel _$DataModelFromJson(Map<String, dynamic> json) => DataModel(
       entityId: json['entity_id'] as String?,
+      brightness: json['brightness'] as int?,
       oldState: json['old_state'] == null
           ? null
           : StateModel.fromJson(json['old_state'] as Map<String, dynamic>),
@@ -27,6 +28,7 @@ Map<String, dynamic> _$DataModelToJson(DataModel instance) {
     }
   }
 
+  writeNotNull('brightness', instance.brightness);
   writeNotNull('old_state', instance.oldState);
   writeNotNull('new_state', instance.newState);
   return val;

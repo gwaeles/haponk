@@ -84,6 +84,20 @@ extension DeviceTypeToString on DeviceType {
   }
 }
 
+enum ColorMode {
+  unknow,
+  onoff,
+  brightness,
+  @JsonValue("color_temp")
+  colorTemp,
+  hs,
+  rgb,
+  rgbw,
+  rgbww,
+  white,
+  xy,
+}
+
 enum SensorDeviceType {
   OPENING,
   PLUG,

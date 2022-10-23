@@ -215,10 +215,6 @@ class ConnectionRepository {
       // Synchro d'un state
       final Box<Device> box = await deviceBox();
 
-      if (state.entityId?.startsWith('light.salle') == true) {
-        print('ok');
-      }
-
       final Device storedDevice = await box.get(state.entityId!) ?? Device(id: state.entityId!);
 
       final Device updatedDevice = storedDevice.copyWith(
@@ -227,6 +223,11 @@ class ConnectionRepository {
         lastChanged: state.lastChanged,
         lastUpdated: state.lastUpdated,
         friendlyName: state.attributes?.friendlyName,
+        colorMode: state.attributes?.colorMode ??
+            (state.attributes?.supportedColorModes?.isNotEmpty == true
+                ? state.attributes?.supportedColorModes?.first
+                : null),
+        brightness: state.attributes?.brightness,
         supportedFeatures: state.attributes?.supportedFeatures,
         currentPosition: state.attributes?.currentPosition,
         lastTriggered: state.attributes?.lastTriggered,
@@ -290,16 +291,26 @@ class ConnectionRepository {
     _send(GetStatesMessageModel(id: _getNextCommandId()));
   }
 
-  void callService(String domain, String service, String entityId) {
+  void callService(
+    String domain,
+    String service,
+    String entityId, [
+    int? brightness,
+  ]) {
     if (_connectionType == ConnectionType.IDLE && _currentConfig != null) {
       connect(_currentConfig!);
     }
-    _send(CallServiceMessageModel(
-      id: _getNextCommandId(),
-      domain: domain,
-      service: service,
-      serviceData: DataModel(entityId: entityId),
-    ));
+    _send(
+      CallServiceMessageModel(
+        id: _getNextCommandId(),
+        domain: domain,
+        service: service,
+        serviceData: DataModel(
+          entityId: entityId,
+          brightness: brightness,
+        ),
+      ),
+    );
   }
 
   ///

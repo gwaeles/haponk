@@ -19,6 +19,8 @@ _$_Device _$$_DeviceFromJson(Map<String, dynamic> json) => _$_Device(
           ? null
           : DateTime.parse(json['lastUpdated'] as String),
       friendlyName: json['friendlyName'] as String?,
+      colorMode: $enumDecodeNullable(_$ColorModeEnumMap, json['colorMode']),
+      brightness: json['brightness'] as int?,
       supportedFeatures: json['supportedFeatures'] as int?,
       currentPosition: json['currentPosition'] as int?,
       lastTriggered: json['lastTriggered'] == null
@@ -45,6 +47,8 @@ Map<String, dynamic> _$$_DeviceToJson(_$_Device instance) => <String, dynamic>{
       'lastChanged': instance.lastChanged?.toIso8601String(),
       'lastUpdated': instance.lastUpdated?.toIso8601String(),
       'friendlyName': instance.friendlyName,
+      'colorMode': _$ColorModeEnumMap[instance.colorMode],
+      'brightness': instance.brightness,
       'supportedFeatures': instance.supportedFeatures,
       'currentPosition': instance.currentPosition,
       'lastTriggered': instance.lastTriggered?.toIso8601String(),
@@ -72,6 +76,19 @@ const _$DeviceTypeEnumMap = {
   DeviceType.SWITCH: 'SWITCH',
   DeviceType.MEDIA_PLAYER: 'MEDIA_PLAYER',
   DeviceType.UNKNOWN: 'UNKNOWN',
+};
+
+const _$ColorModeEnumMap = {
+  ColorMode.unknow: 'unknow',
+  ColorMode.onoff: 'onoff',
+  ColorMode.brightness: 'brightness',
+  ColorMode.colorTemp: 'color_temp',
+  ColorMode.hs: 'hs',
+  ColorMode.rgb: 'rgb',
+  ColorMode.rgbw: 'rgbw',
+  ColorMode.rgbww: 'rgbww',
+  ColorMode.white: 'white',
+  ColorMode.xy: 'xy',
 };
 
 _$_ComparableDevice _$$_ComparableDeviceFromJson(Map<String, dynamic> json) =>

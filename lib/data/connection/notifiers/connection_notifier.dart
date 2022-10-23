@@ -72,7 +72,13 @@ class ConnectionNotifier extends ValueNotifier<ConnectionType> {
     required String domain,
     required String service,
     required String entityId,
+    int? brightness,
   }) {
-    connectionRepository.callService(domain, service, entityId);
+    connectionRepository.callService(
+      domain,
+      service,
+      entityId,
+      brightness,
+    );
   }
 }

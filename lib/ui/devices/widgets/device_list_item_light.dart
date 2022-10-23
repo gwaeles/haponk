@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:haponk/core/hass/models/constants.dart';
 import 'package:haponk/core/themes/app_theme.dart';
 import 'package:haponk/data/connection/notifiers/connection_notifier.dart';
 import 'package:haponk/data/devices/entities/device.dart';
@@ -13,6 +14,17 @@ class DeviceListItemLight extends DeviceListItem {
     Key? key,
     required ComparableDevice device,
   }) : super(key: key, item: device);
+
+  @override
+  String formatStateValue(Device? device) {
+    final bool isDimmer = device?.colorMode == ColorMode.brightness;
+
+    if (device?.brightness != null) {
+      return device!.brightness.toString();
+    }
+
+    return super.formatStateValue(device);
+  }
 
   @override
   Widget buildLeading(BuildContext context, Device? device) {
@@ -31,9 +43,7 @@ class DeviceListItemLight extends DeviceListItem {
         );
       },
       child: SvgPicture.asset(
-        device?.state == "on"
-            ? 'assets/images/${path}light_on.svg'
-            : 'assets/images/${path}light_off.svg',
+        device?.state == "on" ? 'assets/images/${path}light_on.svg' : 'assets/images/${path}light_off.svg',
         width: 48,
         height: 48,
       ),
@@ -41,8 +51,38 @@ class DeviceListItemLight extends DeviceListItem {
   }
 
   @override
-  Widget get trailing => Row(
-        children: [
+  Widget? buildTrailing(BuildContext context, Device? device) {
+    final bool isDimmer = device?.colorMode == ColorMode.brightness;
+
+    final List<Widget> children = [];
+
+    if (isDimmer) {
+      children.addAll(
+        [
+          ListItemActionIcon(
+            icon: Icons.add,
+            onTap: (provider) => provider.callService(
+              domain: "light",
+              service: "turn_on",
+              brightness: (device?.brightness ?? 235) + 20,
+              entityId: item.id,
+            ),
+          ),
+          SizedBox(width: 4),
+          ListItemActionIcon(
+            icon: Icons.remove,
+            onTap: (provider) => provider.callService(
+              domain: "light",
+              service: "turn_on",
+              brightness: (device?.brightness ?? 20) - 20,
+              entityId: item.id,
+            ),
+          ),
+        ],
+      );
+    } else {
+      children.addAll(
+        [
           ListItemActionIcon(
             icon: Icons.lightbulb,
             onTap: (provider) => provider.callService(
@@ -62,4 +102,10 @@ class DeviceListItemLight extends DeviceListItem {
           ),
         ],
       );
+    }
+
+    return Row(
+      children: children,
+    );
+  }
 }

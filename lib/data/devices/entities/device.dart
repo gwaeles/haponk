@@ -13,6 +13,8 @@ class Device with _$Device {
     DateTime? lastChanged,
     DateTime? lastUpdated,
     String? friendlyName,
+    ColorMode? colorMode,
+    int? brightness,
     int? supportedFeatures,
     int? currentPosition,
     DateTime? lastTriggered,

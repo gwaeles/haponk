@@ -1,3 +1,4 @@
+import 'package:haponk/core/hass/models/constants.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 import 'forecast_model.dart';
@@ -10,6 +11,13 @@ class AttributesModel {
   final String? friendlyName;
   @JsonKey(name: "supported_features")
   final int? supportedFeatures;
+
+  // DIMMER
+  @JsonKey(name: "supported_color_modes")
+  final List<ColorMode>? supportedColorModes;
+  @JsonKey(name: "color_mode")
+  final ColorMode? colorMode;
+  final int? brightness;
 
   // COVER
   @JsonKey(name: "current_position")
@@ -43,6 +51,9 @@ class AttributesModel {
 
   const AttributesModel({
     this.friendlyName,
+    this.supportedColorModes,
+    this.colorMode,
+    this.brightness,
     this.supportedFeatures,
     this.currentPosition,
     this.lastTriggered,

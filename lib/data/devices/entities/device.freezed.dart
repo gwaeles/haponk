@@ -26,6 +26,8 @@ mixin _$Device {
   DateTime? get lastChanged => throw _privateConstructorUsedError;
   DateTime? get lastUpdated => throw _privateConstructorUsedError;
   String? get friendlyName => throw _privateConstructorUsedError;
+  ColorMode? get colorMode => throw _privateConstructorUsedError;
+  int? get brightness => throw _privateConstructorUsedError;
   int? get supportedFeatures => throw _privateConstructorUsedError;
   int? get currentPosition => throw _privateConstructorUsedError;
   DateTime? get lastTriggered => throw _privateConstructorUsedError;
@@ -58,6 +60,8 @@ abstract class $DeviceCopyWith<$Res> {
       DateTime? lastChanged,
       DateTime? lastUpdated,
       String? friendlyName,
+      ColorMode? colorMode,
+      int? brightness,
       int? supportedFeatures,
       int? currentPosition,
       DateTime? lastTriggered,
@@ -91,6 +95,8 @@ class _$DeviceCopyWithImpl<$Res> implements $DeviceCopyWith<$Res> {
     Object? lastChanged = freezed,
     Object? lastUpdated = freezed,
     Object? friendlyName = freezed,
+    Object? colorMode = freezed,
+    Object? brightness = freezed,
     Object? supportedFeatures = freezed,
     Object? currentPosition = freezed,
     Object? lastTriggered = freezed,
@@ -132,6 +138,14 @@ class _$DeviceCopyWithImpl<$Res> implements $DeviceCopyWith<$Res> {
           ? _value.friendlyName
           : friendlyName // ignore: cast_nullable_to_non_nullable
               as String?,
+      colorMode: colorMode == freezed
+          ? _value.colorMode
+          : colorMode // ignore: cast_nullable_to_non_nullable
+              as ColorMode?,
+      brightness: brightness == freezed
+          ? _value.brightness
+          : brightness // ignore: cast_nullable_to_non_nullable
+              as int?,
       supportedFeatures: supportedFeatures == freezed
           ? _value.supportedFeatures
           : supportedFeatures // ignore: cast_nullable_to_non_nullable
@@ -208,6 +222,8 @@ abstract class _$$_DeviceCopyWith<$Res> implements $DeviceCopyWith<$Res> {
       DateTime? lastChanged,
       DateTime? lastUpdated,
       String? friendlyName,
+      ColorMode? colorMode,
+      int? brightness,
       int? supportedFeatures,
       int? currentPosition,
       DateTime? lastTriggered,
@@ -242,6 +258,8 @@ class __$$_DeviceCopyWithImpl<$Res> extends _$DeviceCopyWithImpl<$Res>
     Object? lastChanged = freezed,
     Object? lastUpdated = freezed,
     Object? friendlyName = freezed,
+    Object? colorMode = freezed,
+    Object? brightness = freezed,
     Object? supportedFeatures = freezed,
     Object? currentPosition = freezed,
     Object? lastTriggered = freezed,
@@ -283,6 +301,14 @@ class __$$_DeviceCopyWithImpl<$Res> extends _$DeviceCopyWithImpl<$Res>
           ? _value.friendlyName
           : friendlyName // ignore: cast_nullable_to_non_nullable
               as String?,
+      colorMode: colorMode == freezed
+          ? _value.colorMode
+          : colorMode // ignore: cast_nullable_to_non_nullable
+              as ColorMode?,
+      brightness: brightness == freezed
+          ? _value.brightness
+          : brightness // ignore: cast_nullable_to_non_nullable
+              as int?,
       supportedFeatures: supportedFeatures == freezed
           ? _value.supportedFeatures
           : supportedFeatures // ignore: cast_nullable_to_non_nullable
@@ -357,6 +383,8 @@ class _$_Device extends _Device {
       this.lastChanged,
       this.lastUpdated,
       this.friendlyName,
+      this.colorMode,
+      this.brightness,
       this.supportedFeatures,
       this.currentPosition,
       this.lastTriggered,
@@ -391,6 +419,10 @@ class _$_Device extends _Device {
   @override
   final String? friendlyName;
   @override
+  final ColorMode? colorMode;
+  @override
+  final int? brightness;
+  @override
   final int? supportedFeatures;
   @override
   final int? currentPosition;
@@ -423,7 +455,7 @@ class _$_Device extends _Device {
 
   @override
   String toString() {
-    return 'Device(id: $id, deviceType: $deviceType, state: $state, lastChanged: $lastChanged, lastUpdated: $lastUpdated, friendlyName: $friendlyName, supportedFeatures: $supportedFeatures, currentPosition: $currentPosition, lastTriggered: $lastTriggered, mode: $mode, temperature: $temperature, humidity: $humidity, pressure: $pressure, windBearing: $windBearing, windSpeed: $windSpeed, attribution: $attribution, isOn: $isOn, deviceClass: $deviceClass, unitOfMeasurement: $unitOfMeasurement, current: $current, voltage: $voltage)';
+    return 'Device(id: $id, deviceType: $deviceType, state: $state, lastChanged: $lastChanged, lastUpdated: $lastUpdated, friendlyName: $friendlyName, colorMode: $colorMode, brightness: $brightness, supportedFeatures: $supportedFeatures, currentPosition: $currentPosition, lastTriggered: $lastTriggered, mode: $mode, temperature: $temperature, humidity: $humidity, pressure: $pressure, windBearing: $windBearing, windSpeed: $windSpeed, attribution: $attribution, isOn: $isOn, deviceClass: $deviceClass, unitOfMeasurement: $unitOfMeasurement, current: $current, voltage: $voltage)';
   }
 
   @override
@@ -441,6 +473,9 @@ class _$_Device extends _Device {
                 .equals(other.lastUpdated, lastUpdated) &&
             const DeepCollectionEquality()
                 .equals(other.friendlyName, friendlyName) &&
+            const DeepCollectionEquality().equals(other.colorMode, colorMode) &&
+            const DeepCollectionEquality()
+                .equals(other.brightness, brightness) &&
             const DeepCollectionEquality()
                 .equals(other.supportedFeatures, supportedFeatures) &&
             const DeepCollectionEquality()
@@ -476,6 +511,8 @@ class _$_Device extends _Device {
         const DeepCollectionEquality().hash(lastChanged),
         const DeepCollectionEquality().hash(lastUpdated),
         const DeepCollectionEquality().hash(friendlyName),
+        const DeepCollectionEquality().hash(colorMode),
+        const DeepCollectionEquality().hash(brightness),
         const DeepCollectionEquality().hash(supportedFeatures),
         const DeepCollectionEquality().hash(currentPosition),
         const DeepCollectionEquality().hash(lastTriggered),
@@ -514,6 +551,8 @@ abstract class _Device extends Device {
       final DateTime? lastChanged,
       final DateTime? lastUpdated,
       final String? friendlyName,
+      final ColorMode? colorMode,
+      final int? brightness,
       final int? supportedFeatures,
       final int? currentPosition,
       final DateTime? lastTriggered,
@@ -545,6 +584,10 @@ abstract class _Device extends Device {
   DateTime? get lastUpdated;
   @override
   String? get friendlyName;
+  @override
+  ColorMode? get colorMode;
+  @override
+  int? get brightness;
   @override
   int? get supportedFeatures;
   @override

@@ -8,6 +8,8 @@ part 'data_model.g.dart';
 class DataModel {
   @JsonKey(name: "entity_id")
   final String? entityId;
+  @JsonKey(includeIfNull: false)
+  final int? brightness;
   @JsonKey(name: "old_state", includeIfNull: false)
   final StateModel? oldState;
   @JsonKey(name: "new_state", includeIfNull: false)
@@ -15,6 +17,7 @@ class DataModel {
 
   const DataModel({
     this.entityId,
+    this.brightness,
     this.oldState,
     this.newState,
   });

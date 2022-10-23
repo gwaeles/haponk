@@ -84,7 +84,7 @@ abstract class DeviceListItem extends StatelessWidget {
                   ),
                   SizedBox(height: 2),
                   Text(
-                    "${device?.state ?? ''} ${device?.unitOfMeasurement ?? ''}",
+                    formatStateValue(device),
                     style: AppTheme.of(context).listItemSubtitleTextStyle,
                   ),
                 ],
@@ -106,6 +106,10 @@ abstract class DeviceListItem extends StatelessWidget {
 
   Widget? get leading => null;
   Widget? get trailing => null;
+
+  String formatStateValue(Device? device) {
+    return "${device?.state ?? ''} ${device?.unitOfMeasurement ?? ''}";
+  }
 
   Widget? buildLeading(BuildContext context, Device? device) => null;
   Widget? buildTrailing(BuildContext context, Device? device) => null;
