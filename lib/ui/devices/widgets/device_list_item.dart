@@ -1,60 +1,83 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:haponk/core/hass/models/constants.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:haponk/data/connection/models/constants.dart';
 import 'package:haponk/core/themes/app_theme.dart';
-import 'package:haponk/data/devices/blocs/device_bloc.dart';
-import 'package:haponk/data/devices/entities/device.dart';
-import 'package:haponk/data/devices/states/device_state.dart';
+import 'package:haponk/data/devices/repositories/devices_repository.dart';
+import 'package:haponk/domain/devices/entities/device.dart';
+import 'package:haponk/ui/dashboard/widgets/cards/device_card_item.dart';
 
 import 'device_list_item_automation.dart';
 import 'device_list_item_cover.dart';
 import 'device_list_item_light.dart';
 import 'device_list_item_sensor.dart';
 
-abstract class DeviceListItem extends StatelessWidget {
+abstract class DeviceListItem extends ConsumerWidget {
   final ComparableDevice item;
+  final ServiceCallback callService;
 
   const DeviceListItem({
     Key? key,
     required this.item,
+    required this.callService,
   }) : super(key: key);
 
-  factory DeviceListItem.fromDevice(ComparableDevice device) {
+  factory DeviceListItem.fromDevice(
+    ComparableDevice device,
+    ServiceCallback callService,
+  ) {
     switch (device.deviceType) {
       case DeviceType.AUTOMATION:
-        return DeviceListItemAutomation(device: device);
+        return DeviceListItemAutomation(
+          device: device,
+          callService: callService,
+        );
       case DeviceType.LIGHT:
-        return DeviceListItemLight(device: device);
+        return DeviceListItemLight(
+          device: device,
+          callService: callService,
+        );
       case DeviceType.COVER:
-        return DeviceListItemCover(device: device);
+        return DeviceListItemCover(
+          device: device,
+          callService: callService,
+        );
       case DeviceType.WEATHER:
-        return DeviceListItemSensor(device: device);
+        return DeviceListItemSensor(
+          device: device,
+          callService: callService,
+        );
       case DeviceType.BINARY_SENSOR:
-        return DeviceListItemSensor(device: device);
+        return DeviceListItemSensor(
+          device: device,
+          callService: callService,
+        );
       case DeviceType.SENSOR:
-        return DeviceListItemSensor(device: device);
+        return DeviceListItemSensor(
+          device: device,
+          callService: callService,
+        );
       case DeviceType.SWITCH:
-        return DeviceListItemSensor(device: device);
+        return DeviceListItemSensor(
+          device: device,
+          callService: callService,
+        );
       case DeviceType.MEDIA_PLAYER:
-        return DeviceListItemSensor(device: device);
+        return DeviceListItemSensor(
+          device: device,
+          callService: callService,
+        );
       case DeviceType.UNKNOWN:
-        return DeviceListItemSensor(device: device);
+        return DeviceListItemSensor(
+          device: device,
+          callService: callService,
+        );
     }
   }
 
   @override
-  Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => DeviceBloc(
-        repository: context.read(),
-        deviceId: item.id,
-      )..init(),
-      child: BlocBuilder<DeviceBloc, DeviceState>(
-        builder: (context, state) {
-          return buildChild(context, state.device);
-        },
-      ),
-    );
+  Widget build(BuildContext context, WidgetRef ref) {
+    final Device? device = ref.watch(deviceProvider(item.id));
+    return buildChild(context, device);
   }
 
   Widget buildChild(BuildContext context, Device? device) {

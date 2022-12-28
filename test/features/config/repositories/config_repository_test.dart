@@ -2,10 +2,10 @@ import 'dart:async';
 
 import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:haponk/core/hass/models/events/discovery_info_model.dart';
+import 'package:haponk/data/connection/models/events/discovery_info_model.dart';
 import 'package:haponk/core/network/api_status.dart';
 import 'package:haponk/data/config/repositories/config_repository.dart';
-import 'package:haponk/data/config/entities/config.dart';
+import 'package:haponk/domain/config/entities/config.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:haponk/core/db/database.dart';
 import 'package:haponk/core/db/database_extension.dart';

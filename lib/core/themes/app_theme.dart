@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:haponk/core/hass/models/constants.dart';
+import 'package:haponk/data/connection/models/constants.dart';
 
 import 'colors.dart';
 

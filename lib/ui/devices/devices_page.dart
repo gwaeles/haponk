@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:haponk/data/config/blocs/config_bloc.dart';
-import 'package:haponk/data/devices/blocs/devices_bloc.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:haponk/domain/config/blocs/config_bloc.dart';
+import 'package:provider/provider.dart' as provider;
 
 import 'widgets/device_list.dart';
 import 'widgets/devices_app_bar.dart';
 
-class DevicesPage extends StatelessWidget {
+class DevicesPage extends ConsumerWidget {
   final ScrollController? controller;
 
   const DevicesPage({
@@ -16,19 +16,12 @@ class DevicesPage extends StatelessWidget {
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    return MultiProvider(
+  Widget build(BuildContext context, WidgetRef ref) {
+    return provider.MultiProvider(
         providers: [
-          BlocProvider(
-            create: (context) => DevicesBloc(
-              repository: context.read(),
-            ),
-          ),
           BlocProvider<ConfigBloc>(
             lazy: false,
-            create: (context) => ConfigBloc(
-              repository: context.read(),
-            ),
+            create: (context) => ref.read(configBlocProvider),
           ),
         ],
         child: CustomScrollView(

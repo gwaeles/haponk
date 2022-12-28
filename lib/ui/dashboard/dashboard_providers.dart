@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:haponk/data/tabs/entities/flex_tab.dart';
-import 'package:haponk/data/tabs/providers/tabs_provider.dart';
-import 'package:haponk/data/tabs/repositories/tabs_repository.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:provider/provider.dart' as provider;
 
 import 'providers/editor_controller.dart';
 
-class DashboardProviders extends StatelessWidget {
+class DashboardProviders extends ConsumerWidget {
   final Widget? child;
 
   const DashboardProviders({
@@ -15,25 +13,11 @@ class DashboardProviders extends StatelessWidget {
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    return MultiProvider(
+  Widget build(BuildContext context, WidgetRef ref) {
+    return provider.MultiProvider(
       providers: [
-        ChangeNotifierProvider(
+        provider.ChangeNotifierProvider(
           create: (_) => EditorController(),
-        ),
-        Provider(
-          create: (context) => TabsRepository(
-            db: context.read(),
-          ),
-        ),
-        Provider(
-          create: (context) => TabsProvider(
-            context.read(),
-          ),
-        ),
-        StreamProvider<List<FlexTab>>(
-          initialData: [],
-          create: (context) => context.read<TabsProvider>().tabsStream,
         ),
       ],
       child: child,

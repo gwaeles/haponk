@@ -3,6 +3,10 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+
+final dioProvider = Provider((ref) => configureDio());
 
 Dio configureDio() {
   BaseOptions options = BaseOptions(

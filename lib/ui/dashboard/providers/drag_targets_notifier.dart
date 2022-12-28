@@ -2,10 +2,10 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:haponk/data/tabs/entities/fake_flex_card.dart';
-import 'package:haponk/data/tabs/entities/flex_card.dart';
-import 'package:haponk/data/tabs/entities/positioned_drag_target.dart';
-import 'package:haponk/data/tabs/entities/positioned_flex_card.dart';
+import 'package:haponk/domain/tabs/entities/fake_flex_card.dart';
+import 'package:haponk/domain/tabs/entities/flex_card.dart';
+import 'package:haponk/domain/tabs/entities/positioned_drag_target.dart';
+import 'package:haponk/domain/tabs/entities/positioned_flex_card.dart';
 
 class DragTargetsNotifier extends ChangeNotifier {
   double _layoutWidth = 360;
@@ -96,7 +96,6 @@ class DragTargetsNotifier extends ChangeNotifier {
             FlexCard(
               id: 0,
               tabId: fakeItem.card.tabId,
-              type: "deft",
               position: fakeItem.rowIndex,
             ),
           );
@@ -110,7 +109,6 @@ class DragTargetsNotifier extends ChangeNotifier {
               FlexCard(
                 id: 0,
                 tabId: fakeItem.card.tabId,
-                type: "deft",
                 position: fakeItem.itemIndex,
               ),
             );
@@ -125,7 +123,6 @@ class DragTargetsNotifier extends ChangeNotifier {
               FlexCard(
                 id: 0,
                 tabId: fakeItem.card.tabId,
-                type: "deft",
                 position: fakeItem.rowIndex,
                 children: []
                   ..add(targetCard)
@@ -134,7 +131,6 @@ class DragTargetsNotifier extends ChangeNotifier {
                     FlexCard(
                       id: 0,
                       tabId: fakeItem.card.tabId,
-                      type: "deft",
                       position: fakeItem.itemIndex,
                     ),
                   ),

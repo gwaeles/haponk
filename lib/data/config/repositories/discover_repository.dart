@@ -1,28 +1,16 @@
 import 'package:bonsoir/bonsoir.dart';
-import 'package:rxdart/rxdart.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+final discoverRepositoryProvider = Provider(DiscoverRepository.new);
+final discoveredProvider = StateProvider<String?>((ref) => null);
 
 class DiscoverRepository {
-  BehaviorSubject<String>? _controller;
   BonsoirDiscovery? _discovery;
+  final Ref ref;
+
+  DiscoverRepository(this.ref);
 
   String type = '_home-assistant._tcp';
-
-  Stream<String> watch() {
-    if (_controller == null) {
-      _controller = BehaviorSubject(
-        onCancel: () => _onCancel(),
-      );
-    }
-
-    return _controller!.stream;
-  }
-
-  void _onCancel() {
-    if (_controller?.hasListener == false) {
-      _controller?.close();
-      _controller = null;
-    }
-  }
 
   Future<void> start() async {
     if (_discovery == null) {
@@ -38,7 +26,7 @@ class DiscoverRepository {
           final ip = data['service.ip'];
           final port = data['service.port'];
           final internalUrl = 'https://$ip:$port';
-          _controller?.sink.add(internalUrl);
+          ref.read(discoveredProvider.notifier).state = internalUrl;
           stop();
         }
       } else if (event.type == BonsoirDiscoveryEventType.discoveryServiceLost) {

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:haponk/data/config/blocs/config_bloc.dart';
-import 'package:haponk/data/config/blocs/discover_bloc.dart';
-import 'package:haponk/data/config/repositories/discover_repository.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:haponk/domain/config/blocs/config_bloc.dart';
+import 'package:haponk/domain/config/blocs/discover_bloc.dart';
+import 'package:provider/provider.dart' as provider;
 
-class ConfigProviders extends StatelessWidget {
+class ConfigProviders extends ConsumerWidget {
   final int configId;
   final Widget? child;
 
@@ -16,21 +16,17 @@ class ConfigProviders extends StatelessWidget {
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    return MultiProvider(
+  Widget build(BuildContext context, WidgetRef ref) {
+    return provider.MultiProvider(
       providers: [
-        Provider(
-          create: (context) => DiscoverRepository(),
+        BlocProvider(
+          create: (context) => ref.read(discoverBlocProvider),
         ),
         BlocProvider(
-          create: (context) => DiscoverBloc(
-            repository: context.read(),
-          ),
-        ),
-        BlocProvider(
-          create: (context) => ConfigBloc(
-            repository: context.read(),
-          )..add(ConfigWatch(key: configId)),
+          create: (context) => ref.read(configBlocProvider)
+            ..add(
+              ConfigWatch(key: configId),
+            ),
         ),
       ],
       child: child,

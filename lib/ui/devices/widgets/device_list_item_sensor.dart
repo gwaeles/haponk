@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:haponk/core/hass/models/constants.dart';
+import 'package:haponk/data/connection/models/constants.dart';
 import 'package:haponk/core/themes/app_theme.dart';
-import 'package:haponk/data/devices/entities/device.dart';
+import 'package:haponk/domain/devices/entities/device.dart';
+import 'package:haponk/ui/dashboard/widgets/cards/device_card_item.dart';
 
 import 'device_list_item.dart';
 
@@ -10,7 +11,12 @@ class DeviceListItemSensor extends DeviceListItem {
   const DeviceListItemSensor({
     Key? key,
     required ComparableDevice device,
-  }) : super(key: key, item: device);
+    required ServiceCallback callService,
+  }) : super(
+          key: key,
+          item: device,
+          callService: callService,
+        );
 
   @override
   Widget buildLeading(BuildContext context, Device? device) {

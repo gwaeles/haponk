@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:haponk/core/hive/datasources/boxes_provider.dart';
-import 'package:haponk/data/config/blocs/config_bloc.dart';
-import 'package:haponk/data/config/states/config_state.dart';
-import 'package:haponk/data/connection/notifiers/connection_notifier.dart';
-import 'package:haponk/data/devices/repositories/devices_repository.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:haponk/data/connection/repositories/connection_repository.dart';
+import 'package:haponk/domain/config/blocs/config_bloc.dart';
+import 'package:haponk/domain/config/states/config_state.dart';
+import 'package:haponk/domain/connection/controllers/connection_controller.dart';
+import 'package:haponk/domain/connection/entities/constants.dart';
 import 'package:haponk/ui/app_navigation/providers/bottom_navigation_bar_controller.dart';
 import 'package:haponk/ui/app_navigation/widgets/bottom_navigation_bar_page.dart';
 import 'package:haponk/ui/app_navigation/widgets/fake_list_page.dart';
 import 'package:haponk/ui/dashboard/dashboard_screen.dart';
 import 'package:haponk/ui/devices/devices_page.dart';
-import 'package:provider/provider.dart';
+import 'package:provider/provider.dart' as provider;
 
-class AppNavigationPage extends StatelessWidget {
+class AppNavigationPage extends ConsumerWidget {
   final int configId;
 
   const AppNavigationPage({
@@ -21,32 +22,31 @@ class AppNavigationPage extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
-    return MultiProvider(
+  Widget build(BuildContext context, WidgetRef ref) {
+    return provider.MultiProvider(
         providers: [
-          Provider(
-            create: (context) => DevicesRepository(
-              deviceListBox: openDeviceListBox,
-              deviceBox: openDeviceBox,
-            ),
-          ),
           BlocProvider<ConfigBloc>(
-            create: (context) => ConfigBloc(
-              repository: context.read(),
-            )..add(ConfigWatch(key: configId)),
+            create: (context) => ref.read(configBlocProvider)
+              ..add(
+                ConfigWatch(key: configId),
+              ),
           ),
-          ChangeNotifierProvider(
+          provider.ChangeNotifierProvider(
             create: (context) => BottomNavigationBarController(0),
           )
         ],
         child: BlocListener<ConfigBloc, ConfigState>(
           listener: (context, state) {
             if (state.data != null) {
-              context.read<ConnectionNotifier>().connect(state.data!);
+              ref
+                  .read(
+                    connectionControllerProvider,
+                  )
+                  .connect(state.data!);
             }
           },
           child: Scaffold(
-            body: Consumer(builder: (
+            body: provider.Consumer(builder: (
               context,
               BottomNavigationBarController navController,
               child,
@@ -80,14 +80,7 @@ class AppNavigationPage extends StatelessWidget {
                       ],
                     ),
                   ),
-                  Consumer<ConnectionNotifier>(
-                    builder: (context, notifier, _) {
-                      return Container(
-                        height: 2,
-                        color: notifier.isConnected ? Colors.lightGreen : Colors.red,
-                      );
-                    },
-                  ),
+                  ConnexionStatusLine(),
                   BottomNavigationBar(
                     backgroundColor: Colors.red,
                     unselectedItemColor: Colors.grey,
@@ -119,5 +112,23 @@ class AppNavigationPage extends StatelessWidget {
             }),
           ),
         ));
+  }
+}
+
+class ConnexionStatusLine extends ConsumerWidget {
+  const ConnexionStatusLine({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final ConnectionType connectionType = ref.watch<ConnectionType>(
+      connectionTypeProvider,
+    );
+
+    return Container(
+      height: 2,
+      color: connectionType != ConnectionType.idle
+          ? Colors.lightGreen
+          : Colors.red,
+    );
   }
 }

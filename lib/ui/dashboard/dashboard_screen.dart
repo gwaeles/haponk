@@ -1,55 +1,52 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:haponk/core/themes/app_theme.dart';
-import 'package:haponk/data/tabs/providers/tabs_provider.dart';
-import 'package:haponk/data/tabs/entities/flex_tab.dart';
-import 'package:provider/provider.dart';
+import 'package:haponk/domain/tabs/controllers/tabs_controller.dart';
+import 'package:haponk/domain/tabs/entities/flex_tab.dart';
+import 'package:haponk/domain/tabs/states/flex_tabs_state.dart';
+import 'package:provider/provider.dart' as provider;
 
 import 'dashboard_providers.dart';
 import 'providers/editor_controller.dart';
 import 'widgets/tabs/tab_container.dart';
 import 'widgets/tabs/tabs_app_bar_title.dart';
 
-class DashboardScreen extends StatelessWidget {
+class DashboardScreen extends ConsumerWidget {
   DashboardScreen({Key? key}) : super(key: key);
   final scrollController = ScrollController();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final FlexTabsState state = ref.watch(flexTabsStateProvider);
+
+    final List<Widget> children = [];
+    final List<Widget> tabs = [];
+    if (state.data != null) {
+      for (var i = 0; i < state.data!.length; i++) {
+        final item = state.data![i];
+        children.add(
+          TabContainer(
+            flexTabItem: item,
+          ),
+        );
+        tabs.add(TabWidget(
+          index: i,
+          item: item,
+        ));
+      }
+    }
+
     return DashboardProviders(
-      child: Consumer(
-        builder: (
-          context,
-          List<FlexTab> value,
-          child,
-        ) {
-          final List<Widget> children = [];
-          final List<Widget> tabs = [];
-
-          for (var i = 0; i < value.length; i++) {
-            final item = value[i];
-            children.add(
-              TabContainer(
-                flexTabItem: item,
-              ),
-            );
-            tabs.add(TabWidget(
-              index: i,
-              item: item,
-            ));
-          }
-
-          return TabsWidget(
-            tabs: tabs,
-            children: children,
-          );
-        },
+      child: TabsWidget(
+        tabs: tabs,
+        children: children,
       ),
     );
   }
 }
 
-class TabsWidget extends StatelessWidget {
+class TabsWidget extends ConsumerWidget {
   final List<Widget> children;
   final List<Widget> tabs;
 
@@ -60,7 +57,7 @@ class TabsWidget extends StatelessWidget {
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final editorController = context.watch<EditorController>();
 
     return Material(
@@ -115,8 +112,9 @@ class TabsWidget extends StatelessWidget {
                           if (editorController.isOn)
                             IconButton(
                               icon: Icon(Icons.add),
-                              onPressed: () =>
-                                  context.read<TabsProvider>().createItem(),
+                              onPressed: () => ref
+                                  .read(flexTabsControllerProvider)
+                                  .createItem(label: 'New tab'),
                             ),
                         ],
                       ),
@@ -149,9 +147,9 @@ class TabWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<TabController>.value(
+    return provider.ChangeNotifierProvider<TabController>.value(
       value: DefaultTabController.of(context) as TabController,
-      child: Consumer(
+      child: provider.Consumer(
         builder: (
           context,
           TabController controller,

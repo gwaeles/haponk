@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:haponk/core/themes/app_theme.dart';
-import 'package:haponk/data/devices/entities/device.dart';
+import 'package:haponk/domain/devices/entities/device.dart';
+import 'package:haponk/domain/devices/entities/service_params.dart';
+import 'package:haponk/ui/dashboard/widgets/cards/device_card_item.dart';
 
 import 'device_list_item.dart';
 import 'list_item_action_icon.dart';
@@ -10,7 +12,12 @@ class DeviceListItemAutomation extends DeviceListItem {
   const DeviceListItemAutomation({
     Key? key,
     required ComparableDevice device,
-  }) : super(key: key, item: device);
+    required ServiceCallback callService,
+  }) : super(
+          key: key,
+          item: device,
+          callService: callService,
+        );
 
   @override
   Widget buildLeading(BuildContext context, Device? device) {
@@ -28,10 +35,12 @@ class DeviceListItemAutomation extends DeviceListItem {
         children: [
           ListItemActionIcon(
             icon: Icons.play_arrow,
-            onTap: (provider) => provider.callService(
-              domain: "automation",
-              service: "trigger",
-              entityId: item.id,
+            onTap: () => callService(
+              ServiceParams(
+                domain: "automation",
+                service: "trigger",
+                entityId: item.id,
+              ),
             ),
           ),
         ],

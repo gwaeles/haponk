@@ -1,11 +1,11 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:haponk/data/config/blocs/config_bloc.dart';
-import 'package:haponk/data/config/blocs/discover_bloc.dart';
-import 'package:haponk/data/config/states/config_state.dart';
-import 'package:haponk/data/config/states/discover_state.dart' as disco;
-import 'package:haponk/ui/app/router/app_router.gr.dart';
+import 'package:haponk/domain/config/blocs/config_bloc.dart';
+import 'package:haponk/domain/config/blocs/discover_bloc.dart';
+import 'package:haponk/domain/config/states/config_state.dart';
+import 'package:haponk/domain/config/states/discover_state.dart' as disco;
+import 'package:haponk/router.gr.dart';
 
 import 'config_providers.dart';
 import 'widgets/url_text_field.dart';

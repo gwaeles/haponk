@@ -1,13 +1,14 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:haponk/data/tabs/entities/fake_flex_card.dart';
-import 'package:haponk/data/tabs/entities/flex_card.dart';
-import 'package:haponk/data/tabs/entities/positioned_flex_card.dart';
-import 'package:haponk/data/tabs/providers/cards_provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:haponk/domain/tabs/controllers/cards_controller.dart';
+import 'package:haponk/domain/tabs/entities/fake_flex_card.dart';
+import 'package:haponk/domain/tabs/entities/flex_card.dart';
+import 'package:haponk/domain/tabs/entities/positioned_flex_card.dart';
 import 'package:haponk/ui/dashboard/providers/drag_targets_notifier.dart';
 import 'package:haponk/ui/dashboard/providers/editor_controller.dart';
-import 'package:provider/provider.dart';
+import 'package:provider/provider.dart' as provider;
 
 import '../editor/action_button.dart';
 import 'flex_card_widget.dart';
@@ -23,18 +24,20 @@ class _FlexCardGridResult {
   );
 }
 
-class FlexCardGridBuilder extends StatelessWidget {
+class FlexCardGridBuilder extends ConsumerWidget {
   final VoidCallback? onEditTab;
   final VoidCallback? onDeleteTab;
+  final int tabId;
 
   const FlexCardGridBuilder({
     Key? key,
     this.onEditTab,
     this.onDeleteTab,
+    required this.tabId,
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final dragTargetsNotifier = context.watch<DragTargetsNotifier>();
     final editorController = context.watch<EditorController>();
 
@@ -45,7 +48,7 @@ class FlexCardGridBuilder extends StatelessWidget {
       context,
       dragTargetsNotifier,
       editorController,
-      context.read<CardsProvider>(),
+      ref.read(cardsControllerProvider(tabId)),
     );
 
     return SizedBox(
@@ -61,7 +64,7 @@ class FlexCardGridBuilder extends StatelessWidget {
     BuildContext context,
     DragTargetsNotifier dragTargetsNotifier,
     EditorController editorController,
-    CardsProvider cardsProvider,
+    CardsController cardsProvider,
   ) {
     final List<Widget> children = [];
     final cards = dragTargetsNotifier.positionedFlexCards ?? [];
@@ -137,7 +140,10 @@ class FlexCardGridBuilder extends StatelessWidget {
           uniqueId: 'ADD_BUTTON_ITEM_${cardsProvider.tabId}',
           top: maxHeight + 1,
           width: maxWidth,
-          onPressed: () => addItem(context),
+          onPressed: () => addItem(
+            context,
+            cardsProvider,
+          ),
           icon: Icon(
             Icons.add,
             color: Theme.of(context).focusColor,
@@ -244,6 +250,7 @@ class FlexCardGridBuilder extends StatelessWidget {
           onPressed: () => addChildItemToTheLeft(
             context: context,
             item: _selectedItem!.card,
+            cardsProvider: cardsProvider,
           ),
         ),
       );
@@ -257,6 +264,7 @@ class FlexCardGridBuilder extends StatelessWidget {
           onPressed: () => addChildItemToTheRight(
             context: context,
             item: _selectedItem!.card,
+            cardsProvider: cardsProvider,
           ),
         ),
       );
@@ -269,6 +277,7 @@ class FlexCardGridBuilder extends StatelessWidget {
           onPressed: () => addChildItemAbove(
             context: context,
             item: _selectedItem!.card,
+            cardsProvider: cardsProvider,
           ),
         ),
       );
@@ -282,6 +291,7 @@ class FlexCardGridBuilder extends StatelessWidget {
           onPressed: () => addChildItemBelow(
             context: context,
             item: _selectedItem!.card,
+            cardsProvider: cardsProvider,
           ),
         ),
       );
@@ -290,11 +300,11 @@ class FlexCardGridBuilder extends StatelessWidget {
     return _FlexCardGridResult(maxHeight, children);
   }
 
-  Future<void> addItem(BuildContext context) async {
-    final cardsProvider = context.read<CardsProvider>();
+  Future<void> addItem(
+      BuildContext context, CardsController cardsProvider) async {
     final editorController = context.read<EditorController>();
 
-    final List<int>? deviceIds = await showDialog(
+    final List<String>? deviceIds = await showDialog(
       context: context,
       builder: (context) => SelectDeviceAlertDialog(),
     );
@@ -314,68 +324,72 @@ class FlexCardGridBuilder extends StatelessWidget {
   Future<void> addChildItemToTheLeft({
     required BuildContext context,
     required FlexCard item,
+    required CardsController cardsProvider,
   }) async {
-    final List<int> deviceIds = await showDialog(
+    final List<String>? deviceIds = await showDialog(
       context: context,
       builder: (context) => SelectDeviceAlertDialog(),
     );
 
-    if (deviceIds.length == 1) {
-      context.read<CardsProvider>().addChildItemToTheLeft(
-            deviceId: deviceIds.first,
-            item: item,
-          );
+    if (deviceIds?.length == 1) {
+      cardsProvider.addChildItemToTheLeft(
+        deviceIds: deviceIds!,
+        item: item,
+      );
     }
   }
 
   Future<void> addChildItemToTheRight({
     required BuildContext context,
     required FlexCard item,
+    required CardsController cardsProvider,
   }) async {
-    final List<int> deviceIds = await showDialog(
+    final List<String>? deviceIds = await showDialog(
       context: context,
       builder: (context) => SelectDeviceAlertDialog(),
     );
 
-    if (deviceIds.length == 1) {
-      context.read<CardsProvider>().addChildItemToTheRight(
-            deviceId: deviceIds.first,
-            item: item,
-          );
+    if (deviceIds?.length == 1) {
+      cardsProvider.addChildItemToTheRight(
+        deviceIds: deviceIds!,
+        item: item,
+      );
     }
   }
 
   Future<void> addChildItemAbove({
     required BuildContext context,
     required FlexCard item,
+    required CardsController cardsProvider,
   }) async {
-    final List<int> deviceIds = await showDialog(
+    final List<String>? deviceIds = await showDialog(
       context: context,
       builder: (context) => SelectDeviceAlertDialog(),
     );
 
-    if (deviceIds.length > 0) {
-      context.read<CardsProvider>().addChildItemAbove(
-            deviceIds: deviceIds,
-            item: item,
-          );
+    if (deviceIds?.isNotEmpty == true) {
+      cardsProvider.addChildItemAbove(
+        deviceIds: deviceIds!,
+        item: item,
+      );
     }
   }
 
   Future<void> addChildItemBelow({
     required BuildContext context,
     required FlexCard item,
+    required CardsController cardsProvider,
   }) async {
-    final List<int> deviceIds = await showDialog(
+    final List<String>? deviceIds = await showDialog(
       context: context,
       builder: (context) => SelectDeviceAlertDialog(),
     );
 
-    if (deviceIds.length > 0) {
-      context.read<CardsProvider>().addChildItemBelow(
-            deviceIds: deviceIds,
-            item: item,
-          );
+    if (deviceIds?.isNotEmpty == true) {
+      cardsProvider.addChildItemBelow(
+        deviceIds: deviceIds!,
+        item: item,
+      );
     }
   }
 }

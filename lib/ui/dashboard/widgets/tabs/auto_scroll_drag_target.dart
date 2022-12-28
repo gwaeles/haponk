@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:haponk/data/tabs/entities/positioned_flex_card.dart';
+import 'package:haponk/domain/tabs/entities/positioned_flex_card.dart';
 import 'package:haponk/ui/dashboard/providers/drag_targets_notifier.dart';
 import 'package:haponk/ui/dashboard/providers/scroll_edge_notifier.dart';
-import 'package:provider/provider.dart';
+import 'package:provider/provider.dart' as provider;
 
 class AutoScrollDragTarget extends StatelessWidget {
   final DragTargetWillAccept<PositionedFlexCard> onWillAccept;

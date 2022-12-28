@@ -1,48 +1,54 @@
 import 'dart:async';
 
-import 'package:haponk/core/hass/models/constants.dart';
-import 'package:haponk/core/hass/models/device_type_converter.dart';
-import 'package:haponk/core/hass/models/events/data_model.dart';
-import 'package:haponk/core/hass/models/events/state_model.dart';
-import 'package:haponk/core/hass/models/messages/call_service_message_model.dart';
-import 'package:haponk/core/hass/models/messages/get_config_message_model.dart';
-import 'package:haponk/core/hass/models/messages/get_services_message_model.dart';
-import 'package:haponk/core/hass/models/messages/get_states_message_model.dart';
-import 'package:haponk/core/hass/models/messages/send_message_model.dart';
-import 'package:haponk/core/hass/models/messages/subscribe_message_model.dart';
-import 'package:haponk/core/hass/models/messages/unsubscribe_message_model.dart';
-import 'package:haponk/core/hive/datasources/boxes_provider.dart';
-import 'package:haponk/data/config/entities/config.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:haponk/data/connection/models/constants.dart';
+import 'package:haponk/data/connection/models/device_type_converter.dart';
+import 'package:haponk/data/connection/models/events/data_model.dart';
+import 'package:haponk/data/connection/models/events/state_model.dart';
+import 'package:haponk/data/connection/models/messages/call_service_message_model.dart';
+import 'package:haponk/data/connection/models/messages/get_config_message_model.dart';
+import 'package:haponk/data/connection/models/messages/get_services_message_model.dart';
+import 'package:haponk/data/connection/models/messages/get_states_message_model.dart';
+import 'package:haponk/data/connection/models/messages/send_message_model.dart';
+import 'package:haponk/data/connection/models/messages/subscribe_message_model.dart';
+import 'package:haponk/data/connection/models/messages/unsubscribe_message_model.dart';
+import 'package:haponk/data/devices/repositories/devices_repository.dart';
+import 'package:haponk/domain/config/entities/config.dart';
 import 'package:haponk/data/connection/datasources/web_socket_service.dart';
+import 'package:haponk/domain/connection/entities/constants.dart';
 
-import 'package:haponk/data/connection/entities/message.dart';
-import 'package:haponk/data/devices/entities/device.dart';
-import 'package:hive_flutter/hive_flutter.dart';
-import 'package:rxdart/rxdart.dart';
+import 'package:haponk/domain/connection/entities/message.dart';
+import 'package:haponk/domain/devices/entities/device.dart';
+
+final connectionRepositoryProvider = Provider(ConnectionRepository.new);
+final connectionMessagesProvider = StateProvider.autoDispose<Message?>(
+  (ref) => null,
+);
+final connectionTypeProvider = StateProvider.autoDispose<ConnectionType>(
+  (ref) => ConnectionType.idle,
+);
 
 class ConnectionRepository {
-  final DeviceListBoxCallback deviceListBox;
-  final DeviceBoxCallback deviceBox;
+  // final DevicesRepository devicesRepository;
 
-  ConnectionRepository({
-    required this.deviceListBox,
-    required this.deviceBox,
-  });
+  final Ref ref;
 
-  StreamController<Message>? _controller;
+  ConnectionRepository(this.ref);
+
+  // StreamController<Message>? _controller;
   String? _accessToken;
   WebSocketService? localWebSocket;
   WebSocketService? distantWebSocket;
   Config? _currentConfig;
 
-  ConnectionType _connectionType = ConnectionType.IDLE;
-  BehaviorSubject<ConnectionType>? _controllerConnectionType;
+  ConnectionType _connectionType = ConnectionType.idle;
+  // BehaviorSubject<ConnectionType>? _controllerConnectionType;
 
   WebSocketService? get currentWebSocket {
-    if (_connectionType == ConnectionType.LOCAL) {
+    if (_connectionType == ConnectionType.local) {
       return localWebSocket;
     }
-    if (_connectionType == ConnectionType.DISTANT) {
+    if (_connectionType == ConnectionType.distant) {
       return distantWebSocket;
     }
     return null;
@@ -50,55 +56,29 @@ class ConnectionRepository {
 
   ConnectionType get currentConnectionType => _connectionType;
 
-  Stream<Message> messageStream() {
-    if (_controller == null) {
-      _controller = StreamController.broadcast(
-        onCancel: () => _onCancel(),
-      );
-    }
-
-    return _controller!.stream;
-  }
-
-  void _onCancel() {
-    if (_controller?.hasListener == false) {
-      _controller?.close();
-      _controller = null;
-    }
-    if (_controllerConnectionType?.hasListener == false) {
-      _controllerConnectionType?.close();
-      _controllerConnectionType = null;
-    }
-  }
-
   ///
   /// --- CONNECTION --- ///
   ///
 
-  Stream<ConnectionType> connectionTypeStream() {
-    if (_controllerConnectionType == null) {
-      _controllerConnectionType = BehaviorSubject(
-        onCancel: () => _onCancel(),
-      );
-      _controllerConnectionType?.sink.add(_connectionType);
-    }
-
-    return _controllerConnectionType!.stream;
-  }
-
   Future<bool> connect(Config config) async {
-    if (_connectionType != ConnectionType.IDLE || config.accessToken == null || config.internalUrl == null) {
+    if (_connectionType != ConnectionType.idle ||
+        config.accessToken == null ||
+        config.internalUrl == null) {
       return false;
     }
 
     _currentConfig = config;
-    _controller?.sink.add(Message("Connecting"));
+    ref
+        .read(
+          connectionMessagesProvider.notifier,
+        )
+        .state = Message("Connecting");
     _accessToken = config.accessToken;
 
     localWebSocket = WebSocketService(
       accessToken: _accessToken!,
       url: config.internalUrl!,
-      connectionType: ConnectionType.LOCAL,
+      connectionType: ConnectionType.local,
       onAuthOk: _onAuthOk,
       onStates: _onStates,
       onState: _onState,
@@ -111,7 +91,7 @@ class ConnectionRepository {
       distantWebSocket = WebSocketService(
         accessToken: _accessToken!,
         url: config.externalUrl!,
-        connectionType: ConnectionType.DISTANT,
+        connectionType: ConnectionType.distant,
         onAuthOk: _onAuthOk,
         onStates: _onStates,
         onState: _onState,
@@ -125,7 +105,11 @@ class ConnectionRepository {
   }
 
   void disconnect() {
-    _controller?.sink.add(Message("Disconnected"));
+    ref
+        .read(
+          connectionMessagesProvider.notifier,
+        )
+        .state = Message("Disconnected");
 
     unsubscribe();
 
@@ -134,9 +118,13 @@ class ConnectionRepository {
     distantWebSocket?.disconnect();
     distantWebSocket = null;
 
-    _connectionType = ConnectionType.IDLE;
+    _connectionType = ConnectionType.idle;
 
-    _controllerConnectionType?.sink.add(_connectionType);
+    ref
+        .read(
+          connectionTypeProvider.notifier,
+        )
+        .state = _connectionType;
   }
 
   ///
@@ -145,12 +133,16 @@ class ConnectionRepository {
 
   void _onAuthOk(ConnectionType connectionType) {
     print("$connectionType: _onAuthOk");
-    if (_connectionType == ConnectionType.IDLE) {
+    if (_connectionType == ConnectionType.idle) {
       _connectionType = connectionType;
 
       //db.updateConfigDate();
 
-      _controllerConnectionType?.sink.add(_connectionType);
+      ref
+          .read(
+            connectionTypeProvider.notifier,
+          )
+          .state = _connectionType;
 
       subscribe();
 
@@ -159,7 +151,7 @@ class ConnectionRepository {
       getServices();
     } else {
       // Already connected
-      if (connectionType == ConnectionType.DISTANT) {
+      if (connectionType == ConnectionType.distant) {
         distantWebSocket?.disconnect();
         distantWebSocket = null;
       } else {
@@ -171,14 +163,17 @@ class ConnectionRepository {
 
   void _onInfo(ConnectionType connectionType, String message) {
     if (connectionType == _connectionType) {
-      _controller?.sink.add(Message(message));
+      ref
+          .read(
+            connectionMessagesProvider.notifier,
+          )
+          .state = Message(message);
     }
   }
 
-  void _onStates(ConnectionType connectionType, List<StateModel> states) async {
+  void _onStates(ConnectionType connectionType, List<StateModel> states) {
     if (connectionType == _connectionType) {
       // Synchro de tous les states
-      final Box<List<ComparableDevice>> devicesBox = await deviceListBox();
       final list = states
           .where(
             (state) => state.entityId != null,
@@ -195,10 +190,11 @@ class ConnectionRepository {
           )
           .toList();
 
-      devicesBox.put(
-        deviceListHiveKey,
-        list,
-      );
+      ref
+          .read(
+            devicesRepositoryProvider,
+          )
+          .updateList(list);
 
       states.forEach(
         (state) => _onState(
@@ -211,11 +207,15 @@ class ConnectionRepository {
 
   void _onState(ConnectionType connectionType, StateModel state) async {
     final DeviceType deviceType = state.deviceType();
-    if (connectionType == _connectionType && state.entityId != null && deviceType != DeviceType.UNKNOWN) {
+    if (connectionType == _connectionType &&
+        state.entityId != null &&
+        deviceType != DeviceType.UNKNOWN) {
       // Synchro d'un state
-      final Box<Device> box = await deviceBox();
-
-      final Device storedDevice = await box.get(state.entityId!) ?? Device(id: state.entityId!);
+      final DevicesRepository devicesRepository =
+          ref.read(devicesRepositoryProvider);
+      final Device storedDevice =
+          await devicesRepository.getDevice(state.entityId!) ??
+              Device(id: state.entityId!);
 
       final Device updatedDevice = storedDevice.copyWith(
         deviceType: deviceType,
@@ -245,24 +245,29 @@ class ConnectionRepository {
         voltage: state.attributes?.voltage,
       );
 
-      box.put(
-        updatedDevice.id,
-        updatedDevice,
-      );
+      devicesRepository.updateDevice(updatedDevice);
     }
   }
 
   void _onError(ConnectionType connectionType, Object error) {
     print("$connectionType: _onError");
     if (connectionType == _connectionType) {
-      _controller?.sink.add(Message("on Error"));
+      ref
+          .read(
+            connectionMessagesProvider.notifier,
+          )
+          .state = Message("on Error");
     }
   }
 
   void _onDone(ConnectionType connectionType) {
     print("$connectionType: _onDone");
     if (connectionType == _connectionType) {
-      _controller?.sink.add(Message("on Done"));
+      ref
+          .read(
+            connectionMessagesProvider.notifier,
+          )
+          .state = Message("on Done");
       disconnect();
     }
   }
@@ -297,7 +302,7 @@ class ConnectionRepository {
     String entityId, [
     int? brightness,
   ]) {
-    if (_connectionType == ConnectionType.IDLE && _currentConfig != null) {
+    if (_connectionType == ConnectionType.idle && _currentConfig != null) {
       connect(_currentConfig!);
     }
     _send(
